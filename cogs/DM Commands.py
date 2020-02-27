@@ -5,6 +5,8 @@ import Command_Check
 import Command_Execute
 import Quick_SQL
 
+test = 1
+
 class DM_Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
