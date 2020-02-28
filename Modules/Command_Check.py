@@ -211,6 +211,14 @@ def remove_feat(command: str):
     return True, "Remove the feat {} from {}?".format(feat, character_name)
 
 
+def roll_check(command: str):
+    c_list = command.split(",")
+    discord_id = SQL_Lookup.player_id_by_name(c_list[0].lstrip())
+    if discord_id == "":
+        return False, "Player name not found, please use $SyncPlayers to refresh player list and try again."
+    return True, ""
+
+
 def skill_add(command: str):
     c_list = command.split(",")
     if len(c_list) < 2:

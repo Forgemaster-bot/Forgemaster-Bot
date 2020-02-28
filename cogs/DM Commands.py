@@ -13,7 +13,6 @@ class DM_Commands(commands.Cog):
     @commands.command(name='CharacterKill', help="[Character Name],[Reason]")
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def kill_character(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$CharacterKill ', '')
         command_check = Command_Check.kill_character(trim_message)
         await command.send(command_check[1])
@@ -35,7 +34,6 @@ class DM_Commands(commands.Cog):
     @commands.command(name='AddGold', help="[Gold amount],[Character 1],[Character 2]...")
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def change_gold(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$AddGold ', '')
         command_check = Command_Check.add_gold(trim_message)
         await command.send(command_check[1])
@@ -69,7 +67,6 @@ class DM_Commands(commands.Cog):
                                            "\nExample - Rations, Cogs:4,Ratagan:2")
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def add_item(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$ItemAdd ', '')
         command_check = Command_Check.add_item(trim_message)
         await command.send(command_check[1])
@@ -90,7 +87,6 @@ class DM_Commands(commands.Cog):
     @commands.command(name='ItemRemove', help="[Character Name],[Item],[Quantity]")
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def remove_item(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$ItemRemove ', '')
         command_check = Command_Check.remove_item(trim_message)
         await command.send(command_check[1])
@@ -112,7 +108,6 @@ class DM_Commands(commands.Cog):
     @commands.command(name='AddXP', help="[XP amount],[Character 1],[Character 2]...")
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def add_xp(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$AddXP ', '')
         command_check = Command_Check.reward_xp(trim_message)
         await command.send(command_check[1])

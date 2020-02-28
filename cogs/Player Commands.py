@@ -25,7 +25,6 @@ class Player_Commands(commands.Cog):
     # Level up
     @commands.command(name='LevelUp', help="[Character Name],[Class]")
     async def level_up(self, command):
-            await command.send("working...")
             trim_message = command.message.content.replace('$LevelUp ', '')
             discord_id = str(command.message.author.id)
             command_check = Command_Check.level_up(trim_message, discord_id)
@@ -46,7 +45,6 @@ class Player_Commands(commands.Cog):
 
     @commands.command(name='TradeSell', help='[Character],[Item],[Price],[Quantity]')
     async def trade_sell(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$TradeSell ', '')
         discord_id = str(command.message.author.id)
         command_check = Command_Check.trade_sell(trim_message, discord_id)
@@ -67,7 +65,6 @@ class Player_Commands(commands.Cog):
 
     @commands.command(name='TradeBuy', help="[Character],[Seller's Name],[Item],[Quantity]")
     async def trade_buy(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$TradeBuy ', '')
         discord_id = str(command.message.author.id)
         command_check = Command_Check.trade_buy(trim_message, discord_id)
@@ -88,7 +85,6 @@ class Player_Commands(commands.Cog):
 
     @commands.command(name='TradeStop', help="[Character],[Item] Stop the sale of an item")
     async def trade_stop(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$TradeStop ', '')
         discord_id = str(command.message.author.id)
         command_check = Command_Check.trade_stop(trim_message, discord_id)

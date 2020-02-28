@@ -14,7 +14,6 @@ class Support_Commands(commands.Cog):
     @commands.command(name='SyncPlayers', help='updates database with all user Id and names')
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def sync_players(self, command):
-        await command.send("working...")
         response = Command_Execute.sync_players(command)
         await command.send(response)
 

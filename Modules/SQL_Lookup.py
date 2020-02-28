@@ -40,6 +40,14 @@ def character_sheet(character_name: str):
     return cursor.fetchone()
 
 
+def character_owner(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Discord_ID
+
+
 def character_class_by_order(character_name: str, order: int):
     cursor = Quick_SQL.db_connection()
     query = "select * from Link_Character_Class where Character='{}' and Number = '{}'".format(character_name,order)

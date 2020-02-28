@@ -17,9 +17,12 @@ def kill_character(command: str):
     c_list = command.split(",")
     character_name = c_list[0]
     reason = c_list[1]
+    discord_id = SQL_Lookup.character_owner(character_name.lstrip())
 
+    SQL_Delete.discord_roll(discord_id)
     SQL_Insert.move_to_graveyard(character_name.lstrip(), reason.lstrip())
     SQL_Delete.character(character_name.lstrip())
+
     Update_Google_Roster.kill_character(command)
     return "{} died because {}".format(character_name, reason)
 
@@ -106,6 +109,17 @@ def add_xp(command: str):  # [Gold],[Character 1],[Character 2]
     return "{} xp has been added to {}".format(xp, Quick_Python.stitch_string(c_list))
 
 
+def npc_talk(command: str):
+    command_split = command.split(":")
+    npc = command_split[0].lstrip()
+    speach = command_split[1].lstrip()
+    response = "```" \
+               "NPC:{}\n" \
+               "{}" \
+               "```".format(npc, speach)
+    return response
+
+
 '''''''''''''''''''''''''''''''''''''''''
 #############MOD commands###############
 '''''''''''''''''''''''''''''''''''''''''
@@ -177,16 +191,6 @@ def character_refresh(character_name: str):
     Update_Google_Roster.update_items(character_name)
 
 
-def character_update_owner(command: str):
-    c_list = command.split(",")
-    character_name = c_list[0].lstrip()
-    discord_id = c_list[1].lstrip()
-    discord_name = SQL_Lookup.player_name_by_id(discord_id)
-    SQL_Update.character_owner(character_name, discord_id)
-    Update_Google_Roster.update_character(character_name)
-    return "{} is now owned by {}".format(character_name, discord_name)
-
-
 def add_feat(command: str):
     # pull values
     c_list = command.split(",")
@@ -238,17 +242,6 @@ def skill_remove(command: str):
     return "the skill {} has been removed from {}".format(skill, character_name)
 
 
-def npc_talk(command: str):
-    command_split = command.split(":")
-    npc = command_split[0].lstrip()
-    speach = command_split[1].lstrip()
-    response = "```" \
-               "NPC:{}\n" \
-               "{}" \
-               "```".format(npc, speach)
-    return response
-
-
 def stat_change(command: str):
     command_split = command.split(",")
     character_name = command_split[0].lstrip()
@@ -257,6 +250,17 @@ def stat_change(command: str):
     new_value = SQL_Update.character_stat_change(character_name, ability, value)
     Update_Google_Roster.update_character_ability(character_name, ability)
     return "{} now has {} in {}".format(character_name, new_value, ability)
+
+
+def roll_check(command: str):
+    command_split = command.split(",")
+    discord_name = command_split[0]
+    discord_id = SQL_Lookup.player_id_by_name(discord_name)
+    response = SQL_Lookup.player_stat_roll(discord_id)
+    if response == "":
+        return "Player hasnt rolled stats"
+    else:
+        return Quick_Python.stitch_string(response).replace("{},".format(discord_id), "{}:".format(discord_name))
 
 
 '''''''''''''''''''''''''''''''''''''''''

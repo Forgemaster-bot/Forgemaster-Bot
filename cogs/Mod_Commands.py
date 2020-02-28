@@ -15,7 +15,6 @@ class Mod_Commands(commands.Cog):
                                                    "[Str],[Dex],[Con],[Int],[Wis],[Cha],[Gold]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def create_character(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$CharacterCreate ', '')
         command_check = Command_Check.create_character(trim_message)
         await command.send(command_check[1])
@@ -36,7 +35,6 @@ class Mod_Commands(commands.Cog):
     #@commands.command(name='CharacterSync', help='[Character Name] - update the database from google sheets')
     #@commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     #async def sync_characters(self, command):
-    #    await command.send("working...")
     #    trim_message = command.message.content.replace('$CharacterSync ', '')
     #    command_check = Command_Check.sync_character(trim_message)
     #    await command.send(command_check[1])
@@ -57,39 +55,16 @@ class Mod_Commands(commands.Cog):
     @commands.command(name='CharacterRefresh', help='[Character Name]')
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def character_refresh(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$CharacterRefresh ', '')
         command_check = Command_Check.character_refresh(trim_message)
         if command_check[0]:
             Command_Execute.character_refresh(trim_message)
             await command.send("{} refreshed".format(trim_message))
 
-    @commands.command(name='CharacterUpdateOwner', help='[Character Name], Discord_ID')
-    @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
-    async def character_update_owner(self, command):
-        await command.send("working...")
-        trim_message = command.message.content.replace('$CharacterUpdateOwner ', '')
-        command_check = Command_Check.character_update_owner(trim_message)
-        await command.send(command_check[1])
-        if command_check[0]:
-            while True:
-                # Get confirmation from user
-                reply = await self.confirm(command)
-                if reply == "Yes":
-                    await command.send("Updating...")
-                    Quick_SQL.log_command(command)
-                    response = Command_Execute.character_update_owner(trim_message)
-                    await command.send(response)
-                    break
-                else:
-                    await command.send("Sync Character command stopped")
-                    break
-
     # Feats
     @commands.command(name='FeatAdd', help="[Character Name],[Feat or ASL]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def add_feat(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$FeatAdd ', '')
         command_check = Command_Check.add_feat(trim_message)
         await command.send(command_check[1])
@@ -110,7 +85,6 @@ class Mod_Commands(commands.Cog):
     @commands.command(name='FeatRemove', help="[Character Name],[Feat or ASL]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def remove_feat(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$FeatRemove ', '')
         command_check = Command_Check.remove_feat(trim_message)
         await command.send(command_check[1])
@@ -132,7 +106,6 @@ class Mod_Commands(commands.Cog):
     @commands.command(name='SkillAdd', help="[Character Name],[Skill Name], Optional : [Double]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def add_skill(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$SkillAdd ', '')
         command_check = Command_Check.skill_remove(trim_message)
         await command.send(command_check[1])
@@ -153,7 +126,6 @@ class Mod_Commands(commands.Cog):
     @commands.command(name='SkillRemove', help="[Character Name],[Skill Name], Optional : [Double]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def skill_remove(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$SkillRemove ', '')
         command_check = Command_Check.skill_remove(trim_message)
         await command.send(command_check[1])
@@ -175,7 +147,6 @@ class Mod_Commands(commands.Cog):
     @commands.command(name='StatChange', help="[Character Name],[Stat],[Amount]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def stat_change(self, command):
-        await command.send("working...")
         trim_message = command.message.content.replace('$StatChange ', '')
         command_check = Command_Check.stat_raise(trim_message)
         await command.send(command_check[1])
@@ -192,6 +163,15 @@ class Mod_Commands(commands.Cog):
                 else:
                     await command.send("Give feat command stopped")
                     break
+
+    @commands.command(name='RollCheck', help='[Character Name]')
+    @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
+    async def character_refresh(self, command):
+        trim_message = command.message.content.replace('$RollCheck ', '')
+        command_check = Command_Check.roll_check(trim_message)
+        if command_check[0]:
+            response = Command_Execute.roll_check(trim_message)
+            await command.send(response)
 
     async def confirm(self, command):
             # setup sub function to store new message
