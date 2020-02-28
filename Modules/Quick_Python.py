@@ -1,3 +1,5 @@
+import random
+
 def stitch_string(given_list: list):
     return_string = ""
     for element in given_list:
@@ -56,3 +58,8 @@ def ability_name_convert(ability: str):
         return 'Wisdom'
     elif ability == 'CHA':
         return 'Charisma'
+
+
+def dice_roll(low: int, high: int):
+    response = random.randint(low, high)
+    return response

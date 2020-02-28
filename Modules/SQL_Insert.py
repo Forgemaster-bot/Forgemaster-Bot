@@ -92,3 +92,13 @@ def trade_sell(character_name: str, item_name: str, quantity: int, price: int):
     cursor.execute(query)
     cursor.commit()
 
+
+def discord_roll(discord_id: str, stat_array: list):
+    cursor = Quick_SQL.db_connection()
+    link_class_insert = "insert into Discord_Roll (Discord_ID,Roll_1,Roll_2,Roll_3,Roll_4,Roll_5,Roll_6) " \
+                        "values ('{}','{}','{}','{}','{}','{}','{}')".format(discord_id,
+                                                                             stat_array[0], stat_array[1],
+                                                                             stat_array[2], stat_array[3],
+                                                                             stat_array[4], stat_array[5])
+    cursor.execute(link_class_insert)
+    cursor.commit()

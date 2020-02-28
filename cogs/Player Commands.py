@@ -10,21 +10,17 @@ class Player_Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='Roll', help='[Dice Number] + D + [Number of sides] example 4D6')
-    async def dice_roll(self, command):
-        trim_message = command.message.content.replace('$Roll ', '')
-        await command.send(Command_Check.dice_roll(trim_message))
-
     # Roll Stats
     @commands.command(name='randchar', help='[Dice Number] + D + [Number of sides] example 4D6')
     async def dice_roll(self, command):
         Quick_SQL.log_command(command)
         discord_id = str(command.message.author.id)
         command_check = Command_Check.roll_stats(discord_id)
-        if not command_check[0]:
-            return command_check[1]
-        response = Command_Execute
-        await command.send(response)
+        if command_check[0]:
+            response = Command_Execute.rand_char(discord_id)
+            await command.send(response)
+        else:
+            return command.send(command_check[1])
 
     # Level up
     @commands.command(name='LevelUp', help="[Character Name],[Class]")

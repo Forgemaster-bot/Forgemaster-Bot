@@ -284,7 +284,7 @@ def roll_stats(discord_id: str):
                           results.Roll_4, results.Roll_5, results.Roll_6]
         response = Quick_Python.stitch_string(previous_rolls)
         return False, "You already have a stat array : {}".format(response)
-    return True
+    return True, ''
 
 
 def level_up(command: str, discord_id: str):

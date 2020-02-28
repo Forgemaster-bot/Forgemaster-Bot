@@ -41,8 +41,8 @@ def skill_exists(name: str):
 def player_stat_roll(discord_id: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \
-            "From Discord_Roll" \
-            "where Discord_ID = '{}'".format(discord_id)
+            "From Discord_Roll " \
+            "where Discord_ID = '{}' ".format(discord_id)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:
