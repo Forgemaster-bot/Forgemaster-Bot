@@ -38,24 +38,6 @@ def add_gold(command: str):  # [Gold],[Character 1],[Character 2]
 
 
 def add_item(command: str):
-    # get inputs data
-    c_list = command.split(",")
-    character_name = c_list[0].lstrip()
-    item_name = c_list[1].lstrip()
-    try:
-        quantity = int(c_list[2].lstrip())
-    except IndexError:
-        quantity = 1
-    if SQL_Check.character_has_item(character_name, item_name):
-        SQL_Update.character_item_quantity(character_name, item_name, quantity)
-    else:
-        SQL_Insert.character_item(character_name, item_name, quantity)
-
-    Update_Google_Roster.update_items(character_name)
-    return "{} now has {} more {}".format(character_name, quantity, item_name)
-
-
-def add_item_test(command: str):
     c_list = command.split(",")
     character_name = c_list[0].lstrip()
     if SQL_Check.character_exists(character_name):
@@ -326,7 +308,7 @@ def trade_buy(command: str):
     seller_name = c_list[1].lstrip()
     item_name = c_list[2]
     quantity = int(c_list[3])
-    item_value = SQL_Lookup.trade_item_price(seller_name,item_name)
+    item_value = SQL_Lookup.trade_item_price(seller_name, item_name)
     trade_value = item_value * quantity
 
     # add to player inventory

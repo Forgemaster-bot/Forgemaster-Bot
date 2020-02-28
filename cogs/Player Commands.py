@@ -16,7 +16,7 @@ class Player_Commands(commands.Cog):
         await command.send(Command_Check.dice_roll(trim_message))
 
     # Roll Stats
-    @commands.command(name='RollStats', help='[Dice Number] + D + [Number of sides] example 4D6')
+    @commands.command(name='randchar', help='[Dice Number] + D + [Number of sides] example 4D6')
     async def dice_roll(self, command):
         Quick_SQL.log_command(command)
         discord_id = str(command.message.author.id)

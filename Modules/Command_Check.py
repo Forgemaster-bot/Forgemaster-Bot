@@ -43,74 +43,46 @@ def add_item(command: str):  # [Character Name],[Item],[Quantity]
     if len(c_list) < 2:
         return False, "Please enter a character name and an item."
     character_name = c_list[0].lstrip()
-    item = c_list[1].lstrip()
-    if not SQL_Check.character_exists(character_name):
-        return False, "The character {} doesnt exist.".format(character_name)
-    try:
-        quantity = c_list[2].lstrip()
-    except IndexError:
-        quantity = 1
-    return True, "Give {} {} {}?".format(character_name, quantity, item)
-
-
-def add_item_test(command: str):  # [Character Name],[Item],[Quantity]
-    c_list = command.split(",")
-    if len(c_list) < 2:
-        return False, "Please enter a character name and an item."
-    character_name = c_list[0].lstrip()
     if SQL_Check.character_exists(character_name):
-        response = add_many_items_to_one_player(command)
+        # many items
+        character_name = c_list[0].lstrip()
+        del c_list[0]
+        if len(c_list) == 0:
+            return False, "Please enter at least one player to add an item to."
+        return_list = ['Give {} the following:'.format(character_name)]
+        for items in c_list:
+            item_details = items.split(':')
+            item_name = item_details[0].lstrip()
+            try:
+                quantity = int(item_details[1].lstrip())
+            except IndexError:
+                quantity = 1
+            except ValueError:
+                return False, "make sure the quantity for {} is a number".format(item_name)
+            return_list.append('{} {}'.format(quantity, item_name))
+        return_list.append("Do you want to continue?")
+        response = Quick_Python.stitch_table(return_list)
     else:
-        response = add_one_item_to_many_player(command)
-    return response
-
-
-def add_one_item_to_many_player(command: str):  # [Item],[Character Name]:[Quantity],[Character Name]:[Quantity]
-    c_list = command.split(",")
-    # character
-    item_name = c_list[0].lstrip()
-    del c_list[0]
-    if len(c_list) == 0:
-        return False, "Please enter at least one player to add an item to."
-    return_list = ['Give {} to:'.format(item_name)]
-    for characters in c_list:
-        character_list = characters.split(':')
-        character_name = character_list[0].lstrip()
-        if not SQL_Check.character_exists(character_name):
-            return False, "The character {} doesnt exist.".format(character_name)
-        try:
-            quantity = int(character_list[1].lstrip())
-        except IndexError:
-            quantity = 1
-        except ValueError:
-            return False,"make sure the quantity for {} is a number".format(character_name)
-        return_list.append('{} gets {}'.format(character_name, quantity))
-    return_list.append("Do you want to continue?")
-    response = Quick_Python.stitch_table(return_list)
-    return True, response
-
-
-def add_many_items_to_one_player(command: str):  # [Character Name],[Item]:[Quantity],[Item]:[Quantity]
-    c_list = command.split(",")
-    # character
-    character_name = c_list[0].lstrip()
-    del c_list[0]
-    if len(c_list) == 0:
-        return False, "Please enter at least one player to add an item to."
-
-    return_list = ['Give {} the following:'.format(character_name)]
-    for items in c_list:
-        item_details = items.split(':')
-        item_name = item_details[0].lstrip()
-        try:
-            quantity = int(item_details[1].lstrip())
-        except IndexError:
-            quantity = 1
-        except ValueError:
-            return False, "make sure the quantity for {} is a number".format(item_name)
-        return_list.append('{} {}'.format(quantity, item_name))
-    return_list.append("Do you want to continue?")
-    response = Quick_Python.stitch_table(return_list)
+        # many characters
+        item_name = c_list[0].lstrip()
+        del c_list[0]
+        if len(c_list) == 0:
+            return False, "Please enter at least one player to add an item to."
+        return_list = ['Give {} to:'.format(item_name)]
+        for characters in c_list:
+            character_list = characters.split(':')
+            character_name = character_list[0].lstrip()
+            if not SQL_Check.character_exists(character_name):
+                return False, "The character {} doesnt exist.".format(character_name)
+            try:
+                quantity = int(character_list[1].lstrip())
+            except IndexError:
+                quantity = 1
+            except ValueError:
+                return False, "make sure the quantity for {} is a number".format(character_name)
+            return_list.append('{} gets {}'.format(character_name, quantity))
+        return_list.append("Do you want to continue?")
+        response = Quick_Python.stitch_table(return_list)
     return True, response
 
 
@@ -308,7 +280,8 @@ def roll_stats(discord_id: str):
         return False, "You are not on the system, please ask a mod to use the $SyncPlayer command"
     if SQL_Check.player_stat_roll(discord_id):
         results = SQL_Lookup.player_stat_roll(discord_id)
-        previous_rolls = [results.Roll_1, results.Roll_2, results.Roll_3, results.Roll_4, results.Roll_5, results.Roll_6]
+        previous_rolls = [results.Roll_1, results.Roll_2, results.Roll_3,
+                          results.Roll_4, results.Roll_5, results.Roll_6]
         response = Quick_Python.stitch_string(previous_rolls)
         return False, "You already have a stat array : {}".format(response)
     return True
@@ -369,7 +342,7 @@ def trade_sell(command: str, discord_id: str):  # [Character Name],[Item Name],[
 
     # check trade
     if SQL_Check.character_selling_item(character_name, item_name):
-        return False,"{} is already selling {}, end the sale before selling more".format(character_name, item_name)
+        return False, "{} is already selling {}, end the sale before selling more".format(character_name, item_name)
 
     return True, "Put up {} {} from {} for {}g each?".format(quantity, item_name, character_name, value)
 

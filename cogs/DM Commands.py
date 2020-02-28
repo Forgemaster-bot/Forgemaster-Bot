@@ -62,8 +62,11 @@ class DM_Commands(commands.Cog):
         response = Command_Execute.npc_talk(trim_message)
         await command.send(response)
 
-    '''# Items
-    @commands.command(name='ItemAdd', help="[Character Name],[Item],[Quantity]")
+    @commands.command(name='ItemAdd', help="use help for more information"
+                                           "\n1) [Character Name], [Item:Quantity], [Item:Quantity]..."
+                                           "\nExample - Cogs,Dagger:2, Pickaxe:3, Leather:4"
+                                           "\n2) [Item Name], [Character Name:Quantity], [Character Name:Quantity]"
+                                           "\nExample - Rations, Cogs:4,Ratagan:2")
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def add_item(self, command):
         await command.send("working...")
@@ -78,32 +81,6 @@ class DM_Commands(commands.Cog):
                     await command.send("Updating roster...")
                     Quick_SQL.log_command(command)
                     response = Command_Execute.add_item(trim_message)
-                    await command.send(response)
-                    break
-                else:
-                    await command.send("Give item command stopped")
-                    break
-    '''
-
-    @commands.command(name='ItemAdd', help="use help for more information"
-                                           "\n1) [Character Name], [Item:Quantity], [Item:Quantity]..."
-                                           "\nExample - Cogs,Dagger:2, Pickaxe:3, Leather:4"
-                                           "\n2) [Item Name], [Character Name:Quantity], [Character Name:Quantity]"
-                                           "\nExample - Rations, Cogs:4,Ratagan:2")
-    @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
-    async def add_item(self, command):
-        await command.send("working...")
-        trim_message = command.message.content.replace('$ItemAdd ', '')
-        command_check = Command_Check.add_item_test(trim_message)
-        await command.send(command_check[1])
-        if command_check[0]:
-            while True:
-                # Get confirmation from user
-                reply = await self.confirm(command)
-                if reply == "Yes":
-                    await command.send("Updating roster...")
-                    Quick_SQL.log_command(command)
-                    response = Command_Execute.add_item_test(trim_message)
                     await command.send(response)
                     break
                 else:
