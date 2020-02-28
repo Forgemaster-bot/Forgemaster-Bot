@@ -267,31 +267,38 @@ def stat_change(command: str):
 def rand_char(discord_id: str):
     stat_array = []
     stat_display_list = []
-    for rolls in range(0, 6): # Roll 6 times
+    for rolls in range(0, 6):  # Roll 6 times
         dice_results = []
         for roll_number in range(0, 4):  # Roll 4 dice
             dice = int(Quick_Python.dice_roll(1, 6))
             dice_results.append(dice)  # [6,3,2,6]
         lowest = False
-        stat_display = ['(']
+        stat_display = []
         for roll in dice_results:
             if roll == min(dice_results) and lowest is False:  # find the first lowest roll
-                stat_display.append(['~~{}~~'.format(roll)])  # Strike through  the lowest
+                formatting = '~~'
                 lowest = True
             else:
-                stat_display.append(['**{}**'.format(roll)])  # bold the rest
-        # update display of stats
+                formatting = ''
+            stat = '{}{}{}'.format(formatting, roll, formatting)
+            if len(stat_display) == 0:
+                stat_display.append('(' + stat)
+            elif len(stat_display) == 3:
+                stat_display.append(stat + ')')
+            else:
+                stat_display.append(stat)
         total_stat = sum(dice_results) - min(dice_results)
-        stat_display.append(')')  # ['(',6,3,2,6,')']
-        stat_display.append(' = **{}**'.format(total_stat))  # ['(',6,3,2,6,')',' = 15' ]
-        stat_display_list.append(Quick_Python.stitch_string(stat_display))  # ['(6,3,2,6) = 15']
+        stat_display.append(' = **{}**'.format(total_stat))
+        result = Quick_Python.stitch_string(stat_display).replace("),", ")")
+
         # save stats
         stat_array.append(total_stat)
+        stat_display_list.append(result)
     # save to SQL after
-    # SQL_Insert.discord_roll(discord_id, stat_array)  # create new entry in discord roll
+    SQL_Insert.discord_roll(discord_id, stat_array)  # create new entry in discord roll
     # print to discord
     roll_total = sum(stat_array)
-    stat_display_list.append('Total = {}'.format(roll_total))
+    stat_display_list.append('Total = **{}**'.format(roll_total))
     response = Quick_Python.stitch_table(stat_display_list)
     return response
 

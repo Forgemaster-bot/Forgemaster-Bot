@@ -20,7 +20,7 @@ class Player_Commands(commands.Cog):
             response = Command_Execute.rand_char(discord_id)
             await command.send(response)
         else:
-            return command.send(command_check[1])
+            await command.send(command_check[1])
 
     # Level up
     @commands.command(name='LevelUp', help="[Character Name],[Class]")
