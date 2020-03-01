@@ -29,7 +29,7 @@ def character_gold(character_name: str, gold: float):
 
 def character_item_quantity(character_name: str, item_name: str, quantity: int):
     # calculate new total
-    new_amount = SQL_Lookup.character_item_quantity(character_name, item_name) + quantity
+    new_amount = SQL_Lookup.character_item_quantity(character_name, item_name) - quantity
     cursor = Quick_SQL.db_connection()
     query = "UPDATE Link_Character_Items set Quantity = '{}' " \
             "WHERE Character = '{}' AND Item = '{}'".format(new_amount, character_name, item_name)

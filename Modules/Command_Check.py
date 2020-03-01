@@ -128,8 +128,6 @@ def reward_xp(command: str):
 def log_xp(character_name: str):
     if not SQL_Check.character_exists(character_name.lstrip()):
         return False, "The character {} doesnt exist.".format(character_name)
-    if SQL_Check.level_up_check(character_name) == "Yes":
-        return False, "The character needs to level up first to get the XP value of his level for the log"
     return True, ""
 
 
@@ -146,7 +144,7 @@ def create_character(command: str):
         return False, "You have entered too many stats to make a character."
     discord_name = c_list[0].lstrip()
     discord_id = SQL_Lookup.player_id_by_name(c_list[0].lstrip())
-    character = c_list[1].split(" ")
+    character = c_list[1].lstrip().split(" ")
     character_name = character[0].lstrip()
     if discord_id == "":
         return False, "Player name not found, please use $SyncPlayers to refresh player list and try again."

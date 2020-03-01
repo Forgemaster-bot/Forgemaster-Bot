@@ -112,10 +112,13 @@ def add_xp(command: str):  # [Gold],[Character 1],[Character 2]
 
 def log_xp(character_name: str):
     character_level = SQL_Lookup.character_sum_class_levels(character_name)
+    if SQL_Check.level_up_check(character_name) == "Yes":
+        character_level += 1
     xp = SQL_Lookup.log_xp(character_level)
     SQL_Update.character_xp(character_name.lstrip(), xp)
     c_list = [character_name]
     Update_Google_Roster.update_xp_group(c_list)
+    return "{} got {}xp for posting a log".format(character_name, xp)
 
 
 def npc_talk(command: str):
@@ -139,7 +142,7 @@ def create_character(command: str):
 
     discord_id = SQL_Lookup.player_id_by_name(character_sheet[0].lstrip())
     character_sheet[0] = discord_id
-    character = character_sheet[1].split(" ")
+    character = character_sheet[1].lstrip().split(" ")
     character_name = character[0].lstrip()
     character_sheet[1] = character_name
     character_class = character_sheet[4].lstrip()
