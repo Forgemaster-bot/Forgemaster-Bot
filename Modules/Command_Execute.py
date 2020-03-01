@@ -110,6 +110,14 @@ def add_xp(command: str):  # [Gold],[Character 1],[Character 2]
     return "{} xp has been added to {}".format(xp, Quick_Python.stitch_string(c_list))
 
 
+def log_xp(character_name: str):
+    character_level = SQL_Lookup.character_sum_class_levels(character_name)
+    xp = SQL_Lookup.log_xp(character_level)
+    SQL_Update.character_xp(character_name.lstrip(), xp)
+    c_list = [character_name]
+    Update_Google_Roster.update_xp_group(c_list)
+
+
 def npc_talk(command: str):
     command_split = command.split(":")
     npc = command_split[0].lstrip()
@@ -128,11 +136,13 @@ def npc_talk(command: str):
 
 def create_character(command: str):
     character_sheet = command.split(",")
-    character_name = character_sheet[1].lstrip()
-    character_class = character_sheet[4].lstrip()
 
     discord_id = SQL_Lookup.player_id_by_name(character_sheet[0].lstrip())
     character_sheet[0] = discord_id
+    character = character_sheet[1].split(" ")
+    character_name = character[0].lstrip()
+    character_sheet[1] = character_name
+    character_class = character_sheet[4].lstrip()
 
     # update Link_character_Class
     SQL_Insert.character_create(character_sheet)

@@ -209,3 +209,10 @@ def info_classes():
         classes.append(row.Name)
     return classes
 
+
+def log_xp(level: int):
+    cursor = Quick_SQL.db_connection()
+    query = "select * from Info_XP Where Level = {}".format(level)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Log_XP

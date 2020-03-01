@@ -84,7 +84,7 @@ class DM_Commands(commands.Cog):
                     await command.send("Give item command stopped")
                     break
 
-    @commands.command(name='ItemRemove', help="[Character Name],[Item],[Quantity]")
+    @commands.command(name='ItemRemove', help="[Character Name],[Item]:[Quantity]")
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def remove_item(self, command):
         trim_message = command.message.content.replace('$ItemRemove ', '')
@@ -124,6 +124,19 @@ class DM_Commands(commands.Cog):
                 else:
                     await command.send("Reward XP command stopped")
                     break
+
+    # Add logxp
+    @commands.command(name='LogXP', help="[Character]")
+    @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
+    async def log_xp(self, command):
+        trim_message = command.message.content.replace('$LogXP ', '')
+        command_check = Command_Check.log_xp(trim_message)
+        if command_check[0]:
+            Quick_SQL.log_command(command)
+            response = Command_Execute.log_xp(trim_message)
+            await command.send(response)
+        else:
+            await command.send(command_check[1])
 
     # Yes/No response checker
     async def confirm(self, command):

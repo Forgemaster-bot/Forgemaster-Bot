@@ -125,6 +125,14 @@ def reward_xp(command: str):
     return True, "Give {} xp to {}?".format(xp, Quick_Python.stitch_string(c_list))
 
 
+def log_xp(character_name: str):
+    if not SQL_Check.character_exists(character_name.lstrip()):
+        return False, "The character {} doesnt exist.".format(character_name)
+    if SQL_Check.level_up_check(character_name) == "Yes":
+        return False, "The character needs to level up first to get the XP value of his level for the log"
+    return True, ""
+
+
 '''''''''''''''''''''''''''''''''''''''''
 ###########Mod commands###############
 '''''''''''''''''''''''''''''''''''''''''
@@ -138,9 +146,11 @@ def create_character(command: str):
         return False, "You have entered too many stats to make a character."
     discord_name = c_list[0].lstrip()
     discord_id = SQL_Lookup.player_id_by_name(c_list[0].lstrip())
+    character = c_list[1].split(" ")
+    character_name = character[0].lstrip()
     if discord_id == "":
         return False, "Player name not found, please use $SyncPlayers to refresh player list and try again."
-    if SQL_Check.character_exists(c_list[1].lstrip()):
+    if SQL_Check.character_exists(character_name):
         return False, "That character name is already taken, please choose another."
     # checks to see if the class is spelt correctly
     if not SQL_Check.race_exists(c_list[2].lstrip()):
@@ -151,7 +161,7 @@ def create_character(command: str):
                      "Class : {} \nStrength : {} \nDexterity : {} \nConstitution : {} \n" \
                      "Intelligence : {} \nWisdom : {} \nCharisma : {} \nGold : {} \n" \
                      "Do you want to make this character? [Yes/No]"\
-                     .format(discord_name, c_list[1].lstrip(), c_list[2].lstrip(),
+                     .format(discord_name, character_name, c_list[2].lstrip(),
                              c_list[3].lstrip(), c_list[4].lstrip(), c_list[5].lstrip(),
                              c_list[6].lstrip(), c_list[7].lstrip(), c_list[8].lstrip(),
                              c_list[9].lstrip(), c_list[10].lstrip(), c_list[11].lstrip())
@@ -286,7 +296,7 @@ def dice_roll(command: str):
 
 def roll_stats(discord_id: str):
     if not SQL_Check.player_exists(discord_id):
-        return False, "You are not on the system, please ask a mod to use the $SyncPlayer command"
+        return False, "You are not on the system, please ask a mod to use the $SyncPlayers command"
     if SQL_Check.player_stat_roll(discord_id):
         results = SQL_Lookup.player_stat_roll(discord_id)
         previous_rolls = [results.Roll_1, results.Roll_2, results.Roll_3,
