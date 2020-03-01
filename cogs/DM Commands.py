@@ -97,8 +97,8 @@ class DM_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     Quick_SQL.log_command(command)
-                    google_update = Command_Execute.remove_item(trim_message)
-                    await command.send(google_update)
+                    response = Command_Execute.remove_item(trim_message)
+                    await command.send(response)
                     break
                 else:
                     await command.send("Give item command stopped")

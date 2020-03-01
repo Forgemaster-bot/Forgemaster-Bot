@@ -58,6 +58,7 @@ class Mod_Commands(commands.Cog):
         trim_message = command.message.content.replace('$CharacterRefresh ', '')
         command_check = Command_Check.character_refresh(trim_message)
         if command_check[0]:
+            await command.send("working...")
             Command_Execute.character_refresh(trim_message)
             await command.send("{} refreshed".format(trim_message))
 
@@ -166,7 +167,7 @@ class Mod_Commands(commands.Cog):
 
     @commands.command(name='RollCheck', help='[Character Name]')
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
-    async def character_refresh(self, command):
+    async def roll_check(self, command):
         trim_message = command.message.content.replace('$RollCheck ', '')
         command_check = Command_Check.roll_check(trim_message)
         if command_check[0]:

@@ -91,11 +91,12 @@ def remove_item(command: str):
     if len(c_list) < 2:
         return False, "Please enter a character name and an item."
     character_name = c_list[0].lstrip()
-    item_name = c_list[1].lstrip()
+    item = c_list[1].split(":")
+    item_name = item[0].lstrip()
     if not SQL_Check.character_exists(character_name):
         return False, "The character {} doesnt exist.".format(character_name)
     try:
-        quantity = int(c_list[2].lstrip())
+        quantity = int(item[1].lstrip())
     except IndexError:
         quantity = 1
     if not SQL_Check.character_has_item(character_name, item_name):

@@ -3,7 +3,7 @@ import Quick_SQL
 
 def player_name_by_id(user_id: str):
     cursor = Quick_SQL.db_connection()
-    query = 'select * from Info_Discord where ID={}'.format(user_id)
+    query = "select * from Info_Discord where ID= '{}'".format(user_id)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:

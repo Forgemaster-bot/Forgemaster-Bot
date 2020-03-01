@@ -82,9 +82,10 @@ def remove_item(command: str):
     # get inputs data
     c_list = command.split(",")
     character_name = c_list[0].lstrip()
-    item_name = c_list[1].lstrip()
+    item = c_list[1].split(":")
+    item_name = item[0].lstrip()
     try:
-        quantity = int(c_list[2].lstrip())
+        quantity = int(item[1].lstrip())
     except IndexError:
         quantity = 1
     if quantity == SQL_Lookup.character_item_quantity(character_name, item_name):
@@ -302,6 +303,7 @@ def rand_char(discord_id: str):
     SQL_Insert.discord_roll(discord_id, stat_array)  # create new entry in discord roll
     # print to discord
     roll_total = sum(stat_array)
+    stat_display_list.insert(0, "**{}:**".format(SQL_Lookup.player_name_by_id(discord_id)))
     stat_display_list.append('Total = **{}**'.format(roll_total))
     response = Quick_Python.stitch_table(stat_display_list)
     return response
@@ -423,10 +425,13 @@ def sync_players(command: str):
     for member in command.guild.members:
         discord_name = member.display_name.replace("'", "")
         discord_id = member.id
-        if not SQL_Check.player_exists(discord_id):
-            SQL_Insert.sync_players(discord_id, discord_name)
-            new_players += 1
-        elif discord_name != SQL_Lookup.player_name_by_id(discord_id):
-            SQL_Update.player_name(discord_name, discord_id)
-            update_player += 1
+        try:
+            if not SQL_Check.player_exists(discord_id):
+                SQL_Insert.sync_players(discord_id, discord_name)
+                new_players += 1
+            elif discord_name != SQL_Lookup.player_name_by_id(discord_id):
+                SQL_Update.player_name(discord_name, discord_id)
+                update_player += 1
+        except:
+            return "eh?"
     return "{} new players found\n{} player names updated".format(new_players, update_player)
