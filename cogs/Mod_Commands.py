@@ -165,6 +165,12 @@ class Mod_Commands(commands.Cog):
                     await command.send("Give feat command stopped")
                     break
 
+    @commands.command(name='SyncPlayers', help='updates database with all user Id and names')
+    @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
+    async def sync_players(self, command):
+        response = Command_Execute.sync_players(command)
+        await command.send(response)
+
     @commands.command(name='RollCheck', help='[Character Name]')
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def roll_check(self, command):

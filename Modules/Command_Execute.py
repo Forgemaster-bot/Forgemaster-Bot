@@ -438,13 +438,13 @@ def sync_players(command: str):
     for member in command.guild.members:
         discord_name = member.display_name.replace("'", "")
         discord_id = member.id
-        try:
-            if not SQL_Check.player_exists(discord_id):
-                SQL_Insert.sync_players(discord_id, discord_name)
+        result = Quick_Python.sync_player(discord_id, discord_name)
+        if result[0]:
+            if result[1] == "New":
                 new_players += 1
-            elif discord_name != SQL_Lookup.player_name_by_id(discord_id):
-                SQL_Update.player_name(discord_name, discord_id)
+            elif result[1] == "Update":
                 update_player += 1
-        except:
-            return "eh?"
+        else:
+            if result[1] != "No change":
+                return result[1]
     return "{} new players found\n{} player names updated".format(new_players, update_player)

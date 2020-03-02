@@ -292,9 +292,11 @@ def dice_roll(command: str):
         return "Please enter two values, first for number of dice, then for sides"
 
 
-def roll_stats(discord_id: str):
+def roll_stats(discord_id: str, discord_name: str):
     if not SQL_Check.player_exists(discord_id):
-        return False, "You are not on the system, please ask a mod to use the $SyncPlayers command"
+        sync = Quick_Python.sync_player(discord_id, discord_name)
+        if not sync[0]:
+            return sync
     if SQL_Check.player_stat_roll(discord_id):
         results = SQL_Lookup.player_stat_roll(discord_id)
         previous_rolls = [results.Roll_1, results.Roll_2, results.Roll_3,

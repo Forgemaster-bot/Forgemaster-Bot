@@ -15,7 +15,9 @@ class Player_Commands(commands.Cog):
     async def dice_roll(self, command):
         Quick_SQL.log_command(command)
         discord_id = str(command.message.author.id)
-        command_check = Command_Check.roll_stats(discord_id)
+        discord_name = str(command.message.author.display_name)
+
+        command_check = Command_Check.roll_stats(discord_id, discord_name)
         if command_check[0]:
             response = Command_Execute.rand_char(discord_id)
             await command.send(response)
@@ -103,15 +105,6 @@ class Player_Commands(commands.Cog):
                     await command.send("For sale command stopped")
                     break
 
-    @commands.command(name='ListSkills', help="list available skills")
-    async def list_skills(self, command):
-        response = Command_Execute.info_skills()
-        await command.send(response)
-
-    @commands.command(name='ListClasses', help="list available classes")
-    async def list_classes(self, command):
-        response = Command_Execute.info_classes()
-        await command.send(response)
 
     async def confirm(self, command):
             # setup sub function to store new message

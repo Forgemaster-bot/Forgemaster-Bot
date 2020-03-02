@@ -1,4 +1,8 @@
 import random
+import SQL_Check
+import SQL_Lookup
+import SQL_Update
+import SQL_Insert
 
 def stitch_string(given_list: list):
     return_string = ""
@@ -63,3 +67,16 @@ def ability_name_convert(ability: str):
 def dice_roll(low: int, high: int):
     response = random.randint(low, high)
     return response
+
+
+def sync_player(discord_id: str, discord_name: str):
+    try:
+        if not SQL_Check.player_exists(discord_id):
+            SQL_Insert.sync_players(discord_id, discord_name)
+            return True, "New"
+        elif discord_name != SQL_Lookup.player_name_by_id(discord_id):
+            SQL_Update.player_name(discord_name, discord_id)
+            return True, "Update"
+    except:
+        return False, "Something went wrong adding {} to the list".format(discord_name)
+    return False, "No change"

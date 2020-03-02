@@ -7,20 +7,15 @@ class Support_Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='Ping', help='Pong')
-    async def ping(self, command):
-        await command.send("Pong")
-
-    @commands.command(name='SyncPlayers', help='updates database with all user Id and names')
-    @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
-    async def sync_players(self, command):
-        response = Command_Execute.sync_players(command)
+    @commands.command(name='ListSkills', help="list available skills")
+    async def list_skills(self, command):
+        response = Command_Execute.info_skills()
         await command.send(response)
 
-    @commands.command(name='Test', help='Does stuff')
-    @commands.check_any(commands.has_role('Bot-Support'))
-    async def test(self, command):
-        await command.send("ping")
+    @commands.command(name='ListClasses', help="list available classes")
+    async def list_classes(self, command):
+        response = Command_Execute.info_classes()
+        await command.send(response)
 
     # Yes/No response checker
     async def confirm(self, command):
