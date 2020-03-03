@@ -110,20 +110,6 @@ def character_has_skill(character_name: str, skill_name: str):
     return True
 
 
-def character_has_profession(character_name: str):
-    cursor = Quick_SQL.db_connection()
-    query = "select a.*,b.* " \
-            "from Link_Character_Skills A " \
-            "Left Join Info_Skills B " \
-            "on A.Skill = B.Name" \
-            "where A.Character = '{}' and B.Job = 1".format(character_name)
-    cursor.execute(query)
-    result = cursor.fetchone()
-    if result is None:
-        return False
-    return True
-
-
 def character_has_feat(character_name: str, feat_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \
@@ -211,4 +197,53 @@ def level_up_check(character_name: str):
     return "No"
 
 
+def character_has_crafting_point(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Main_Crafting " \
+            "where Character_Name = '{}' and Crafting_Point = 1".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
 
+
+def character_has_crafting_value(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Main_Crafting " \
+            "where Character_Name = '{}' and Crafting_Value > 0".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+
+
+def character_has_crafting_skill(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "Select count(*) as Total " \
+            "From Link_Character_Skills A " \
+            "Left Join Info_Skills B " \
+            "On A.Skill = B.Name " \
+            "where Character = '{}' and B.Job = 1".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+
+
+def character_has_multiple_profession(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "Select count(*) as Total " \
+            "From Link_Character_Skills A " \
+            "Left Join Info_Skills B " \
+            "On A.Skill = B.Name " \
+            "where Character = '{}' and B.Job = 1".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result.Total > 1:
+        return True
+    return False

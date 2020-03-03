@@ -426,7 +426,14 @@ def craft(character_name: str, discord_id: str):
         return False, "The character {} doesnt exist".format(character_name)
     if not SQL_Check.player_owns_character(character_name, discord_id):
         return False, "You don't own the character {}.".format(character_name)
-    return True,""
+    if not SQL_Check.character_has_crafting_skill(character_name):
+        return False, "{} is not skilled in any crafting tools".format(character_name)
+    if not SQL_Check.character_has_crafting_point(character_name) and \
+       not SQL_Check.character_has_crafting_value(character_name):
+        return False, "{} has used up all their crafting time for this week".format(character_name)
+    return True, ""
+
+
 '''''''''''''''''''''''''''''''''''''''''
 ###########Utility commands##############
 '''''''''''''''''''''''''''''''''''''''''

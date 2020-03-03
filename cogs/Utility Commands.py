@@ -17,6 +17,12 @@ class Support_Commands(commands.Cog):
         response = Command_Execute.info_classes()
         await command.send(response)
 
+    @commands.command(name='Ping', help="list available classes")
+    async def ping(self, command):
+        response = "Ping!"
+        author = "<@{}>".format(command.message.author.id)
+        await command.send("{} {}".format(author, response))
+
     # Yes/No response checker
     async def confirm(self, command):
         # setup sub function to store new message

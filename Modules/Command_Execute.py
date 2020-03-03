@@ -118,7 +118,8 @@ def log_xp(character_name: str):
     SQL_Update.character_xp(character_name.lstrip(), xp)
     c_list = [character_name]
     Update_Google_Roster.update_xp_group(c_list)
-    return "{} got {}xp for posting a log".format(character_name, xp)
+    user_ping = "<@{}>".format(SQL_Lookup.character_owner(character_name))
+    return "{} {} got {}xp for posting a log".format(user_ping, character_name, xp)
 
 
 def npc_talk(command: str):
@@ -152,7 +153,8 @@ def create_character(command: str):
     SQL_Insert.character_class(character_name, character_class, 1, 1)
     Update_Google_Roster.insert_new_character(character_name)
     Update_Google_Roster.update_classes(character_name)
-    return "{} has been created".format(character_name)
+    user_ping = "<@{}>".format(SQL_Lookup.character_owner(character_name))
+    return "{} your character {} has been created".format(user_ping, character_name)
 
 
 def character_sync(character_name: str):

@@ -4,6 +4,7 @@ import asyncio
 import SQL_Lookup
 import SQL_Check
 import Command_Check
+import Quick_Python
 
 
 class Crafting_Commands(commands.Cog):
@@ -12,17 +13,25 @@ class Crafting_Commands(commands.Cog):
 
     @commands.command(name='Craft', help="[Character]")
     async def craft(self, command):
-        trim_message = command.message.content.replace('$Craft ', '')
-        discord_id = str(command.message.author.id)
-        command_check = Command_Check.craft(trim_message, discord_id)
+        character_name = command.message.content.replace('$Craft ', '')
+        discord_id = command.message.author.id
+        command_check = Command_Check.craft(character_name, discord_id)
         if not command_check[0]:
             await command.send(command_check[1])
-        while True:
-            reply = await self.pick_craft_skill(command, 'I hear you want craft something is this true?')
-            await command.author.send("you replied with {}".format(reply))
-            break
+        else:
+            crafting = True
+            while crafting:
+                if SQL_Check.character_has_multiple_profession(character_name):
+                    craft_skill = await self.pick_craft_skill(command, character_name)
+                    crafting = craft_skill[0]
+                else:
+                    craft_skill = SQL_Lookup.character_skill_profession(character_name)
 
-    async def pick_craft_skill(self, command, question):
+            await command.author.send("Crafting Ended")
+
+    async def pick_craft_skill(self, command, character_name):
+        profession = Quick_Python.stitch_table(SQL_Lookup.character_skill_profession(character_name))
+        question = "Please choose a profession to use:\n{}".format(profession)
         await command.message.author.send(question)
 
         # setup sub function to do checks the returned message is from the user in private messages
@@ -33,10 +42,12 @@ class Crafting_Commands(commands.Cog):
         try:
             msg = await self.bot.wait_for('message', timeout=60.0, check=check_reply)
         except asyncio.TimeoutError:
-            return False, "No"
+            return False, ""
+        if msg.content == "EXIT":
+            return False, ""
 
         # check content of response to see what the person wrote
-        return msg.content.lower()
+        return True, msg.content.lower()
 
 
 def setup(bot):
