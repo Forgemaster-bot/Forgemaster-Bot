@@ -421,6 +421,12 @@ def trade_stop(command: str, discord_id: str):
     return True, "Do you want to stop selling {}?".format(item_name)
 
 
+def craft(character_name: str, discord_id: str):
+    if not SQL_Check.character_exists(character_name):
+        return False, "The character {} doesnt exist".format(character_name)
+    if not SQL_Check.player_owns_character(character_name, discord_id):
+        return False, "You don't own the character {}.".format(character_name)
+    return True,""
 '''''''''''''''''''''''''''''''''''''''''
 ###########Utility commands##############
 '''''''''''''''''''''''''''''''''''''''''

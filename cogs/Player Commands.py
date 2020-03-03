@@ -105,7 +105,6 @@ class Player_Commands(commands.Cog):
                     await command.send("For sale command stopped")
                     break
 
-
     async def confirm(self, command):
             # setup sub function to store new message
             def check_reply(m):

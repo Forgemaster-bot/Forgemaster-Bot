@@ -11,7 +11,7 @@ def player_name_by_id(user_id: str):
     return result.Name
 
 
-def player_id_by_name(name:str):
+def player_id_by_name(name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * from Info_Discord where Name = '{}'".format(name)
     cursor.execute(query)
@@ -33,6 +33,13 @@ def player_stat_roll(discord_id: str):
     return result
 
 
+def player_character(discord_id: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select Character_Name from Main_Characters where Discord_ID = '{}'".format(discord_id)
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
 def character_sheet(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
@@ -50,7 +57,7 @@ def character_owner(character_name: str):
 
 def character_class_by_order(character_name: str, order: int):
     cursor = Quick_SQL.db_connection()
-    query = "select * from Link_Character_Class where Character='{}' and Number = '{}'".format(character_name,order)
+    query = "select * from Link_Character_Class where Character='{}' and Number = '{}'".format(character_name, order)
     cursor.execute(query)
     class_lookup = cursor.fetchone()
     return class_lookup.Class, class_lookup.Level
@@ -58,7 +65,9 @@ def character_class_by_order(character_name: str, order: int):
 
 def character_class_level_by_class(character_name: str, character_class: str):
     cursor = Quick_SQL.db_connection()
-    query = "select * from Link_Character_Class where Character='{}' and Class = '{}'".format(character_name,character_class)
+    query = "select * " \
+            "from Link_Character_Class " \
+            "where Character='{}' and Class = '{}'".format(character_name, character_class)
     cursor.execute(query)
     class_lookup = cursor.fetchone()
     return class_lookup.Level
@@ -93,13 +102,13 @@ def character_feats(character_name: str):
 
 def character_item_quantity(character_name: str, item_name: str):
     cursor = Quick_SQL.db_connection()
-    query = "select * from Link_Character_Items where Character='{}' AND Item = '{}'".format(character_name,item_name)
+    query = "select * from Link_Character_Items where Character='{}' AND Item = '{}'".format(character_name, item_name)
     cursor.execute(query)
     item = cursor.fetchone()
     return item.Quantity
 
 
-def character_inventory(character_name:str):
+def character_inventory(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * from Link_Character_Items where Character='{}'".format(character_name)
     cursor.execute(query)
