@@ -226,14 +226,3 @@ def log_xp(level: int):
     result = cursor.fetchone()
     return result.Log_XP
 
-
-def character_skill_profession(character_name: str):
-    cursor = Quick_SQL.db_connection()
-    query = "Select A.* " \
-            "From Link_Character_Skills A " \
-            "Left Join Info_Skills B " \
-            "On A.Skill = B.Name " \
-            "where Character = '{}' and B.Job = 1".format(character_name)
-    cursor.execute(query)
-    rows = cursor.fetchall()
-    return rows.Skills
