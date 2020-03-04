@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a7f42299-d755-4423-9cfc-10cd828ff8b2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Modules/SQL_Crafting_Lookup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Modules/Command_Check.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Command_Check.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Modules/Command_Execute.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Command_Execute.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Modules/SQL_Crafting_Lookup.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Modules/SQL_Lookup.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/SQL_Lookup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Modules/SQL_Update.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/SQL_Update.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cogs/Crafting_Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Crafting_Commands.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player Commands.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,57 +32,137 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cogs/Mod_Commands.py">
+        <entry file="file://$PROJECT_DIR$/cogs/DM Commands.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-34">
-              <caret line="27" column="56" selection-start-line="27" selection-start-column="56" selection-end-line="27" selection-end-column="56" />
+            <state relative-caret-position="493">
+              <caret line="99" column="52" selection-start-line="99" selection-start-column="52" selection-end-line="99" selection-end-column="52" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
-                <element signature="e#266#422#0" />
-                <element signature="e#1320#1426#0" />
-                <element signature="e#2545#2889#0" />
-                <element signature="e#3104#3831#0" />
-                <element signature="e#4040#4776#0" />
-                <element signature="e#5014#5748#0" />
-                <element signature="e#5979#6721#0" />
-                <element signature="e#6944#7679#0" />
+                <element signature="e#409#1159#0" />
+                <element signature="e#1393#2120#0" />
+                <element signature="e#2321#2514#0" />
+                <element signature="e#2559#2986#0" />
+                <element signature="e#3115#3842#0" />
+                <element signature="e#5940#6296#0" />
+                <element signature="e#6374#6877#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cogs/Player Commands.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="457">
+              <caret line="86" column="25" lean-forward="true" selection-start-line="86" selection-start-column="25" selection-end-line="86" selection-end-column="25" />
+              <folding>
+                <element signature="e#0#32#0" expanded="true" />
+                <element signature="e#360#1275#0" />
+                <element signature="e#364#780#0" />
+                <element signature="e#1886#2734#0" />
+                <element signature="e#1907#2713#0" />
+                <element signature="e#3783#4581#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Modules/Command_Check.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-8">
+              <caret line="358" lean-forward="true" selection-start-line="358" selection-end-line="358" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#241#639#0" />
+                <element signature="e#712#1436#0" />
+                <element signature="e#1509#3579#0" />
+                <element signature="e#3617#4597#0" />
+                <element signature="e#16234#17799#0" />
+                <element signature="e#17853#18601#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Modules/Command_Execute.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="331">
+              <caret line="88" column="22" lean-forward="true" selection-start-line="88" selection-start-column="22" selection-end-line="88" selection-end-column="22" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#852#1265#0" />
+                <element signature="e#1300#2823#0" />
+                <element signature="e#3546#3946#0" />
+                <element signature="e#3986#4483#0" />
+                <element signature="e#4518#4761#0" />
+                <element signature="e#4931#5699#0" />
+                <element signature="e#5747#7331#0" />
+                <element signature="e#7382#7598#0" />
+                <element signature="e#7633#7962#0" />
+                <element signature="e#8000#8301#0" />
+                <element signature="e#8337#8710#0" />
+                <element signature="e#8749#9056#0" />
+                <element signature="e#9094#9490#0" />
+                <element signature="e#9527#9902#0" />
+                <element signature="e#10069#11635#0" />
+                <element signature="e#11670#12408#0" />
+                <element signature="e#12445#13146#0" />
+                <element signature="e#13182#14593#0" />
+                <element signature="e#14630#15317#0" />
+                <element signature="e#15343#15448#0" />
+                <element signature="e#15475#15581#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/cogs/Crafting_Commands.py">
+        <entry file="file://$PROJECT_DIR$/Modules/SQL_Update.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="28" column="21" lean-forward="true" selection-start-line="28" selection-start-column="21" selection-end-line="28" selection-end-column="21" />
+            <state relative-caret-position="230">
+              <caret line="32" column="38" lean-forward="true" selection-start-line="32" selection-start-column="38" selection-end-line="32" selection-end-column="38" />
               <folding>
-                <element signature="e#0#32#0" expanded="true" />
+                <element signature="e#0#16#0" expanded="true" />
+                <element signature="e#109#413#0" />
+                <element signature="e#474#792#0" />
+                <element signature="e#1317#1715#0" />
+                <element signature="e#1796#2247#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cogs/Utility Commands.py">
+        <entry file="file://$PROJECT_DIR$/Modules/SQL_Lookup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="20" column="34" selection-start-line="20" selection-start-column="34" selection-end-line="20" selection-end-column="34" />
+            <state relative-caret-position="271">
+              <caret line="107" selection-start-line="107" selection-end-line="107" />
               <folding>
-                <element signature="e#0#32#0" expanded="true" />
-                <element signature="e#488#566#0" />
-                <element signature="e#677#815#0" />
-                <element signature="e#893#1396#0" />
+                <element signature="e#4229#4442#0" />
+                <element signature="e#4513#5091#0" />
+                <element signature="e#5141#5509#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Modules/SQL_Crafting_Lookup.py">
+        <entry file="file://$PROJECT_DIR$/Modules/SQL_Check.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
+            <state relative-caret-position="229">
+              <caret line="97" selection-start-line="97" selection-end-line="97" />
+              <folding>
+                <element signature="e#0#16#0" expanded="true" />
+                <element signature="e#70#327#0" />
+                <element signature="e#362#617#0" />
+                <element signature="e#653#909#0" />
+                <element signature="e#955#1225#0" />
+                <element signature="e#1260#1515#0" />
+                <element signature="e#1915#2224#0" />
+                <element signature="e#2669#2979#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -155,18 +239,18 @@
         <option value="$PROJECT_DIR$/Modules/SQL_Insert.py" />
         <option value="$PROJECT_DIR$/Modules/SQL_Delete.py" />
         <option value="$PROJECT_DIR$/cogs/DM Commands.py" />
-        <option value="$PROJECT_DIR$/Modules/SQL_Update.py" />
         <option value="$PROJECT_DIR$/Modules/Quick_Python.py" />
         <option value="$PROJECT_DIR$/cogs/Mod_Commands.py" />
         <option value="$PROJECT_DIR$/Core.py" />
-        <option value="$PROJECT_DIR$/cogs/Player Commands.py" />
         <option value="$PROJECT_DIR$/cogs/Utility Commands.py" />
-        <option value="$PROJECT_DIR$/Modules/Command_Execute.py" />
-        <option value="$PROJECT_DIR$/Modules/Command_Check.py" />
         <option value="$PROJECT_DIR$/Modules/SQL_Check.py" />
-        <option value="$PROJECT_DIR$/Modules/SQL_Lookup.py" />
         <option value="$PROJECT_DIR$/Modules/SQL_Crafting_Lookup.py" />
         <option value="$PROJECT_DIR$/cogs/Crafting_Commands.py" />
+        <option value="$PROJECT_DIR$/Modules/SQL_Lookup.py" />
+        <option value="$PROJECT_DIR$/cogs/Player Commands.py" />
+        <option value="$PROJECT_DIR$/Modules/Command_Check.py" />
+        <option value="$PROJECT_DIR$/Modules/SQL_Update.py" />
+        <option value="$PROJECT_DIR$/Modules/Command_Execute.py" />
       </list>
     </option>
   </component>
@@ -358,7 +442,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583270726174</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="More crafting">
+      <created>1583276162770</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1583276162770</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -397,7 +488,8 @@
     <MESSAGE value="removed surnames and update character create to ignore them" />
     <MESSAGE value="fixed item remove" />
     <MESSAGE value="Making crafting chat command" />
-    <option name="LAST_COMMIT_MESSAGE" value="Making crafting chat command" />
+    <MESSAGE value="More crafting" />
+    <option name="LAST_COMMIT_MESSAGE" value="More crafting" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -408,9 +500,9 @@
           <option name="timeStamp" value="78" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/cogs/Crafting_Commands.py</url>
-          <line>31</line>
-          <option name="timeStamp" value="105" />
+          <url>file://$PROJECT_DIR$/Modules/Command_Execute.py</url>
+          <line>350</line>
+          <option name="timeStamp" value="112" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -631,20 +723,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/SQL_Update.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-            <element signature="e#109#413#0" />
-            <element signature="e#474#792#0" />
-            <element signature="e#1317#1715#0" />
-            <element signature="e#1796#2247#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/client.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
@@ -676,74 +754,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/Command_Execute.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="108" selection-start-line="108" selection-end-line="108" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-            <element signature="e#852#1265#0" />
-            <element signature="e#1300#2823#0" />
-            <element signature="e#2861#3475#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="82" selection-start-line="82" selection-end-line="82" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player Commands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="31" column="32" lean-forward="true" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-            <element signature="e#364#780#0" />
-            <element signature="e#1907#2713#0" />
-            <element signature="e#3783#4581#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/Command_Check.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="423" column="4" selection-start-line="423" selection-start-column="4" selection-end-line="423" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-            <element signature="e#241#639#0" />
-            <element signature="e#712#1436#0" />
-            <element signature="e#1509#3579#0" />
-            <element signature="e#3617#4597#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Modules/Quick_SQL.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="7" selection-start-line="7" selection-end-line="7" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/SQL_Lookup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="227" selection-start-line="227" selection-end-line="227" />
-          <folding>
-            <element signature="e#5578#5802#0" />
-            <element signature="e#5868#6089#0" />
-            <element signature="e#6149#6364#0" />
-            <element signature="e#6390#6642#0" />
-            <element signature="e#6669#6906#0" />
-            <element signature="e#6937#7120#0" />
           </folding>
         </state>
       </provider>
@@ -765,69 +781,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/bot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="598" selection-start-line="598" selection-end-line="598" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/SQL_Crafting_Lookup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/SQL_Check.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="501">
-          <caret line="247" selection-start-line="247" selection-end-line="247" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-            <element signature="e#70#327#0" />
-            <element signature="e#362#617#0" />
-            <element signature="e#653#909#0" />
-            <element signature="e#955#1225#0" />
-            <element signature="e#1260#1515#0" />
-            <element signature="e#1915#2224#0" />
-            <element signature="e#2292#2599#0" />
-            <element signature="e#2669#2979#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Utility Commands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="20" column="34" selection-start-line="20" selection-start-column="34" selection-end-line="20" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-            <element signature="e#488#566#0" />
-            <element signature="e#677#815#0" />
-            <element signature="e#893#1396#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/DM Commands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="114" column="23" lean-forward="true" selection-start-line="114" selection-start-column="23" selection-end-line="114" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-            <element signature="e#409#1159#0" />
-            <element signature="e#1393#2120#0" />
-            <element signature="e#2321#2514#0" />
-            <element signature="e#2559#2986#0" />
-            <element signature="e#3115#3842#0" />
-            <element signature="e#4058#4794#0" />
-            <element signature="e#5940#6296#0" />
-            <element signature="e#6374#6877#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Core.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
@@ -835,6 +788,13 @@
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/bot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="598" selection-start-line="598" selection-end-line="598" />
         </state>
       </provider>
     </entry>
@@ -856,12 +816,161 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Crafting_Commands.py">
+    <entry file="file://$PROJECT_DIR$/Modules/SQL_Crafting_Lookup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="28" column="21" lean-forward="true" selection-start-line="28" selection-start-column="21" selection-end-line="28" selection-end-column="21" />
+        <state>
+          <caret column="16" selection-start-column="16" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Utility Commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="20" column="34" selection-start-line="20" selection-start-column="34" selection-end-line="20" selection-end-column="34" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#488#566#0" />
+            <element signature="e#677#815#0" />
+            <element signature="e#893#1396#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Crafting_Commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="82" selection-start-line="82" selection-end-line="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player Commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="457">
+          <caret line="86" column="25" lean-forward="true" selection-start-line="86" selection-start-column="25" selection-end-line="86" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#360#1275#0" />
+            <element signature="e#364#780#0" />
+            <element signature="e#1886#2734#0" />
+            <element signature="e#1907#2713#0" />
+            <element signature="e#3783#4581#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/SQL_Check.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="97" selection-start-line="97" selection-end-line="97" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+            <element signature="e#70#327#0" />
+            <element signature="e#362#617#0" />
+            <element signature="e#653#909#0" />
+            <element signature="e#955#1225#0" />
+            <element signature="e#1260#1515#0" />
+            <element signature="e#1915#2224#0" />
+            <element signature="e#2669#2979#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/Command_Check.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-8">
+          <caret line="358" lean-forward="true" selection-start-line="358" selection-end-line="358" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#241#639#0" />
+            <element signature="e#712#1436#0" />
+            <element signature="e#1509#3579#0" />
+            <element signature="e#3617#4597#0" />
+            <element signature="e#16234#17799#0" />
+            <element signature="e#17853#18601#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/SQL_Lookup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="107" selection-start-line="107" selection-end-line="107" />
+          <folding>
+            <element signature="e#4229#4442#0" />
+            <element signature="e#4513#5091#0" />
+            <element signature="e#5141#5509#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/DM Commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="99" column="52" selection-start-line="99" selection-start-column="52" selection-end-line="99" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#409#1159#0" />
+            <element signature="e#1393#2120#0" />
+            <element signature="e#2321#2514#0" />
+            <element signature="e#2559#2986#0" />
+            <element signature="e#3115#3842#0" />
+            <element signature="e#5940#6296#0" />
+            <element signature="e#6374#6877#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/Command_Execute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="88" column="22" lean-forward="true" selection-start-line="88" selection-start-column="22" selection-end-line="88" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#852#1265#0" />
+            <element signature="e#1300#2823#0" />
+            <element signature="e#3546#3946#0" />
+            <element signature="e#3986#4483#0" />
+            <element signature="e#4518#4761#0" />
+            <element signature="e#4931#5699#0" />
+            <element signature="e#5747#7331#0" />
+            <element signature="e#7382#7598#0" />
+            <element signature="e#7633#7962#0" />
+            <element signature="e#8000#8301#0" />
+            <element signature="e#8337#8710#0" />
+            <element signature="e#8749#9056#0" />
+            <element signature="e#9094#9490#0" />
+            <element signature="e#9527#9902#0" />
+            <element signature="e#10069#11635#0" />
+            <element signature="e#11670#12408#0" />
+            <element signature="e#12445#13146#0" />
+            <element signature="e#13182#14593#0" />
+            <element signature="e#14630#15317#0" />
+            <element signature="e#15343#15448#0" />
+            <element signature="e#15475#15581#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/SQL_Update.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="32" column="38" lean-forward="true" selection-start-line="32" selection-start-column="38" selection-end-line="32" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+            <element signature="e#109#413#0" />
+            <element signature="e#474#792#0" />
+            <element signature="e#1317#1715#0" />
+            <element signature="e#1796#2247#0" />
           </folding>
         </state>
       </provider>

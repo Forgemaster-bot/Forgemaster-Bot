@@ -173,6 +173,14 @@ def character_skills(character_name: str):
     return skills
 
 
+def shop_item(item_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * from Info_Item where Name = '{}' and For_Sale = 1".format(item_name)
+    cursor.execute(query)
+    item = cursor.fetchone()
+    return item
+
+
 def trade_item_quantity(character_name: str, item_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * from Main_Trade where Character='{}' AND Item = '{}'".format(character_name, item_name)
@@ -226,3 +234,22 @@ def log_xp(level: int):
     result = cursor.fetchone()
     return result.Log_XP
 
+
+'''''''''''''''''''''''''''''''''''''''''
+###########Crafting##############
+'''''''''''''''''''''''''''''''''''''''''
+
+
+def character_skill_profession(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "Select A.* " \
+            "From Link_Character_Skills A " \
+            "Left Join Info_Skills B " \
+            "On A.Skill = B.Name " \
+            "where Character = '{}' and B.Job = 1".format(character_name)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    skill_list = []
+    for row in rows:
+        skill_list.append(row.Skill)
+    return skill_list

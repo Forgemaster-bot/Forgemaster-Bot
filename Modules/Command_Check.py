@@ -328,6 +328,67 @@ def level_up(command: str, discord_id: str):
     return True, "Add a level of {} to {}?".format(character_class, character_name)
 
 
+def shop_buy(command: str, discord_id: str):  # [Character Name],[Seller's Name],[Item Name],[Quantity]
+    c_list = command.split(",")
+    if len(c_list) != 3:
+        return False, "Please enter your character name, the item and the quantity"
+    # character
+    character_name = c_list[0].lstrip()
+    if not SQL_Check.character_exists(character_name):
+        return False, "The character {} doesnt exist".format(character_name)
+    if not SQL_Check.player_owns_character(character_name, discord_id):
+        return False, "You don't own the character {}.".format(character_name)
+    # item
+    item_name = c_list[1].lstrip()
+    shop_item = SQL_Lookup.shop_item(item_name)
+    if shop_item is None:
+        return False, "{} not found, make sure to type the name of the item in correctly".format(item_name)
+    # Quantity
+    try:
+        quantity = int(c_list[2])
+    except ValueError:
+        return False, "Make sure the value of the item is a number"
+    # Cost
+    item_value = shop_item.Value
+    total_value = item_value * quantity
+    available_gold = SQL_Lookup.character_gold(character_name)
+    if available_gold < total_value:
+        return False, "You don't have the {}g needed to buy {} {}".format(total_value, quantity, item_name)
+    return True, "Do you want to buy {} {} from the shop for {}g?".format(quantity, item_name, total_value)
+
+
+def shop_sell(command: str, discord_id: str):  # [Character Name],[Seller's Name],[Item Name],[Quantity]
+    c_list = command.split(",")
+    if len(c_list) != 3:
+        return False, "Please enter your character name, the item and the quantity"
+    # character
+    character_name = c_list[0].lstrip()
+    if not SQL_Check.character_exists(character_name):
+        return False, "The character {} doesnt exist".format(character_name)
+    if not SQL_Check.player_owns_character(character_name, discord_id):
+        return False, "You don't own the character {}.".format(character_name)
+    # item in inventory
+    item_name = c_list[1].lstrip()
+    if not SQL_Check.character_has_item(character_name, item_name):
+        return False, "{} doesnt own any {}".format(character_name, item_name)
+    # item in shop
+    shop_item = SQL_Lookup.shop_item(item_name)
+    if shop_item is None:
+        return False, "The shop doesnt want to buy that item"
+    # quantity
+    try:
+        quantity = int(c_list[2])
+    except ValueError:
+        return False, "Make sure the quantity is a number"
+    if quantity > SQL_Lookup.character_item_quantity(character_name, item_name):
+        return False, "{} doesnt own {} {} to sell".format(character_name, quantity, item_name)
+
+    # Cost
+    item_value = shop_item.shop_item(item_name).Value
+    total_value = item_value * quantity
+    return True, "Do you want to sell {} {} for {}g?".format(quantity, item_name, total_value)
+
+
 def trade_sell(command: str, discord_id: str):  # [Character Name],[Item Name],[Value],[Quantity]
     c_list = command.split(",")
     if len(c_list) != 4:

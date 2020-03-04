@@ -10,6 +10,27 @@ class Player_Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    # Level up
+    @commands.command(name='LevelUp', help="[Character Name],[Class]")
+    async def level_up(self, command):
+        trim_message = command.message.content.replace('$LevelUp ', '')
+        discord_id = str(command.message.author.id)
+        command_check = Command_Check.level_up(trim_message, discord_id)
+        await command.send(command_check[1])
+        if command_check[0]:
+            while True:
+                # Get confirmation from user
+                reply = await self.confirm(command)
+                if reply == "Yes":
+                    await command.send("Adding level...")
+                    Quick_SQL.log_command(command)
+                    response = Command_Execute.level_up(trim_message)
+                    await command.send(response)
+                    break
+                else:
+                    await command.send("level up command stopped")
+                    break
+
     # Roll Stats
     @commands.command(name='randchar', help='[Dice Number] + D + [Number of sides] example 4D6')
     async def dice_roll(self, command):
@@ -24,27 +45,48 @@ class Player_Commands(commands.Cog):
         else:
             await command.send(command_check[1])
 
-    # Level up
-    @commands.command(name='LevelUp', help="[Character Name],[Class]")
-    async def level_up(self, command):
-            trim_message = command.message.content.replace('$LevelUp ', '')
-            discord_id = str(command.message.author.id)
-            command_check = Command_Check.level_up(trim_message, discord_id)
-            await command.send(command_check[1])
-            if command_check[0]:
-                while True:
-                    # Get confirmation from user
-                    reply = await self.confirm(command)
-                    if reply == "Yes":
-                        await command.send("Adding level...")
-                        Quick_SQL.log_command(command)
-                        response = Command_Execute.level_up(trim_message)
-                        await command.send(response)
-                        break
-                    else:
-                        await command.send("level up command stopped")
-                        break
+    # Shop
+    @commands.command(name='ShopBuy', help="[Character]],[Item],[Quantity]")
+    async def shop_buy(self, command):
+        trim_message = command.message.content.replace('$ShopBuy ', '')
+        discord_id = str(command.message.author.id)
+        command_check = Command_Check.shop_buy(trim_message, discord_id)
+        await command.send(command_check[1])
+        if command_check[0]:
+            while True:
+                # Get confirmation from user
+                reply = await self.confirm(command)
+                if reply == "Yes":
+                    await command.send("buying...")
+                    Quick_SQL.log_command(command)
+                    response = Command_Execute.shop_buy(trim_message)
+                    await command.send(response)
+                    break
+                else:
+                    await command.send("For sale command stopped")
+                    break
 
+    @commands.command(name='ShopSell', help="[Character]],[Item],[Quantity]")
+    async def shop_sell(self, command):
+        trim_message = command.message.content.replace('$ShopSell ', '')
+        discord_id = str(command.message.author.id)
+        command_check = Command_Check.shop_sell(trim_message, discord_id)
+        await command.send(command_check[1])
+        if command_check[0]:
+            while True:
+                # Get confirmation from user
+                reply = await self.confirm(command)
+                if reply == "Yes":
+                    await command.send("selling...")
+                    Quick_SQL.log_command(command)
+                    response = Command_Execute.shop_buy(trim_message)
+                    await command.send(response)
+                    break
+                else:
+                    await command.send("For sale command stopped")
+                    break
+
+    # Trade
     @commands.command(name='TradeSell', help='[Character],[Item],[Price],[Quantity]')
     async def trade_sell(self, command):
         trim_message = command.message.content.replace('$TradeSell ', '')

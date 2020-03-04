@@ -85,9 +85,9 @@ def remove_item(command: str):
     item = c_list[1].split(":")
     item_name = item[0].lstrip()
     try:
-        quantity = int(item[1].lstrip())
+        quantity = int(item[1].lstrip()) * -1
     except IndexError:
-        quantity = 1
+        quantity = 1 * -1
     if quantity == SQL_Lookup.character_item_quantity(character_name, item_name):
         SQL_Delete.character_item(character_name, item_name)
     else:
@@ -340,6 +340,29 @@ def level_up(command: str):
     Update_Google_Roster.update_level(character_name)
     total_level = SQL_Lookup.character_sum_class_levels(character_name)
     return "{} gained a level in {} and is now level {} overall".format(character_name, character_class, total_level)
+
+
+def shop_buy(command: str):
+    c_list = command.split(",")
+    character_name = c_list[0].lstrip()
+    item_name = c_list[1].lstrip()
+    quantity = int(c_list[2].lstrip())
+    item_value = SQL_Lookup.shop_item(item_name).Value
+    total_cost = (item_value * quantity) * -1
+
+    # add to player inventory
+    if SQL_Check.character_has_item(character_name, item_name):
+        SQL_Update.character_item_quantity(character_name, item_name, quantity)
+    else:
+        SQL_Insert.character_item(character_name, item_name, quantity)
+    # remove gold from player
+    SQL_Update.character_gold(character_name, total_cost)
+
+    # update roster
+    update_list = [character_name]
+    Update_Google_Roster.update_gold_group(update_list)
+    Update_Google_Roster.update_items(character_name)
+    return "{} bought {} {} from the shop for {}g".format(character_name, quantity, item_name, total_cost*-1)
 
 
 def trade_sell(command: str):
