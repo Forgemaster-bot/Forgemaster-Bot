@@ -240,6 +240,16 @@ def log_xp(level: int):
 '''''''''''''''''''''''''''''''''''''''''
 
 
+def character_crafting_points(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "Select * " \
+            "From Main_Crafting " \
+            "Where Character_Name = '{}'".format(character_name)
+    cursor.execute(query)
+    response = cursor.fetchone()
+    return response.Crafting_Point, response.Crafting_Value, response.Labour_Points
+
+
 def character_skill_profession(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "Select A.* " \
@@ -253,3 +263,40 @@ def character_skill_profession(character_name: str):
     for row in rows:
         skill_list.append(row.Skill)
     return skill_list
+
+
+def profession_item_list(profession: str, item_type: str, gold: float):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Info_Item " \
+            "Where Crafting = '{}' and Type = '{}' and Value <= '{}' " \
+            "order by Type,Name".format(profession, item_type, gold*2)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    results = []
+    for row in rows:
+        results.append(row.Name)
+    return results
+
+
+def profession_item_type_list(profession: str, gold: float):
+    cursor = Quick_SQL.db_connection()
+    query = "Select Type from Info_Item " \
+            "Where Crafting = '{}' and Value <= '{}' " \
+            "group by Type order by Type".format(profession, gold*2)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    item_types = []
+    for row in rows:
+        item_types.append(row.Type)
+    return item_types
+
+
+def item_detail(item_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "Select * " \
+            "From Info_Item " \
+            "Where Name = '{}' ".format(item_name)
+    cursor.execute(query)
+    item = cursor.fetchone()
+    return item

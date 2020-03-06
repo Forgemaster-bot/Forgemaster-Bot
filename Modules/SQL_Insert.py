@@ -102,3 +102,16 @@ def discord_roll(discord_id: str, stat_array: list):
                                                                              stat_array[4], stat_array[5])
     cursor.execute(link_class_insert)
     cursor.commit()
+
+
+'''''''''''''''''''''''''''''''''''''''''
+################Crafting#################
+'''''''''''''''''''''''''''''''''''''''''
+
+
+def crafting_point(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    insert = "insert into Main_crafting (character_Name,Crafting_Point,Crafting_Value,Labour_Points) " \
+             "values ('{}','1','0','0')".format(character_name)
+    cursor.execute(insert)
+    cursor.commit()

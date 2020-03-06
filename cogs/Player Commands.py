@@ -46,6 +46,7 @@ class Player_Commands(commands.Cog):
             await command.send(command_check[1])
 
     # Shop
+    '''
     @commands.command(name='ShopBuy', help="[Character]],[Item],[Quantity]")
     async def shop_buy(self, command):
         trim_message = command.message.content.replace('$ShopBuy ', '')
@@ -66,7 +67,7 @@ class Player_Commands(commands.Cog):
                     await command.send("For sale command stopped")
                     break
 
-    @commands.command(name='ShopSell', help="[Character]],[Item],[Quantity]")
+    @commands.command(name='Sell', help="[Character]],[Item],[Quantity]")
     async def shop_sell(self, command):
         trim_message = command.message.content.replace('$ShopSell ', '')
         discord_id = str(command.message.author.id)
@@ -85,7 +86,7 @@ class Player_Commands(commands.Cog):
                 else:
                     await command.send("For sale command stopped")
                     break
-
+    '''
     # Trade
     @commands.command(name='TradeSell', help='[Character],[Item],[Price],[Quantity]')
     async def trade_sell(self, command):

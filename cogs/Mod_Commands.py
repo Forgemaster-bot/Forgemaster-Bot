@@ -108,7 +108,7 @@ class Mod_Commands(commands.Cog):
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def add_skill(self, command):
         trim_message = command.message.content.replace('$SkillAdd ', '')
-        command_check = Command_Check.skill_remove(trim_message)
+        command_check = Command_Check.skill_add(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
             while True:

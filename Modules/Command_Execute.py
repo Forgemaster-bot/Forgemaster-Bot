@@ -473,3 +473,75 @@ def sync_players(command: str):
             if result[1] != "No change":
                 return result[1]
     return "{} new players found\n{} player names updated".format(new_players, update_player)
+
+
+'''''''''''''''''''''''''''''''''''''''''
+################Crafting#################
+'''''''''''''''''''''''''''''''''''''''''
+
+
+def crafting_message(character_name):
+    character_gold = SQL_Lookup.character_gold(character_name)
+    craft_limit = character_crafting_point(character_name)
+    craft_points = craft_limit[0]
+    craft_value = craft_limit[1]
+    labour = craft_limit[2]
+    labour_value = labour_crafting_value(craft_limit[2])
+    if craft_points > 0:
+        value_message = "You haven't worked this week so you can craft {}g worth of goods, " \
+                        "or you could make one valuable item.".format(craft_value)
+        if labour_value > 0:
+            max_message = "As you've recruited {} workers this week, the item can be worth up to {}g.".format(
+                labour, labour_value)
+        else:
+            max_message = "As your working alone this week, the item can be worth up to 500g"
+    else:
+        value_message = "You've already crafted this week, you have " \
+                        "{}g remaining in value of goods you can make.".format(craft_value)
+        max_message = ""
+
+    message = "Welcome {}, you have {}g that can be spent on raw materials, " \
+              "{} {}"\
+        .format(character_name, character_gold, value_message, max_message)
+    return message
+
+
+def crafting_gold_limit(character_name: str):
+    character_gold = SQL_Lookup.character_gold(character_name)
+    craft_limit = character_crafting_point(character_name)
+    craft_value = craft_limit[1]/2
+    labour_value = labour_crafting_value(craft_limit[2])
+    if craft_limit[0] == 1 and labour_value > 0:  # if they haven't crafted anything this week
+        if character_gold < labour_value:
+            return character_gold
+        else:
+            return labour_value
+    else:  # already crafted this week
+        if character_gold < craft_value:
+            return character_gold
+        else:
+            return craft_value
+
+
+def character_crafting_point(character_name: str):
+    if SQL_Check.character_has_crafted(character_name):
+        craft_details = SQL_Lookup.character_crafting_points(character_name)
+    else:
+        SQL_Insert.crafting_point(character_name)
+        craft_details = SQL_Lookup.character_crafting_points(character_name)
+    if craft_details[0] == 1:
+        return craft_details[0], 100, craft_details[2]
+    else:
+        return craft_details
+
+
+def labour_crafting_value(labour: int):
+    if labour == 1:
+        value = 5000
+    elif labour == 2:
+        value = 50000
+    elif labour > 2:
+        value = 1000000
+    else:
+        value = 0
+    return value

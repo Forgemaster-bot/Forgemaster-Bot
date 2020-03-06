@@ -80,3 +80,15 @@ def sync_player(discord_id: str, discord_name: str):
     except:
         return False, "Something went wrong adding {} to the list".format(discord_name)
     return False, "No change"
+
+
+def question_list(give_list: list):
+    return_string = ""
+    list_length = len(give_list)
+    for entry in range(list_length):
+        if return_string == "":
+            return_string = "{} : {}".format(entry + 1, give_list[entry])
+        else:
+            return_string = "{}\n{} : {}".format(return_string, entry + 1, give_list[entry])
+    return return_string
+

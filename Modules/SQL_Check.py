@@ -197,11 +197,16 @@ def level_up_check(character_name: str):
     return "No"
 
 
-def character_has_crafting_point(character_name: str):
+'''''''''''''''''''''''''''''''''''''''''''''''''''
+###################CRAFTING#######################
+'''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+def character_has_crafted(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \
             "from Main_Crafting " \
-            "where Character_Name = '{}' and Crafting_Point = 1".format(character_name)
+            "where Character_Name = '{}'".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:
@@ -209,11 +214,11 @@ def character_has_crafting_point(character_name: str):
     return True
 
 
-def character_has_crafting_value(character_name: str):
+def character_has_crafting_left(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \
             "from Main_Crafting " \
-            "where Character_Name = '{}' and Crafting_Value > 0".format(character_name)
+            "where Character_Name = '{}' and Crafting_Value = 0 and Crafting_Point = 0".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:
@@ -245,5 +250,19 @@ def character_has_multiple_profession(character_name: str):
     cursor.execute(query)
     result = cursor.fetchone()
     if result.Total > 1:
+        return True
+    return False
+
+
+def profession_has_multiple_choice(profession: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select A.Name, B.Total as Mundane, C.Total as Recipe " \
+            "from Info_Skills A  " \
+            "Left join (select Crafting, count(crafting) as Total from Info_Item where Crafting is not null group by Crafting) B on A.Name = B.Crafting " \
+            "left join (select Skill, count(skill) as Total from Info_Crafting_Recipes group by skill) C on A.Name = C.Skill " \
+            " where A.Job = 1 and A.Name = '{}'".format(profession)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result.Mundane is not None and result.Recipe is not None:
         return True
     return False
