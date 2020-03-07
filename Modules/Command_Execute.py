@@ -457,7 +457,7 @@ def info_classes():
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def sync_players(command: str):
+def sync_players(command):
     new_players = 0
     update_player = 0
     for member in command.guild.members:
@@ -494,14 +494,14 @@ def crafting_message(character_name):
             max_message = "As you've recruited {} workers this week, the item can be worth up to {}g.".format(
                 labour, labour_value)
         else:
-            max_message = "As your working alone this week, the item can be worth up to 500g"
+            max_message = "As your working alone this week, the item can be worth up to 500g."
     else:
         value_message = "You've already crafted this week, you have " \
                         "{}g remaining in value of goods you can make.".format(craft_value)
         max_message = ""
 
     message = "Welcome {}, you have {}g that can be spent on raw materials, " \
-              "{} {}"\
+              "{} {} Type stop at any point to stop crafting."\
         .format(character_name, character_gold, value_message, max_message)
     return message
 
@@ -545,3 +545,21 @@ def labour_crafting_value(labour: int):
     else:
         value = 0
     return value
+
+
+def craft_item(character_name: str, item_name: str, quantity: int):
+    item = SQL_Lookup.item_detail(item_name)
+    # update gold
+    craft_cost = item.Value/2 * quantity
+    SQL_Update.character_gold(character_name, craft_cost * -1)
+    Update_Google_Roster.update_gold_group([character_name])
+    # update inventory
+    add_item_command = "{},{}:{}".format(character_name, item_name, quantity)
+    add_item(add_item_command)
+    # update crafting
+    craft_details = SQL_Lookup.character_crafting_points(character_name)
+    new_craft_value = craft_details[1] - (craft_cost*2)
+    if new_craft_value <= 0:
+        new_craft_value = 0
+    SQL_Update.crafting_points(character_name, 0, new_craft_value, 0)
+

@@ -300,3 +300,19 @@ def item_detail(item_name: str):
     cursor.execute(query)
     item = cursor.fetchone()
     return item
+
+def profession_choice(profession: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select A.Name, B.Total as Mundane, C.Total as Recipe " \
+            "from Info_Skills A  " \
+            "Left join (select Crafting, count(crafting) as Total from Info_Item where Crafting is not null group by Crafting) B on A.Name = B.Crafting " \
+            "left join (select Skill, count(skill) as Total from Info_Crafting_Recipes group by skill) C on A.Name = C.Skill " \
+            " where A.Job = 1 and A.Name = '{}'".format(profession)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    choices = 0
+    if result.Mundane is not None:
+        choices += 1
+    if result.Recipe is not None:
+        choices += 1
+    return choices

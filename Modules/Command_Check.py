@@ -177,7 +177,7 @@ def character_sync(character_name: str):
 def character_refresh(character_name: str):
     if not SQL_Check.character_exists(character_name):
         return False, "The character {} doesnt exist.".format(character_name)
-    return "T"
+    return True, ""
 
 
 def character_update_owner(command: str):

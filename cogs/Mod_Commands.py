@@ -61,6 +61,8 @@ class Mod_Commands(commands.Cog):
             await command.send("working...")
             Command_Execute.character_refresh(trim_message)
             await command.send("{} refreshed".format(trim_message))
+        else:
+            await command.send(command_check[1])
 
     # Feats
     @commands.command(name='FeatAdd', help="[Character Name],[Feat or ASL]")

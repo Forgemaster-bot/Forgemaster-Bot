@@ -119,3 +119,12 @@ def trade_quantity(character_name: str, item_name: str, quantity: int):
             "WHERE Character = '{}' AND Item = '{}'".format(new_amount, character_name, item_name)
     cursor.execute(query)
     cursor.commit()
+
+
+def crafting_points(character_name: str, craft_points: int, crafting_value: float, labour: int):
+    cursor = Quick_SQL.db_connection()
+    query = "UPDATE Main_Crafting " \
+            "set Crafting_Point = '{}', Crafting_Value = '{}', Labour_Points = '{}'" \
+            "WHERE Character_Name = '{}'".format(craft_points, crafting_value, labour, character_name)
+    cursor.execute(query)
+    cursor.commit()

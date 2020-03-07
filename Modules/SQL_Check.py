@@ -253,16 +253,3 @@ def character_has_multiple_profession(character_name: str):
         return True
     return False
 
-
-def profession_has_multiple_choice(profession: str):
-    cursor = Quick_SQL.db_connection()
-    query = "select A.Name, B.Total as Mundane, C.Total as Recipe " \
-            "from Info_Skills A  " \
-            "Left join (select Crafting, count(crafting) as Total from Info_Item where Crafting is not null group by Crafting) B on A.Name = B.Crafting " \
-            "left join (select Skill, count(skill) as Total from Info_Crafting_Recipes group by skill) C on A.Name = C.Skill " \
-            " where A.Job = 1 and A.Name = '{}'".format(profession)
-    cursor.execute(query)
-    result = cursor.fetchone()
-    if result.Mundane is not None and result.Recipe is not None:
-        return True
-    return False

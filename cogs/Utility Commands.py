@@ -17,11 +17,11 @@ class Support_Commands(commands.Cog):
         response = Command_Execute.info_classes()
         await command.send(response)
 
-    @commands.command(name='Ping', help="list available classes")
+    @commands.command(name='Ping', help="Pong")
     async def ping(self, command):
         response = "Ping!"
         author = "<@{}>".format(command.message.author.id)
-        await command.send("{} {}".format(author, response))
+        command.send("{} {}".format(author, response))
 
     # Yes/No response checker
     async def confirm(self, command):
