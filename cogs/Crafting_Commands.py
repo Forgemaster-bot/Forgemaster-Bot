@@ -13,7 +13,7 @@ class Crafting_Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='Craft', help="[Character] ")
+    @commands.command(name='Craft', help="[Character] Craft items with your skills")
     async def craft(self, command):
         character_name = command.message.content.replace('$Craft ', '')
         discord_id = command.message.author.id
@@ -93,11 +93,11 @@ class Crafting_Commands(commands.Cog):
                         quantity = 1
                     await command.author.send("Do you want to craft {} {} for {}g? [yes/no]"
                                               .format(quantity, item.Name, (item.Value/2)*quantity))
-                    reply = await self.confirm(command)
+                    reply = await self.craft_confirm(command)
                     if reply == "Yes":
                         await command.author.send("crafting..")
-                        Quick_SQL.log_command("{},{},{},{}".format(character_name, item.Name,
-                                                                   quantity,(item.Value/2)*quantity))
+                        Quick_SQL.log_craft_command(character_name, item.Name, quantity,
+                                                    (item.Value/2)*quantity, discord_id)
                         Command_Execute.craft_item(character_name, item.Name, quantity)
                         await command.author.send("You crafted {} {} for {}g".format(quantity, item.Name, item.Value/2))
                         crafting = False
@@ -110,6 +110,27 @@ class Crafting_Commands(commands.Cog):
                     await command.author.send("experimenting is still in development, come back later")
                     crafting = False
             await command.author.send("Crafting Ended")
+
+    @commands.command(name='Work', help="[Your Character],[Employers Character Name] work for someone this week.")
+    async def working(self, command):
+        trim_message = command.message.content.replace('$Work ', '')
+        discord_id = str(command.message.author.id)
+        command_check = Command_Check.work(trim_message, discord_id)
+        await command.send(command_check[1])
+        test = 1
+        if command_check[0]:
+            while True:
+                # Get confirmation from user
+                reply = await self.confirm(command)
+                if reply == "Yes":
+                    await command.send("selling")
+                    Quick_SQL.log_command(command)
+                    response = Command_Execute.work(trim_message)
+                    await command.send(response)
+                    break
+                else:
+                    await command.send("Sale command stopped")
+                    break
 
     async def answer_from_list(self, command, question, option_list):
         options = Quick_Python.question_list(option_list)
@@ -166,7 +187,7 @@ class Crafting_Commands(commands.Cog):
                 await command.message.author.send("{} is not a number, please enter a number"
                                                   .format(msg.content))
 
-    async def confirm(self, command):
+    async def craft_confirm(self, command):
             # check author
             def check_reply(user_response):
                 return user_response.author == command.author and user_response.channel.type[1] == 1
@@ -184,6 +205,21 @@ class Crafting_Commands(commands.Cog):
                 reply = "No"
             return reply
 
+    async def confirm(self, command):
+            # setup sub function to store new message
+            def check_reply(m):
+                return m.author == command.author
+            # send the user the message
+            try:
+                msg = await self.bot.wait_for('message', timeout=60.0, check=check_reply)
+            except asyncio.TimeoutError:
+                return "No"
+            # check content of response to see what the person wrote
+            if msg.content.lower() == "yes":
+                reply = "Yes"
+            else:
+                reply = "No"
+            return reply
 
 def setup(bot):
     bot.add_cog(Crafting_Commands(bot))

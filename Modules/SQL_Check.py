@@ -1,7 +1,6 @@
 import Quick_SQL
 import SQL_Lookup
 
-
 def class_exists(name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \
@@ -214,7 +213,19 @@ def character_has_crafted(character_name: str):
     return True
 
 
-def character_has_crafting_left(character_name: str):
+def character_has_craft_point(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Main_Crafting " \
+            "where Character_Name = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result.Crafting_Point == 1:
+        return False
+    return True
+
+
+def character_has_crafting_value(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \
             "from Main_Crafting " \
@@ -235,7 +246,7 @@ def character_has_crafting_skill(character_name: str):
             "where Character = '{}' and B.Job = 1".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
-    if result is None:
+    if result.Total == 0:
         return False
     return True
 
@@ -252,4 +263,3 @@ def character_has_multiple_profession(character_name: str):
     if result.Total > 1:
         return True
     return False
-

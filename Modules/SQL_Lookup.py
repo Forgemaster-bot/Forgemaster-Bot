@@ -175,7 +175,7 @@ def character_skills(character_name: str):
 
 def shop_item(item_name: str):
     cursor = Quick_SQL.db_connection()
-    query = "select * from Info_Item where Name = '{}' and For_Sale = 1".format(item_name)
+    query = "select * from Info_Item where Name = '{}'".format(item_name)
     cursor.execute(query)
     item = cursor.fetchone()
     return item
@@ -247,7 +247,7 @@ def character_crafting_points(character_name: str):
             "Where Character_Name = '{}'".format(character_name)
     cursor.execute(query)
     response = cursor.fetchone()
-    return response.Crafting_Point, response.Crafting_Value, response.Labour_Points
+    return response
 
 
 def character_skill_profession(character_name: str):
@@ -300,6 +300,7 @@ def item_detail(item_name: str):
     cursor.execute(query)
     item = cursor.fetchone()
     return item
+
 
 def profession_choice(profession: str):
     cursor = Quick_SQL.db_connection()

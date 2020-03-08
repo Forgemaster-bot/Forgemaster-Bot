@@ -85,12 +85,14 @@ def remove_item(command: str):
     item = c_list[1].split(":")
     item_name = item[0].lstrip()
     try:
-        quantity = int(item[1].lstrip()) * -1
+        quantity = int(item[1].lstrip())
     except IndexError:
-        quantity = 1 * -1
+        quantity = 1
     if quantity == SQL_Lookup.character_item_quantity(character_name, item_name):
+        quantity = quantity * -1
         SQL_Delete.character_item(character_name, item_name)
     else:
+        quantity = quantity * -1
         SQL_Update.character_item_quantity(character_name, item_name, quantity)
     Update_Google_Roster.update_items(character_name)
     return "{} now has {} less {}".format(character_name, quantity, item_name)
@@ -342,6 +344,7 @@ def level_up(command: str):
     return "{} gained a level in {} and is now level {} overall".format(character_name, character_class, total_level)
 
 
+'''
 def shop_buy(command: str):
     c_list = command.split(",")
     character_name = c_list[0].lstrip()
@@ -363,6 +366,26 @@ def shop_buy(command: str):
     Update_Google_Roster.update_gold_group(update_list)
     Update_Google_Roster.update_items(character_name)
     return "{} bought {} {} from the shop for {}g".format(character_name, quantity, item_name, total_cost*-1)
+'''
+
+
+def sell(command: str):
+    c_list = command.split(",")
+    character_name = c_list[0].lstrip()
+    item_name = c_list[1].lstrip()
+    quantity = int(c_list[2].lstrip())
+    item = SQL_Lookup.item_detail(item_name)
+    total_value = (item.Value/2 * quantity)
+
+    # update SQL
+    if quantity == SQL_Lookup.character_item_quantity(character_name, item_name):
+        SQL_Delete.character_item(character_name, item_name)
+    else:
+        SQL_Update.character_item_quantity(character_name, item_name, quantity*-1)
+    SQL_Update.character_gold(character_name, total_value)
+    Update_Google_Roster.update_items(character_name)
+    Update_Google_Roster.update_gold_group([character_name])
+    return "{} sold {} {} for {} to the town".format(character_name, quantity, item_name, total_value)
 
 
 def trade_sell(command: str):
@@ -482,11 +505,11 @@ def sync_players(command):
 
 def crafting_message(character_name):
     character_gold = SQL_Lookup.character_gold(character_name)
-    craft_limit = character_crafting_point(character_name)
-    craft_points = craft_limit[0]
-    craft_value = craft_limit[1]
-    labour = craft_limit[2]
-    labour_value = labour_crafting_value(craft_limit[2])
+    craft_limit = SQL_Lookup.character_crafting_points(character_name)
+    craft_points = craft_limit[1]
+    craft_value = craft_limit[2]
+    labour = craft_limit[3]
+    labour_value = labour_crafting_value(labour)
     if craft_points > 0:
         value_message = "You haven't worked this week so you can craft {}g worth of goods, " \
                         "or you could make one valuable item.".format(craft_value)
@@ -508,7 +531,7 @@ def crafting_message(character_name):
 
 def crafting_gold_limit(character_name: str):
     character_gold = SQL_Lookup.character_gold(character_name)
-    craft_limit = character_crafting_point(character_name)
+    craft_limit = SQL_Lookup.character_crafting_points(character_name)
     craft_value = craft_limit[1]/2
     labour_value = labour_crafting_value(craft_limit[2])
     if craft_limit[0] == 1 and labour_value > 0:  # if they haven't crafted anything this week
@@ -521,18 +544,6 @@ def crafting_gold_limit(character_name: str):
             return character_gold
         else:
             return craft_value
-
-
-def character_crafting_point(character_name: str):
-    if SQL_Check.character_has_crafted(character_name):
-        craft_details = SQL_Lookup.character_crafting_points(character_name)
-    else:
-        SQL_Insert.crafting_point(character_name)
-        craft_details = SQL_Lookup.character_crafting_points(character_name)
-    if craft_details[0] == 1:
-        return craft_details[0], 100, craft_details[2]
-    else:
-        return craft_details
 
 
 def labour_crafting_value(labour: int):
@@ -562,4 +573,15 @@ def craft_item(character_name: str, item_name: str, quantity: int):
     if new_craft_value <= 0:
         new_craft_value = 0
     SQL_Update.crafting_points(character_name, 0, new_craft_value, 0)
+
+    return
+
+
+def work(command: str):
+    c_list = command.split(",")
+    character_name = c_list[0].lstrip()
+    employer_name = c_list[1].lstrip()
+    worker_point = SQL_Lookup.character_crafting_points(character_name)
+    employee_points = SQL_Lookup.character_crafting_points(employer_name)
+
 

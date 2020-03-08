@@ -2,6 +2,7 @@ import Quick_Google
 import SQL_Check
 import SQL_Lookup
 import Quick_Python
+import SQL_Insert
 
 '''''''''''''''''''''''''''''''''''''''''
 ############DM commands#################
@@ -357,7 +358,7 @@ def shop_buy(command: str, discord_id: str):  # [Character Name],[Seller's Name]
     return True, "Do you want to buy {} {} from the shop for {}g?".format(quantity, item_name, total_value)
 
 
-def shop_sell(command: str, discord_id: str):  # [Character Name],[Seller's Name],[Item Name],[Quantity]
+def sell(command: str, discord_id: str):  # [Character Name],[Seller's Name],[Item Name],[Quantity]
     c_list = command.split(",")
     if len(c_list) != 3:
         return False, "Please enter your character name, the item and the quantity"
@@ -384,9 +385,9 @@ def shop_sell(command: str, discord_id: str):  # [Character Name],[Seller's Name
         return False, "{} doesnt own {} {} to sell".format(character_name, quantity, item_name)
 
     # Cost
-    item_value = shop_item.shop_item(item_name).Value
-    total_value = item_value * quantity
-    return True, "Do you want to sell {} {} for {}g?".format(quantity, item_name, total_value)
+    item = SQL_Lookup.item_detail(item_name)
+    item_value = item.Value/2 * quantity
+    return True, "Do you want to sell {} {} for {}g?".format(quantity, item_name, item_value)
 
 
 def trade_sell(command: str, discord_id: str):  # [Character Name],[Item Name],[Value],[Quantity]
@@ -482,6 +483,11 @@ def trade_stop(command: str, discord_id: str):
     return True, "Do you want to stop selling {}?".format(item_name)
 
 
+'''''''''''''''''''''''''''''''''''''''''
+###########Crafting##############
+'''''''''''''''''''''''''''''''''''''''''
+
+
 def craft(character_name: str, discord_id: str):
     if not SQL_Check.character_exists(character_name):
         return False, "The character {} doesnt exist".format(character_name)
@@ -489,11 +495,34 @@ def craft(character_name: str, discord_id: str):
         return False, "You don't own the character {}.".format(character_name)
     if not SQL_Check.character_has_crafting_skill(character_name):
         return False, "{} is not skilled in any crafting tools".format(character_name)
-    if SQL_Check.character_has_crafted(character_name)and SQL_Check.character_has_crafting_left(character_name):
+    if not SQL_Check.character_has_crafted(character_name):
+        SQL_Insert.crafting_point(character_name)
+        return True, ""
+    if SQL_Check.character_has_crafting_value(character_name):
         return False, "{} has used up all their crafting time for this week".format(character_name)
     return True, ""
 
 
-'''''''''''''''''''''''''''''''''''''''''
-###########Utility commands##############
-'''''''''''''''''''''''''''''''''''''''''
+def work(command: str, discord_id: str):
+    c_list = command.split(",")
+    character_name = c_list[0].lstrip()
+    employer_name = c_list[1].lstrip()
+
+    # check worker
+    if not SQL_Check.character_exists(character_name):
+        return False, "The character {} doesnt exist".format(character_name)
+    if not SQL_Check.player_owns_character(character_name, discord_id):
+        return False, "You don't own the character {}.".format(character_name)
+    if not SQL_Check.character_has_crafting_skill(character_name):
+        return False, "{} is not skilled in any crafting tools".format(character_name)
+    if SQL_Check.character_has_crafted(character_name):
+        return False, "{} has crafted this week so cannot work for someone".format(character_name)
+
+    # check employer
+    if not SQL_Check.character_exists(employer_name):
+        return False, "The character {} doesnt exist".format(employer_name)
+    if not SQL_Check.character_has_crafting_skill(employer_name):
+        return False, "{} is not skilled in any crafting tools".format(employer_name)
+    if SQL_Check.character_has_crafted(employer_name):
+        return False, "{} has crafted this week so cannot hire workers".format(employer_name)
+    return True, "Would {} like to work for {} this week?".format(character_name, employer_name)
