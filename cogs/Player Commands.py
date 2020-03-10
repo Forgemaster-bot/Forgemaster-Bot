@@ -31,11 +31,14 @@ class Player_Commands(commands.Cog):
                 # find crafting skills, choose if more than one
                 if SQL_Check.character_has_multiple_profession(character_name):
                     profession_list = SQL_Lookup.character_skill_profession(character_name)
-                    profession_question = "Please enter the number of the profession to use"
-                    skill_choice = await self.answer_from_list(command, profession_question, profession_list)
-                    if not skill_choice[0]:
-                        break
-                    skill = skill_choice[1]
+                    if len(profession_list) == 1:
+                        skill = profession_list[0]
+                    else:
+                        profession_question = "Please enter the number of the profession to use"
+                        skill_choice = await self.answer_from_list(command, profession_question, profession_list)
+                        if not skill_choice[0]:
+                            break
+                        skill = skill_choice[1]
                 else:
                     skill = SQL_Lookup.character_skill_profession(character_name)[0]
 
@@ -61,7 +64,8 @@ class Player_Commands(commands.Cog):
                     # Pick type of item to make
                     item_type_list = SQL_Lookup.profession_item_type_list(skill, gold_limit)
                     if len(item_type_list) > 1:
-                        item_type_question = "Please enter the number of the of item type would you like to craft"
+                        item_type_question = "With your {} tools you can make the following. Please enter the " \
+                                             "number of the of item type would you like to craft".format(skill)
                         item_type_choice = await self.answer_from_list(command, item_type_question, item_type_list)
                         if not item_type_choice[0]:
                             crafting = False

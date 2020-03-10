@@ -252,12 +252,15 @@ def character_crafting_points(character_name: str):
 
 def character_skill_profession(character_name: str):
     cursor = Quick_SQL.db_connection()
+
     query = "Select A.* " \
             "From Link_Character_Skills A " \
             "Left Join Info_Skills B " \
             "On A.Skill = B.Name " \
-            "where Character = '{}' and B.Job = 1" \
-            "order by Skill".format(character_name)
+            "left join Link_Character_Items C " \
+            "on B.Tools = C.Item " \
+            "where A.Character = '{}' and C.Character = '{}' and B.Job = 1 " \
+            "order by A.Skill ".format(character_name, character_name)
     cursor.execute(query)
     rows = cursor.fetchall()
     skill_list = []

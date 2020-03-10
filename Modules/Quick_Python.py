@@ -4,6 +4,7 @@ import SQL_Lookup
 import SQL_Update
 import SQL_Insert
 
+
 def stitch_string(given_list: list):
     return_string = ""
     for element in given_list:
