@@ -263,3 +263,19 @@ def character_has_multiple_profession(character_name: str):
     if result.Total > 1:
         return True
     return False
+
+
+def has_tool_for_job(character_name: str, skill: str):
+    cursor = Quick_SQL.db_connection()
+    tool_query = "select Tools from Info_Skills where Name = '{}'".format(skill)
+    cursor.execute(tool_query)
+    tool = cursor.fetchone()
+    inventory = "Select Item from " \
+                "Link_Character_Items " \
+                "where Character = '{}' AND Item = '{}'".format(character_name,tool.Item)
+    cursor.execute(inventory)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+

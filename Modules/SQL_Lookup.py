@@ -232,7 +232,7 @@ def log_xp(level: int):
     query = "select * from Info_XP Where Level = {}".format(level)
     cursor.execute(query)
     result = cursor.fetchone()
-    return result.XP/20
+    return result.XP_To_Level/20
 
 
 '''''''''''''''''''''''''''''''''''''''''

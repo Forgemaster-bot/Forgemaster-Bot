@@ -145,7 +145,7 @@ class Player_Commands(commands.Cog):
                 # Get confirmation from user
                 reply = await self.confirm(command)
                 if reply == "Yes":
-                    await command.send("selling...")
+                    await command.send("paying...")
                     Quick_SQL.log_command(command)
                     response = Command_Execute.pay(trim_message)
                     await command.send(response)

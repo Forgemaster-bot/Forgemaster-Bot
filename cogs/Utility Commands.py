@@ -21,7 +21,7 @@ class Support_Commands(commands.Cog):
     async def ping(self, command):
         response = "Ping!"
         author = "<@{}>".format(command.message.author.id)
-        command.send("{} {}".format(author, response))
+        await command.send("{} {}".format(author, response))
 
     # Yes/No response checker
     async def confirm(self, command):
