@@ -51,15 +51,6 @@ class DM_Commands(commands.Cog):
                     await command.send("Give gold command stopped")
                     break
 
-    # NPC
-    @commands.command(name='NPC', help="[NPC Name]:[Dialog]")
-    @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
-    async def stat_change(self, command):
-        await command.message.delete()
-        trim_message = command.message.content.replace('$NPC ', '')
-        response = Command_Execute.npc_talk(trim_message)
-        await command.send(response)
-
     @commands.command(name='ItemAdd', help="use help for more information"
                                            "\n1) [Character Name], [Item:Quantity], [Item:Quantity]..."
                                            "\nExample - Cogs,Dagger:2, Pickaxe:3, Leather:4"

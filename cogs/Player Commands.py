@@ -10,6 +10,27 @@ class Player_Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    # Give stuff
+    @commands.command(name='GiveGold', help="[Your character],[receiving character],[Amount]")
+    async def give_gold(self, command):
+        trim_message = command.message.content.replace('$GiveGold ', '')
+        discord_id = str(command.message.author.id)
+        command_check = Command_Check.give_gold(trim_message, discord_id)
+        await command.send(command_check[1])
+        if command_check[0]:
+            while True:
+                # Get confirmation from user
+                reply = await self.confirm(command)
+                if reply == "Yes":
+                    await command.send("selling...")
+                    #Quick_SQL.log_command(command)
+                    #response = Command_Execute.sell(trim_message)
+                    #await command.send(response)
+                    break
+                else:
+                    await command.send("Sale command stopped")
+                    break
+
     # Level up
     @commands.command(name='LevelUp', help="[Character Name],[Class]")
     async def level_up(self, command):
@@ -45,30 +66,7 @@ class Player_Commands(commands.Cog):
         else:
             await command.send(command_check[1])
 
-    # Shop
-    '''
-    @commands.command(name='ShopBuy', help="[Character]],[Item],[Quantity]")
-    async def shop_buy(self, command):
-        trim_message = command.message.content.replace('$ShopBuy ', '')
-        discord_id = str(command.message.author.id)
-        command_check = Command_Check.shop_buy(trim_message, discord_id)
-        await command.send(command_check[1])
-        if command_check[0]:
-            while True:
-                # Get confirmation from user
-                reply = await self.confirm(command)
-                if reply == "Yes":
-                    await command.send("buying...")
-                    Quick_SQL.log_command(command)
-                    response = Command_Execute.shop_buy(trim_message)
-                    await command.send(response)
-                    break
-                else:
-                    await command.send("For sale command stopped")
-                    break
-    '''
-
-    @commands.command(name='Sell', help="[Character]],[Item],[Quantity]")
+    @commands.command(name='Sell', help="[Character],[Item],[Quantity] Sell item to town at half value")
     async def shop_sell(self, command):
         trim_message = command.message.content.replace('$Sell ', '')
         discord_id = str(command.message.author.id)

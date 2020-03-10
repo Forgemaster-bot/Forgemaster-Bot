@@ -99,7 +99,7 @@ class Crafting_Commands(commands.Cog):
                         Quick_SQL.log_craft_command(character_name, item.Name, quantity,
                                                     (item.Value/2)*quantity, discord_id)
                         Command_Execute.craft_item(character_name, item.Name, quantity)
-                        await command.author.send("You crafted {} {} for {}g".format(quantity, item.Name, item.Value/2))
+                        await command.author.send("You crafted {} {} for {}g".format(quantity, item.Name, (item.Value/2)*quantity))
                         crafting = False
                     else:
                         crafting = False
@@ -117,19 +117,18 @@ class Crafting_Commands(commands.Cog):
         discord_id = str(command.message.author.id)
         command_check = Command_Check.work(trim_message, discord_id)
         await command.send(command_check[1])
-        test = 1
         if command_check[0]:
             while True:
                 # Get confirmation from user
                 reply = await self.confirm(command)
                 if reply == "Yes":
-                    await command.send("selling")
+                    await command.send("getting to work..")
                     Quick_SQL.log_command(command)
                     response = Command_Execute.work(trim_message)
                     await command.send(response)
                     break
                 else:
-                    await command.send("Sale command stopped")
+                    await command.send("work command stopped")
                     break
 
     async def answer_from_list(self, command, question, option_list):
@@ -143,7 +142,7 @@ class Crafting_Commands(commands.Cog):
         while True:
             # run the check until 60 seconds has elapsed or player types EXIT
             try:
-                msg = await self.bot.wait_for('message', timeout=60.0, check=check_reply)
+                msg = await self.bot.wait_for('message', timeout=120.0, check=check_reply)
             except asyncio.TimeoutError:
                 return False, ""
             if msg.content.lower() == "stop":
@@ -171,7 +170,7 @@ class Crafting_Commands(commands.Cog):
         while True:
             # run the check until 60 seconds has elapsed or player types EXIT
             try:
-                msg = await self.bot.wait_for('message', timeout=60.0, check=check_reply)
+                msg = await self.bot.wait_for('message', timeout=120.0, check=check_reply)
             except asyncio.TimeoutError:
                 return False, ""
             if msg.content.lower() == "stop":
@@ -193,7 +192,7 @@ class Crafting_Commands(commands.Cog):
                 return user_response.author == command.author and user_response.channel.type[1] == 1
             # send the user the message
             try:
-                msg = await self.bot.wait_for('message', timeout=60.0, check=check_reply)
+                msg = await self.bot.wait_for('message', timeout=120.0, check=check_reply)
             except asyncio.TimeoutError:
                 return False, ""
             if msg.content.lower() == "stop":
@@ -211,7 +210,7 @@ class Crafting_Commands(commands.Cog):
                 return m.author == command.author
             # send the user the message
             try:
-                msg = await self.bot.wait_for('message', timeout=60.0, check=check_reply)
+                msg = await self.bot.wait_for('message', timeout=120.0, check=check_reply)
             except asyncio.TimeoutError:
                 return "No"
             # check content of response to see what the person wrote

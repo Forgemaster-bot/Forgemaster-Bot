@@ -17,7 +17,7 @@ def character_xp(character_name: str, xp: int):
 
 def character_gold(character_name: str, gold: float):
     cursor = Quick_SQL.db_connection()
-    new_gold = SQL_Lookup.character_gold(character_name) + int(gold)
+    new_gold = float(SQL_Lookup.character_gold(character_name)) + gold
 
     query = "UPDATE Main_Characters " \
             "SET Gold = '{}' " \

@@ -232,7 +232,7 @@ def log_xp(level: int):
     query = "select * from Info_XP Where Level = {}".format(level)
     cursor.execute(query)
     result = cursor.fetchone()
-    return result.Log_XP
+    return result.XP/20
 
 
 '''''''''''''''''''''''''''''''''''''''''
@@ -256,7 +256,8 @@ def character_skill_profession(character_name: str):
             "From Link_Character_Skills A " \
             "Left Join Info_Skills B " \
             "On A.Skill = B.Name " \
-            "where Character = '{}' and B.Job = 1".format(character_name)
+            "where Character = '{}' and B.Job = 1" \
+            "order by Skill".format(character_name)
     cursor.execute(query)
     rows = cursor.fetchall()
     skill_list = []

@@ -284,13 +284,32 @@ def stat_raise(command: str):
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def dice_roll(command: str):
-    # split message into parts
-    c_list = command.split("D")
-    if c_list[0] == command:
-        return "Please us a capital D when rolling"
-    if len(c_list) == 1:
-        return "Please enter two values, first for number of dice, then for sides"
+def give_gold(command: str, discord_id: str):  # [Character Name],[Seller's Name],[Item Name],[Quantity]
+    c_list = command.split(",")
+    if len(c_list) != 3:
+        return False, "Please enter your character name, the receivers name and the amount of gold"
+
+    # character
+    character_name = c_list[0].lstrip()
+    if not SQL_Check.character_exists(character_name):
+        return False, "The character {} doesnt exist".format(character_name)
+    if not SQL_Check.player_owns_character(character_name, discord_id):
+        return False, "You don't own the character {}.".format(character_name)
+
+    # Receiver
+    receiver_name = c_list[1].lstrip()
+    if not SQL_Check.character_exists(receiver_name):
+        return False, "The character {} doesnt exist".format(receiver_name)
+
+    # amount
+    try:
+        amount = float(c_list[2].lstrip())
+    except ValueError:
+        return False, "Make sure the quantity is a number"
+    character_gold = SQL_Lookup.character_gold(character_name)
+    if amount > character_gold:
+        return False, "{} only has {} gold.".format(character_name,character_gold)
+    return True, "Do you want {} to to give {} {}g?".format(character_name, receiver_name, amount)
 
 
 def roll_stats(discord_id: str, discord_name: str):
@@ -327,35 +346,6 @@ def level_up(command: str, discord_id: str):
             False, "{} aleady has three classes.".format(character_name)
     # if its passed all tests its fine to level up
     return True, "Add a level of {} to {}?".format(character_class, character_name)
-
-
-def shop_buy(command: str, discord_id: str):  # [Character Name],[Seller's Name],[Item Name],[Quantity]
-    c_list = command.split(",")
-    if len(c_list) != 3:
-        return False, "Please enter your character name, the item and the quantity"
-    # character
-    character_name = c_list[0].lstrip()
-    if not SQL_Check.character_exists(character_name):
-        return False, "The character {} doesnt exist".format(character_name)
-    if not SQL_Check.player_owns_character(character_name, discord_id):
-        return False, "You don't own the character {}.".format(character_name)
-    # item
-    item_name = c_list[1].lstrip()
-    shop_item = SQL_Lookup.shop_item(item_name)
-    if shop_item is None:
-        return False, "{} not found, make sure to type the name of the item in correctly".format(item_name)
-    # Quantity
-    try:
-        quantity = int(c_list[2])
-    except ValueError:
-        return False, "Make sure the value of the item is a number"
-    # Cost
-    item_value = shop_item.Value
-    total_value = item_value * quantity
-    available_gold = SQL_Lookup.character_gold(character_name)
-    if available_gold < total_value:
-        return False, "You don't have the {}g needed to buy {} {}".format(total_value, quantity, item_name)
-    return True, "Do you want to buy {} {} from the shop for {}g?".format(quantity, item_name, total_value)
 
 
 def sell(command: str, discord_id: str):  # [Character Name],[Seller's Name],[Item Name],[Quantity]
@@ -409,7 +399,7 @@ def trade_sell(command: str, discord_id: str):  # [Character Name],[Item Name],[
 
     # value
     try:
-        value = int(c_list[2])
+        value = float(c_list[2])
     except ValueError:
         return False, "Make sure the value of the item is a number"
 
@@ -417,7 +407,7 @@ def trade_sell(command: str, discord_id: str):  # [Character Name],[Item Name],[
     try:
         quantity = int(c_list[3])
     except ValueError:
-        return False, "Make sure the quantity is a number"
+        return False, "Make sure the quantity is a whole number"
     if quantity > SQL_Lookup.character_item_quantity(character_name, item_name):
         return False, "{} doesnt own {} {} to sell".format(character_name, quantity, item_name)
 
@@ -450,7 +440,7 @@ def trade_buy(command: str, discord_id: str):  # [Character Name],[Seller's Name
 
     # Quantity
     try:
-        quantity = int(c_list[3])
+        quantity = int(c_list[3].lstrip())
     except ValueError:
         return False, "Make sure the value of the item is a number"
     if quantity > SQL_Lookup.trade_item_quantity(seller, item_name):
@@ -515,14 +505,18 @@ def work(command: str, discord_id: str):
         return False, "You don't own the character {}.".format(character_name)
     if not SQL_Check.character_has_crafting_skill(character_name):
         return False, "{} is not skilled in any crafting tools".format(character_name)
-    if SQL_Check.character_has_crafted(character_name):
-        return False, "{} has crafted this week so cannot work for someone".format(character_name)
+    if not SQL_Check.character_has_crafted(character_name):
+        SQL_Insert.crafting_point(character_name)
+    elif SQL_Check.character_has_crafting_value(character_name):
+        return False, "{} has used up all their crafting time for this week".format(character_name)
 
     # check employer
     if not SQL_Check.character_exists(employer_name):
         return False, "The character {} doesnt exist".format(employer_name)
     if not SQL_Check.character_has_crafting_skill(employer_name):
         return False, "{} is not skilled in any crafting tools".format(employer_name)
-    if SQL_Check.character_has_crafted(employer_name):
-        return False, "{} has crafted this week so cannot hire workers".format(employer_name)
+    if not SQL_Check.character_has_crafted(employer_name):
+        SQL_Insert.crafting_point(employer_name)
+    elif SQL_Check.character_has_crafting_value(employer_name):
+        return False, "{} has used up all their crafting time for this week".format(employer_name)
     return True, "Would {} like to work for {} this week?".format(character_name, employer_name)

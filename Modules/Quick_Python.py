@@ -32,15 +32,6 @@ def find_character_row(character_list: list, character_name: str):
     return character_row
 
 
-def find_trade(character_list: list, character_name: str, item_list: list, item_name: str):
-    for character in character_list:
-        if character == character_name:
-            character_index = character_list.index(character_name)
-            if item_list[character_index] == item_name:
-                return character_index + 1
-    return 0
-
-
 def ability_name_check(stat: str):
     stat_list = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']
     for name in stat_list:

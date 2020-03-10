@@ -153,6 +153,7 @@ def create_character(command: str):
     # update Link_character_Class
     SQL_Insert.character_create(character_sheet)
     SQL_Insert.character_class(character_name, character_class, 1, 1)
+    SQL_Insert.character_item(character_name, "Rations", 10)
     Update_Google_Roster.insert_new_character(character_name)
     Update_Google_Roster.update_classes(character_name)
     user_ping = "<@{}>".format(SQL_Lookup.character_owner(character_name))
@@ -392,14 +393,14 @@ def trade_sell(command: str):
     c_list = command.split(",")
     character_name = c_list[0].lstrip()
     item_name = c_list[1].lstrip()
-    value = int(c_list[2])
+    value = float(c_list[2])
     quantity = int(c_list[3])
 
     # update SQL
     if quantity == SQL_Lookup.character_item_quantity(character_name, item_name):
         SQL_Delete.character_item(character_name, item_name)
     else:
-        SQL_Update.character_item_quantity(character_name, item_name, quantity)
+        SQL_Update.character_item_quantity(character_name, item_name, quantity * -1)
     SQL_Insert.trade_sell(character_name, item_name, quantity, value)
 
     # update google
@@ -412,8 +413,8 @@ def trade_buy(command: str):
     c_list = command.split(",")
     character_name = c_list[0].lstrip()
     seller_name = c_list[1].lstrip()
-    item_name = c_list[2]
-    quantity = int(c_list[3])
+    item_name = c_list[2].lstrip()
+    quantity = int(c_list[3].lstrip())
     item_value = SQL_Lookup.trade_item_price(seller_name, item_name)
     trade_value = item_value * quantity
 
@@ -517,7 +518,7 @@ def crafting_message(character_name):
             max_message = "As you've recruited {} workers this week, the item can be worth up to {}g.".format(
                 labour, labour_value)
         else:
-            max_message = "As your working alone this week, the item can be worth up to 500g."
+            max_message = "As your working alone this week, the item can be worth up to 100g."
     else:
         value_message = "You've already crafted this week, you have " \
                         "{}g remaining in value of goods you can make.".format(craft_value)
@@ -532,9 +533,9 @@ def crafting_message(character_name):
 def crafting_gold_limit(character_name: str):
     character_gold = SQL_Lookup.character_gold(character_name)
     craft_limit = SQL_Lookup.character_crafting_points(character_name)
-    craft_value = craft_limit[1]/2
-    labour_value = labour_crafting_value(craft_limit[2])
-    if craft_limit[0] == 1 and labour_value > 0:  # if they haven't crafted anything this week
+    craft_value = craft_limit[2]/2
+    labour_value = labour_crafting_value(craft_limit[3])
+    if craft_limit[1] == 1:  # if they haven't crafted anything this week
         if character_gold < labour_value:
             return character_gold
         else:
@@ -548,13 +549,13 @@ def crafting_gold_limit(character_name: str):
 
 def labour_crafting_value(labour: int):
     if labour == 1:
-        value = 5000
+        value = 500
     elif labour == 2:
-        value = 50000
+        value = 5000
     elif labour > 2:
-        value = 1000000
+        value = 50000
     else:
-        value = 0
+        value = 50
     return value
 
 
@@ -569,7 +570,7 @@ def craft_item(character_name: str, item_name: str, quantity: int):
     add_item(add_item_command)
     # update crafting
     craft_details = SQL_Lookup.character_crafting_points(character_name)
-    new_craft_value = craft_details[1] - (craft_cost*2)
+    new_craft_value = craft_details[2] - (craft_cost*2)
     if new_craft_value <= 0:
         new_craft_value = 0
     SQL_Update.crafting_points(character_name, 0, new_craft_value, 0)
@@ -581,7 +582,12 @@ def work(command: str):
     c_list = command.split(",")
     character_name = c_list[0].lstrip()
     employer_name = c_list[1].lstrip()
-    worker_point = SQL_Lookup.character_crafting_points(character_name)
-    employee_points = SQL_Lookup.character_crafting_points(employer_name)
+    employer_points = SQL_Lookup.character_crafting_points(employer_name)
+    new_labour = employer_points[3] + 1
+    # remove point from player
+    SQL_Update.crafting_points(character_name, 0, 0, 0)
+    # add labour to employer
+    SQL_Update.crafting_points(employer_name, 1, 100, new_labour)
+    return "You are now working for {}, giving him one more labour point for the week".format(employer_name)
 
 

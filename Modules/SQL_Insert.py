@@ -85,7 +85,7 @@ def sync_players(user_id: str, name: str):
     cursor.commit()
 
 
-def trade_sell(character_name: str, item_name: str, quantity: int, price: int):
+def trade_sell(character_name: str, item_name: str, quantity: int, price: float):
     cursor = Quick_SQL.db_connection()
     query = "insert into Main_Trade (Character,item,Quantity,Price) " \
             "values ('{}','{}','{}','{}')".format(character_name, item_name, quantity, price)

@@ -105,6 +105,15 @@ class Mod_Commands(commands.Cog):
                     await command.send("Give feat command stopped")
                     break
 
+    # NPC
+    @commands.command(name='NPC', help="[NPC Name]:[Dialog]")
+    @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
+    async def stat_change(self, command):
+        await command.message.delete()
+        trim_message = command.message.content.replace('$NPC ', '')
+        response = Command_Execute.npc_talk(trim_message)
+        await command.send(response)
+
     # Skills
     @commands.command(name='SkillAdd', help="[Character Name],[Skill Name], Optional : [Double]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))

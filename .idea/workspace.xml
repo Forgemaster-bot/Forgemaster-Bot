@@ -5,13 +5,15 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Modules/Command_Check.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Command_Check.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Modules/Command_Execute.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Command_Execute.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Modules/SQL_Check.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/SQL_Check.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Modules/Quick_Python.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Quick_Python.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Modules/SQL_Insert.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/SQL_Insert.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Modules/SQL_Lookup.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/SQL_Lookup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Modules/SQL_Update.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/SQL_Update.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Modules/Update_Google_Trade.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Update_Google_Trade.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cogs/Crafting_Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Crafting_Commands.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/DM Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/DM Commands.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cogs/Mod_Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Mod_Commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Utility Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Utility Commands.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player Commands.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,22 +26,28 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Core.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
+            <state relative-caret-position="476">
+              <caret line="39" selection-start-line="39" selection-end-line="39" />
+              <folding>
+                <element signature="e#0#32#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/cogs/Crafting_Commands.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cogs/Player Commands.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="50" column="29" lean-forward="true" selection-start-line="50" selection-start-column="29" selection-end-line="50" selection-end-column="29" />
+            <state relative-caret-position="392">
+              <caret line="142" selection-start-line="142" selection-end-line="142" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
-                <element signature="e#5990#7352#0" />
-                <element signature="e#7430#8601#0" />
-                <element signature="e#8653#9328#0" />
+                <element signature="e#335#1122#0" />
+                <element signature="e#1286#1702#0" />
+                <element signature="e#2760#3527#0" />
+                <element signature="e#3676#4482#0" />
+                <element signature="e#4625#5409#0" />
+                <element signature="e#6402#6957#0" />
               </folding>
             </state>
           </provider>
@@ -48,8 +56,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Modules/Command_Execute.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="565" lean-forward="true" selection-start-line="565" selection-end-line="565" />
+            <state relative-caret-position="449">
+              <caret line="461" selection-start-line="461" selection-end-line="461" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
                 <element signature="e#852#1265#0" />
@@ -58,15 +66,22 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cogs/Mod_Commands.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Modules/Update_Google_Trade.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="363">
-              <caret line="26" column="50" lean-forward="true" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="50" />
+            <state relative-caret-position="595">
+              <caret line="37" column="37" lean-forward="true" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Modules/Quick_Python.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-10">
+              <caret line="21" column="13" lean-forward="true" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
               <folding>
-                <element signature="e#0#32#0" expanded="true" />
-                <element signature="e#266#422#0" />
-                <element signature="e#1320#1426#0" />
+                <element signature="e#0#13#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -97,6 +112,7 @@
       <find>try</find>
       <find>character_refresh</find>
       <find>item</find>
+      <find>crafting</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -139,24 +155,24 @@
         <option value="$PROJECT_DIR$/Modules/Update_SQL_Roster.py" />
         <option value="$PROJECT_DIR$/Modules/Check_SQL_Commands.py" />
         <option value="$PROJECT_DIR$/Modules/Quick_Google.py" />
-        <option value="$PROJECT_DIR$/Modules/Quick_SQL.py" />
-        <option value="$PROJECT_DIR$/Modules/Update_Google_Trade.py" />
         <option value="$PROJECT_DIR$/Modules/Update_Google_Roster.py" />
         <option value="$PROJECT_DIR$/Modules/SQL_Delete.py" />
-        <option value="$PROJECT_DIR$/cogs/DM Commands.py" />
         <option value="$PROJECT_DIR$/Core.py" />
         <option value="$PROJECT_DIR$/Modules/SQL_Crafting_Lookup.py" />
-        <option value="$PROJECT_DIR$/Modules/Quick_Python.py" />
-        <option value="$PROJECT_DIR$/cogs/Player Commands.py" />
+        <option value="$PROJECT_DIR$/cogs/Utility Commands.py" />
+        <option value="$PROJECT_DIR$/Modules/Quick_SQL.py" />
         <option value="$PROJECT_DIR$/Modules/SQL_Check.py" />
-        <option value="$PROJECT_DIR$/Modules/SQL_Lookup.py" />
-        <option value="$PROJECT_DIR$/cogs/Mod_Commands.py" />
-        <option value="$PROJECT_DIR$/Modules/Command_Check.py" />
         <option value="$PROJECT_DIR$/Modules/SQL_Insert.py" />
         <option value="$PROJECT_DIR$/Modules/SQL_Update.py" />
-        <option value="$PROJECT_DIR$/cogs/Utility Commands.py" />
-        <option value="$PROJECT_DIR$/Modules/Command_Execute.py" />
         <option value="$PROJECT_DIR$/cogs/Crafting_Commands.py" />
+        <option value="$PROJECT_DIR$/Modules/SQL_Lookup.py" />
+        <option value="$PROJECT_DIR$/cogs/DM Commands.py" />
+        <option value="$PROJECT_DIR$/cogs/Mod_Commands.py" />
+        <option value="$PROJECT_DIR$/cogs/Player Commands.py" />
+        <option value="$PROJECT_DIR$/Modules/Command_Execute.py" />
+        <option value="$PROJECT_DIR$/Modules/Command_Check.py" />
+        <option value="$PROJECT_DIR$/Modules/Quick_Python.py" />
+        <option value="$PROJECT_DIR$/Modules/Update_Google_Trade.py" />
       </list>
     </option>
   </component>
@@ -369,7 +385,21 @@
       <option name="project" value="LOCAL" />
       <updated>1583510606923</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="finished crafting">
+      <created>1583598271653</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1583598271653</updated>
+    </task>
+    <task id="LOCAL-00018" summary="finished crafting">
+      <created>1583706508967</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1583706508967</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -380,16 +410,16 @@
       <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.25052083" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" />
-      <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.5015625" side_tool="true" weight="0.32910052" />
+      <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.50208336" side_tool="true" weight="0.24761905" />
       <window_info anchor="bottom" id="Python Console" order="2" />
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" weight="0.32910052" />
       <window_info anchor="bottom" id="Version Control" order="5" sideWeight="0.49947917" weight="0.32910052" />
-      <window_info active="true" anchor="bottom" id="Debug" order="6" sideWeight="0.4984375" visible="true" weight="0.24761905" />
+      <window_info active="true" anchor="bottom" id="Debug" order="6" sideWeight="0.49791667" visible="true" weight="0.24761905" />
       <window_info anchor="bottom" id="Cvs" order="7" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="8" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="9" />
-      <window_info anchor="bottom" x="0" y="364" width="1920" height="311" id="Run" order="10" weight="0.20952381" />
+      <window_info anchor="bottom" x="0" y="364" width="1920" height="311" id="Run" order="10" sideWeight="0.49947917" weight="0.20952381" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -411,7 +441,8 @@
     <MESSAGE value="More crafting" />
     <MESSAGE value="Shop buy and sell implimented" />
     <MESSAGE value="more crafting" />
-    <option name="LAST_COMMIT_MESSAGE" value="more crafting" />
+    <MESSAGE value="finished crafting" />
+    <option name="LAST_COMMIT_MESSAGE" value="finished crafting" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -427,6 +458,11 @@
   <component name="debuggerHistoryManager">
     <expressions id="setValue">
       <expression>
+        <expression-string>'Ratagan'</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>'died by fire'</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
@@ -434,21 +470,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://D:/Program Files/Python/Lib/enum.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="307" selection-start-line="307" selection-end-line="307" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/streams.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="595" selection-start-line="595" selection-end-line="595" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/old.py" />
     <entry file="file://$PROJECT_DIR$/Modules/Update_Characters.py" />
     <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/gspread/utils.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -517,24 +538,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/Update_Google_Trade.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Modules/SQL_Delete.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="413">
           <caret line="49" lean-forward="true" selection-start-line="49" selection-end-line="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/context.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="207" selection-start-line="207" selection-end-line="207" />
         </state>
       </provider>
     </entry>
@@ -545,24 +552,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/activity.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="318" selection-start-line="318" selection-end-line="318" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/member.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="213">
           <caret line="379" selection-start-line="379" selection-end-line="379" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="53" selection-start-line="53" selection-end-line="53" />
         </state>
       </provider>
     </entry>
@@ -573,54 +566,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/Quick_Python.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/Program Files/Python/Lib/encodings/utf_16_le.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/errors.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="223" selection-start-line="223" selection-end-line="223" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player Commands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="150" selection-start-line="150" selection-end-line="164" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-            <element signature="e#1719#3544#1" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/SQL_Check.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="72" selection-start-line="72" selection-end-line="72" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-            <element signature="e#70#327#0" />
-            <element signature="e#362#617#0" />
-            <element signature="e#955#1225#0" />
-            <element signature="e#1260#1515#0" />
-            <element signature="e#1915#2224#0" />
-            <element signature="e#2669#2979#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -638,94 +587,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/abc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="855" selection-start-line="855" selection-end-line="855" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Program Files/Python/Lib/asyncio/events.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="424">
-          <caret line="100" selection-start-line="100" selection-end-line="100" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/aiohttp/streams.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="595" selection-start-line="595" selection-end-line="595" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/aiohttp/connector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="972" selection-start-line="972" selection-end-line="972" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Program Files/Python/Lib/asyncio/base_events.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="1007" selection-start-line="1007" selection-end-line="1007" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/DM Commands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="32" selection-start-column="24" selection-end-column="32" />
-          <folding>
-            <element signature="e#409#1159#0" />
-            <element signature="e#1393#2120#0" />
-            <element signature="e#2321#2514#0" />
-            <element signature="e#2559#2986#0" />
-            <element signature="e#3115#3842#0" />
-            <element signature="e#4058#4794#0" />
-            <element signature="e#5940#6296#0" />
-            <element signature="e#6374#6877#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/SQL_Lookup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="301" selection-start-line="301" selection-end-line="301" />
-          <folding>
-            <element signature="e#4229#4442#0" />
-            <element signature="e#4513#5091#0" />
-            <element signature="e#5141#5509#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/Quick_SQL.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/Command_Check.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="484" column="4" selection-start-line="484" selection-start-column="4" selection-end-line="484" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-            <element signature="e#241#639#0" />
-            <element signature="e#712#1436#0" />
-            <element signature="e#1509#3579#0" />
-            <element signature="e#3617#4597#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Modules/Update_Google_Roster.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
@@ -736,71 +597,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/SQL_Insert.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="110" lean-forward="true" selection-start-line="110" selection-end-line="110" />
-          <folding>
-            <element signature="e#68#1133#0" />
-            <element signature="e#1224#1514#0" />
-            <element signature="e#1593#1867#0" />
-            <element signature="e#1931#2181#0" />
-            <element signature="e#2265#2548#0" />
-            <element signature="e#2612#3141#0" />
-            <element signature="e#3509#3679#0" />
-            <element signature="e#3766#4012#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/SQL_Update.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="129" selection-start-line="129" selection-end-line="129" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-            <element signature="e#109#413#0" />
-            <element signature="e#1317#1715#0" />
-            <element signature="e#1796#2247#0" />
-            <element signature="e#2298#3427#0" />
-            <element signature="e#3492#3727#0" />
-            <element signature="e#3787#4000#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/cog.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
           <caret line="229" selection-start-line="229" selection-end-line="229" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="796" selection-start-line="796" selection-end-line="796" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/bot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="131" selection-start-line="131" selection-end-line="131" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/client.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="326" selection-start-line="326" selection-end-line="326" />
         </state>
       </provider>
     </entry>
@@ -818,34 +618,251 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/errors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="223" selection-start-line="223" selection-end-line="223" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/aiohttp/streams.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="595" selection-start-line="595" selection-end-line="595" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="59" selection-start-line="59" selection-end-line="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/context.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="194" selection-start-line="194" selection-end-line="194" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Program Files/Python/Lib/asyncio/events.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="126" selection-start-line="126" selection-end-line="126" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/activity.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="318" selection-start-line="318" selection-end-line="318" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/client.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="932" selection-start-line="932" selection-end-line="932" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Program Files/Python/Lib/asyncio/base_events.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="981" selection-start-line="981" selection-end-line="981" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/async_timeout/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="92" selection-start-line="92" selection-end-line="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/aiohttp/connector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="935" selection-start-line="935" selection-end-line="935" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/bot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="926" selection-start-line="926" selection-end-line="926" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/abc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="823" selection-start-line="823" selection-end-line="823" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cogs/Utility Commands.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="36" lean-forward="true" selection-start-line="12" selection-start-column="36" selection-end-line="12" selection-end-column="36" />
+        <state relative-caret-position="187">
+          <caret line="11" column="37" selection-start-line="11" selection-start-column="37" selection-end-line="11" selection-end-column="37" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
             <element signature="e#488#566#0" />
-            <element signature="e#893#1396#0" />
+            <element signature="e#659#791#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/ext/commands/core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="82" selection-start-line="82" selection-end-line="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/SQL_Insert.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="244">
+          <caret line="92" selection-start-line="92" selection-end-line="92" />
+          <folding>
+            <element signature="e#68#1133#0" />
+            <element signature="e#1224#1514#0" />
+            <element signature="e#1593#1867#0" />
+            <element signature="e#1931#2181#0" />
+            <element signature="e#2265#2548#0" />
+            <element signature="e#2612#3141#0" />
+            <element signature="e#3509#3679#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="39" selection-start-line="39" selection-end-line="39" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/SQL_Check.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="70" selection-start-line="70" selection-end-line="70" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cogs/Mod_Commands.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="26" column="50" lean-forward="true" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="50" />
+        <state relative-caret-position="323">
+          <caret line="71" column="43" lean-forward="true" selection-start-line="71" selection-start-column="43" selection-end-line="71" selection-end-column="43" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
             <element signature="e#266#422#0" />
+            <element signature="e#556#1314#0" />
             <element signature="e#1320#1426#0" />
+            <element signature="e#2545#2952#0" />
+            <element signature="e#4103#4839#0" />
+            <element signature="e#5044#5237#0" />
+            <element signature="e#5077#5808#0" />
+            <element signature="e#6039#6781#0" />
+            <element signature="e#7004#7739#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/DM Commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="51" column="25" selection-start-line="51" selection-start-column="25" selection-end-line="51" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#409#1159#0" />
+            <element signature="e#1393#2120#0" />
+            <element signature="e#2559#2986#0" />
+            <element signature="e#3115#3842#0" />
+            <element signature="e#4058#4794#0" />
+            <element signature="e#5017#5741#0" />
+            <element signature="e#6374#6877#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/SQL_Update.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="29" column="4" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+            <element signature="e#109#413#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/Quick_SQL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Crafting_Commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="27" column="59" lean-forward="true" selection-start-line="27" selection-start-column="59" selection-end-line="27" selection-end-column="59" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/Command_Check.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="442" column="41" selection-start-line="442" selection-start-column="41" selection-end-line="442" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/gspread/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="712" selection-start-line="712" selection-end-line="712" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/gspread/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="114" selection-start-line="114" selection-end-line="114" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/SQL_Lookup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="196" selection-start-line="196" selection-end-line="196" />
+          <folding>
+            <element signature="e#4513#5091#0" />
+            <element signature="e#5141#5509#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Modules/Command_Execute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="565" lean-forward="true" selection-start-line="565" selection-end-line="565" />
+        <state relative-caret-position="449">
+          <caret line="461" selection-start-line="461" selection-end-line="461" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#852#1265#0" />
@@ -853,16 +870,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Crafting_Commands.py">
+    <entry file="file://$PROJECT_DIR$/cogs/Player Commands.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="50" column="29" lean-forward="true" selection-start-line="50" selection-start-column="29" selection-end-line="50" selection-end-column="29" />
+        <state relative-caret-position="392">
+          <caret line="142" selection-start-line="142" selection-end-line="142" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
-            <element signature="e#5990#7352#0" />
-            <element signature="e#7430#8601#0" />
-            <element signature="e#8653#9328#0" />
+            <element signature="e#335#1122#0" />
+            <element signature="e#1286#1702#0" />
+            <element signature="e#2760#3527#0" />
+            <element signature="e#3676#4482#0" />
+            <element signature="e#4625#5409#0" />
+            <element signature="e#6402#6957#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/Quick_Python.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-10">
+          <caret line="21" column="13" lean-forward="true" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/Update_Google_Trade.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="37" column="37" lean-forward="true" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
         </state>
       </provider>
     </entry>
