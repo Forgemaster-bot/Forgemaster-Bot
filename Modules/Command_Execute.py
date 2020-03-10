@@ -156,6 +156,7 @@ def create_character(command: str):
     SQL_Insert.character_item(character_name, "Rations", 10)
     Update_Google_Roster.insert_new_character(character_name)
     Update_Google_Roster.update_classes(character_name)
+    Update_Google_Roster.update_items(character_name)
     user_ping = "<@{}>".format(SQL_Lookup.character_owner(character_name))
     return "{} your character {} has been created".format(user_ping, character_name)
 
@@ -345,29 +346,18 @@ def level_up(command: str):
     return "{} gained a level in {} and is now level {} overall".format(character_name, character_class, total_level)
 
 
-'''
-def shop_buy(command: str):
+def pay(command: str):
     c_list = command.split(",")
     character_name = c_list[0].lstrip()
-    item_name = c_list[1].lstrip()
-    quantity = int(c_list[2].lstrip())
-    item_value = SQL_Lookup.shop_item(item_name).Value
-    total_cost = (item_value * quantity) * -1
+    receiver_name = c_list[1].lstrip()
+    amount = float(c_list[2].lstrip())
 
-    # add to player inventory
-    if SQL_Check.character_has_item(character_name, item_name):
-        SQL_Update.character_item_quantity(character_name, item_name, quantity)
-    else:
-        SQL_Insert.character_item(character_name, item_name, quantity)
-    # remove gold from player
-    SQL_Update.character_gold(character_name, total_cost)
+    SQL_Update.character_gold(character_name, amount*-1)
+    SQL_Update.character_gold(receiver_name, amount)
+    Update_Google_Roster.update_gold_group([character_name, receiver_name])
 
-    # update roster
-    update_list = [character_name]
-    Update_Google_Roster.update_gold_group(update_list)
-    Update_Google_Roster.update_items(character_name)
-    return "{} bought {} {} from the shop for {}g".format(character_name, quantity, item_name, total_cost*-1)
-'''
+    user_ping = "<@{}>".format(SQL_Lookup.character_owner(receiver_name))
+    return "{} {} paid {} {}g".format(user_ping, character_name, receiver_name, amount)
 
 
 def sell(command: str):
@@ -464,6 +454,11 @@ def trade_stop(command: str):
     return "{} stopped selling {}".format(character_name, item_name)
 
 
+'''''''''''''''''''''''''''''''''''''''''
+###########Utility commands##############
+'''''''''''''''''''''''''''''''''''''''''
+
+
 def info_skills():
     skill_list = SQL_Lookup.info_skills()
     reply = Quick_Python.stitch_string(skill_list)
@@ -474,11 +469,6 @@ def info_classes():
     class_list = SQL_Lookup.info_classes()
     reply = Quick_Python.stitch_string(class_list)
     return reply
-
-
-'''''''''''''''''''''''''''''''''''''''''
-###########Utility commands##############
-'''''''''''''''''''''''''''''''''''''''''
 
 
 def sync_players(command):

@@ -110,7 +110,7 @@ def character_item_quantity(character_name: str, item_name: str):
 
 def character_inventory(character_name: str):
     cursor = Quick_SQL.db_connection()
-    query = "select * from Link_Character_Items where Character='{}'".format(character_name)
+    query = "select * from Link_Character_Items where Character='{}' order by Item".format(character_name)
     cursor.execute(query)
     rows = cursor.fetchall()
     items = []

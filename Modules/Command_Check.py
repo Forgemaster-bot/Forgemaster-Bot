@@ -284,7 +284,7 @@ def stat_raise(command: str):
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def give_gold(command: str, discord_id: str):  # [Character Name],[Seller's Name],[Item Name],[Quantity]
+def pay(command: str, discord_id: str):  # [Character Name],[Seller's Name],[Item Name],[Quantity]
     c_list = command.split(",")
     if len(c_list) != 3:
         return False, "Please enter your character name, the receivers name and the amount of gold"

@@ -83,3 +83,13 @@ def question_list(give_list: list):
             return_string = "{}\n{} : {}".format(return_string, entry + 1, give_list[entry])
     return return_string
 
+
+def find_trade_row(seller_name: str, seller_list: list, item_name: str, item_list: list):
+    for row in range(len(seller_list)):
+        if seller_list[row].lower() == seller_name.lower():
+            character_index = row
+            list_item_name = item_list[character_index]
+            if list_item_name.lower() == item_name.lower():
+                trade_row = character_index + 1
+                return trade_row
+

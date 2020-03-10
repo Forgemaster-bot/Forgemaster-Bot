@@ -52,7 +52,7 @@ class Mod_Commands(commands.Cog):
     #                await command.send("Sync Character command stopped")
     #                break
 
-    @commands.command(name='CharacterRefresh', help='[Character Name]')
+    @commands.command(name='CharacterRefresh', help='[Character]')
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def character_refresh(self, command):
         trim_message = command.message.content.replace('$CharacterRefresh ', '')
@@ -65,7 +65,7 @@ class Mod_Commands(commands.Cog):
             await command.send(command_check[1])
 
     # Feats
-    @commands.command(name='FeatAdd', help="[Character Name],[Feat or ASL]")
+    @commands.command(name='FeatAdd', help="[Character],[Feat or ASL]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def add_feat(self, command):
         trim_message = command.message.content.replace('$FeatAdd ', '')
@@ -85,7 +85,7 @@ class Mod_Commands(commands.Cog):
                     await command.send("Give feat command stopped")
                     break
 
-    @commands.command(name='FeatRemove', help="[Character Name],[Feat or ASL]")
+    @commands.command(name='FeatRemove', help="[Character],[Feat or ASL]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def remove_feat(self, command):
         trim_message = command.message.content.replace('$FeatRemove ', '')
@@ -115,7 +115,7 @@ class Mod_Commands(commands.Cog):
         await command.send(response)
 
     # Skills
-    @commands.command(name='SkillAdd', help="[Character Name],[Skill Name], Optional : [Double]")
+    @commands.command(name='SkillAdd', help="[Character],[Skill], Optional : [Double]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def add_skill(self, command):
         trim_message = command.message.content.replace('$SkillAdd ', '')
@@ -135,7 +135,7 @@ class Mod_Commands(commands.Cog):
                     await command.send("Give skill command stopped")
                     break
 
-    @commands.command(name='SkillRemove', help="[Character Name],[Skill Name], Optional : [Double]")
+    @commands.command(name='SkillRemove', help="[Character],[Skill], Optional : [Double]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def skill_remove(self, command):
         trim_message = command.message.content.replace('$SkillRemove ', '')
@@ -156,7 +156,7 @@ class Mod_Commands(commands.Cog):
                     break
 
     # Stats
-    @commands.command(name='StatChange', help="[Character Name],[Stat],[Amount]")
+    @commands.command(name='StatChange', help="[Character],[Stat],[Amount]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def stat_change(self, command):
         trim_message = command.message.content.replace('$StatChange ', '')
@@ -182,7 +182,7 @@ class Mod_Commands(commands.Cog):
         response = Command_Execute.sync_players(command)
         await command.send(response)
 
-    @commands.command(name='RollCheck', help='[Character Name]')
+    @commands.command(name='RollCheck', help='[Discord Name]')
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def roll_check(self, command):
         trim_message = command.message.content.replace('$RollCheck ', '')
