@@ -490,6 +490,9 @@ def craft(character_name: str, discord_id: str):
         return True, ""
     if SQL_Check.character_has_crafting_value(character_name):
         return False, "{} has used up all their crafting time for this week".format(character_name)
+    profession_list = SQL_Lookup.character_skill_profession(character_name)
+    if len(profession_list) == 0:
+        return False, "You don't own any artisan tools for your professions."
     return True, ""
 
 

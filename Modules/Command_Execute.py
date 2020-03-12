@@ -432,7 +432,8 @@ def trade_buy(command: str):
     Update_Google_Roster.update_gold_group(update_list)
     Update_Google_Roster.update_items(character_name)
     Update_Google_Roster.update_items(seller_name)
-    return "{} bought {} {} from {} for {}g".format(character_name, quantity, item_name, seller_name, trade_value)
+    user_ping = "<@{}>".format(SQL_Lookup.character_owner(seller_name))
+    return "{} bought {} {} from {} for {}g".format(character_name, quantity, item_name, user_ping, trade_value)
 
 
 def trade_stop(command: str):

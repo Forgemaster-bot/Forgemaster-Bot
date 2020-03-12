@@ -5,7 +5,6 @@ import Command_Check
 import Command_Execute
 import Quick_SQL
 import Quick_Python
-import SQL_Check
 import SQL_Lookup
 
 
@@ -22,43 +21,31 @@ class Player_Commands(commands.Cog):
         if not command_check[0]:
             await command.send(command_check[1])
         else:
-            crafting = True
-            while crafting:
+            while True:
                 # collect information about how much crafting can be done
                 welcome_message = Command_Execute.crafting_message(character_name)
                 gold_limit = Command_Execute.crafting_gold_limit(character_name)
                 await command.message.author.send(welcome_message)
-                # find crafting skills, choose if more than one
-                if SQL_Check.character_has_multiple_profession(character_name):
-                    profession_list = SQL_Lookup.character_skill_profession(character_name)
-                    if len(profession_list) == 1:
-                        skill = profession_list[0]
-                    else:
-                        profession_question = "Please enter the number of the profession to use"
-                        skill_choice = await self.answer_from_list(command, profession_question, profession_list)
-                        if not skill_choice[0]:
-                            break
-                        skill = skill_choice[1]
+                # check for skills and tools
+                profession_list = SQL_Lookup.character_skill_profession(character_name)
+                if len(profession_list) == 1:
+                    skill = profession_list[0]
                 else:
-                    skill = SQL_Lookup.character_skill_profession(character_name)[0]
+                    profession_question = "Please enter the number of the profession to use"
+                    skill_choice = await self.answer_from_list(command, profession_question, profession_list)
+                    if not skill_choice[0]:
+                        break
+                    skill = skill_choice[1]
 
                 # find crafting types, choose if more than one
                 profession_choices = SQL_Lookup.profession_choice(skill)
-                if profession_choices > 1:
-                    crafting_type_list = ("Craft a mundane item",
-                                          "Craft a consumable from a recipe",
-                                          "Experiment with ingredients")
-                    craft_choice_question = "What would you like to craft?"
-                    craft_type_choice = await self.answer_from_list(command, craft_choice_question, crafting_type_list)
-                    if not craft_type_choice[0]:
-                        crafting = False
-                        break
-                    craft_type = craft_type_choice[1]
-                elif profession_choices == 1:
-                    craft_type = "Craft a mundane item"
+                if len(profession_choices) == 1:
+                    craft_type = profession_choices[0]
                 else:
-                    await command.author.send("{} has nothing to craft yet".format(skill))
-                    break
+                    craft_choice_question = "What would you like to craft?"
+                    craft_type_choice = await self.answer_from_list(command, craft_choice_question, profession_choices)
+                    craft_type = craft_type_choice[1]
+
                 # crafting mundane items
                 if craft_type == "Craft a mundane item":
                     # Pick type of item to make
@@ -68,7 +55,6 @@ class Player_Commands(commands.Cog):
                                              "number of the of item type would you like to craft".format(skill)
                         item_type_choice = await self.answer_from_list(command, item_type_question, item_type_list)
                         if not item_type_choice[0]:
-                            crafting = False
                             break
                         item_type = item_type_choice[1]
                     else:
@@ -78,7 +64,6 @@ class Player_Commands(commands.Cog):
                     item_question = "Please enter the number of the item would you like to craft?"
                     item_choice = await self.answer_from_list(command, item_question, item_list)
                     if not item_choice[0]:
-                        crafting = False
                         break
                     item = SQL_Lookup.item_detail(item_choice[1])
 
@@ -90,7 +75,6 @@ class Player_Commands(commands.Cog):
                             .format(item.Value / 2, item.Name, max_quantity)
                         quantity_choice = await self.answer_with_number(command, quantity_question, max_quantity)
                         if not quantity_choice[0]:
-                            crafting = False
                             break
                         else:
                             quantity = quantity_choice[1]
@@ -106,15 +90,13 @@ class Player_Commands(commands.Cog):
                         Command_Execute.craft_item(character_name, item.Name, quantity)
                         await command.author.send(
                             "You crafted {} {} for {}g".format(quantity, item.Name, (item.Value / 2) * quantity))
-                        crafting = False
-                    else:
-                        crafting = False
+                    break
                 elif craft_type == "Craft a consumable from a recipe":
                     await command.author.send("consumable crafting is still in development, come back later")
-                    crafting = False
+                    break
                 elif craft_type == "Experiment with ingredients":
                     await command.author.send("experimenting is still in development, come back later")
-                    crafting = False
+                    break
             await command.author.send("Crafting Ended")
 
     @commands.command(name='Work', help="[Character],[Employers Name] Work for someone this week.")
@@ -249,6 +231,7 @@ class Player_Commands(commands.Cog):
                     Quick_SQL.log_command(command)
                     response = Command_Execute.trade_buy(trim_message)
                     await command.send(response)
+
                     break
                 else:
                     await command.send("For sale command stopped")
