@@ -379,13 +379,7 @@ def sell(command: str):
     return "{} sold {} {} for {} to the town".format(character_name, quantity, item_name, total_value)
 
 
-def trade_sell(command: str):
-    c_list = command.split(",")
-    character_name = c_list[0].lstrip()
-    item_name = c_list[1].lstrip()
-    value = float(c_list[2])
-    quantity = int(c_list[3])
-
+def trade_sell(character_name: str, item_name: str, value: float, quantity: int):
     # update SQL
     if quantity == SQL_Lookup.character_item_quantity(character_name, item_name):
         SQL_Delete.character_item(character_name, item_name)
@@ -396,15 +390,10 @@ def trade_sell(command: str):
     # update google
     Update_Google_Roster.update_items(character_name)
     Update_Google_Trade.trade_create(character_name, item_name)
-    return "{} {} is now for sale at {}g each".format(quantity, item_name, value)
+    return "{} {} are now up for sale at {}g each".format(quantity, item_name, value)
 
 
-def trade_buy(command: str):
-    c_list = command.split(",")
-    character_name = c_list[0].lstrip()
-    seller_name = c_list[1].lstrip()
-    item_name = c_list[2].lstrip()
-    quantity = int(c_list[3].lstrip())
+def trade_buy(character_name: str, seller_name: str, item_name: str, quantity: int):
     item_value = SQL_Lookup.trade_item_price(seller_name, item_name)
     trade_value = item_value * quantity
 
@@ -436,10 +425,7 @@ def trade_buy(command: str):
     return "{} bought {} {} from {} for {}g".format(character_name, quantity, item_name, user_ping, trade_value)
 
 
-def trade_stop(command: str):
-    c_list = command.split(",")
-    character_name = c_list[0].lstrip()
-    item_name = c_list[1].lstrip()
+def trade_stop(character_name: str, item_name: str):
     quantity = SQL_Lookup.trade_item_quantity(character_name, item_name)
 
     # return to inventory
@@ -526,16 +512,12 @@ def crafting_gold_limit(character_name: str):
     craft_limit = SQL_Lookup.character_crafting_points(character_name)
     craft_value = craft_limit[2]/2
     labour_value = labour_crafting_value(craft_limit[3])
-    if craft_limit[1] == 1:  # if they haven't crafted anything this week
-        if character_gold < labour_value:
-            return character_gold
-        else:
-            return labour_value
-    else:  # already crafted this week
-        if character_gold < craft_value:
-            return character_gold
-        else:
-            return craft_value
+    if labour_value == 0:
+        limit_list = [character_gold, craft_value]
+        return min(limit_list)
+    else:
+        limit_list = [character_gold, craft_value, labour_value]
+        return min(limit_list)
 
 
 def labour_crafting_value(labour: int):
@@ -546,7 +528,7 @@ def labour_crafting_value(labour: int):
     elif labour > 2:
         value = 50000
     else:
-        value = 50
+        value = 0
     return value
 
 

@@ -286,8 +286,8 @@ def stat_raise(command: str):
 
 def pay(command: str, discord_id: str):  # [Character Name],[Seller's Name],[Item Name],[Quantity]
     c_list = command.split(",")
-    if len(c_list) != 3:
-        return False, "Please enter your character name, the receivers name and the amount of gold"
+    if len(c_list) != 4:
+        return False, "Please enter your character name, the target name, the ammount and a reason for the payment"
 
     # character
     character_name = c_list[0].lstrip()

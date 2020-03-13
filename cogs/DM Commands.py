@@ -51,14 +51,14 @@ class DM_Commands(commands.Cog):
                     await command.send("Give gold command stopped")
                     break
 
-    @commands.command(name='ItemAdd', help="use help for more information"
+    @commands.command(name='AddItem', help="use help for more information"
                                            "\n1) [Character Name], [Item:Quantity], [Item:Quantity]..."
                                            "\nExample - Cogs,Dagger:2, Pickaxe:3, Leather:4"
                                            "\n2) [Item Name], [Character Name:Quantity], [Character Name:Quantity]"
                                            "\nExample - Rations, Cogs:4,Ratagan:2")
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def add_item(self, command):
-        trim_message = command.message.content.replace('$ItemAdd ', '')
+        trim_message = command.message.content.replace('$AddItem ', '')
         command_check = Command_Check.add_item(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
@@ -75,10 +75,10 @@ class DM_Commands(commands.Cog):
                     await command.send("Give item command stopped")
                     break
 
-    @commands.command(name='ItemRemove', help="[Character Name],[Item]:[Quantity]")
+    @commands.command(name='RemoveItem', help="[Character Name],[Item]:[Quantity]")
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def remove_item(self, command):
-        trim_message = command.message.content.replace('$ItemRemove ', '')
+        trim_message = command.message.content.replace('$RemoveItem ', '')
         command_check = Command_Check.remove_item(trim_message)
         await command.send(command_check[1])
         if command_check[0]:

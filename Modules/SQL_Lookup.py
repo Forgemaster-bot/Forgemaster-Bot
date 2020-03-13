@@ -1,5 +1,9 @@
 import Quick_SQL
 
+'''''''''''''''''''''''''''''''''''''''''
+############Info_Discord###############
+'''''''''''''''''''''''''''''''''''''''''
+
 
 def player_name_by_id(user_id: str):
     cursor = Quick_SQL.db_connection()
@@ -33,11 +37,20 @@ def player_stat_roll(discord_id: str):
     return result
 
 
-def player_character(discord_id: str):
+'''''''''''''''''''''''''''''''''''''''''
+############Main_character###############
+'''''''''''''''''''''''''''''''''''''''''
+
+
+def character_list(discord_id: str):
     cursor = Quick_SQL.db_connection()
     query = "select Character_Name from Main_Characters where Discord_ID = '{}'".format(discord_id)
     cursor.execute(query)
-    return cursor.fetchall()
+    rows = cursor.execute(query)
+    response = []
+    for row in rows:
+        response.append(row.Character_Name)
+    return response
 
 
 def character_sheet(character_name: str):
@@ -53,6 +66,75 @@ def character_owner(character_name: str):
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Discord_ID
+
+
+def character_xp(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    cursor.execute(query)
+    character = cursor.fetchone()
+    return character.XP
+
+
+def character_gold(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    cursor.execute(query)
+    character = cursor.fetchone()
+    return character.Gold
+
+
+def character_ability_score(character_name: str, ability: str):
+    cursor = Quick_SQL.db_connection()
+    sql_command = "select * from Main_Characters where Character_Name = '{}'".format(character_name)
+    cursor.execute(sql_command)
+    result = cursor.fetchone()
+    value = 0
+    if ability == "STR":
+        value = result.Strength
+    if ability == "DEX":
+        value = result.Dexterity
+    if ability == "CON":
+        value = result.Constitution
+    if ability == "INT":
+        value = result.Intelligence
+    if ability == "WIS":
+        value = result.Wisdom
+    if ability == "CHA":
+        value = result.Charisma
+    return value
+
+
+'''''''''''''''''''''''''''''''''''''''''
+###########Link_Character_Items##########
+'''''''''''''''''''''''''''''''''''''''''
+
+
+def character_item_quantity(character_name: str, item_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * from Link_Character_Items where Character='{}' AND Item = '{}'".format(character_name, item_name)
+    cursor.execute(query)
+    item = cursor.fetchone()
+    return item.Quantity
+
+
+def character_inventory(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * from Link_Character_Items where Character='{}' order by Item".format(character_name)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    items = []
+    for row in rows:
+        if row.Quantity == 1:
+            items.append(row.Item)
+        else:
+            items.append(row.Item + " ({})".format(row.Quantity))
+    return items
+
+
+'''''''''''''''''''''''''''''''''''''''''
+###########Link_Character_Class##########
+'''''''''''''''''''''''''''''''''''''''''
 
 
 def character_class_by_order(character_name: str, order: int):
@@ -100,65 +182,6 @@ def character_feats(character_name: str):
     return feats
 
 
-def character_item_quantity(character_name: str, item_name: str):
-    cursor = Quick_SQL.db_connection()
-    query = "select * from Link_Character_Items where Character='{}' AND Item = '{}'".format(character_name, item_name)
-    cursor.execute(query)
-    item = cursor.fetchone()
-    return item.Quantity
-
-
-def character_inventory(character_name: str):
-    cursor = Quick_SQL.db_connection()
-    query = "select * from Link_Character_Items where Character='{}' order by Item".format(character_name)
-    cursor.execute(query)
-    rows = cursor.fetchall()
-    items = []
-    for row in rows:
-        if row.Quantity == 1:
-            items.append(row.Item)
-        else:
-            items.append(row.Item + " ({})".format(row.Quantity))
-    return items
-
-
-def character_xp(character_name: str):
-    cursor = Quick_SQL.db_connection()
-    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
-    cursor.execute(query)
-    character = cursor.fetchone()
-    return character.XP
-
-
-def character_gold(character_name: str):
-    cursor = Quick_SQL.db_connection()
-    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
-    cursor.execute(query)
-    character = cursor.fetchone()
-    return character.Gold
-
-
-def character_ability_score(character_name: str, ability: str):
-    cursor = Quick_SQL.db_connection()
-    sql_command = "select * from Main_Characters where Character_Name = '{}'".format(character_name)
-    cursor.execute(sql_command)
-    result = cursor.fetchone()
-    value = 0
-    if ability == "STR":
-        value = result.Strength
-    if ability == "DEX":
-        value = result.Dexterity
-    if ability == "CON":
-        value = result.Constitution
-    if ability == "INT":
-        value = result.Intelligence
-    if ability == "WIS":
-        value = result.Wisdom
-    if ability == "CHA":
-        value = result.Charisma
-    return value
-
-
 def character_skills(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * from Link_Character_Skills where Character='{}'".format(character_name)
@@ -176,30 +199,6 @@ def character_skills(character_name: str):
 def shop_item(item_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * from Info_Item where Name = '{}'".format(item_name)
-    cursor.execute(query)
-    item = cursor.fetchone()
-    return item
-
-
-def trade_item_quantity(character_name: str, item_name: str):
-    cursor = Quick_SQL.db_connection()
-    query = "select * from Main_Trade where Character='{}' AND Item = '{}'".format(character_name, item_name)
-    cursor.execute(query)
-    item = cursor.fetchone()
-    return item.Quantity
-
-
-def trade_item_price(character_name: str, item_name: str):
-    cursor = Quick_SQL.db_connection()
-    query = "select * from Main_Trade where Character='{}' AND Item = '{}'".format(character_name, item_name)
-    cursor.execute(query)
-    item = cursor.fetchone()
-    return item.Price
-
-
-def trade_item(character_name: str, item_name: str):
-    cursor = Quick_SQL.db_connection()
-    query = "select * from Main_Trade where Character='{}' AND Item = '{}'".format(character_name, item_name)
     cursor.execute(query)
     item = cursor.fetchone()
     return item
@@ -308,7 +307,87 @@ def item_detail(item_name: str):
 
 def profession_choice(skill: str):
     cursor = Quick_SQL.db_connection()
-    query = "select Craft From Link_Skills_Recipies where Skill = '{}'".format(skill)
+    query = "Select Craft " \
+            "From Link_Skills_Recipies " \
+            "Where Skill = '{}'" \
+            "Order by craft".format(skill)
     cursor.execute(query)
-    result = cursor.fetchone()
+    rows = cursor.fetchall()
+    result = []
+    for row in rows:
+        result.append(row.Craft)
     return result
+
+
+'''''''''''''''''''''''''''''''''''''''''
+##############Main_Trade#################
+'''''''''''''''''''''''''''''''''''''''''
+
+
+def trade_item(character_name: str, item_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * from Main_Trade where Character='{}' AND Item = '{}'".format(character_name, item_name)
+    cursor.execute(query)
+    item = cursor.fetchone()
+    return item
+
+
+def trade_item_quantity(character_name: str, item_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * from Main_Trade where Character='{}' AND Item = '{}'".format(character_name, item_name)
+    cursor.execute(query)
+    item = cursor.fetchone()
+    return item.Quantity
+
+
+def trade_item_price(character_name: str, item_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * from Main_Trade where Character='{}' AND Item = '{}'".format(character_name, item_name)
+    cursor.execute(query)
+    item = cursor.fetchone()
+    return item.Price
+
+
+def trade_sellers_list(character_name: str, price: float):
+    cursor = Quick_SQL.db_connection()
+    query = "select Distinct Character " \
+            "from Main_Trade " \
+            "where Character != '{}' and Price <= '{}' " \
+            "order by Character".format(character_name, price)
+    cursor.execute(query)
+    result = []
+    rows = cursor.fetchall()
+    for row in rows:
+        result.append(row.Character)
+    return result
+
+
+def trade_seller_item_list(character_name: str, price: float):
+    cursor = Quick_SQL.db_connection()
+    query = "select Item, Price " \
+            "from Main_Trade " \
+            "where Character = '{}' and Price <= '{}' " \
+            "order by Item".format(character_name, price)
+    cursor.execute(query)
+    result = []
+    rows = cursor.fetchall()
+    for row in rows:
+        result.append("{} - {}g".format(row.Item, row.Price))
+    return result
+
+
+def character_inventory_sell_list(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Link_Character_Items " \
+            "where Character='{}' and Item not in (select Item from Main_Trade where Character = '{}') " \
+            "order by Item".format(character_name,character_name)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    items = []
+    for row in rows:
+        if row.Quantity == 1:
+            items.append(row.Item)
+        else:
+            items.append(row.Item + " ({})".format(row.Quantity))
+    return items

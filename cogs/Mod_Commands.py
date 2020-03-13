@@ -65,10 +65,10 @@ class Mod_Commands(commands.Cog):
             await command.send(command_check[1])
 
     # Feats
-    @commands.command(name='FeatAdd', help="[Character],[Feat or ASL]")
+    @commands.command(name='AddFeat', help="[Character],[Feat or ASL]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def add_feat(self, command):
-        trim_message = command.message.content.replace('$FeatAdd ', '')
+        trim_message = command.message.content.replace('$AddFeat ', '')
         command_check = Command_Check.add_feat(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
@@ -85,10 +85,10 @@ class Mod_Commands(commands.Cog):
                     await command.send("Give feat command stopped")
                     break
 
-    @commands.command(name='FeatRemove', help="[Character],[Feat or ASL]")
+    @commands.command(name='RemoveFeat', help="[Character],[Feat or ASL]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def remove_feat(self, command):
-        trim_message = command.message.content.replace('$FeatRemove ', '')
+        trim_message = command.message.content.replace('$RemoveFeat ', '')
         command_check = Command_Check.remove_feat(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
@@ -115,10 +115,10 @@ class Mod_Commands(commands.Cog):
         await command.send(response)
 
     # Skills
-    @commands.command(name='SkillAdd', help="[Character],[Skill], Optional : [Double]")
+    @commands.command(name='AddSkill', help="[Character],[Skill], Optional : [Double]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def add_skill(self, command):
-        trim_message = command.message.content.replace('$SkillAdd ', '')
+        trim_message = command.message.content.replace('$AddSkill ', '')
         command_check = Command_Check.skill_add(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
@@ -135,10 +135,10 @@ class Mod_Commands(commands.Cog):
                     await command.send("Give skill command stopped")
                     break
 
-    @commands.command(name='SkillRemove', help="[Character],[Skill], Optional : [Double]")
+    @commands.command(name='RemoveSkill', help="[Character],[Skill], Optional : [Double]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def skill_remove(self, command):
-        trim_message = command.message.content.replace('$SkillRemove ', '')
+        trim_message = command.message.content.replace('$RemoveSkill ', '')
         command_check = Command_Check.skill_remove(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
@@ -156,10 +156,10 @@ class Mod_Commands(commands.Cog):
                     break
 
     # Stats
-    @commands.command(name='StatChange', help="[Character],[Stat],[Amount]")
+    @commands.command(name='ChangeStat', help="[Character],[Stat],[Amount]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def stat_change(self, command):
-        trim_message = command.message.content.replace('$StatChange ', '')
+        trim_message = command.message.content.replace('$ChangeStat ', '')
         command_check = Command_Check.stat_raise(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
