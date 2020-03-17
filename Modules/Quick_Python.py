@@ -26,11 +26,11 @@ def stitch_table(given_list: list):
 
 
 def find_character_row(character_list: list, character_name: str):
-    try:
-        character_row = character_list.index(character_name) + 1
-    except ValueError:
-        character_row = 0
-    return character_row
+    for row in range(len(character_list)):
+        target = character_list[row].lower()
+        if target == character_name.lower():
+            return row + 1
+    return 0
 
 
 def ability_name_check(stat: str):
@@ -93,4 +93,6 @@ def find_trade_row(seller_name: str, seller_list: list, item_name: str, item_lis
             if list_item_name.lower() == item_name.lower():
                 trade_row = character_index + 1
                 return trade_row
+
+
 

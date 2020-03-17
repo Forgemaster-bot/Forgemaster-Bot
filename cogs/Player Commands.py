@@ -339,7 +339,7 @@ class Player_Commands(commands.Cog):
                 reply = await self.private_confirm(command)
                 if reply == "Yes":
                     await command.author.send("stopping...")
-                    log = "{] stopped selling {}".format(character_name, item_name)
+                    log = "{} stopped selling {}".format(character_name, item_name)
                     Quick_SQL.log_private_command(discord_id, log)
                     response = Command_Execute.trade_stop(character_name, item_name)
                     await command.author.send(response)

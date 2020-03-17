@@ -212,19 +212,6 @@ def character_has_crafted(character_name: str):
         return False
     return True
 
-
-def character_has_craft_point(character_name: str):
-    cursor = Quick_SQL.db_connection()
-    query = "select * " \
-            "from Main_Crafting " \
-            "where Character_Name = '{}'".format(character_name)
-    cursor.execute(query)
-    result = cursor.fetchone()
-    if result.Crafting_Point == 1:
-        return False
-    return True
-
-
 def character_has_crafting_value(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \
@@ -279,3 +266,98 @@ def has_tool_for_job(character_name: str, skill: str):
         return False
     return True
 
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''
+###################Player_Menu#####################
+'''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+def character_has_professions_and_tools(character_name: str):
+    cursor = Quick_SQL.db_connection()
+
+    query = "Select A.Skill " \
+            "From Link_Character_Skills A " \
+            "Left Join Info_Skills B " \
+            "On A.Skill = B.Name " \
+            "left join Link_Character_Items C " \
+            "on B.Tools = C.Item " \
+            "where A.Character = '{}' and C.Character = '{}' and B.Job = 1 " \
+            "order by A.Skill ".format(character_name, character_name)
+    cursor.execute(query)
+    result = cursor.fetchall()
+    if result is None:
+        return False
+    return True
+
+
+def character_has_crafting_point(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Main_Crafting " \
+            "where Character_Name = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result.Crafting_Point == 1:
+        return False
+    return True
+
+
+def character_has_gold(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+
+
+def character_can_level_up(character_name: str):
+    character_level = SQL_Lookup.character_sum_class_levels(character_name)
+    character_xp = SQL_Lookup.character_xp(character_name)
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Info_XP " \
+            "where Level='{}'".format(character_level)
+    cursor.execute(query)
+    xp_sheet = cursor.fetchone()
+    if character_xp > xp_sheet.XP:
+        return True
+    return False
+
+
+def character_has_items_to_sell(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "Select * " \
+            "From Link_Character_Items " \
+            "Where Character = '{}' " \
+            "AND Item in (select Name from Info_Item)".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+
+
+def character_has_items_to_trade(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "Select * " \
+            "From Link_Character_Items " \
+            "Where Character = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+
+
+def character_has_items_on_sale(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Main_Trade " \
+            "where Character = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True

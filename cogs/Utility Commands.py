@@ -23,6 +23,11 @@ class Support_Commands(commands.Cog):
         author = "<@{}>".format(command.message.author.id)
         await command.send("{} {}".format(author, response))
 
+    @commands.command(name='Test', help="message player test")
+    async def test(self, command):
+        target = 259051627145592832
+        user = self.bot.get_user(target)
+        await user.send("Test")
     # Yes/No response checker
     async def confirm(self, command):
         # setup sub function to store new message

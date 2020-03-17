@@ -547,7 +547,6 @@ def craft_item(character_name: str, item_name: str, quantity: int):
     if new_craft_value <= 0:
         new_craft_value = 0
     SQL_Update.crafting_points(character_name, 0, new_craft_value, 0)
-
     return
 
 

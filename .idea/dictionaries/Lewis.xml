@@ -2,6 +2,7 @@
   <dictionary name="Lewis">
     <words>
       <w>botmsg</w>
+      <w>sellable</w>
     </words>
   </dictionary>
 </component>
