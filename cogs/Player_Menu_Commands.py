@@ -12,7 +12,7 @@ class Player_Menu_Commands(commands.Cog):
         self.bot = bot
 
     # Menu
-    @commands.command(name='Menu', help="in development DONT USE")
+    @commands.command(name='Menu', help="Opens the player menu")
     async def player_menu(self, command):
         discord_id = command.message.author.id
         # welcome message
@@ -76,7 +76,7 @@ class Player_Menu_Commands(commands.Cog):
                         break
             elif menu_option == "Work for a character":
                 while True:
-                    menu = await self.sell_menu(command, discord_id, character_name)
+                    menu = await self.work_menu(command, discord_id, character_name)
                     if menu == "exit":
                         menu_option = "exit"
                         break
@@ -103,7 +103,7 @@ class Player_Menu_Commands(commands.Cog):
             await command.message.author.send("{} doesnt have any options available".format(character_name))
             choice = "stop"
         else:
-            option_question = "Main Menu: Welcome {}, What would you like to do? Type **EXIT** to close the menu"\
+            option_question = "Main Menu: Welcome {}, What would you like to do? Type **EXIT** to close the menu."\
                 .format(character_name)
             choice = await self.answer_from_list(command, option_question, option_list)
         return choice
@@ -216,7 +216,7 @@ class Player_Menu_Commands(commands.Cog):
 
     # Giving items
     async def give_menu(self, command, discord_id, character_name):
-        welcome_message = "Gift Menu: Type **STOP** at any time to go back to the player menu"
+        welcome_message = "Gift Menu: Type **STOP** at any time to go back to the player menu."
         await command.message.author.send(welcome_message)
         while True:
             # get character item is being sent to
@@ -285,7 +285,7 @@ class Player_Menu_Commands(commands.Cog):
     async def level_menu(self, command, discord_id, character_name):
         character_levels = Scripts.stitch_string(SQL_Lookup.character_class_and_levels(character_name))
         welcome_message = "Level Menu: Type **STOP** at any time to go back to the player menu " \
-                          "\n{} is currently a {}".format(character_name, character_levels)
+                          "\n{} is currently a {}.".format(character_name, character_levels)
         await command.message.author.send(welcome_message)
         while True:
             class_choice = await self.level_step_1_class_choice(command, character_name)
@@ -322,8 +322,8 @@ class Player_Menu_Commands(commands.Cog):
     # Pay Character
 
     async def pay_menu(self, command, discord_id, character_name):
-        welcome_message = "Pay Menu: Type **STOP** at any time to go back to the player menu \n" \
-                          "You can pay other players directly for goods and services"
+        welcome_message = "Pay Menu: Type **STOP** at any time to go back to the player menu. \n" \
+                          "You can pay other players directly for goods and services."
         await command.message.author.send(welcome_message)
         while True:
             # get character item is being sent to
@@ -344,7 +344,7 @@ class Player_Menu_Commands(commands.Cog):
             return
 
     async def pay_step_1_character_choice(self, command, character_name):
-        choice_question = "Type the name of the character you want to pay"
+        choice_question = "Type the name of the character you want to pay."
         choice = await self.character_name_lookup(command, choice_question, character_name)
         return choice
 
@@ -380,8 +380,8 @@ class Player_Menu_Commands(commands.Cog):
 
     # Sell Item to town
     async def sell_menu(self, command, discord_id, character_name):
-        welcome_message = "Sell Menu: Type **STOP** at any time to go back to the player menu \n" \
-                          "You can sell mundane items to the town at their crafting value"
+        welcome_message = "Sell Menu: Type **STOP** at any time to go back to the player menu.\n" \
+                          "You can sell mundane items to the town at their crafting value."
         await command.message.author.send(welcome_message)
         while True:
             # get the item they want to sell
@@ -421,7 +421,7 @@ class Player_Menu_Commands(commands.Cog):
 
     async def sell_step_3_confirm(self, command, discord_id, character_name, item_name, quantity: int):
         item_value = SQL_Lookup.item_value(item_name)
-        total_value = item_value * quantity
+        total_value = item_value/2 * quantity
         question = "Do you want to sell {} {} for {}g each for a total of {}g?"\
             .format(quantity, item_name, item_value, total_value)
         await command.author.send(question)
@@ -526,7 +526,7 @@ class Player_Menu_Commands(commands.Cog):
         await command.author.send(question)
         reply = await self.confirm(command)
         if reply == "Yes":
-            await command.author.send("Selling...")
+            await command.author.send("Buying item...")
             log = "{} Bought {} {} for {}g".format(character_name, quantity, trade_good, total_value)
             Quick_SQL.log_private_command(discord_id, log)
             Scripts.trade_buy(character_name, item_name, quantity)
@@ -565,8 +565,8 @@ class Player_Menu_Commands(commands.Cog):
         await command.author.send(question)
         reply = await self.confirm(command)
         if reply == "Yes":
-            await command.author.send("Selling...")
-            log = "{} put {} {} up for trade at {}g".format(character_name, quantity, item_name, price)
+            await command.author.send("putting up for trade...")
+            log = "{} put {} {} up for trade at {}g each".format(character_name, quantity, item_name, price)
             Quick_SQL.log_private_command(discord_id, log)
             Scripts.trade_sell(character_name, item_name, quantity, price)
 
@@ -585,7 +585,7 @@ class Player_Menu_Commands(commands.Cog):
         await command.author.send(question)
         reply = await self.confirm(command)
         if reply == "Yes":
-            await command.author.send("Selling...")
+            await command.author.send("Stopping sale...")
             log = "{} stopped selling {}".format(character_name, item_name)
             Quick_SQL.log_private_command(discord_id, log)
             Scripts.trade_stop(character_name, item_name)
@@ -596,8 +596,8 @@ class Player_Menu_Commands(commands.Cog):
 
     #  Work Menu
     async def work_menu(self, command, discord_id, character_name):
-        welcome_message = "Work Menu: Type **STOP** at any time to go back to the player menu \n" \
-                          "You can give up crafting for the week to work for another character"
+        welcome_message = "Work Menu: Type **STOP** at any time to go back to the player menu.\n" \
+                          "You can give up crafting for the week to work for another character."
         await command.message.author.send(welcome_message)
         while True:
             # get target name
@@ -620,7 +620,7 @@ class Player_Menu_Commands(commands.Cog):
         await command.author.send(question)
         reply = await self.confirm(command)
         if reply == "Yes":
-            await command.author.send("Selling...")
+            await command.author.send("working...")
             log = "{} worked for {}".format(character_name, target_name)
             Quick_SQL.log_private_command(discord_id, log)
             Scripts.trade_stop(character_name, target_name)

@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a7f42299-d755-4423-9cfc-10cd828ff8b2" name="Default Changelist" comment="reduced complexity of crafting">
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Check.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Delete.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Insert.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Update.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Scripts.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu_Commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Lewis.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Lewis.xml" afterDir="false" />
+    <list default="true" id="a7f42299-d755-4423-9cfc-10cd828ff8b2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Modules/Command_Execute.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Command_Execute.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Modules/Quick_Python.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Quick_Python.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Modules/SQL_Check.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/SQL_Check.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player Commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Utility Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Utility Commands.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Scripts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu_Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu_Commands.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,8 +18,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Core.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="26" selection-start-line="26" selection-end-line="26" />
+            <state relative-caret-position="204">
+              <caret line="12" column="66" lean-forward="true" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="66" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -42,7 +30,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cogs/Player Commands.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
+            <state relative-caret-position="2193">
               <caret line="129" column="50" selection-start-line="129" selection-start-column="50" selection-end-line="129" selection-end-column="50" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
@@ -61,105 +49,84 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Modules/Command_Execute.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="552" selection-start-line="552" selection-end-line="563" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-                <element signature="e#852#1265#0" />
-                <element signature="e#1300#2823#0" />
-                <element signature="e#2861#3541#0" />
-                <element signature="e#3612#4012#0" />
-                <element signature="e#4052#4549#0" />
-                <element signature="e#10250#11816#0" />
-                <element signature="e#14632#15948#0" />
-                <element signature="e#16008#16588#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cogs/Player_Menu_Commands.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="314">
-              <caret line="620" column="58" selection-start-line="620" selection-start-column="58" selection-end-line="620" selection-end-column="58" />
+            <state relative-caret-position="237">
+              <caret line="403" column="45" lean-forward="true" selection-start-line="403" selection-start-column="45" selection-end-line="403" selection-end-column="45" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
-                <element signature="e#883#950#0" />
-                <element signature="e#1106#1404#0" />
-                <element signature="e#1494#1788#0" />
-                <element signature="e#1517#1779#0" />
-                <element signature="e#1864#2158#0" />
-                <element signature="e#2235#2530#0" />
-                <element signature="e#2525#2803#0" />
-                <element signature="e#2557#2803#0" />
-                <element signature="e#2886#3165#0" />
-                <element signature="e#1985#2397#0" />
-                <element signature="e#2465#2958#0" />
-                <element signature="e#3052#5411#0" />
-                <element signature="e#3076#5411#0" />
-                <element signature="e#5510#5837#0" />
-                <element signature="e#5909#6301#0" />
-                <element signature="e#6405#6760#0" />
-                <element signature="e#6875#7121#0" />
-                <element signature="e#7221#7787#0" />
-                <element signature="e#7917#8672#0" />
-                <element signature="e#8260#8650#0" />
-                <element signature="e#8747#8940#0" />
-                <element signature="e#9036#10221#0" />
-                <element signature="e#10306#10496#0" />
-                <element signature="e#10584#10841#0" />
-                <element signature="e#10949#11409#0" />
-                <element signature="e#11536#12422#0" />
-                <element signature="e#13080#13690#0" />
-                <element signature="e#13129#13544#0" />
-                <element signature="e#14665#15236#0" />
-                <element signature="e#15115#16458#0" />
-                <element signature="e#16383#16573#0" />
-                <element signature="e#16422#16882#0" />
-                <element signature="e#17030#17236#0" />
-                <element signature="e#17848#18980#0" />
-                <element signature="e#17863#18205#0" />
-                <element signature="e#18313#18773#0" />
-                <element signature="e#20364#21138#0" />
-                <element signature="e#21577#23013#0" />
-                <element signature="e#22998#23308#0" />
-                <element signature="e#23862#24085#0" />
-                <element signature="e#24161#24450#0" />
-                <element signature="e#24668#25326#0" />
-                <element signature="e#25444#26369#0" />
-                <element signature="e#26448#26687#0" />
-                <element signature="e#26769#27507#0" />
-                <element signature="e#27200#27393#0" />
-                <element signature="e#27571#28270#0" />
-                <element signature="e#28349#28572#0" />
-                <element signature="e#29532#30069#0" />
-                <element signature="e#30879#31998#0" />
-                <element signature="e#12524#13947#0" />
-                <element signature="e#14029#15215#0" />
-                <element signature="e#14240#14324#0" />
-                <element signature="e#20740#21915#0" />
-                <element signature="e#21069#21915#0" />
-                <element signature="e#25520#26116#0" />
-                <element signature="e#15263#15912#0" />
-                <element signature="e#16000#17011#0" />
+                <element signature="e#392#3635#0" />
+                <element signature="e#1113#1393#0" />
+                <element signature="e#1476#1755#0" />
+                <element signature="e#1831#2111#0" />
+                <element signature="e#2179#2457#0" />
+                <element signature="e#2530#2809#0" />
+                <element signature="e#2886#3166#0" />
+                <element signature="e#3239#3518#0" />
+                <element signature="e#3724#4136#0" />
+                <element signature="e#4204#4709#0" />
+                <element signature="e#4803#7041#0" />
+                <element signature="e#7140#7467#0" />
+                <element signature="e#7539#7931#0" />
+                <element signature="e#8028#8383#0" />
+                <element signature="e#8491#8737#0" />
+                <element signature="e#8830#9396#0" />
+                <element signature="e#9519#10262#0" />
+                <element signature="e#10330#10523#0" />
+                <element signature="e#10620#11805#0" />
+                <element signature="e#11890#12080#0" />
+                <element signature="e#12168#12510#0" />
+                <element signature="e#12618#13078#0" />
+                <element signature="e#13205#14045#0" />
+                <element signature="e#14143#14908#0" />
+                <element signature="e#14990#15405#0" />
+                <element signature="e#15508#16079#0" />
+                <element signature="e#16177#17296#0" />
+                <element signature="e#16195#16353#0" />
+                <element signature="e#17380#17560#0" />
+                <element signature="e#17649#17991#0" />
+                <element signature="e#18062#18243#0" />
+                <element signature="e#18368#19101#0" />
+                <element signature="e#19203#20148#0" />
+                <element signature="e#20660#21122#0" />
+                <element signature="e#22095#25013#0" />
+                <element signature="e#25089#25377#0" />
+                <element signature="e#25473#25712#0" />
+                <element signature="e#25814#26119#0" />
+                <element signature="e#26212#26870#0" />
+                <element signature="e#26989#27914#0" />
+                <element signature="e#27993#28216#0" />
+                <element signature="e#28310#28673#0" />
+                <element signature="e#28748#28942#0" />
+                <element signature="e#29116#29823#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Scripts.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="271" column="40" selection-start-line="271" selection-start-column="40" selection-end-line="271" selection-end-column="40" />
+            <state relative-caret-position="289">
+              <caret line="38" column="26" selection-start-line="35" selection-start-column="13" selection-end-line="38" selection-end-column="26" />
               <folding>
-                <element signature="e#0#33#0" expanded="true" />
-                <element signature="e#8776#9321#0" />
-                <element signature="e#9387#9967#0" />
+                <element signature="e#70#283#0" />
+                <element signature="e#356#590#0" />
+                <element signature="e#643#1037#0" />
+                <element signature="e#1647#1887#0" />
+                <element signature="e#1965#2789#0" />
+                <element signature="e#2849#3074#0" />
+                <element signature="e#3123#3341#0" />
+                <element signature="e#3387#3598#0" />
+                <element signature="e#3638#3852#0" />
+                <element signature="e#3891#4111#0" />
+                <element signature="e#4162#4458#0" />
+                <element signature="e#4512#4845#0" />
+                <element signature="e#4919#5313#0" />
+                <element signature="e#5392#5768#0" />
+                <element signature="e#5825#6048#0" />
+                <element signature="e#6102#6393#0" />
               </folding>
             </state>
           </provider>
@@ -176,7 +143,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>main_character</find>
       <find>gold</find>
       <find>select item from</find>
       <find>main_trade</find>
@@ -206,6 +172,7 @@
       <find>trade_sale</find>
       <find>trade_item</find>
       <find>trade_seller_item_list</find>
+      <find>log</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -258,20 +225,20 @@
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Checks_Scripts.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/__init__.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/SQL_Checks.py" />
-        <option value="$PROJECT_DIR$/Core.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu.py" />
-        <option value="$PROJECT_DIR$/Modules/Command_Execute.py" />
         <option value="$PROJECT_DIR$/cogs/Player Commands.py" />
         <option value="$PROJECT_DIR$/cogs/Utility Commands.py" />
         <option value="$PROJECT_DIR$/Modules/Quick_Python.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/SQL_Check.py" />
         <option value="$PROJECT_DIR$/Modules/SQL_Lookup.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/SQL_Delete.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu/SQL_Update.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/SQL_Insert.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu_Commands.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/SQL_Update.py" />
+        <option value="$PROJECT_DIR$/Core.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Scripts.py" />
+        <option value="$PROJECT_DIR$/Modules/Command_Execute.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu_Commands.py" />
       </list>
     </option>
   </component>
@@ -546,12 +513,18 @@
       <option name="project" value="LOCAL" />
       <updated>1584131082264</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Player Menu">
+      <created>1584470838333</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1584470838333</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.25052083" />
@@ -591,7 +564,8 @@
     <MESSAGE value="finished crafting" />
     <MESSAGE value="bug fixes" />
     <MESSAGE value="reduced complexity of crafting" />
-    <option name="LAST_COMMIT_MESSAGE" value="reduced complexity of crafting" />
+    <MESSAGE value="Player Menu" />
+    <option name="LAST_COMMIT_MESSAGE" value="Player Menu" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -790,25 +764,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Mod_Commands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="181" column="40" lean-forward="true" selection-start-line="181" selection-start-column="40" selection-end-line="181" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-            <element signature="e#266#422#0" />
-            <element signature="e#556#1314#0" />
-            <element signature="e#1320#1426#0" />
-            <element signature="e#2540#2947#0" />
-            <element signature="e#3157#3884#0" />
-            <element signature="e#4088#4824#0" />
-            <element signature="e#5025#5218#0" />
-            <element signature="e#5446#6177#0" />
-            <element signature="e#6398#7140#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cogs/Utility Commands.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
@@ -927,16 +882,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" selection-start-line="26" selection-end-line="26" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Modules/Quick_SQL.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -958,57 +903,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/SQL_Update.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="113" selection-start-line="113" selection-end-line="120" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-            <element signature="e#109#413#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Update.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="43" column="19" lean-forward="true" selection-start-line="43" selection-start-column="19" selection-end-line="43" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Modules/SQL_Lookup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
           <caret line="364" selection-start-line="364" selection-end-line="375" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="386">
-          <caret line="292" column="29" selection-start-line="292" selection-start-column="4" selection-end-line="292" selection-end-column="29" />
-          <folding>
-            <element signature="e#70#283#0" />
-            <element signature="e#356#590#0" />
-            <element signature="e#643#1037#0" />
-            <element signature="e#1104#1590#0" />
-            <element signature="e#1647#1887#0" />
-            <element signature="e#1965#2789#0" />
-            <element signature="e#2849#3074#0" />
-            <element signature="e#3123#3341#0" />
-            <element signature="e#3387#3598#0" />
-            <element signature="e#3638#3852#0" />
-            <element signature="e#3891#4111#0" />
-            <element signature="e#4162#4458#0" />
-            <element signature="e#4512#4845#0" />
-            <element signature="e#4919#5313#0" />
-            <element signature="e#5392#5768#0" />
-            <element signature="e#5825#6048#0" />
-            <element signature="e#6102#6393#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1035,77 +933,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu_Commands.py">
+    <entry file="file://$PROJECT_DIR$/Modules/SQL_Update.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="620" column="58" selection-start-line="620" selection-start-column="58" selection-end-line="620" selection-end-column="58" />
+        <state relative-caret-position="443">
+          <caret line="123" selection-start-line="123" selection-end-line="129" selection-end-column="19" />
           <folding>
-            <element signature="e#0#32#0" expanded="true" />
-            <element signature="e#883#950#0" />
-            <element signature="e#1106#1404#0" />
-            <element signature="e#1494#1788#0" />
-            <element signature="e#1517#1779#0" />
-            <element signature="e#1864#2158#0" />
-            <element signature="e#2235#2530#0" />
-            <element signature="e#2525#2803#0" />
-            <element signature="e#2557#2803#0" />
-            <element signature="e#2886#3165#0" />
-            <element signature="e#1985#2397#0" />
-            <element signature="e#2465#2958#0" />
-            <element signature="e#3052#5411#0" />
-            <element signature="e#3076#5411#0" />
-            <element signature="e#5510#5837#0" />
-            <element signature="e#5909#6301#0" />
-            <element signature="e#6405#6760#0" />
-            <element signature="e#6875#7121#0" />
-            <element signature="e#7221#7787#0" />
-            <element signature="e#7917#8672#0" />
-            <element signature="e#8260#8650#0" />
-            <element signature="e#8747#8940#0" />
-            <element signature="e#9036#10221#0" />
-            <element signature="e#10306#10496#0" />
-            <element signature="e#10584#10841#0" />
-            <element signature="e#10949#11409#0" />
-            <element signature="e#11536#12422#0" />
-            <element signature="e#13080#13690#0" />
-            <element signature="e#13129#13544#0" />
-            <element signature="e#14665#15236#0" />
-            <element signature="e#15115#16458#0" />
-            <element signature="e#16383#16573#0" />
-            <element signature="e#16422#16882#0" />
-            <element signature="e#17030#17236#0" />
-            <element signature="e#17848#18980#0" />
-            <element signature="e#17863#18205#0" />
-            <element signature="e#18313#18773#0" />
-            <element signature="e#20364#21138#0" />
-            <element signature="e#21577#23013#0" />
-            <element signature="e#22998#23308#0" />
-            <element signature="e#23862#24085#0" />
-            <element signature="e#24161#24450#0" />
-            <element signature="e#24668#25326#0" />
-            <element signature="e#25444#26369#0" />
-            <element signature="e#26448#26687#0" />
-            <element signature="e#26769#27507#0" />
-            <element signature="e#27200#27393#0" />
-            <element signature="e#27571#28270#0" />
-            <element signature="e#28349#28572#0" />
-            <element signature="e#29532#30069#0" />
-            <element signature="e#30879#31998#0" />
-            <element signature="e#12524#13947#0" />
-            <element signature="e#14029#15215#0" />
-            <element signature="e#14240#14324#0" />
-            <element signature="e#20740#21915#0" />
-            <element signature="e#21069#21915#0" />
-            <element signature="e#25520#26116#0" />
-            <element signature="e#15263#15912#0" />
-            <element signature="e#16000#17011#0" />
+            <element signature="e#0#16#0" expanded="true" />
+            <element signature="e#109#413#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Update.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="403">
+          <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cogs/Player Commands.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
+        <state relative-caret-position="2193">
           <caret line="129" column="50" selection-start-line="129" selection-start-column="50" selection-end-line="129" selection-end-column="50" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
@@ -1123,10 +974,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="66" lean-forward="true" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="66" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Scripts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="284" lean-forward="true" selection-start-line="284" selection-end-line="284" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Mod_Commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="61" column="37" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#266#422#0" />
+            <element signature="e#556#1314#0" />
+            <element signature="e#1320#1426#0" />
+            <element signature="e#3157#3884#0" />
+            <element signature="e#4088#4824#0" />
+            <element signature="e#5025#5218#0" />
+            <element signature="e#5446#6177#0" />
+            <element signature="e#6398#7140#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Modules/Command_Execute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="552" selection-start-line="552" selection-end-line="563" />
+        <state relative-caret-position="340">
+          <caret line="213" lean-forward="true" selection-start-line="213" selection-end-line="213" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#852#1265#0" />
@@ -1141,14 +1030,81 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Scripts.py">
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="271" column="40" selection-start-line="271" selection-start-column="40" selection-end-line="271" selection-end-column="40" />
+        <state relative-caret-position="289">
+          <caret line="38" column="26" selection-start-line="35" selection-start-column="13" selection-end-line="38" selection-end-column="26" />
           <folding>
-            <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#8776#9321#0" />
-            <element signature="e#9387#9967#0" />
+            <element signature="e#70#283#0" />
+            <element signature="e#356#590#0" />
+            <element signature="e#643#1037#0" />
+            <element signature="e#1647#1887#0" />
+            <element signature="e#1965#2789#0" />
+            <element signature="e#2849#3074#0" />
+            <element signature="e#3123#3341#0" />
+            <element signature="e#3387#3598#0" />
+            <element signature="e#3638#3852#0" />
+            <element signature="e#3891#4111#0" />
+            <element signature="e#4162#4458#0" />
+            <element signature="e#4512#4845#0" />
+            <element signature="e#4919#5313#0" />
+            <element signature="e#5392#5768#0" />
+            <element signature="e#5825#6048#0" />
+            <element signature="e#6102#6393#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu_Commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="403" column="45" lean-forward="true" selection-start-line="403" selection-start-column="45" selection-end-line="403" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#392#3635#0" />
+            <element signature="e#1113#1393#0" />
+            <element signature="e#1476#1755#0" />
+            <element signature="e#1831#2111#0" />
+            <element signature="e#2179#2457#0" />
+            <element signature="e#2530#2809#0" />
+            <element signature="e#2886#3166#0" />
+            <element signature="e#3239#3518#0" />
+            <element signature="e#3724#4136#0" />
+            <element signature="e#4204#4709#0" />
+            <element signature="e#4803#7041#0" />
+            <element signature="e#7140#7467#0" />
+            <element signature="e#7539#7931#0" />
+            <element signature="e#8028#8383#0" />
+            <element signature="e#8491#8737#0" />
+            <element signature="e#8830#9396#0" />
+            <element signature="e#9519#10262#0" />
+            <element signature="e#10330#10523#0" />
+            <element signature="e#10620#11805#0" />
+            <element signature="e#11890#12080#0" />
+            <element signature="e#12168#12510#0" />
+            <element signature="e#12618#13078#0" />
+            <element signature="e#13205#14045#0" />
+            <element signature="e#14143#14908#0" />
+            <element signature="e#14990#15405#0" />
+            <element signature="e#15508#16079#0" />
+            <element signature="e#16177#17296#0" />
+            <element signature="e#16195#16353#0" />
+            <element signature="e#17380#17560#0" />
+            <element signature="e#17649#17991#0" />
+            <element signature="e#18062#18243#0" />
+            <element signature="e#18368#19101#0" />
+            <element signature="e#19203#20148#0" />
+            <element signature="e#20660#21122#0" />
+            <element signature="e#22095#25013#0" />
+            <element signature="e#25089#25377#0" />
+            <element signature="e#25473#25712#0" />
+            <element signature="e#25814#26119#0" />
+            <element signature="e#26212#26870#0" />
+            <element signature="e#26989#27914#0" />
+            <element signature="e#27993#28216#0" />
+            <element signature="e#28310#28673#0" />
+            <element signature="e#28748#28942#0" />
+            <element signature="e#29116#29823#0" />
           </folding>
         </state>
       </provider>

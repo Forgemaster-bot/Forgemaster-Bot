@@ -96,7 +96,8 @@ def crafting_welcome_message(character_name):
                         "{}g remaining in value of goods you can make.".format(craft_value)
         max_message = ""
 
-    message = "You have {}g. {} {} Type **STOP** at any point to stop crafting and go back to the player menu."\
+    message = "Craft Menu: Type STOP at any time to go back to the player menu \n" \
+              "You have {}g. {} {} "\
         .format(character_gold, value_message, max_message)
     return message
 
@@ -283,7 +284,7 @@ def work(character_name: str, employer_name):
 
 
 async def log_to_discord(self, log: str):
-    log_channel = self.bot.get_channel(677249711073263656)
+    log_channel = self.bot.get_channel(689614915253567564)
     await log_channel.send(log)
 
 

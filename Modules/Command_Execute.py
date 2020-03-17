@@ -209,6 +209,7 @@ def character_refresh(character_name: str):
     Update_Google_Roster.update_classes(character_name)
     Update_Google_Roster.update_feat(character_name)
     Update_Google_Roster.update_items(character_name)
+    Update_Google_Roster.update_skill(character_name)
 
 
 def add_feat(command: str):
