@@ -5,6 +5,7 @@ from Player_Menu import SQL_Insert
 from Player_Menu import SQL_Delete
 import Update_Google_Roster
 import Update_Google_Trade
+import random
 
 
 def main_menu_options(character_name: str):
@@ -23,6 +24,9 @@ def main_menu_options(character_name: str):
     # Pay
     if SQL_Check.character_has_gold(character_name):
         menu_option_list.append("Pay a character")
+    # Pick a profession
+    if not SQL_Check.character_has_professions(character_name):
+        menu_option_list.append("Pick your free crafting profession")
     # sell
     if SQL_Check.character_has_items_to_trade(character_name):
         menu_option_list.append("Sell an item to town")
@@ -169,6 +173,63 @@ def give_gold(character_name: str, receiver_name: str, amount: float):
 
 
 '''''''''''''''''''''''''''''''''''''''''
+#################Pay#####################
+'''''''''''''''''''''''''''''''''''''''''
+
+
+def give_profession(character_name: str, profession_name: str):
+    # get inputs data
+    SQL_Insert.character_profession(character_name, profession_name, 1)
+    Update_Google_Roster.update_skill(character_name)
+    return
+
+
+'''''''''''''''''''''''''''''''''''''''''
+############Roll Character###############
+'''''''''''''''''''''''''''''''''''''''''
+
+
+def rand_char(discord_id: str):
+    stat_array = []
+    stat_display_list = []
+    for rolls in range(0, 6):  # Roll 6 times
+        dice_results = []
+        for roll_number in range(0, 4):  # Roll 4 dice
+            dice = int(random.randint(1, 6))
+            dice_results.append(dice)  # [6,3,2,6]
+        lowest = False
+        stat_display = []
+        for roll in dice_results:
+            if roll == min(dice_results) and lowest is False:  # find the first lowest roll
+                formatting = '~~'
+                lowest = True
+            else:
+                formatting = ''
+            stat = '{}{}{}'.format(formatting, roll, formatting)
+            if len(stat_display) == 0:
+                stat_display.append('(' + stat)
+            elif len(stat_display) == 3:
+                stat_display.append(stat + ')')
+            else:
+                stat_display.append(stat)
+        total_stat = sum(dice_results) - min(dice_results)
+        stat_display.append(' = **{}**'.format(total_stat))
+        result = stitch_list_into_string(stat_display).replace("),", ")")
+
+        # save stats
+        stat_array.append(total_stat)
+        stat_display_list.append(result)
+    # save to SQL after
+    SQL_Insert.discord_roll(discord_id, stat_array)  # create new entry in discord roll
+    # print to discord
+    roll_total = sum(stat_array)
+    stat_display_list.insert(0, "**{}:**".format(SQL_Lookup.player_name_by_id(discord_id)))
+    stat_display_list.append('Total = **{}**'.format(roll_total))
+    response = stitch_list_into_string(stat_display_list)
+    return response
+
+
+'''''''''''''''''''''''''''''''''''''''''
 ##############Sell Item##################
 '''''''''''''''''''''''''''''''''''''''''
 
@@ -268,9 +329,14 @@ def trade_stop(character_name: str, item_name: str):
 #################Work####################
 '''''''''''''''''''''''''''''''''''''''''
 
+
 def work(character_name: str, employer_name):
     employer_details = SQL_Lookup.character_main_crafting(employer_name)
-    new_labour = employer_details.Labour_Points + 1
+    if employer_details is None:
+        SQL_Insert.crafting_point(employer_name)
+        new_labour = 1
+    else:
+        new_labour = employer_details.Labour_Points + 1
     # remove point from player
     SQL_Update.crafting_points(character_name, 0, 0, 0)
     # add labour to employer
@@ -299,7 +365,7 @@ def question_list(give_list: list):
     return return_string
 
 
-def stitch_string(given_list: list):
+def stitch_list_into_string(given_list: list):
     return_string = ""
     for element in given_list:
         if return_string == "":
@@ -307,3 +373,17 @@ def stitch_string(given_list: list):
         else:
             return_string = "{}, {}".format(return_string, element)
     return return_string
+
+
+def sync_player(discord_id: str, discord_name: str):
+    try:
+        if not SQL_Check.player_exists(discord_id):
+            SQL_Insert.sync_players(discord_id, discord_name)
+            return True, "New"
+        elif discord_name != SQL_Lookup.player_name_by_id(discord_id):
+            SQL_Update.player_name(discord_name, discord_id)
+            return True, "Update"
+    except:
+        return False, "Something went wrong adding {} to the list".format(discord_name)
+    return False, "No change"
+

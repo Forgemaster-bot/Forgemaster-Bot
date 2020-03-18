@@ -19,7 +19,10 @@ def character_item_quantity(character_name: str, item_name: str):
 
 def character_inventory(character_name: str):
     cursor = Quick_SQL.db_connection()
-    query = "select * from Link_Character_Items where Character='{}' order by Item".format(character_name)
+    query = "Select * " \
+            "From Link_Character_Items " \
+            "Where Character='{}' and Item not in (select Item from Main_Trade where Character = '{}') " \
+            "Order by Item".format(character_name, character_name)
     cursor.execute(query)
     rows = cursor.fetchall()
     items = []
@@ -207,6 +210,17 @@ def info_classes():
     return classes
 
 
+def info_skills():
+    cursor = Quick_SQL.db_connection()
+    query = "select Name from Info_Skills Where Job = 'True' ORDER BY Name"
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    skills = []
+    for row in rows:
+        skills.append(row.Name)
+    return skills
+
+
 def character_class_and_levels(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "Select Class, Level " \
@@ -302,3 +316,25 @@ def character_items_for_trade(character_name: str):
     for row in rows:
         result.append("{} - {}g".format(row.Item, row.Price))
     return result
+
+
+def player_stat_roll(discord_id: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "From Discord_Roll " \
+            "where Discord_ID = '{}'".format(discord_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return ""
+    return result
+
+
+def player_name_by_id(user_id: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * from Info_Discord where ID= '{}'".format(user_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return ""
+    return result.Name

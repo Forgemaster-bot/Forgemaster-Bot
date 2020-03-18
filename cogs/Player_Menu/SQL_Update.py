@@ -62,3 +62,12 @@ def crafting_points(character_name: str, craft_points: int, crafting_value: floa
             "WHERE Character_Name = '{}'".format(craft_points, crafting_value, labour, character_name)
     cursor.execute(query)
     cursor.commit()
+
+
+def player_name(discord_name: str, discord_id: str):
+    cursor = Quick_SQL.db_connection()
+    query = "UPDATE Info_Discord " \
+            "SET Name = '{}' " \
+            "WHERE ID = '{}'".format(discord_name, discord_id)
+    cursor.execute(query)
+    cursor.commit()

@@ -23,7 +23,6 @@ def character_can_craft(character_name: str, gold_limit: float):
     return False
 
 
-
 def character_on_crafting_table(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \
@@ -138,6 +137,40 @@ def character_has_class(character_name: str, class_name: str):
     query = "select * " \
             "from Link_Character_Class " \
             "where Character = '{}' AND Class = '{}'".format(character_name, class_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+
+
+def character_has_professions(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Link_Character_Skills " \
+            "where Character = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+
+def player_exists(user_id: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Info_Discord where ID='{}'".format(user_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+
+
+def player_stat_roll(discord_id: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "From Discord_Roll " \
+            "where Discord_ID = '{}' ".format(discord_id)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:

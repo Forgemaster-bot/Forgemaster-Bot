@@ -58,6 +58,14 @@ class Player_Menu_Commands(commands.Cog):
                         break
                     if menu == "stop":
                         break
+            elif menu_option == "Pick your free crafting profession":
+                while True:
+                    menu = await self.pay_menu(command, discord_id, character_name)
+                    if menu == "exit":
+                        menu_option = "exit"
+                        break
+                    if menu == "stop":
+                        break
             elif menu_option == "Sell an item to town":
                 while True:
                     menu = await self.sell_menu(command, discord_id, character_name)
@@ -85,6 +93,27 @@ class Player_Menu_Commands(commands.Cog):
             if menu_option == "exit":
                 break
         await command.message.author.send("Menu closed")
+
+    # Roll Stats
+    @commands.command(name='randchar', help='Roll character stats')
+    async def dice_roll(self, command):
+        Quick_SQL.log_command(command)
+        discord_id = str(command.message.author.id)
+        discord_name = str(command.message.author.display_name)
+
+        if not SQL_Check.player_exists(discord_id):
+            sync = Scripts.sync_player(discord_id, discord_name)
+            if not sync[0]:
+                await command.send(sync)
+        if SQL_Check.player_stat_roll(discord_id):
+            results = SQL_Lookup.player_stat_roll(discord_id)
+            previous_rolls = [results.Roll_1, results.Roll_2, results.Roll_3,
+                              results.Roll_4, results.Roll_5, results.Roll_6]
+            response = Scripts.stitch_list_into_string(previous_rolls)
+            response = "You already have a stat array : {}".format(response)
+        else:
+            response = Scripts.rand_char(discord_id)
+        await command.send(response)
 
     # Menu commands
     async def character_choice(self, command, discord_id):
@@ -283,7 +312,7 @@ class Player_Menu_Commands(commands.Cog):
     # Leveling up
 
     async def level_menu(self, command, discord_id, character_name):
-        character_levels = Scripts.stitch_string(SQL_Lookup.character_class_and_levels(character_name))
+        character_levels = Scripts.stitch_list_into_string(SQL_Lookup.character_class_and_levels(character_name))
         welcome_message = "Level Menu: Type **STOP** at any time to go back to the player menu " \
                           "\n{} is currently a {}.".format(character_name, character_levels)
         await command.message.author.send(welcome_message)
@@ -375,6 +404,41 @@ class Player_Menu_Commands(commands.Cog):
             target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_name))
             await Scripts.log_to_discord(self, log)
             await target_discord.send(log)
+            await command.author.send(log)
+        return "stop"
+
+    # Pick free profession
+
+    async def profession_menu(self, command, discord_id, character_name):
+        character_levels = Scripts.stitch_list_into_string(SQL_Lookup.character_class_and_levels(character_name))
+        welcome_message = "Profession Menu: Type **STOP** at any time to go back to the player menu " \
+                          "\nPick your free crafting profession.".format(character_name, character_levels)
+        await command.message.author.send(welcome_message)
+        while True:
+            profession_choice = await self.profession_step_1_profession_choice(command)
+            if profession_choice == "exit" or profession_choice == "stop":
+                return profession_choice
+            confirm = await self.profession_step_2_confirm(command, discord_id, character_name, profession_choice)
+            if confirm == "exit" or confirm == "stop":
+                return confirm
+            return
+
+    async def profession_step_1_profession_choice(self, command):
+        option_list = SQL_Lookup.info_skills()
+        option_question = "Which profession would you like to gain have?"
+        choice = await self.answer_from_list(command, option_question, option_list)
+        return choice
+
+    async def profession_step_2_confirm(self, command, discord_id, character_name, profession_name):
+        question = "Do you want {} to gain {} as a profession?".format(character_name, profession_name)
+        await command.author.send(question)
+        reply = await self.confirm(command)
+        if reply == "Yes":
+            await command.author.send("leveling...")
+            log = "{} gained {} as their free profession".format(character_name, profession_name)
+            Quick_SQL.log_private_command(discord_id, log)
+            Scripts.give_profession(character_name, profession_name)
+            await Scripts.log_to_discord(self, log)
             await command.author.send(log)
         return "stop"
 
@@ -527,9 +591,9 @@ class Player_Menu_Commands(commands.Cog):
         reply = await self.confirm(command)
         if reply == "Yes":
             await command.author.send("Buying item...")
-            log = "{} Bought {} {} for {}g".format(character_name, quantity, trade_good, total_value)
+            log = "{} Bought {} {} for {}g".format(character_name, quantity, trade_good.Item, total_value)
             Quick_SQL.log_private_command(discord_id, log)
-            Scripts.trade_buy(character_name, item_name, quantity)
+            Scripts.trade_buy(character_name, trade_good, quantity)
 
             target_discord = self.bot.get_user(SQL_Lookup.character_owner(trade_good.Character))
             await Scripts.log_to_discord(self, log)
@@ -539,9 +603,10 @@ class Player_Menu_Commands(commands.Cog):
 
     async def trade_sell_step_1_item(self, command, character_name):
         option_list = SQL_Lookup.character_inventory(character_name)
-        option_question = "What would you like to sell?"
-        choice = await self.answer_from_list(command, option_question, option_list)
-        return choice
+        option_question = "What would you like to sell in the market?"
+        choice_details = await self.answer_from_list(command, option_question, option_list)
+        choice = choice_details.split(" (")
+        return choice[0]
 
     async def trade_sell_step_2_quantity(self, command, character_name, item_name):
         maximum = SQL_Lookup.character_item_quantity(character_name, item_name)
@@ -621,9 +686,9 @@ class Player_Menu_Commands(commands.Cog):
         reply = await self.confirm(command)
         if reply == "Yes":
             await command.author.send("working...")
-            log = "{} worked for {}".format(character_name, target_name)
+            log = "{} is now working for {} this week".format(character_name, target_name)
             Quick_SQL.log_private_command(discord_id, log)
-            Scripts.trade_stop(character_name, target_name)
+            Scripts.work(character_name, target_name)
 
             target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_name))
             await Scripts.log_to_discord(self, log)
