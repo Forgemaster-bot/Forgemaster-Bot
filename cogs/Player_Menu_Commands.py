@@ -60,7 +60,7 @@ class Player_Menu_Commands(commands.Cog):
                         break
             elif menu_option == "Pick your free crafting profession":
                 while True:
-                    menu = await self.pay_menu(command, discord_id, character_name)
+                    menu = await self.profession_menu(command, discord_id, character_name)
                     if menu == "exit":
                         menu_option = "exit"
                         break
@@ -434,7 +434,7 @@ class Player_Menu_Commands(commands.Cog):
         await command.author.send(question)
         reply = await self.confirm(command)
         if reply == "Yes":
-            await command.author.send("leveling...")
+            await command.author.send("adding profession...")
             log = "{} gained {} as their free profession".format(character_name, profession_name)
             Quick_SQL.log_private_command(discord_id, log)
             Scripts.give_profession(character_name, profession_name)
@@ -571,7 +571,7 @@ class Player_Menu_Commands(commands.Cog):
 
     async def trade_buy_step_3_quantity(self, command, character_name, item_name):
         character_gold = SQL_Lookup.character_gold_total(character_name)
-        trade_good = SQL_Lookup.trade_item_details(character_name, item_name)
+        trade_good = SQL_Lookup.trade_item_cheapest_on_sale(item_name)
         maximum = min([trade_good.Quantity, int(character_gold/trade_good.Price)])
         if maximum == 1:
             choice = 1
@@ -583,7 +583,7 @@ class Player_Menu_Commands(commands.Cog):
         return choice
 
     async def trade_buy_step_4_confirm(self, command, discord_id, character_name, item_name, quantity: int):
-        trade_good = SQL_Lookup.trade_item_details(character_name, item_name)
+        trade_good = SQL_Lookup.trade_item_cheapest_on_sale(item_name)
         total_value = trade_good.Price * quantity
         question = "Do you want to buy {} {} for {}g each for a total of {}g?" \
             .format(quantity, item_name, trade_good.Price, total_value)
@@ -642,8 +642,9 @@ class Player_Menu_Commands(commands.Cog):
     async def trade_stop_step_1_item(self, command, character_name):
         option_list = SQL_Lookup.character_items_for_trade(character_name)
         option_question = "What would you like to stop selling?"
-        choice = await self.answer_from_list(command, option_question, option_list)
-        return choice
+        choice_details = await self.answer_from_list(command, option_question, option_list)
+        choice = choice_details.split(" - ")
+        return choice[0]
 
     async def trade_stop_step_2_confirm(self, command, discord_id, character_name, item_name):
         question = "Do you want stop selling {}?".format(item_name)

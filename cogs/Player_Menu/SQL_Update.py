@@ -44,13 +44,12 @@ def character_class_level(character_name: str, character_class: str):
     cursor.commit()
 
 
-def trade_quantity(character_name: str, item_name: str, quantity: int):
+def trade_quantity(character_name: str, trade_good, quantity: int):
     # calculate new total
-    trade_good = SQL_Lookup.trade_item_details("", item_name)
     new_amount = trade_good.Quantity + quantity
     cursor = Quick_SQL.db_connection()
     query = "UPDATE Main_Trade set Quantity = '{}' " \
-            "WHERE Character = '{}' AND Item = '{}'".format(new_amount, character_name, item_name)
+            "WHERE Character = '{}' AND Item = '{}'".format(new_amount, character_name, trade_good.Item)
     cursor.execute(query)
     cursor.commit()
 

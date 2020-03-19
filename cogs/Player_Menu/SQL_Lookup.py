@@ -78,8 +78,9 @@ def character_profession_list(character_name: str, gold_limit: float):
     rows = cursor.fetchall()
     skill_list = []
     for row in rows:
-        if row.Total > 0:
-            skill_list.append(row.Skill)
+        if row.Total is not None:
+            if row.Total > 0:
+                skill_list.append(row.Skill)
     return skill_list
 
 
@@ -268,7 +269,7 @@ def trade_goods_types(character_name: str, gold_limit: float):
 def trade_goods_items_by_type(character_name: str, gold_limit: float, item_type: str):
     cursor = Quick_SQL.db_connection()
     if type == "Other":
-        query = "select a.Item  " \
+        query = "select a.Character, a.Item " \
                 "from Main_Trade a " \
                 "left join Info_Item b " \
                 "on a.Item = b.Name " \
@@ -276,29 +277,51 @@ def trade_goods_items_by_type(character_name: str, gold_limit: float, item_type:
                 "group by a.Item " \
                 "order by Item".format(gold_limit, character_name)
     else:
-        query = "select a.Item  " \
+        query = "select a.Item " \
                 "from Main_Trade a " \
                 "left join Info_Item b " \
                 "on a.Item = b.Name " \
-                "where b.Type = '{}' and a.price <= '{}' and a.Character != '{}' " \
+                "where b.Type = '{}' and a.price <= '{}' " \
                 "group by a.Item " \
-                "order by Item".format(item_type, gold_limit, character_name)
+                "order by Item".format(item_type, gold_limit)
     cursor.execute(query)
     item_name_list = cursor.fetchall()
     response = []
     for items in item_name_list:
-        item_details = trade_item_details(character_name, items.Item)
+        item_details = trade_item_not_sold_by_character(character_name, items.Item)
         response.append("{}: {}g each with {} for sale".format(item_details.Item, item_details.Price,
                                                                item_details.Quantity))
     return response
 
 
-def trade_item_details(character_name: str, item_name: str):
+def trade_item_not_sold_by_character(character_name: str, item_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \
             "From Main_Trade " \
             "Where Item = '{}' and Character != '{}' " \
             "order by Price, Quantity desc".format(item_name, character_name)
+    cursor.execute(query)
+    item = cursor.fetchone()
+    return item
+
+
+def trade_item_sold_by_character(character_name: str, item_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "From Main_Trade " \
+            "Where Item = '{}' and Character = '{}' " \
+            "order by Price, Quantity desc".format(item_name, character_name)
+    cursor.execute(query)
+    item = cursor.fetchone()
+    return item
+
+
+def trade_item_cheapest_on_sale(item_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "From Main_Trade " \
+            "Where Item = '{}' " \
+            "order by Price, Quantity desc".format(item_name)
     cursor.execute(query)
     item = cursor.fetchone()
     return item

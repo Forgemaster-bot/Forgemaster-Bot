@@ -225,7 +225,7 @@ def rand_char(discord_id: str):
     roll_total = sum(stat_array)
     stat_display_list.insert(0, "**{}:**".format(SQL_Lookup.player_name_by_id(discord_id)))
     stat_display_list.append('Total = **{}**'.format(roll_total))
-    response = stitch_list_into_string(stat_display_list)
+    response = stitch_list_into_table(stat_display_list)
     return response
 
 
@@ -284,7 +284,7 @@ def trade_buy(character_name: str, trade_good, quantity: int):
         SQL_Delete.trade_sale(trade_good.Character, trade_good.Item)
         Update_Google_Trade.trade_delete(trade_good.Character, trade_good.Item)
     else:
-        SQL_Update.trade_quantity(trade_good.Character, trade_good.Item, quantity * -1)
+        SQL_Update.trade_quantity(trade_good.Character, trade_good, quantity * -1)
         Update_Google_Trade.trade_update(trade_good.Character, trade_good.Item)
 
     # update roster
@@ -310,7 +310,7 @@ def trade_sell(character_name: str, item_name: str, quantity: int, value: float)
 
 
 def trade_stop(character_name: str, item_name: str):
-    trade_good = SQL_Lookup.trade_item_details(character_name, item_name)
+    trade_good = SQL_Lookup.trade_item_sold_by_character(character_name, item_name)
 
     # return to inventory
     if SQL_Check.character_has_item(character_name, item_name):
@@ -372,6 +372,16 @@ def stitch_list_into_string(given_list: list):
             return_string = element
         else:
             return_string = "{}, {}".format(return_string, element)
+    return return_string
+
+
+def stitch_list_into_table(given_list: list):
+    return_string = ""
+    for element in given_list:
+        if return_string == "":
+            return_string = element
+        else:
+            return_string = "{}\n{}".format(return_string, element)
     return return_string
 
 
