@@ -44,15 +44,6 @@ def main_menu_options(character_name: str):
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def craft_check_professions_and_gold(character_name: str):
-    gold_limit = crafting_gold_limit(character_name)
-    if gold_limit == 0:
-        return False, "You have used up all your crafting time this week"
-    if not SQL_Check.character_has_professions_with_gold(character_name, gold_limit):
-        return False, "You don't have any crafting professions"
-    return True, ""
-
-
 def craft_create_mundane_item(character_name: str, item_name: str, quantity: int):
     item = SQL_Lookup.item_detail(item_name)
     # update gold

@@ -309,12 +309,12 @@ def trade_goods_types(character_name: str, gold_limit: float):
 
 def trade_goods_items_by_type(character_name: str, gold_limit: float, item_type: str):
     cursor = Quick_SQL.db_connection()
-    if type == "Other":
-        query = "select a.Character, a.Item " \
+    if item_type == "Other":
+        query = "select a.Item " \
                 "from Main_Trade a " \
                 "left join Info_Item b " \
                 "on a.Item = b.Name " \
-                "where b.Type is null and a.price <= '{} and a.Character != '{}' " \
+                "where b.Type is null and a.price <= '{}' and a.Character != '{}' " \
                 "group by a.Item " \
                 "order by Item".format(gold_limit, character_name)
     else:

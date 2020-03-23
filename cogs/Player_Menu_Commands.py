@@ -140,15 +140,11 @@ class Player_Menu_Commands(commands.Cog):
 
     # Crafting
     async def craft_menu(self, command, discord_id, character_name):
-        prof_and_gold = Scripts.craft_check_professions_and_gold(character_name)
-        if not prof_and_gold[0]:
-            await command.message.author.send(prof_and_gold[1])
-            return "stop"
-
         while True:
             await command.message.author.send(Scripts.crafting_welcome_message(character_name))
             gold_limit = Scripts.crafting_gold_limit(character_name)
             if gold_limit == 0:
+                await command.message.author.send("you cannot craft any more this week")
                 return "stop"
             profession = await self.craft_step_1_profession_choice(command, character_name, gold_limit)
             if profession == "exit" or profession == "stop":
@@ -655,6 +651,9 @@ class Player_Menu_Commands(commands.Cog):
                 return trade_type
             elif trade_type == "Buy":
                 gold_limit = SQL_Lookup.character_gold_total(character_name)
+                if not SQL_Check.character_has_enough_gold_to_buy_trade(gold_limit):
+                    await command.message.author.send("There is nothing on the market you can afford")
+                    return "stop"
                 # what item type are they looking for?
                 item_type = await self.trade_buy_step_1_item_type_choice(command, gold_limit, character_name)
                 if item_type == "exit" or item_type == "stop":
@@ -717,7 +716,10 @@ class Player_Menu_Commands(commands.Cog):
     async def trade_buy_step_3_quantity(self, command, character_name, item_name):
         character_gold = SQL_Lookup.character_gold_total(character_name)
         trade_good = SQL_Lookup.trade_item_cheapest_on_sale(item_name)
-        maximum = min([trade_good.Quantity, int(character_gold/trade_good.Price)])
+        if trade_good.Price == 0:
+            maximum = trade_good.Quantity
+        else:
+            maximum = min([trade_good.Quantity, int(character_gold/trade_good.Price)])
         if maximum == 1:
             choice = 1
         else:

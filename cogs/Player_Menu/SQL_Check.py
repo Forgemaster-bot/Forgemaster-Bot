@@ -2,27 +2,6 @@ import Quick_SQL
 from Player_Menu import SQL_Lookup
 
 
-def character_has_professions_with_gold(character_name: str, gold_limit: float):
-    cursor = Quick_SQL.db_connection()
-    item_value = gold_limit * 2
-    query = "select * from ( " \
-            "Select A.Skill, C.Total " \
-            "From Link_Character_Skills A " \
-            "Left Join Info_Skills B " \
-            "On A.Skill = B.Name " \
-            "left join (select Crafting, count(*) as Total from Info_Item where value <= '{}' group by Crafting) C " \
-            "on A.Skill = C.Crafting " \
-            "where A.Character = '{}' and B.Job = 1) a " \
-            "where a.Total is not null " \
-            "order by A.Skill".format(item_value, character_name)
-    cursor.execute(query)
-    rows = cursor.fetchall()
-    for row in rows:
-        if row.Total is not None:
-            return True
-    return False
-
-
 def character_has_profession_tools(character_name:str, profession: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \
@@ -196,6 +175,18 @@ def player_stat_roll(discord_id: str):
     query = "select * " \
             "From Discord_Roll " \
             "where Discord_ID = '{}' ".format(discord_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+
+
+def character_has_enough_gold_to_buy_trade(gold: float):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Main_Trade " \
+            "where Price <='{}'".format(gold)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:
