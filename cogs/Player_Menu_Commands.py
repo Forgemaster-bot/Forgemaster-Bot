@@ -117,6 +117,7 @@ class Player_Menu_Commands(commands.Cog):
 
     # Menu commands
     async def character_choice(self, command, discord_id):
+
         option_list = SQL_Lookup.player_character_list(discord_id)
         if len(option_list) == 0:
             await command.message.author.send("You dont have any characters yet.")
@@ -139,12 +140,23 @@ class Player_Menu_Commands(commands.Cog):
 
     # Crafting
     async def craft_menu(self, command, discord_id, character_name):
+        prof_and_gold = Scripts.craft_check_professions_and_gold(character_name)
+        if not prof_and_gold[0]:
+            await command.message.author.send(prof_and_gold[1])
+            return "stop"
+
         while True:
             await command.message.author.send(Scripts.crafting_welcome_message(character_name))
             gold_limit = Scripts.crafting_gold_limit(character_name)
+            if gold_limit == 0:
+                return "stop"
             profession = await self.craft_step_1_profession_choice(command, character_name, gold_limit)
             if profession == "exit" or profession == "stop":
                 return profession
+            character_has_tools = Scripts.character_has_profession_tools(character_name, profession)
+            if not character_has_tools[0]:
+                await command.message.author.send(character_has_tools[1])
+                return
             craft_type_choice = await self.craft_step_2_type_choice(command, profession)
             if craft_type_choice == "Mundane item":
                 # get the type of item they want to craft
@@ -169,17 +181,86 @@ class Player_Menu_Commands(commands.Cog):
                 if repeat == "exit" or repeat == "stop":
                     return repeat
                 return
-            elif craft_type_choice == "Craft a consumable from a recipe":
-                await command.author.send("consumable crafting is still in development, come back later")
-                return
-            elif craft_type_choice == "Experiment with ingredients":
-                await command.author.send("consumable crafting is still in development, come back later")
+            elif craft_type_choice == "Consumable from a recipes":
+                # Number of effects
+                type_name = Scripts.recipe_item_type(profession)
+                # stop them from crafting
+                if gold_limit < 10:
+                    await command.message.author.send("{} does not have enough gold or time to craft {}"
+                                                      .format(character_name, type_name))
+                inventory_essence_list = SQL_Lookup.character_inventory_essence(character_name)
+                message = "The {} can have up to 5 effects, each effect costs 10g and needs two essences." \
+                    .format(type_name)
+                await command.message.author.send(message)
+
+                recipe_list = Scripts.craft_recipe_list(character_name, profession, inventory_essence_list)
+                effect_list = []
+
+                while True:
+                    if len(recipe_list) == 0:
+                        await command.message.author.send("{} doesnt have enough essences to add another effect"
+                                                          .format(character_name))
+                        break
+                    if len(effect_list) == 5:
+                        await command.message.author.send("the {} have reached five effects".format(type_name))
+                        break
+                    if (len(effect_list) + 1) * 10 > gold_limit:
+                        await command.message.author.send("{} cannot afford to add any more effects"
+                                                          .format(character_name))
+                        break
+                    recipe = await self.craft_consumable_step_1_effects(command, type_name, effect_list, recipe_list,
+                                                                        Scripts.stitch_list_into_string
+                                                                        (inventory_essence_list))
+                    if recipe == "exit" or recipe == "stop":
+                        return recipe
+                    if recipe == "craft":
+                        break
+                    else:
+                        effect_list.append(recipe)
+                        recipe_essence = SQL_Lookup.recipe_essence_list(profession, recipe)
+                        inventory_essence_list = Scripts.craft_remove_essence_from_list(inventory_essence_list,
+                                                                                        recipe_essence[0])
+                        inventory_essence_list = Scripts.craft_remove_essence_from_list(inventory_essence_list,
+                                                                                        recipe_essence[1])
+                        recipe_list = Scripts.craft_recipe_list(character_name, profession, inventory_essence_list)
+                if len(effect_list) == 0:
+                    await command.message.author.send("You cannot craft a {} without any effects".format(type_name))
+                    break
+                craft = await self.craft_consumable_step_2_confirm(command, discord_id, character_name, profession,
+                                                                   type_name, effect_list)
+                if craft == "exit" or craft == "stop":
+                    break
+
+            elif craft_type_choice == "Experiment with ingredients ":
+                total_character_essence = SQL_Lookup.character_inventory_essence_count(character_name)
+                if total_character_essence < 2:
+                    await command.message.author.send("{} does not have enough essences to experiment with"
+                                                      .format(character_name))
+                    return
+                if gold_limit < 20:
+                    await command.message.author.send("{} does not have enough gold or time to experiment"
+                                                      .format(character_name))
+                    return
+                # get the first essence
+                essence_list = Scripts.craft_essence_list(character_name, profession)
+                essence_1 = await self.craft_experiment_step_1_first_essence(command, essence_list)
+                if essence_1 == "exit" or essence_1 == "stop":
+                    return essence_1
+                # get the second essence
+                essence_list = Scripts.craft_remove_essence_from_list(essence_list, essence_1)
+                essence_2 = await self.craft_experiment_step_2_second_essence(command, essence_list)
+                if essence_2 == "exit" or essence_2 == "stop":
+                    return essence_2
+                confirm = await self.craft_experiment_step_3_confirm(command, discord_id, character_name,
+                                                                     profession, essence_1, essence_2,)
+                if confirm == "exit" or confirm == "stop":
+                    return confirm
                 return
 
     async def craft_step_1_profession_choice(self, command, character_name, gold_limit):
         # collect information about how much crafting can be done
         option_list = SQL_Lookup.character_profession_list(character_name, gold_limit)
-        option_question = "Please enter the number of the profession to use"
+        option_question = "Please enter the number of the profession to use."
         choice = await self.answer_from_list(command, option_question, option_list)
         return choice
 
@@ -230,7 +311,7 @@ class Player_Menu_Commands(commands.Cog):
             await command.author.send("crafting..")
             log = "{} made {} {} for {}g".format(character_name, quantity, item_name, total_cost)
             Quick_SQL.log_private_command(discord_id, log)
-            Scripts.craft_item(character_name, item_name, quantity)
+            Scripts.craft_create_mundane_item(character_name, item_name, quantity)
             await Scripts.log_to_discord(self, log)
             await command.author.send(log)
             return
@@ -243,7 +324,71 @@ class Player_Menu_Commands(commands.Cog):
             choice = "stop"
         return choice
 
-    # Giving items
+    async def craft_consumable_step_1_effects(self, command, type_name, effect_list: list, recipe_list: list,
+                                              inventory):
+        cost = len(effect_list) * 10
+        if len(effect_list) == 0:
+            short_effect_list = "None"
+        else:
+            short_effect_list = Scripts.stitch_list_into_string(Scripts.craft_merge_effects(effect_list))
+        option_question = "Current effects : {}, at a cost of Cost : {}g. \n" \
+                          "Essence available : {} \n" \
+                          "Please enter the number for the effect you want or type **Craft** to create the {}"\
+            .format(short_effect_list, cost, inventory, type_name)
+        choice = await self.answer_from_list_craft(command, option_question, recipe_list)
+        choice_details = choice.split(" :")
+        return choice_details[0]
+
+    async def craft_consumable_step_2_confirm(self, command, discord_id, character_name, profession,
+                                              type_name, effect_list):
+        cleaned_effect_list = Scripts.stitch_list_into_string(Scripts.craft_merge_effects(effect_list))
+        await command.author.send("Do you want to craft a {} with: \n{} \nFor {}g? [yes/no]"
+                                  .format(type_name, cleaned_effect_list,
+                                          len(effect_list)*10))
+        reply = await self.confirm(command)
+        if reply == "Yes":
+            await command.author.send("crafting..")
+            log = "{} made a {} of {} for {}g".format(character_name, type_name,
+                                                      cleaned_effect_list, len(effect_list)*10)
+            Quick_SQL.log_private_command(discord_id, log)
+            Scripts.craft_create_consumable(character_name, type_name, profession, cleaned_effect_list, effect_list)
+            await Scripts.log_to_discord(self, log)
+            await command.author.send(log)
+            return
+        return "stop"
+
+    async def craft_experiment_step_1_first_essence(self, command, option_list):
+        option_question = "Please enter the number for the first essence you want to experiment with."
+        choice = await self.answer_from_list(command, option_question, option_list)
+        choice_details = choice.split(" (")
+        return choice_details[0]
+
+    async def craft_experiment_step_2_second_essence(self, command, essence_list):
+        option_question = "Please enter the for the second essence to use."
+        choice = await self.answer_from_list(command, option_question, essence_list)
+        choice_details = choice.split(" (")
+        return choice_details[0]
+
+    async def craft_experiment_step_3_confirm(self, command, discord_id, character_name,
+                                              profession, essence_1, essence_2):
+        await command.author.send("Do you want to experiment using "
+                                  "{} and {} as a {} for 20g? [yes/no]".format(essence_1, essence_2, profession))
+        reply = await self.confirm(command)
+        if reply == "Yes":
+            await command.author.send("crafting..")
+            recipe_name = SQL_Lookup.recipe_by_essence(profession, essence_1, essence_2)
+            if recipe_name == "":
+                recipe_name = SQL_Lookup.recipe_by_essence(profession, essence_2, essence_1)
+
+            log = "{} experimented with {} and {} as a {} and discovered {}".format(character_name, essence_1,
+                                                                                    essence_2, profession, recipe_name)
+            Quick_SQL.log_private_command(discord_id, log)
+            Scripts.craft_create_experiment(character_name, profession, recipe_name, essence_1, essence_2)
+            await Scripts.log_to_discord(self, log)
+            await command.author.send(log)
+            return
+        return "stop"
+
     async def give_menu(self, command, discord_id, character_name):
         welcome_message = "Gift Menu: Type **STOP** at any time to go back to the player menu."
         await command.message.author.send(welcome_message)
@@ -670,6 +815,10 @@ class Player_Menu_Commands(commands.Cog):
             target_name = await self.work_step_1_character_choice(command, character_name)
             if target_name == "exit" or target_name == "stop":
                 return target_name
+            if not SQL_Check.character_has_crafted_this_week(target_name):
+                await command.message.author.send("{} has already started working this "
+                                                  "week and cannot hire help".format(target_name))
+                return "stop"
             # confirm the transaction
             confirm = await self.work_step_2_confirm(command, discord_id, character_name, target_name)
             if confirm == "exit" or confirm == "stop":
@@ -700,6 +849,7 @@ class Player_Menu_Commands(commands.Cog):
     # Answers methods
     async def answer_from_list(self, command, question, option_list):
         options = Scripts.question_list(option_list)
+        maximum = len(option_list)
         await command.message.author.send("{}\n{}".format(question, options))
 
         # setup sub function to do checks the returned message is from the user in private messages
@@ -719,16 +869,55 @@ class Player_Menu_Commands(commands.Cog):
                 return "stop"
 
             # check they picked an answer
+
             try:
                 answer = int(msg.content)
-                option = option_list[answer - 1]
-                return option
-            except ValueError:
-                await command.message.author.send("{} is not a number, please enter a number from the "
-                                                  "list of options".format(msg.content))
+                if answer < 1:
+                    await command.message.author.send("Please enter a number between 1 and {}".format(maximum))
+                else:
+                    option = option_list[answer - 1]
+                    return option
             except IndexError:
-                await command.message.author.send("{} is not on the list, please enter a number from the "
-                                                  "list of options".format(msg.content))
+                await command.message.author.send("Please enter a number between 1 and {}".format(maximum))
+            except ValueError:
+                await command.message.author.send("{} is not a number, please enter a number".format(msg.content))
+
+    async def answer_from_list_craft(self, command, question, option_list):
+        options = Scripts.question_list(option_list)
+        maximum = len(option_list)
+        await command.message.author.send("{}\n{}".format(question, options))
+
+        # setup sub function to do checks the returned message is from the user in private messages
+
+        def check_reply(user_response):
+            return user_response.author == command.author and user_response.channel.type[1] == 1
+
+        while True:
+            # run the check until 60 seconds has elapsed or player types EXIT
+            try:
+                msg = await self.bot.wait_for('message', timeout=120.0, check=check_reply)
+            except asyncio.TimeoutError:
+                return "exit"
+            if msg.content.lower() == "exit":
+                return "exit"
+            if msg.content.lower() == "craft":
+                return "craft"
+            if msg.content.lower() == "stop":
+                return "stop"
+
+            # check they picked an answer
+
+            try:
+                answer = int(msg.content)
+                if answer < 1:
+                    await command.message.author.send("Please enter a number between 1 and {}".format(maximum))
+                else:
+                    option = option_list[answer - 1]
+                    return option
+            except IndexError:
+                await command.message.author.send("Please enter a number between 1 and {}".format(maximum))
+            except ValueError:
+                await command.message.author.send("{} is not a number, please enter a number".format(msg.content))
 
     async def answer_with_int_number(self, command, question, maximum):
         await command.message.author.send("{}".format(question))
@@ -751,13 +940,15 @@ class Player_Menu_Commands(commands.Cog):
             # check they picked an answer
             try:
                 answer = int(msg.content)
-                if answer <= maximum:
+                if answer < 1:
+                    await command.message.author.send("Please enter a number between 1 and {}".format(maximum))
+                elif answer <= maximum:
                     return answer
                 else:
-                    await command.message.author.send("{} is too high, pick a number equal to or less than {}"
-                                                      .format(answer, maximum))
+                    await command.message.author.send("Please enter a number between 1 and {}".format(maximum))
             except ValueError:
-                await command.message.author.send("{} is not a number, please enter a number".format(msg.content))
+                await command.message.author.send("{} is not a number, Please enter a number between 1 and {}"
+                                                  .format(msg.content, maximum))
 
     async def answer_with_float_number(self, command, question, maximum):
         await command.message.author.send("{}".format(question))
@@ -780,12 +971,15 @@ class Player_Menu_Commands(commands.Cog):
             # check they picked an answer
             try:
                 answer = float(msg.content)
-                if answer <= maximum:
+                if answer < 0:
+                    await command.message.author.send("Please enter a number greater than 0".format(maximum))
+                elif answer <= maximum:
                     return answer
                 else:
-                    await command.message.author.send("{} is too high, pick a number under {}".format(answer, maximum))
+                    await command.message.author.send("Please enter a number greater than 0".format(maximum))
             except ValueError:
-                await command.message.author.send("{} is not a number, please enter a number".format(msg.content))
+                await command.message.author.send("{} is not a number, Please enter a number greater than 0"
+                                                  .format(msg.content))
 
     async def answer_with_statement(self, command):
         # check author
@@ -853,3 +1047,4 @@ class Player_Menu_Commands(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Player_Menu_Commands(bot))
+

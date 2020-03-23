@@ -2,25 +2,37 @@ import Quick_SQL
 from Player_Menu import SQL_Lookup
 
 
-def character_can_craft(character_name: str, gold_limit: float):
+def character_has_professions_with_gold(character_name: str, gold_limit: float):
     cursor = Quick_SQL.db_connection()
     item_value = gold_limit * 2
-    query = "Select A.Skill, D.Total " \
+    query = "select * from ( " \
+            "Select A.Skill, C.Total " \
             "From Link_Character_Skills A " \
             "Left Join Info_Skills B " \
             "On A.Skill = B.Name " \
-            "left join Link_Character_Items C " \
-            "on B.Tools = C.Item " \
-            "left join (select Crafting, count(*) as Total from Info_Item where value <= '{}' group by Crafting) D " \
-            "on A.Skill = D.Crafting " \
-            "where A.Character = '{}' and C.Character = '{}' and B.Job = 1 " \
-            "order by A.Skill".format(item_value, character_name, character_name)
+            "left join (select Crafting, count(*) as Total from Info_Item where value <= '{}' group by Crafting) C " \
+            "on A.Skill = C.Crafting " \
+            "where A.Character = '{}' and B.Job = 1) a " \
+            "where a.Total is not null " \
+            "order by A.Skill".format(item_value, character_name)
     cursor.execute(query)
     rows = cursor.fetchall()
     for row in rows:
         if row.Total is not None:
             return True
     return False
+
+
+def character_has_profession_tools(character_name:str, profession: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Link_Character_Items " \
+            "where Character = '{}' AND Item = '{}'".format(character_name, profession)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
 
 
 def character_on_crafting_table(character_name: str):
@@ -35,14 +47,14 @@ def character_on_crafting_table(character_name: str):
     return True
 
 
-def character_has_crafting_point(character_name: str):
+def character_has_crafted_this_week(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \
             "from Main_Crafting " \
             "where Character_Name = '{}'".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
-    if result.Crafting_Point != 1:
+    if result.Crafting_Value != 50:
         return False
     return True
 
@@ -120,6 +132,18 @@ def character_has_item(character_name: str, item_name: str):
     return True
 
 
+def character_has_item_quantity(character_name: str, item_name: str, quantity: int):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Link_Character_Items " \
+            "where Character = '{}' AND Item = '{}' AND Quantity >= '{}'".format(character_name, item_name, quantity)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+
+
 def character_exists(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "Select Character_Name " \
@@ -154,6 +178,7 @@ def character_has_professions(character_name: str):
     if result is None:
         return False
     return True
+
 
 def player_exists(user_id: str):
     cursor = Quick_SQL.db_connection()

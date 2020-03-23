@@ -14,11 +14,11 @@ def character_gold(character_name: str, gold: float):
     return new_gold
 
 
-def character_main_crafting(character_name: str, craft_points: int, crafting_value: float, labour: int):
+def character_main_crafting(character_name: str, crafting_value: float, labour: int):
     cursor = Quick_SQL.db_connection()
     query = "UPDATE Main_Crafting " \
-            "set Crafting_Point = '{}', Crafting_Value = '{}', Labour_Points = '{}'" \
-            "WHERE Character_Name = '{}'".format(craft_points, crafting_value, labour, character_name)
+            "set Crafting_Value = '{}', Labour_Points = '{}'" \
+            "WHERE Character_Name = '{}'".format(crafting_value, labour, character_name)
     cursor.execute(query)
     cursor.commit()
 
@@ -50,15 +50,6 @@ def trade_quantity(character_name: str, trade_good, quantity: int):
     cursor = Quick_SQL.db_connection()
     query = "UPDATE Main_Trade set Quantity = '{}' " \
             "WHERE Character = '{}' AND Item = '{}'".format(new_amount, character_name, trade_good.Item)
-    cursor.execute(query)
-    cursor.commit()
-
-
-def crafting_points(character_name: str, craft_points: int, crafting_value: float, labour: int):
-    cursor = Quick_SQL.db_connection()
-    query = "UPDATE Main_Crafting " \
-            "set Crafting_Point = '{}', Crafting_Value = '{}', Labour_Points = '{}'" \
-            "WHERE Character_Name = '{}'".format(craft_points, crafting_value, labour, character_name)
     cursor.execute(query)
     cursor.commit()
 

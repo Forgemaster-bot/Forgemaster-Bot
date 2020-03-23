@@ -34,6 +34,37 @@ def character_inventory(character_name: str):
     return items
 
 
+def character_inventory_essence(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Link_Character_Items " \
+            "where Character='{}' and Item in (select Name from Info_Item where Type = 'Essence') " \
+            "order by Item".format(character_name)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    items = []
+    for row in rows:
+        if row.Quantity == 1:
+            items.append(row.Item)
+        else:
+            items.append(row.Item + " ({})".format(row.Quantity))
+    return items
+
+
+def character_inventory_essence_count(character_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Link_Character_Items " \
+            "where Character='{}' and Item in (select Name from Info_Item where Type = 'Essence') " \
+            "order by Item".format(character_name)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    essence = 0
+    for row in rows:
+        essence = essence + row.Quantity
+    return essence
+
+
 def character_sellable_inventory_list(character_name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \
@@ -64,16 +95,16 @@ def character_main_crafting(character_name: str):
 def character_profession_list(character_name: str, gold_limit: float):
     cursor = Quick_SQL.db_connection()
     gold_value = gold_limit * 2
-    query = "Select A.Skill, D.Total " \
+    query = "select * from ( " \
+            "Select A.Skill, C.Total " \
             "From Link_Character_Skills A " \
             "Left Join Info_Skills B " \
             "On A.Skill = B.Name " \
-            "left join Link_Character_Items C " \
-            "on B.Tools = C.Item " \
-            "left join (select Crafting, count(*) as Total from Info_Item where value <= '{}' group by Crafting) D " \
-            "on A.Skill = D.Crafting " \
-            "where A.Character = '{}' and C.Character = '{}' and B.Job = 1 " \
-            "order by A.Skill".format(gold_value, character_name, character_name)
+            "left join (select Crafting, count(*) as Total from Info_Item where value <= '{}' group by Crafting) C " \
+            "on A.Skill = C.Crafting " \
+            "where A.Character = '{}' and B.Job = 1) a " \
+            "where a.Total is not null " \
+            "order by A.Skill".format(gold_value, character_name)
     cursor.execute(query)
     rows = cursor.fetchall()
     skill_list = []
@@ -179,6 +210,16 @@ def profession_item_list(profession: str, item_type: str, gold: float):
     for row in rows:
         results.append(row.Name)
     return results
+
+
+def profession_tool(profession: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select Tools " \
+            "from Info_Skills " \
+            "Where Name = '{}'".format(profession)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Tools
 
 
 def character_count_classes(character_name: str):
@@ -361,3 +402,53 @@ def player_name_by_id(user_id: str):
     if result is None:
         return ""
     return result.Name
+
+
+def recipe_by_essence(profession: str, essence_1: str, essence_2):
+    cursor = Quick_SQL.db_connection()
+    query = "Select * " \
+            "From Info_Crafting_Recipes " \
+            "Where Skill = '{}' and Essence_1 = '{}' and Essence_2 = '{}'".format(profession, essence_1, essence_2)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return ""
+    return result.Name
+
+
+def recipe_essence_list(profession: str, name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "Select * " \
+            "From Info_Crafting_Recipes " \
+            "Where Skill = '{}' and Name = '{}' ".format(profession, name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return ""
+    return result.Essence_1, result.Essence_2
+
+
+def recipe_by_profession(profession: str):
+    cursor = Quick_SQL.db_connection()
+    query = "Select * " \
+            "From Info_Crafting_Recipes " \
+            "Where Skill = '{}'".format(profession)
+    cursor.execute(query)
+    result = []
+    rows = cursor.fetchall()
+    for row in rows:
+        result.append(row.Name)
+    return result
+
+
+def character_known_recipe(character_name: str, profession: str):
+    cursor = Quick_SQL.db_connection()
+    query = "Select * " \
+            "From Link_Character_Recipe " \
+            "Where character = '{}' and Skill = '{}'".format(character_name, profession)
+    cursor.execute(query)
+    result = []
+    rows = cursor.fetchall()
+    for row in rows:
+        result.append(row.Recipe)
+    return result

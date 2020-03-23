@@ -13,8 +13,7 @@ def main_menu_options(character_name: str):
     # Craft
     if not SQL_Check.character_on_crafting_table(character_name):
         SQL_Insert.crafting_point(character_name)
-    if SQL_Check.character_can_craft(character_name, crafting_gold_limit(character_name)):
-        menu_option_list.append("Craft items")
+    menu_option_list.append("Craft items")
     # Give item
     if SQL_Check.character_has_items_to_trade(character_name):
         menu_option_list.append("Give items to other characters")
@@ -34,7 +33,7 @@ def main_menu_options(character_name: str):
     if SQL_Check.character_has_items_to_trade(character_name) or SQL_Check.character_has_items_on_sale(character_name):
         menu_option_list.append("Trade at the marketplace")
     # Work
-    if SQL_Check.character_has_crafting_point(character_name):
+    if SQL_Check.character_has_crafted_this_week(character_name):
         menu_option_list.append("Work for a character")
     # menu_option_list.append("Test")
     return menu_option_list
@@ -45,7 +44,16 @@ def main_menu_options(character_name: str):
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def craft_item(character_name: str, item_name: str, quantity: int):
+def craft_check_professions_and_gold(character_name: str):
+    gold_limit = crafting_gold_limit(character_name)
+    if gold_limit == 0:
+        return False, "You have used up all your crafting time this week"
+    if not SQL_Check.character_has_professions_with_gold(character_name, gold_limit):
+        return False, "You don't have any crafting professions"
+    return True, ""
+
+
+def craft_create_mundane_item(character_name: str, item_name: str, quantity: int):
     item = SQL_Lookup.item_detail(item_name)
     # update gold
     craft_cost = item.Value/2 * quantity
@@ -61,18 +69,97 @@ def craft_item(character_name: str, item_name: str, quantity: int):
 
     # update crafting
     craft_details = SQL_Lookup.character_main_crafting(character_name)
-    new_craft_value = craft_details[2] - (craft_cost*2)
+    new_craft_value = int(craft_details[1]) - craft_cost
     if new_craft_value <= 0:
         new_craft_value = 0
-    SQL_Update.character_main_crafting(character_name, 0, new_craft_value, 0)
+    SQL_Update.character_main_crafting(character_name, new_craft_value, 0)
     return
+
+
+def craft_create_experiment(character_name: str, profession: str, recipe_name: str, essence_1: str, essence_2: str):
+    # learn new recipe
+    SQL_Insert.character_recipe(character_name, profession, recipe_name)
+    # take gold from player
+    SQL_Update.character_gold(character_name, -20)
+
+    # update crafting
+    craft_details = SQL_Lookup.character_main_crafting(character_name)
+    new_craft_value = int(craft_details[1]) - 20
+    SQL_Update.character_main_crafting(character_name, new_craft_value, 0)
+
+    # add item to player
+    item_type = recipe_item_type(profession)
+
+    # remove essences 1
+    if SQL_Lookup.character_item_quantity(character_name, essence_1) == 1:
+        SQL_Delete.character_item(character_name, essence_1)
+    else:
+        SQL_Update.character_item_quantity(character_name, essence_1, -1)
+
+    # remove essences 2
+    if SQL_Lookup.character_item_quantity(character_name, essence_2) == 1:
+        SQL_Delete.character_item(character_name, essence_2)
+    else:
+        SQL_Update.character_item_quantity(character_name, essence_2, -1)
+
+    # add new item to player inventory
+    item_name = "{} of {}".format(item_type, recipe_name)
+    if SQL_Check.character_has_item(character_name, item_name):
+        SQL_Update.character_item_quantity(character_name, item_name, 1)
+    else:
+        SQL_Insert.character_item(character_name, item_name, 1)
+
+    Update_Google_Roster.update_items(character_name)
+    Update_Google_Roster.update_gold_group([character_name])
+
+
+def craft_create_consumable(character_name: str, item_type: str, profession: str, item_name: str, effect_list: list):
+    # remove gold
+    cost = len(effect_list) * 10
+    SQL_Update.character_gold(character_name, - cost)
+
+    # remove crafting value
+    craft_details = SQL_Lookup.character_main_crafting(character_name)
+    new_craft_value = int(craft_details[1]) - cost
+    SQL_Update.character_main_crafting(character_name, new_craft_value, 0)
+
+    # remove essences
+    for effect in effect_list:
+        recipe_essences_list = SQL_Lookup.recipe_essence_list(profession, effect)
+        for essence in recipe_essences_list:
+            if SQL_Lookup.character_item_quantity(character_name, essence) == 1:
+                SQL_Delete.character_item(character_name, essence)
+            else:
+                SQL_Update.character_item_quantity(character_name, essence, -1)
+
+    # add new item to player inventory
+    name = "{} of {}".format(item_type, item_name)
+    if SQL_Check.character_has_item(character_name, name):
+        SQL_Update.character_item_quantity(character_name, name, 1)
+    else:
+        SQL_Insert.character_item(character_name, name, 1)
+
+    # update
+    Update_Google_Roster.update_gold_group([character_name])
+    Update_Google_Roster.update_items(character_name)
+
+
+def character_has_profession_tools(character_name, profession: str):
+    tool = SQL_Lookup.profession_tool(profession)
+    if SQL_Check.character_has_class(character_name, "Artificer"):
+        artificer_level = SQL_Lookup.character_class_level_by_class(character_name, "Artificer")
+        if artificer_level > 2 and SQL_Check.character_has_item(character_name, "Tinker tools"):
+            return True, ""
+    if not SQL_Check.character_has_item(character_name, tool):
+        return False, "{} doesnt own a set of {} to craft with".format(character_name, tool)
+    return True, ""
 
 
 def crafting_gold_limit(character_name: str):
     character_gold = SQL_Lookup.character_gold_total(character_name) * 2
     craft_limit = SQL_Lookup.character_main_crafting(character_name)
-    craft_value = craft_limit[2]/2
-    labour_value = labour_crafting_value(craft_limit[3])
+    craft_value = craft_limit[1]
+    labour_value = labour_crafting_value(craft_limit[2])
     if labour_value == 0:
         limit_list = [character_gold, craft_value]
         return min(limit_list)
@@ -84,11 +171,10 @@ def crafting_gold_limit(character_name: str):
 def crafting_welcome_message(character_name):
     character_gold = SQL_Lookup.character_gold_total(character_name)
     craft_limit = SQL_Lookup.character_main_crafting(character_name)
-    craft_points = craft_limit[1]
-    craft_value = craft_limit[2]
-    labour = craft_limit[3]
+    craft_value = int(craft_limit[1]) * 2
+    labour = craft_limit[2]
     labour_value = labour_crafting_value(labour) * 2
-    if craft_points == 1:
+    if craft_value == 100:
         value_message = "You haven't worked this week so you can craft {}g worth of goods.".format(craft_value)
         if labour_value > 0:
             max_message = "As you've recruited {} workers this week, You can instead make one item up to {}g.".format(
@@ -99,8 +185,7 @@ def crafting_welcome_message(character_name):
         value_message = "You've already crafted this week, you have " \
                         "{}g remaining in value of goods you can make.".format(craft_value)
         max_message = ""
-
-    message = "Craft Menu: Type STOP at any time to go back to the player menu \n" \
+    message = "Craft Menu: Type **STOP** at any time to go back to the player menu \n" \
               "You have {}g. {} {} "\
         .format(character_gold, value_message, max_message)
     return message
@@ -116,6 +201,103 @@ def labour_crafting_value(labour: int):
     else:
         value = 0
     return value
+
+
+def craft_essence_list(character_name: str, profession: str):
+    # get lists
+    known_recipes = SQL_Lookup.character_known_recipe(character_name, profession)
+    profession_recipes = SQL_Lookup.recipe_by_profession(profession)
+    
+    # get list of unknown recipes
+    for recipe in known_recipes:
+        profession_recipes.remove(recipe)
+
+    # get a list of essences needed that the player owns
+    essence_list = []
+    for recipe in profession_recipes:
+        recipe_essence = SQL_Lookup.recipe_essence_list(profession, recipe)
+        if recipe_essence[0] == recipe_essence[1]:
+            if SQL_Check.character_has_item_quantity(character_name, recipe_essence[0], 2):
+                if recipe_essence[0] not in essence_list:
+                    essence_list.append(recipe_essence[0])
+        else:
+            if SQL_Check.character_has_item_quantity(character_name, recipe_essence[0], 1):
+                if SQL_Check.character_has_item_quantity(character_name, recipe_essence[1], 1):
+                    if recipe_essence[0] not in essence_list:
+                        essence_list.append(recipe_essence[0])
+                    if recipe_essence[1] not in essence_list:
+                        essence_list.append(recipe_essence[1])
+
+    for row in range(len(essence_list)):
+        quantity = SQL_Lookup.character_item_quantity(character_name, essence_list[row])
+        if quantity > 1:
+            essence_list[row] = "{} ({})".format(essence_list[row], quantity)
+    return essence_list
+
+
+def craft_remove_essence_from_list(essence_list: list, essence: str):
+    for row in range(len(essence_list)):
+        essence_detail = essence_list[row].replace(")", "").split(" (")
+        if essence_detail[0] == essence:
+            if len(essence_detail) == 1:
+                essence_list.remove(essence_list[row])
+            elif essence_detail[1] == "2":
+                essence_list[row] = essence_detail[0]
+            else:
+                essence_list[row] = "{} ({})".format(essence_detail[0], int(essence_detail[1])-1)
+            return essence_list
+
+
+def recipe_item_type(profession):
+    if profession == "Alchemist":
+        return "Spray"
+    if profession == 'Calligrapher':
+        return "Glyph"
+    if profession == 'Cook':
+        return "Snack"
+    if profession == 'Herbalism':
+        return "Potion"
+    if profession == 'Poisoner':
+        return "Bomb"
+
+
+def craft_recipe_list(character_name: str, profession: str, inventory_essence: list):
+    known_list = SQL_Lookup.character_known_recipe(character_name, profession)
+
+    craft_list = []
+    for recipe in known_list:
+        recipe_essence = SQL_Lookup.recipe_essence_list(profession, recipe)
+        if recipe_essence[0] == recipe_essence[1]:
+            for row in range(len(inventory_essence)):
+                essence_details = inventory_essence[row].replace(")", "").split(" (",)
+                if essence_details[0] == recipe_essence[0] and len(essence_details) > 1:
+                    if int(essence_details[1]) > 2:
+                        craft_list.append("{} : {} + {}".format(recipe, recipe_essence[0], recipe_essence[1]))
+
+        else:
+            for row_1 in range(len(inventory_essence)):
+                essence_details_1 = inventory_essence[row_1].replace(")", "").split(" (", )
+                if essence_details_1[0] == recipe_essence[0]:
+                    for row_2 in range(len(inventory_essence)):
+                        essence_details_2 = inventory_essence[row_2].replace(")", "").split(" (", )
+                        if essence_details_2[0] == recipe_essence[1]:
+                            craft_list.append("{} : {} + {}".format(recipe, recipe_essence[0], recipe_essence[1]))
+    return craft_list
+
+
+def craft_merge_effects(effect_list):
+    unique_effect_list = []
+
+    for effect in effect_list:
+        if effect not in unique_effect_list:
+            unique_effect_list.append(effect)
+
+    for row in range(len(unique_effect_list)):
+        quantity = effect_list.count(unique_effect_list[row])
+        if quantity > 1:
+            unique_effect_list[row] = "{} x {}".format(unique_effect_list[row], quantity)
+
+    return unique_effect_list
 
 
 '''''''''''''''''''''''''''''''''''''''''
@@ -335,12 +517,14 @@ def work(character_name: str, employer_name):
     if employer_details is None:
         SQL_Insert.crafting_point(employer_name)
         new_labour = 1
+        new_craft_value = 50
     else:
         new_labour = employer_details.Labour_Points + 1
+        new_craft_value = employer_details.Crafting_Value
     # remove point from player
-    SQL_Update.crafting_points(character_name, 0, 0, 0)
+    SQL_Update.character_main_crafting(character_name, 0, 0)
     # add labour to employer
-    SQL_Update.crafting_points(employer_name, 1, 100, new_labour)
+    SQL_Update.character_main_crafting(employer_name, new_craft_value, new_labour)
     return "You are now working for {}, giving him one more labour point for the week".format(employer_name)
 
 
@@ -396,4 +580,3 @@ def sync_player(discord_id: str, discord_name: str):
     except:
         return False, "Something went wrong adding {} to the list".format(discord_name)
     return False, "No change"
-

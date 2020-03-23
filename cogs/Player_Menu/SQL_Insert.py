@@ -11,8 +11,8 @@ def character_item(character_name: str, item_name: str, quantity: int):
 
 def crafting_point(character_name: str):
     cursor = Quick_SQL.db_connection()
-    insert = "insert into Main_crafting (character_Name,Crafting_Point,Crafting_Value,Labour_Points) " \
-             "values ('{}','1','100','0')".format(character_name)
+    insert = "insert into Main_crafting (character_Name,Crafting_Value,Labour_Points) " \
+             "values ('{}','50','0')".format(character_name)
     cursor.execute(insert)
     cursor.commit()
 
@@ -55,5 +55,13 @@ def character_profession(character_name: str, profession_name: str, proficiency:
     cursor = Quick_SQL.db_connection()
     link_class_insert = "insert into Link_Character_Skills (Character,Skill,Proficiency) " \
                         "values ('{}','{}','{}')".format(character_name, profession_name, proficiency)
+    cursor.execute(link_class_insert)
+    cursor.commit()
+
+
+def character_recipe(character_name: str, profession: str, recipie_name: str):
+    cursor = Quick_SQL.db_connection()
+    link_class_insert = "insert into Link_Character_Recipe (Character,Skill,Recipe) " \
+                        "values ('{}','{}','{}')".format(character_name, profession, recipie_name)
     cursor.execute(link_class_insert)
     cursor.commit()
