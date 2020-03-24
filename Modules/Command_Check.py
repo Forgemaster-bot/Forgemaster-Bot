@@ -203,8 +203,8 @@ def add_feat(command: str):
     feat = c_list[1].lstrip()
     if not SQL_Check.character_exists(character_name):
         return False, "The character {} doesnt exist.".format(character_name)
-    if not SQL_Check.feat_exists(feat):
-        return False, "The feat {} doesnt exist.".format(feat)
+    # if not SQL_Check.feat_exists(feat):
+        # return False, "The feat {} doesnt exist.".format(feat)
     return True, "Give {} the feat {}?".format(character_name, feat)
 
 

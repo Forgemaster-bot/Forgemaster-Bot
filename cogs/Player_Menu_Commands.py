@@ -122,6 +122,8 @@ class Player_Menu_Commands(commands.Cog):
         if len(option_list) == 0:
             await command.message.author.send("You dont have any characters yet.")
             choice = "stop"
+        elif len(option_list) == 1:
+            choice = option_list[0]
         else:
             option_question = "Which character would you like to view the menu for?"
             choice = await self.answer_from_list(command, option_question, option_list)

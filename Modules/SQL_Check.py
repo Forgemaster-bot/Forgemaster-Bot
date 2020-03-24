@@ -191,7 +191,7 @@ def level_up_check(character_name: str):
             "where Level='{}'".format(character_level)
     cursor.execute(query)
     xp_sheet = cursor.fetchone()
-    if character_xp > xp_sheet.XP:
+    if character_xp >= xp_sheet.XP:
         return "Yes"
     return "No"
 

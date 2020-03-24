@@ -330,8 +330,9 @@ def trade_goods_items_by_type(character_name: str, gold_limit: float, item_type:
     response = []
     for items in item_name_list:
         item_details = trade_item_not_sold_by_character(character_name, items.Item)
-        response.append("{}: {}g each with {} for sale".format(item_details.Item, item_details.Price,
-                                                               item_details.Quantity))
+        if item_details is not None:
+            response.append("{}: {}g each with {} for sale".format(item_details.Item, item_details.Price,
+                                                                   item_details.Quantity))
     return response
 
 
