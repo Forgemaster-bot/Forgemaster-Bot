@@ -79,7 +79,7 @@ def craft_create_experiment(character_name: str, profession: str, recipe_name: s
     SQL_Update.character_main_crafting(character_name, new_craft_value, 0)
 
     # add item to player
-    item_type = recipe_item_type(profession)
+    item_type = SQL_Lookup.profession_consumable_name(profession)
 
     # remove essences 1
     if SQL_Lookup.character_item_quantity(character_name, essence_1) == 1:
@@ -104,9 +104,9 @@ def craft_create_experiment(character_name: str, profession: str, recipe_name: s
     Update_Google_Roster.update_gold_group([character_name])
 
 
-def craft_create_consumable(character_name: str, item_type: str, profession: str, item_name: str, effect_list: list):
+def craft_create_consumable(character_name: str, item_type: str, profession: str,
+                            item_name: str, effect_list: list, cost: int):
     # remove gold
-    cost = len(effect_list) * 10
     SQL_Update.character_gold(character_name, - cost)
 
     # remove crafting value
@@ -162,19 +162,18 @@ def crafting_gold_limit(character_name: str):
 def crafting_welcome_message(character_name):
     character_gold = SQL_Lookup.character_gold_total(character_name)
     craft_limit = SQL_Lookup.character_main_crafting(character_name)
-    craft_value = int(craft_limit[1]) * 2
+    craft_value = int(craft_limit[1])
     labour = craft_limit[2]
     labour_value = labour_crafting_value(labour) * 2
-    if craft_value == 100:
-        value_message = "You haven't worked this week so you can craft {}g worth of goods.".format(craft_value)
-        if labour_value > 0:
-            max_message = "As you've recruited {} workers this week, You can instead make one item up to {}g.".format(
-                labour, labour_value)
-        else:
-            max_message = "You haven't recruited any workers so you cant build anything larger."
+
+    value_message = "You can spend {}g on materials this week.".format(craft_value)
+
+    if labour_value > 0 and craft_value == 50:
+        max_message = "As you've recruited {} workers this week, You can instead make one item up to {}g."\
+            .format(labour, labour_value)
+    elif craft_value == 50:
+        max_message = "You haven't recruited any workers so you cant build anything larger."
     else:
-        value_message = "You've already crafted this week, you have " \
-                        "{}g remaining in value of goods you can make.".format(craft_value)
         max_message = ""
     message = "Craft Menu: Type **STOP** at any time to go back to the player menu \n" \
               "You have {}g. {} {} "\
@@ -226,6 +225,45 @@ def craft_essence_list(character_name: str, profession: str):
     return essence_list
 
 
+def craft_possible_essence_combination_list(character_name: str, profession: str, essence: str):
+    known_recipes = SQL_Lookup.character_known_recipe(character_name, profession)
+    profession_recipes = SQL_Lookup.recipe_by_profession(profession)
+
+    # get list of recipes using essence
+    unknown_list = []
+    for recipe in profession_recipes:
+        recipe_essence = SQL_Lookup.recipe_essence_list(profession, recipe)
+        if recipe_essence[0] == essence or recipe_essence[1] == essence:
+            unknown_list.append(recipe)
+
+    # get list of unknown recipes using essence
+    for recipe in known_recipes:
+        if recipe in unknown_list:
+            unknown_list.remove(recipe)
+
+    # get list of essences that could be combined for new recipes
+    essence_list = []
+    for recipe in unknown_list:
+        recipe_essence = SQL_Lookup.recipe_essence_list(profession, recipe)
+        if recipe_essence[0] == essence:
+            if recipe_essence[1] not in essence_list:
+                essence_list.append(recipe_essence[1])
+        else:
+            if recipe_essence[0] not in essence_list:
+                essence_list.append(recipe_essence[0])
+
+    # get quantity of each essence and return
+    result_list = []
+    for row in range(len(essence_list)):
+        if SQL_Check.character_has_item(character_name, essence_list[row]):
+            quantity = SQL_Lookup.character_item_quantity(character_name, essence_list[row])
+            if essence_list[row] == essence:
+                quantity -= 1
+            if quantity > 0:
+                result_list.append("{} ({})".format(essence_list[row], quantity))
+    return result_list
+
+
 def craft_remove_essence_from_list(essence_list: list, essence: str):
     for row in range(len(essence_list)):
         essence_detail = essence_list[row].replace(")", "").split(" (")
@@ -239,31 +277,19 @@ def craft_remove_essence_from_list(essence_list: list, essence: str):
             return essence_list
 
 
-def recipe_item_type(profession):
-    if profession == "Alchemist":
-        return "Spray"
-    if profession == 'Calligrapher':
-        return "Glyph"
-    if profession == 'Cook':
-        return "Snack"
-    if profession == 'Herbalism':
-        return "Potion"
-    if profession == 'Poisoner':
-        return "Bomb"
-
-
 def craft_recipe_list(character_name: str, profession: str, inventory_essence: list):
     known_list = SQL_Lookup.character_known_recipe(character_name, profession)
 
     craft_list = []
     for recipe in known_list:
-        recipe_essence = SQL_Lookup.recipe_essence_list(profession, recipe)
+        recipe_essence = SQL_Lookup.recipe_essence_and_description_list(profession, recipe)
         if recipe_essence[0] == recipe_essence[1]:
             for row in range(len(inventory_essence)):
                 essence_details = inventory_essence[row].replace(")", "").split(" (",)
                 if essence_details[0] == recipe_essence[0] and len(essence_details) > 1:
                     if int(essence_details[1]) > 2:
-                        craft_list.append("{} : {} + {}".format(recipe, recipe_essence[0], recipe_essence[1]))
+                        craft_list.append("{} : {} : **{}** + **{}**".format(recipe, recipe_essence[2],
+                                                                             recipe_essence[0], recipe_essence[1]))
 
         else:
             for row_1 in range(len(inventory_essence)):
@@ -272,7 +298,9 @@ def craft_recipe_list(character_name: str, profession: str, inventory_essence: l
                     for row_2 in range(len(inventory_essence)):
                         essence_details_2 = inventory_essence[row_2].replace(")", "").split(" (", )
                         if essence_details_2[0] == recipe_essence[1]:
-                            craft_list.append("{} : {} + {}".format(recipe, recipe_essence[0], recipe_essence[1]))
+                            craft_list.append(
+                                "{} : {} : **{}** + **{}**".format(recipe, recipe_essence[2],
+                                                                   recipe_essence[0], recipe_essence[1]))
     return craft_list
 
 

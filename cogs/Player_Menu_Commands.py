@@ -143,121 +143,144 @@ class Player_Menu_Commands(commands.Cog):
     # Crafting
     async def craft_menu(self, command, discord_id, character_name):
         while True:
-            await command.message.author.send(Scripts.crafting_welcome_message(character_name))
             gold_limit = Scripts.crafting_gold_limit(character_name)
             if gold_limit == 0:
                 await command.message.author.send("you cannot craft any more this week")
                 return "stop"
-            profession = await self.craft_step_1_profession_choice(command, character_name, gold_limit)
+            await command.message.author.send("Craft Menu: Type **STOP** at any time to go back to the player menu")
+            profession = await self.craft_step_1_profession_choice(command, character_name)
             if profession == "exit" or profession == "stop":
                 return profession
             character_has_tools = Scripts.character_has_profession_tools(character_name, profession)
             if not character_has_tools[0]:
                 await command.message.author.send(character_has_tools[1])
                 return
-            craft_type_choice = await self.craft_step_2_type_choice(command, profession)
-            if craft_type_choice == "Mundane item":
-                # get the type of item they want to craft
-                item_type = await self.craft_mundane_step_1_type_choice(command, profession, gold_limit)
-                if item_type == "exit" or item_type == "stop":
-                    return item_type
-                # get the name of the item
-                item_name = await self.craft_mundane_step_2_item_choice(command, profession, gold_limit, item_type)
-                if item_name == "exit" or item_name == "stop":
-                    return item_name
-                # get the quantity
-                quantity = await self.craft_mundane_step_3_quantity(command, gold_limit, item_name)
-                if quantity == "exit" or quantity == "stop":
-                    return quantity
-                # confirm crafting
-                confirm = await self.craft_mundane_step_4_confirm(command, discord_id, character_name,
-                                                                  item_name, quantity)
-                if confirm == "exit" or confirm == "stop":
-                    return confirm
-                # check if they want to craft something else
-                repeat = await self.craft_mundane_step_5_repeat(command)
-                if repeat == "exit" or repeat == "stop":
-                    return repeat
-                return
-            elif craft_type_choice == "Consumable from a recipes":
-                # Number of effects
-                type_name = Scripts.recipe_item_type(profession)
-                # stop them from crafting
-                if gold_limit < 10:
-                    await command.message.author.send("{} does not have enough gold or time to craft {}"
-                                                      .format(character_name, type_name))
-                inventory_essence_list = SQL_Lookup.character_inventory_essence(character_name)
-                message = "The {} can have up to 5 effects, each effect costs 10g and needs two essences." \
-                    .format(type_name)
-                await command.message.author.send(message)
+            while True:
+                await command.message.author.send(Scripts.crafting_welcome_message(character_name))
+                craft_type_choice = await self.craft_step_2_type_choice(command, profession)
+                if craft_type_choice == "Mundane item":
+                    # get the type of item they want to craft
+                    item_type = await self.craft_mundane_step_1_type_choice(command, profession, gold_limit)
+                    if item_type == "exit" or item_type == "stop":
+                        return item_type
+                    # get the name of the item
+                    item_name = await self.craft_mundane_step_2_item_choice(command, profession, gold_limit, item_type)
+                    if item_name == "exit" or item_name == "stop":
+                        return item_name
+                    # get the quantity
+                    quantity = await self.craft_mundane_step_3_quantity(command, gold_limit, item_name)
+                    if quantity == "exit" or quantity == "stop":
+                        return quantity
+                    # confirm crafting
+                    confirm = await self.craft_mundane_step_4_confirm(command, discord_id, character_name,
+                                                                      item_name, quantity)
+                    if confirm == "exit" or confirm == "stop":
+                        return confirm
+                    # check if they want to craft something else
+                    repeat = await self.craft_mundane_step_5_repeat(command)
+                    if repeat == "exit" or repeat == "stop":
+                        return repeat
+                    return
+                elif craft_type_choice == "Consumable from a recipe":
+                    # Number of effects
+                    type_name = SQL_Lookup.profession_consumable_name(profession)
+                    inventory_essence_list = SQL_Lookup.character_inventory_essence(character_name)
+                    recipe_list = Scripts.craft_recipe_list(character_name, profession, inventory_essence_list)
+                    effect_list = []
 
-                recipe_list = Scripts.craft_recipe_list(character_name, profession, inventory_essence_list)
-                effect_list = []
-
-                while True:
-                    if len(recipe_list) == 0:
-                        await command.message.author.send("{} doesnt have enough essences to add another effect"
-                                                          .format(character_name))
-                        break
-                    if len(effect_list) == 5:
-                        await command.message.author.send("the {} have reached five effects".format(type_name))
-                        break
-                    if (len(effect_list) + 1) * 10 > gold_limit:
-                        await command.message.author.send("{} cannot afford to add any more effects"
-                                                          .format(character_name))
-                        break
-                    recipe = await self.craft_consumable_step_1_effects(command, type_name, effect_list, recipe_list,
-                                                                        Scripts.stitch_list_into_string
-                                                                        (inventory_essence_list))
-                    if recipe == "exit" or recipe == "stop":
-                        return recipe
-                    if recipe == "craft":
-                        break
+                    if profession.lower() == "cook":
+                        minimum_gold = 25
+                        message = "As a cook you can snack for 25g. These snacks will only have one effect"
                     else:
-                        effect_list.append(recipe)
-                        recipe_essence = SQL_Lookup.recipe_essence_list(profession, recipe)
-                        inventory_essence_list = Scripts.craft_remove_essence_from_list(inventory_essence_list,
-                                                                                        recipe_essence[0])
-                        inventory_essence_list = Scripts.craft_remove_essence_from_list(inventory_essence_list,
-                                                                                        recipe_essence[1])
-                        recipe_list = Scripts.craft_recipe_list(character_name, profession, inventory_essence_list)
-                if len(effect_list) == 0:
-                    await command.message.author.send("You cannot craft a {} without any effects".format(type_name))
-                    break
-                craft = await self.craft_consumable_step_2_confirm(command, discord_id, character_name, profession,
-                                                                   type_name, effect_list)
-                if craft == "exit" or craft == "stop":
-                    break
+                        minimum_gold = 10
+                        message = "as a {} you can create {} that have up to 5 effects, each effect costs 10g and " \
+                                  "needs two essences to add.".format(profession, type_name)
+                    if len(recipe_list) == 0:
+                        await command.message.author.send("{} does not have the materials to craft any recipes that "
+                                                          "they know for making a {}".format(character_name, type_name))
+                        return "stop"
+                    if gold_limit < minimum_gold:
+                        await command.message.author.send("{} does not have enough gold or time to craft {}"
+                                                          .format(character_name, type_name))
+                        return "stop"
 
-            elif craft_type_choice == "Experiment with ingredients ":
-                total_character_essence = SQL_Lookup.character_inventory_essence_count(character_name)
-                if total_character_essence < 2:
-                    await command.message.author.send("{} does not have enough essences to experiment with"
-                                                      .format(character_name))
-                    return
-                if gold_limit < 20:
-                    await command.message.author.send("{} does not have enough gold or time to experiment"
-                                                      .format(character_name))
-                    return
-                # get the first essence
-                essence_list = Scripts.craft_essence_list(character_name, profession)
-                essence_1 = await self.craft_experiment_step_1_first_essence(command, essence_list)
-                if essence_1 == "exit" or essence_1 == "stop":
-                    return essence_1
-                # get the second essence
-                essence_list = Scripts.craft_remove_essence_from_list(essence_list, essence_1)
-                essence_2 = await self.craft_experiment_step_2_second_essence(command, essence_list)
-                if essence_2 == "exit" or essence_2 == "stop":
-                    return essence_2
-                confirm = await self.craft_experiment_step_3_confirm(command, discord_id, character_name,
-                                                                     profession, essence_1, essence_2,)
-                if confirm == "exit" or confirm == "stop":
-                    return confirm
-                return
+                    await command.message.author.send(message)
 
-    async def craft_step_1_profession_choice(self, command, character_name, gold_limit):
+                    while True:
+                        if len(recipe_list) == 0:
+                            await command.message.author.send("{} doesnt have enough essences to add another effect"
+                                                              .format(character_name))
+                        if profession == "cook" and len(effect_list) == 1:
+                            break
+                        if len(effect_list) == 5:
+                            await command.message.author.send("the {} have reached five effects".format(type_name))
+                            break
+                        if (len(effect_list) + 1) * 10 > gold_limit:
+                            await command.message.author.send("{} cannot afford to add any more effects"
+                                                              .format(character_name))
+                            break
+                        recipe = await self.craft_consumable_step_1_effects(command, type_name, effect_list,
+                                                                            recipe_list, Scripts.stitch_list_into_string
+                                                                            (inventory_essence_list))
+                        if recipe == "exit" or recipe == "stop":
+                            return recipe
+                        if recipe == "craft":
+                            break
+                        else:
+                            effect_list.append(recipe)
+                            recipe_essence = SQL_Lookup.recipe_essence_list(profession, recipe)
+                            inventory_essence_list = Scripts.craft_remove_essence_from_list(inventory_essence_list,
+                                                                                            recipe_essence[0])
+                            inventory_essence_list = Scripts.craft_remove_essence_from_list(inventory_essence_list,
+                                                                                            recipe_essence[1])
+                            recipe_list = Scripts.craft_recipe_list(character_name, profession, inventory_essence_list)
+                    if len(effect_list) == 0:
+                        await command.message.author.send("You cannot craft a {} without any effects".format(type_name))
+                        break
+                    craft = await self.craft_consumable_step_2_confirm(command, discord_id, character_name, profession,
+                                                                       type_name, effect_list)
+                    if craft == "exit" or craft == "stop":
+                        break
+                elif craft_type_choice == "Experiment with ingredients":
+                    total_character_essence = SQL_Lookup.character_inventory_essence_count(character_name)
+                    if total_character_essence < 2:
+                        await command.message.author.send("{} does not have enough essences to experiment with"
+                                                          .format(character_name))
+                        return
+                    if gold_limit < 20:
+                        await command.message.author.send("{} does not have enough gold or time to experiment"
+                                                          .format(character_name))
+                        return
+                    # get the first essence
+                    essence_list = Scripts.craft_essence_list(character_name, profession)
+                    essence_1 = await self.craft_experiment_step_1_first_essence(command, essence_list)
+                    if essence_1 == "exit" or essence_1 == "stop":
+                        return essence_1
+                    # get the second essence
+                    essence_list = Scripts.craft_possible_essence_combination_list(character_name, profession,
+                                                                                   essence_1)
+                    essence_2 = await self.craft_experiment_step_2_second_essence(command, essence_list)
+                    if essence_2 == "exit" or essence_2 == "stop":
+                        return essence_2
+                    confirm = await self.craft_experiment_step_3_confirm(command, discord_id, character_name,
+                                                                         profession, essence_1, essence_2,)
+                    if confirm == "exit" or confirm == "stop":
+                        return confirm
+                    return
+                elif craft_type_choice == "Look at recipe book":
+                    recipe_list = SQL_Lookup.character_known_recipe_details(character_name, profession)
+                    if len(recipe_list) == 0:
+                        await command.message.author.send("{} doesnt know any recipes for {} yet"
+                                                          .format(character_name, profession))
+                    else:
+                        recipe_list.insert(0, "{} knows the following {} recipes:".format(character_name, profession))
+                        await command.message.author.send(Scripts.stitch_list_into_table(recipe_list))
+                elif craft_type_choice == "exit" or craft_type_choice == "stop":
+                        return craft_type_choice
+
+    async def craft_step_1_profession_choice(self, command, character_name):
         # collect information about how much crafting can be done
-        option_list = SQL_Lookup.character_profession_list(character_name, gold_limit)
+        option_list = SQL_Lookup.character_profession_list(character_name)
         option_question = "Please enter the number of the profession to use."
         choice = await self.answer_from_list(command, option_question, option_list)
         return choice
@@ -274,6 +297,9 @@ class Player_Menu_Commands(commands.Cog):
 
     async def craft_mundane_step_1_type_choice(self, command, profession, gold_limit):
         option_list = SQL_Lookup.profession_item_type_list(profession, gold_limit)
+        if len(option_list) == 0:
+            await command.message.author.send("No options available")
+            return "stop"
         option_question = "What type of item do you want to craft?".format(profession)
         if len(option_list) == 1:
             choice = option_list[0]
@@ -283,6 +309,9 @@ class Player_Menu_Commands(commands.Cog):
 
     async def craft_mundane_step_2_item_choice(self, command, profession, gold_limit, item_type):
         option_list = SQL_Lookup.profession_item_list(profession, item_type, gold_limit)
+        if len(option_list) == 0:
+            await command.message.author.send("No options available")
+            return "stop"
         option_question = "What item do you want to craft?"
         choice = await self.answer_from_list(command, option_question, option_list)
         return choice
@@ -327,12 +356,14 @@ class Player_Menu_Commands(commands.Cog):
         cost = len(effect_list) * 10
         if len(effect_list) == 0:
             short_effect_list = "None"
+            craft_message = "."
         else:
             short_effect_list = Scripts.stitch_list_into_string(Scripts.craft_merge_effects(effect_list))
+            craft_message = " or type **Craft** to create the {}.".format(type_name)
         option_question = "Current effects : {}, at a cost of Cost : {}g. \n" \
                           "Essence available : {} \n" \
-                          "Please enter the number for the effect you want or type **Craft** to create the {}"\
-            .format(short_effect_list, cost, inventory, type_name)
+                          "Please enter the number for the effect you want{}"\
+            .format(short_effect_list, cost, inventory, craft_message)
         choice = await self.answer_from_list_craft(command, option_question, recipe_list)
         choice_details = choice.split(" :")
         return choice_details[0]
@@ -340,16 +371,20 @@ class Player_Menu_Commands(commands.Cog):
     async def craft_consumable_step_2_confirm(self, command, discord_id, character_name, profession,
                                               type_name, effect_list):
         cleaned_effect_list = Scripts.stitch_list_into_string(Scripts.craft_merge_effects(effect_list))
+        if profession == "cook":
+            cost = 25
+        else:
+            cost = len(effect_list)*10
         await command.author.send("Do you want to craft a {} with: \n{} \nFor {}g? [yes/no]"
-                                  .format(type_name, cleaned_effect_list,
-                                          len(effect_list)*10))
+                                  .format(type_name, cleaned_effect_list, cost))
         reply = await self.confirm(command)
         if reply == "Yes":
             await command.author.send("crafting..")
             log = "{} made a {} of {} for {}g".format(character_name, type_name,
-                                                      cleaned_effect_list, len(effect_list)*10)
+                                                      cleaned_effect_list, cost)
             Quick_SQL.log_private_command(discord_id, log)
-            Scripts.craft_create_consumable(character_name, type_name, profession, cleaned_effect_list, effect_list)
+            Scripts.craft_create_consumable(character_name, type_name, profession,
+                                            cleaned_effect_list, effect_list, cost)
             await Scripts.log_to_discord(self, log)
             await command.author.send(log)
             return

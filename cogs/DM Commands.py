@@ -1,8 +1,7 @@
 from discord.ext import commands
 import asyncio
 
-import Command_Check
-import Command_Execute
+from DM_Menu import Scripts
 import Quick_SQL
 
 
@@ -14,7 +13,7 @@ class DM_Commands(commands.Cog):
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def kill_character(self, command):
         trim_message = command.message.content.replace('$CharacterKill ', '')
-        command_check = Command_Check.kill_character(trim_message)
+        command_check = Scripts.kill_character_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
             while True:
@@ -23,7 +22,7 @@ class DM_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     Quick_SQL.log_command(command)
-                    response = Command_Execute.kill_character(trim_message)
+                    response = Scripts.kill_character_execute(trim_message)
                     await command.send(response)
                     break
                 else:
@@ -35,7 +34,7 @@ class DM_Commands(commands.Cog):
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def change_gold(self, command):
         trim_message = command.message.content.replace('$AddGold ', '')
-        command_check = Command_Check.add_gold(trim_message)
+        command_check = Scripts.add_gold_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
             while True:
@@ -44,7 +43,7 @@ class DM_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     Quick_SQL.log_command(command)
-                    response = Command_Execute.add_gold(trim_message)
+                    response = Scripts.add_gold_execute(trim_message)
                     await command.send(response)
                     break
                 else:
@@ -59,7 +58,7 @@ class DM_Commands(commands.Cog):
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def add_item(self, command):
         trim_message = command.message.content.replace('$AddItem ', '')
-        command_check = Command_Check.add_item(trim_message)
+        command_check = Scripts.add_item_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
             while True:
@@ -68,7 +67,7 @@ class DM_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     Quick_SQL.log_command(command)
-                    response = Command_Execute.add_item(trim_message)
+                    response = Scripts.add_item_execute(trim_message)
                     await command.send(response)
                     break
                 else:
@@ -79,7 +78,7 @@ class DM_Commands(commands.Cog):
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def remove_item(self, command):
         trim_message = command.message.content.replace('$RemoveItem ', '')
-        command_check = Command_Check.remove_item(trim_message)
+        command_check = Scripts.remove_item_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
             while True:
@@ -88,7 +87,7 @@ class DM_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     Quick_SQL.log_command(command)
-                    response = Command_Execute.remove_item(trim_message)
+                    response = Scripts.remove_item_execute(trim_message)
                     await command.send(response)
                     break
                 else:
@@ -100,7 +99,7 @@ class DM_Commands(commands.Cog):
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def add_xp(self, command):
         trim_message = command.message.content.replace('$AddXP ', '')
-        command_check = Command_Check.reward_xp(trim_message)
+        command_check = Scripts.add_xp_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
             while True:
@@ -109,7 +108,7 @@ class DM_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     Quick_SQL.log_command(command)
-                    response = Command_Execute.add_xp(trim_message)
+                    response = Scripts.add_xp_execute(trim_message)
                     await command.send(response)
                     break
                 else:
@@ -121,10 +120,10 @@ class DM_Commands(commands.Cog):
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def log_xp(self, command):
         trim_message = command.message.content.replace('$LogXP ', '')
-        command_check = Command_Check.log_xp(trim_message)
+        command_check = Scripts.log_xp_check(trim_message)
         if command_check[0]:
             Quick_SQL.log_command(command)
-            response = Command_Execute.log_xp(trim_message)
+            response = Scripts.log_xp_execute(trim_message)
             await command.send(response)
         else:
             await command.send(command_check[1])
