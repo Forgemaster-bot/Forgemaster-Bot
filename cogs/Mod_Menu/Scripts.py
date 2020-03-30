@@ -4,7 +4,7 @@ from Mod_Menu import SQL_Insert
 from Mod_Menu import SQL_Delete
 from Mod_Menu import SQL_Update
 import Update_Google_Roster
-import Quick_Google
+import Connections
 import Quick_Python
 
 
@@ -60,7 +60,7 @@ def create_character_execute(command: str):
 
 
 def character_sync_check(character_name: str):
-    roster = Quick_Google.sheet("Roster")
+    roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
     if character_row == 0:
         return False, "The character {} doesnt exist.".format(character_name)
@@ -68,7 +68,7 @@ def character_sync_check(character_name: str):
 
 
 def character_sync_execute(character_name: str):
-    roster = Quick_Google.sheet("Roster")
+    roster = Connections.google_sheet("Roster")
     character_row = roster.col_values(2).index(character_name) + 1
     character_sheet = roster.row_values(character_row)
 

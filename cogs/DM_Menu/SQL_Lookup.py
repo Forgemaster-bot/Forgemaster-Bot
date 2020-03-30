@@ -1,8 +1,8 @@
-import Quick_SQL
+import Connections
 
 
 def character_owner(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -10,7 +10,7 @@ def character_owner(character_name: str):
 
 
 def character_gold(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
     cursor.execute(query)
     character = cursor.fetchone()
@@ -18,7 +18,7 @@ def character_gold(character_name: str):
 
 
 def character_item_quantity(character_name: str, item_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Link_Character_Items where Character='{}' AND Item = '{}'".format(character_name, item_name)
     cursor.execute(query)
     item = cursor.fetchone()
@@ -26,7 +26,7 @@ def character_item_quantity(character_name: str, item_name: str):
 
 
 def character_xp(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
     cursor.execute(query)
     character = cursor.fetchone()
@@ -34,7 +34,7 @@ def character_xp(character_name: str):
 
 
 def character_sum_class_levels(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select SUM(Level) Total from Link_Character_Class where Character = '{}'".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -42,7 +42,7 @@ def character_sum_class_levels(character_name: str):
 
 
 def log_xp(level: int):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Info_XP Where Level = {}".format(level)
     cursor.execute(query)
     result = cursor.fetchone()

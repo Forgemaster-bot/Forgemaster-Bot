@@ -1,8 +1,8 @@
-import Quick_SQL
+import Connections
 
 
 def character_gold_total(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
     cursor.execute(query)
     character = cursor.fetchone()
@@ -10,7 +10,7 @@ def character_gold_total(character_name: str):
 
 
 def character_item_quantity(character_name: str, item_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Link_Character_Items where Character='{}' AND Item = '{}'".format(character_name, item_name)
     cursor.execute(query)
     item = cursor.fetchone()
@@ -18,7 +18,7 @@ def character_item_quantity(character_name: str, item_name: str):
 
 
 def character_inventory(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Link_Character_Items " \
             "Where Character='{}' and Item not in (select Item from Main_Trade where Character = '{}') " \
@@ -35,7 +35,7 @@ def character_inventory(character_name: str):
 
 
 def character_inventory_essence(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Items " \
             "where Character='{}' and Item in (select Name from Info_Item where Type = 'Essence') " \
@@ -52,7 +52,7 @@ def character_inventory_essence(character_name: str):
 
 
 def character_inventory_essence_count(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Items " \
             "where Character='{}' and Item in (select Name from Info_Item where Type = 'Essence') " \
@@ -66,7 +66,7 @@ def character_inventory_essence_count(character_name: str):
 
 
 def character_sellable_inventory_list(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Items " \
             "where Character='{}' and Item in (select Name from Info_Item) " \
@@ -83,7 +83,7 @@ def character_sellable_inventory_list(character_name: str):
 
 
 def character_main_crafting(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Main_Crafting " \
             "Where Character_Name = '{}'".format(character_name)
@@ -93,7 +93,7 @@ def character_main_crafting(character_name: str):
 
 
 def character_profession_list(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select Skill " \
             "From Link_Character_Skills " \
             "Where Character = '{}'" \
@@ -107,7 +107,7 @@ def character_profession_list(character_name: str):
 
 
 def character_sum_class_levels(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select SUM(Level) Total from Link_Character_Class where Character = '{}'".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -115,7 +115,7 @@ def character_sum_class_levels(character_name: str):
 
 
 def character_owner(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -123,7 +123,7 @@ def character_owner(character_name: str):
 
 
 def character_xp(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
     cursor.execute(query)
     character = cursor.fetchone()
@@ -131,7 +131,7 @@ def character_xp(character_name: str):
 
 
 def item_detail(item_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Info_Item " \
             "Where Name = '{}' ".format(item_name)
@@ -141,7 +141,7 @@ def item_detail(item_name: str):
 
 
 def item_value(item_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Info_Item " \
             "Where Name = '{}' ".format(item_name)
@@ -151,7 +151,7 @@ def item_value(item_name: str):
 
 
 def player_character_list(discord_id: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select Character_Name from Main_Characters where Discord_ID = '{}'".format(discord_id)
     cursor.execute(query)
     rows = cursor.execute(query)
@@ -162,7 +162,7 @@ def player_character_list(discord_id: str):
 
 
 def profession_craft_options(profession: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select Craft " \
             "From Link_Skills_Recipies " \
             "Where Skill = '{}'" \
@@ -176,7 +176,7 @@ def profession_craft_options(profession: str):
 
 
 def profession_item_type_list(profession: str, gold_limit: float):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     gold_value = gold_limit * 2
     query = "Select Type from Info_Item " \
             "Where Crafting = '{}' and Value <= '{}' " \
@@ -190,7 +190,7 @@ def profession_item_type_list(profession: str, gold_limit: float):
 
 
 def profession_item_list(profession: str, item_type: str, gold: float):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Info_Item " \
             "Where Crafting = '{}' and Type = '{}' and Value <= '{}' " \
@@ -204,7 +204,7 @@ def profession_item_list(profession: str, item_type: str, gold: float):
 
 
 def profession_tool(profession: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select Tools " \
             "from Info_Skills " \
             "Where Name = '{}'".format(profession)
@@ -214,7 +214,7 @@ def profession_tool(profession: str):
 
 
 def character_count_classes(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select Count(*) Total from Link_Character_Class where Character = '{}'".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -222,7 +222,7 @@ def character_count_classes(character_name: str):
 
 
 def character_class_list(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select distinct Class from Link_Character_Class where Character = '{}'".format(character_name)
     cursor.execute(query)
     rows = cursor.fetchall()
@@ -233,7 +233,7 @@ def character_class_list(character_name: str):
 
 
 def info_classes():
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select Name from Info_Classes ORDER BY Name"
     cursor.execute(query)
     rows = cursor.fetchall()
@@ -244,7 +244,7 @@ def info_classes():
 
 
 def info_skills():
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select Name from Info_Skills Where Job = 'True' ORDER BY Name"
     cursor.execute(query)
     rows = cursor.fetchall()
@@ -255,7 +255,7 @@ def info_skills():
 
 
 def character_class_and_levels(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select Class, Level " \
             "From Link_Character_Class " \
             "Where Character = '{}' " \
@@ -269,7 +269,7 @@ def character_class_and_levels(character_name: str):
 
 
 def character_class_level_by_class(character_name: str, character_class: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Class " \
             "where Character='{}' and Class = '{}'".format(character_name, character_class)
@@ -279,7 +279,7 @@ def character_class_level_by_class(character_name: str, character_class: str):
 
 
 def trade_goods_types(character_name: str, gold_limit: float):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select distinct b.Type " \
             "From Main_Trade a " \
             "Left join Info_Item b " \
@@ -299,7 +299,7 @@ def trade_goods_types(character_name: str, gold_limit: float):
 
 
 def trade_goods_items_by_type(character_name: str, gold_limit: float, item_type: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     if item_type == "Other":
         query = "select a.Item " \
                 "from Main_Trade a " \
@@ -328,7 +328,7 @@ def trade_goods_items_by_type(character_name: str, gold_limit: float, item_type:
 
 
 def trade_item_not_sold_by_character(character_name: str, item_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * " \
             "From Main_Trade " \
             "Where Item = '{}' and Character != '{}' " \
@@ -339,7 +339,7 @@ def trade_item_not_sold_by_character(character_name: str, item_name: str):
 
 
 def trade_item_sold_by_character(character_name: str, item_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * " \
             "From Main_Trade " \
             "Where Item = '{}' and Character = '{}' " \
@@ -350,7 +350,7 @@ def trade_item_sold_by_character(character_name: str, item_name: str):
 
 
 def trade_item_cheapest_on_sale(item_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * " \
             "From Main_Trade " \
             "Where Item = '{}' " \
@@ -361,7 +361,7 @@ def trade_item_cheapest_on_sale(item_name: str):
 
 
 def character_items_for_trade(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select Item, Price " \
             "from Main_Trade " \
             "where Character = '{}' " \
@@ -375,7 +375,7 @@ def character_items_for_trade(character_name: str):
 
 
 def player_stat_roll(discord_id: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * " \
             "From Discord_Roll " \
             "where Discord_ID = '{}'".format(discord_id)
@@ -387,7 +387,7 @@ def player_stat_roll(discord_id: str):
 
 
 def player_name_by_id(user_id: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Info_Discord where ID= '{}'".format(user_id)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -397,7 +397,7 @@ def player_name_by_id(user_id: str):
 
 
 def recipe_by_essence(profession: str, essence_1: str, essence_2):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Info_Crafting_Recipes " \
             "Where Skill = '{}' and Essence_1 = '{}' and Essence_2 = '{}'".format(profession, essence_1, essence_2)
@@ -409,7 +409,7 @@ def recipe_by_essence(profession: str, essence_1: str, essence_2):
 
 
 def recipe_essence_list(profession: str, name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Info_Crafting_Recipes " \
             "Where Skill = '{}' and Name = '{}' ".format(profession, name)
@@ -421,7 +421,7 @@ def recipe_essence_list(profession: str, name: str):
 
 
 def recipe_essence_and_description_list(profession: str, name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Info_Crafting_Recipes " \
             "Where Skill = '{}' and Name = '{}' ".format(profession, name)
@@ -433,7 +433,7 @@ def recipe_essence_and_description_list(profession: str, name: str):
 
 
 def recipe_by_profession(profession: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Info_Crafting_Recipes " \
             "Where Skill = '{}'".format(profession)
@@ -446,7 +446,7 @@ def recipe_by_profession(profession: str):
 
 
 def character_known_recipe(character_name: str, profession: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Link_Character_Recipe " \
             "Where character = '{}' and Skill = '{}'".format(character_name, profession)
@@ -459,7 +459,7 @@ def character_known_recipe(character_name: str, profession: str):
 
 
 def profession_consumable_name(profession: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Info_Skills " \
             "Where Name = '{}'".format(profession)
@@ -469,7 +469,7 @@ def profession_consumable_name(profession: str):
 
 
 def character_known_recipe_details(character_name: str, profession: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "Select b.Name,b.Description,b.Essence_1, b.Essence_2 " \
             "From Link_Character_Recipe a " \
             "left join Info_Crafting_Recipes b " \

@@ -1,8 +1,8 @@
-import Quick_SQL
+import Connections
 
 
 def character_create(character_sheet: list):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     discord_id = character_sheet[0].lstrip()
     character_name = character_sheet[1].lstrip()
     race = character_sheet[2].lstrip()
@@ -27,7 +27,7 @@ def character_create(character_sheet: list):
 
 
 def character_class(character_name: str, class_name: str, level: int, number: int):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     link_class_insert = "insert into Link_Character_Class (Character,Class,Level,Number) " \
                         "values ('{}','{}','{}','{}')".format(character_name, class_name, level, number)
     cursor.execute(link_class_insert)
@@ -35,7 +35,7 @@ def character_class(character_name: str, class_name: str, level: int, number: in
 
 
 def character_item(character_name: str, item_name: str, quantity: int):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     link_class_insert = "insert into Link_Character_Items (Character,Item,Quantity) " \
                         "values ('{}','{}','{}')".format(character_name, item_name, quantity)
     cursor.execute(link_class_insert)
@@ -43,7 +43,7 @@ def character_item(character_name: str, item_name: str, quantity: int):
 
 
 def character_feat(character_name: str, feat_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     link_class_insert = "insert into Link_Character_Feats (Character,Feat) " \
                         "values ('{}','{}')".format(character_name, feat_name)
     cursor.execute(link_class_insert)
@@ -51,7 +51,7 @@ def character_feat(character_name: str, feat_name: str):
 
 
 def character_skill(character_name: str, skill_name: str, proficiency: int):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     link_class_insert = "insert into Link_Character_Skills (Character,Skill,Proficiency) " \
                         "values ('{}','{}','{}')".format(character_name, skill_name, proficiency)
     cursor.execute(link_class_insert)

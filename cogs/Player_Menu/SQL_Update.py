@@ -1,9 +1,9 @@
-import Quick_SQL
+import Connections
 from Player_Menu import SQL_Lookup
 
 
 def character_gold(character_name: str, gold: float):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     new_gold = float(SQL_Lookup.character_gold_total(character_name)) + gold
 
     query = "UPDATE Main_Characters " \
@@ -15,7 +15,7 @@ def character_gold(character_name: str, gold: float):
 
 
 def character_main_crafting(character_name: str, crafting_value: float, labour: int):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "UPDATE Main_Crafting " \
             "set Crafting_Value = '{}', Labour_Points = '{}'" \
             "WHERE Character_Name = '{}'".format(crafting_value, labour, character_name)
@@ -26,7 +26,7 @@ def character_main_crafting(character_name: str, crafting_value: float, labour: 
 def character_item_quantity(character_name: str, item_name: str, quantity: int):
     # calculate new total
     new_amount = SQL_Lookup.character_item_quantity(character_name, item_name) + quantity
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "UPDATE Link_Character_Items set Quantity = '{}' " \
             "WHERE Character = '{}' AND Item = '{}'".format(new_amount, character_name, item_name)
     cursor.execute(query)
@@ -34,7 +34,7 @@ def character_item_quantity(character_name: str, item_name: str, quantity: int):
 
 
 def character_class_level(character_name: str, character_class: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     current_level = int(SQL_Lookup.character_class_level_by_class(character_name, character_class))
     new_level = current_level + 1
     query = "UPDATE Link_Character_Class " \
@@ -47,7 +47,7 @@ def character_class_level(character_name: str, character_class: str):
 def trade_quantity(character_name: str, trade_good, quantity: int):
     # calculate new total
     new_amount = trade_good.Quantity + quantity
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "UPDATE Main_Trade set Quantity = '{}' " \
             "WHERE Character = '{}' AND Item = '{}'".format(new_amount, character_name, trade_good.Item)
     cursor.execute(query)
@@ -55,7 +55,7 @@ def trade_quantity(character_name: str, trade_good, quantity: int):
 
 
 def player_name(discord_name: str, discord_id: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "UPDATE Info_Discord " \
             "SET Name = '{}' " \
             "WHERE ID = '{}'".format(discord_name, discord_id)

@@ -1,10 +1,10 @@
 from Mod_Menu import SQL_Lookup
-import Quick_SQL
+import Connections
 import Quick_Python
 
 
 def character_sheet(character: list):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
 
     # update Main_character Table
     discord_id = SQL_Lookup.player_id_by_name(character[0])
@@ -35,7 +35,7 @@ def character_sheet(character: list):
 
 
 def character_stat_change(character_name: str, ability: str, value: int):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
 
     current_stat = int(SQL_Lookup.character_ability_score(character_name, ability))
     new_value = current_stat + int(value)

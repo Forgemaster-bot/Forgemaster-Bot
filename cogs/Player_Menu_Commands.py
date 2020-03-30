@@ -1,8 +1,7 @@
 from discord.ext import commands
 import asyncio
 
-import Quick_SQL
-import Quick_Discord
+import Connections
 from Player_Menu import SQL_Lookup
 from Player_Menu import SQL_Check
 from Player_Menu import Scripts
@@ -98,7 +97,8 @@ class Player_Menu_Commands(commands.Cog):
     # Roll Stats
     @commands.command(name='randchar', help='Roll character stats')
     async def dice_roll(self, command):
-        Quick_SQL.log_command(command)
+        log = "ran the randchar command"
+        Connections.log_command(command, log)
         discord_id = str(command.message.author.id)
         discord_name = str(command.message.author.display_name)
 
@@ -338,9 +338,9 @@ class Player_Menu_Commands(commands.Cog):
         if reply == "Yes":
             await command.author.send("crafting..")
             log = "{} made {} {} for {}g".format(character_name, quantity, item_name, total_cost)
-            Quick_SQL.log_private_command(discord_id, log)
+            Connections.log_private_command(discord_id, log)
             Scripts.craft_create_mundane_item(character_name, item_name, quantity)
-            await Quick_Discord.log_to_discord(self, log)
+            await Connections.log_to_discord(self, log)
             await command.author.send(log)
             return
         return "stop"
@@ -383,10 +383,10 @@ class Player_Menu_Commands(commands.Cog):
             await command.author.send("crafting..")
             log = "{} made a {} of {} for {}g".format(character_name, type_name,
                                                       cleaned_effect_list, cost)
-            Quick_SQL.log_private_command(discord_id, log)
+            Connections.log_private_command(discord_id, log)
             Scripts.craft_create_consumable(character_name, type_name, profession,
                                             cleaned_effect_list, effect_list, cost)
-            await Quick_Discord.log_to_discord(self, log)
+            await Connections.log_to_discord(self, log)
             await command.author.send(log)
             return
         return "stop"
@@ -416,9 +416,9 @@ class Player_Menu_Commands(commands.Cog):
 
             log = "{} experimented with {} and {} as a {} and discovered {}".format(character_name, essence_1,
                                                                                     essence_2, profession, recipe_name)
-            Quick_SQL.log_private_command(discord_id, log)
+            Connections.log_private_command(discord_id, log)
             Scripts.craft_create_experiment(character_name, profession, recipe_name, essence_1, essence_2)
-            await Quick_Discord.log_to_discord(self, log)
+            await Connections.log_to_discord(self, log)
             await command.author.send(log)
             return
         return "stop"
@@ -480,10 +480,10 @@ class Player_Menu_Commands(commands.Cog):
         if reply == "Yes":
             await command.author.send("Giving...")
             log = "{} gave {} {} {}".format(character_name, target_name, quantity, item_name)
-            Quick_SQL.log_private_command(discord_id, log)
+            Connections.log_private_command(discord_id, log)
             Scripts.give_item(character_name, target_name, item_name, quantity)
             target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_name))
-            await Quick_Discord.log_to_discord(self, log)
+            await Connections.log_to_discord(self, log)
             await target_discord.send(log)
             await command.author.send(log)
         return "stop"
@@ -521,9 +521,9 @@ class Player_Menu_Commands(commands.Cog):
         if reply == "Yes":
             await command.author.send("leveling...")
             log = "{} gained a level in {}".format(character_name, class_choice)
-            Quick_SQL.log_private_command(discord_id, log)
+            Connections.log_private_command(discord_id, log)
             Scripts.level_up(character_name, class_choice)
-            await Quick_Discord.log_to_discord(self, log)
+            await Connections.log_to_discord(self, log)
             await command.author.send(log)
         return "stop"
 
@@ -578,10 +578,10 @@ class Player_Menu_Commands(commands.Cog):
         if reply == "Yes":
             await command.author.send("Paying...")
             log = "{} gave {} {}g because: {}".format(character_name, target_name, quantity, reason)
-            Quick_SQL.log_private_command(discord_id, log)
+            Connections.log_private_command(discord_id, log)
             Scripts.give_gold(character_name, target_name, quantity)
             target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_name))
-            await Quick_Discord.log_to_discord(self, log)
+            await Connections.log_to_discord(self, log)
             await target_discord.send(log)
             await command.author.send(log)
         return "stop"
@@ -615,9 +615,9 @@ class Player_Menu_Commands(commands.Cog):
         if reply == "Yes":
             await command.author.send("adding profession...")
             log = "{} gained {} as their free profession".format(character_name, profession_name)
-            Quick_SQL.log_private_command(discord_id, log)
+            Connections.log_private_command(discord_id, log)
             Scripts.give_profession(character_name, profession_name)
-            await Quick_Discord.log_to_discord(self, log)
+            await Connections.log_to_discord(self, log)
             await command.author.send(log)
         return "stop"
 
@@ -672,9 +672,9 @@ class Player_Menu_Commands(commands.Cog):
         if reply == "Yes":
             await command.author.send("Selling...")
             log = "{} sold {} {} for {}g".format(character_name, quantity, item_name, total_value)
-            Quick_SQL.log_private_command(discord_id, log)
+            Connections.log_private_command(discord_id, log)
             Scripts.sell_item_to_town(character_name, item_name, quantity)
-            await Quick_Discord.log_to_discord(self, log)
+            await Connections.log_to_discord(self, log)
             await command.author.send(log)
         return "stop"
 
@@ -777,11 +777,11 @@ class Player_Menu_Commands(commands.Cog):
         if reply == "Yes":
             await command.author.send("Buying item...")
             log = "{} Bought {} {} for {}g".format(character_name, quantity, trade_good.Item, total_value)
-            Quick_SQL.log_private_command(discord_id, log)
+            Connections.log_private_command(discord_id, log)
             Scripts.trade_buy(character_name, trade_good, quantity)
 
             target_discord = self.bot.get_user(SQL_Lookup.character_owner(trade_good.Character))
-            await Quick_Discord.log_to_discord(self, log)
+            await Connections.log_to_discord(self, log)
             await target_discord.send(log)
             await command.author.send(log)
         return "stop"
@@ -817,10 +817,10 @@ class Player_Menu_Commands(commands.Cog):
         if reply == "Yes":
             await command.author.send("putting up for trade...")
             log = "{} put {} {} up for trade at {}g each".format(character_name, quantity, item_name, price)
-            Quick_SQL.log_private_command(discord_id, log)
+            Connections.log_private_command(discord_id, log)
             Scripts.trade_sell(character_name, item_name, quantity, price)
 
-            await Quick_Discord.log_to_discord(self, log)
+            await Connections.log_to_discord(self, log)
             await command.author.send(log)
         return "stop"
 
@@ -838,10 +838,10 @@ class Player_Menu_Commands(commands.Cog):
         if reply == "Yes":
             await command.author.send("Stopping sale...")
             log = "{} stopped selling {}".format(character_name, item_name)
-            Quick_SQL.log_private_command(discord_id, log)
+            Connections.log_private_command(discord_id, log)
             Scripts.trade_stop(character_name, item_name)
 
-            await Quick_Discord.log_to_discord(self, log)
+            await Connections.log_to_discord(self, log)
             await command.author.send(log)
         return "stop"
 
@@ -877,11 +877,11 @@ class Player_Menu_Commands(commands.Cog):
         if reply == "Yes":
             await command.author.send("working...")
             log = "{} is now working for {} this week".format(character_name, target_name)
-            Quick_SQL.log_private_command(discord_id, log)
+            Connections.log_private_command(discord_id, log)
             Scripts.work(character_name, target_name)
 
             target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_name))
-            await Quick_Discord.log_to_discord(self, log)
+            await Connections.log_to_discord(self, log)
             await target_discord.send(log)
             await command.author.send(log)
         return "stop"

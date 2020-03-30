@@ -1,8 +1,8 @@
-import Quick_SQL
+import Connections
 
 
 def player_id_by_name(name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Info_Discord where Name = '{}'".format(name)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -12,7 +12,7 @@ def player_id_by_name(name: str):
 
 
 def player_name_by_id(user_id: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Info_Discord where ID= '{}'".format(user_id)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -22,7 +22,7 @@ def player_name_by_id(user_id: str):
 
 
 def player_stat_roll(discord_id: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * " \
             "From Discord_Roll " \
             "where Discord_ID = '{}'".format(discord_id)
@@ -34,7 +34,7 @@ def player_stat_roll(discord_id: str):
 
 
 def character_owner(character_name: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -42,7 +42,7 @@ def character_owner(character_name: str):
 
 
 def character_ability_score(character_name: str, ability: str):
-    cursor = Quick_SQL.db_connection()
+    cursor = Connections.sql_db_connection()
     sql_command = "select * from Main_Characters where Character_Name = '{}'".format(character_name)
     cursor.execute(sql_command)
     result = cursor.fetchone()

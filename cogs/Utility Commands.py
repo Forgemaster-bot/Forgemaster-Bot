@@ -1,6 +1,5 @@
 from discord.ext import commands
-import asyncio
-import Command_Execute
+from Utility_Menu import Scripts
 
 
 class Support_Commands(commands.Cog):
@@ -9,12 +8,12 @@ class Support_Commands(commands.Cog):
 
     @commands.command(name='ListSkills', help="list available skills")
     async def list_skills(self, command):
-        response = Command_Execute.info_skills()
+        response = Scripts.info_skills()
         await command.send(response)
 
     @commands.command(name='ListClasses', help="list available classes")
     async def list_classes(self, command):
-        response = Command_Execute.info_classes()
+        response = Scripts.info_classes()
         await command.send(response)
 
     @commands.command(name='Ping', help="Pong")

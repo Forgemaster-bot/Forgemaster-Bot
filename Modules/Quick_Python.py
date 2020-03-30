@@ -1,8 +1,5 @@
 import random
-import SQL_Check
-import SQL_Lookup
-import SQL_Update
-import SQL_Insert
+import Connections
 
 
 def stitch_string(given_list: list):
@@ -61,19 +58,6 @@ def dice_roll(low: int, high: int):
     return response
 
 
-def sync_player(discord_id: str, discord_name: str):
-    try:
-        if not SQL_Check.player_exists(discord_id):
-            SQL_Insert.sync_players(discord_id, discord_name)
-            return True, "New"
-        elif discord_name != SQL_Lookup.player_name_by_id(discord_id):
-            SQL_Update.player_name(discord_name, discord_id)
-            return True, "Update"
-    except:
-        return False, "Something went wrong adding {} to the list".format(discord_name)
-    return False, "No change"
-
-
 def question_list(give_list: list):
     return_string = ""
     list_length = len(give_list)
@@ -95,4 +79,51 @@ def find_trade_row(seller_name: str, seller_list: list, item_name: str, item_lis
                 return trade_row
 
 
+def check_player_exists(user_id: str):
+    cursor = Connections.db_connection()
+    query = "select * " \
+            "from Info_Discord where ID='{}'".format(user_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
 
+
+def sync_player(discord_id: str, discord_name: str):
+    try:
+        if not check_player_exists(discord_id):
+            insert_players(discord_id, discord_name)
+            return True, "New"
+        elif discord_name != lookup_player_name_by_id(discord_id):
+            update_player_name(discord_name, discord_id)
+            return True, "Update"
+    except:
+        return False, "Something went wrong adding {} to the list".format(discord_name)
+    return False, "No change"
+
+
+def insert_players(user_id: str, name: str):
+    cursor = Connections.db_connection()
+    query = "insert into Info_Discord (ID,Name) values ('{}','{}')".format(user_id, name)
+    cursor.execute(query)
+    cursor.commit()
+
+
+def lookup_player_name_by_id(user_id: str):
+    cursor = Connections.db_connection()
+    query = "select * from Info_Discord where ID= '{}'".format(user_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return ""
+    return result.Name
+
+
+def update_player_name(discord_name: str, discord_id: str):
+    cursor = Connections.db_connection()
+    query = "UPDATE Info_Discord " \
+            "SET Name = '{}' " \
+            "WHERE ID = '{}'".format(discord_name, discord_id)
+    cursor.execute(query)
+    cursor.commit()
