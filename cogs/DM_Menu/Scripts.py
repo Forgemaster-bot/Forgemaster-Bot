@@ -66,6 +66,97 @@ def add_gold_execute(command: str):  # [Gold],[Character 1],[Character 2]
     return "{} Gold has been added to {}".format(gold, Quick_Python.stitch_string(c_list))
 
 
+def item_check(command: str):  # [Character Name],[Item],[Quantity]
+    item_list = item_split(command)
+    return_list = []
+    for rows in range(len(item_list)):
+        character_name = item_list[rows][0].lstrip()
+        item_name = item_list[rows][1].lstrip()
+
+        if not SQL_Check.character_exists(character_name):
+            return_list.append("The character {} doesnt exist.".format(character_name))
+            continue
+        try:
+            quantity = int(item_list[rows][2])
+            if quantity > 0:
+                return_list.append('Add {} {} to {}'.format(quantity, item_name, character_name))
+                continue
+            elif quantity < 0:
+                if SQL_Check.character_has_item(character_name, item_name):
+                    current_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
+                    if current_quantity <= quantity:
+                        return_list.append('Remove {} {} from {}'.format(quantity * -1, item_name, character_name))
+                    return_list.append('{} only owns {} {}'.format(character_name, current_quantity, item_name))
+                else:
+                    return_list.append('{} doesnt own any {}, none will be removed'.format(character_name, item_name))
+        except IndexError:
+            return_list.append('Add {} 1 to {}'.format(character_name, item_name))
+        except ValueError:
+            return_list.append("{} quantity for {} was wrong and wont get any".format(character_name, item_name))
+    return_list.append("Do you want to make these changes to items?")
+    return Quick_Python.stitch_table(return_list)
+
+
+def item_execute(command: str):
+    item_list = item_split(command)
+    character_name_list = []
+    for rows in range(len(item_list)):
+        character_name = item_list[rows][0].lstrip()
+        item_name = item_list[rows][1].lstrip()
+        try:
+            quantity = int(item_list[rows][2])
+        except IndexError:
+            quantity = 1
+        except ValueError:
+            continue
+        if quantity > 0:
+            if SQL_Check.character_has_item(character_name, item_name):
+                SQL_Update.character_item_quantity(character_name, item_name, quantity)
+            else:
+                SQL_Insert.character_item(character_name, item_name, quantity)
+            character_name_list.append(character_name)
+        elif quantity < 0:
+            if SQL_Check.character_has_item(character_name, item_name):
+                current_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
+                if quantity < current_quantity:
+                    SQL_Update.character_item_quantity(character_name, item_name, quantity)
+                elif quantity == current_quantity:
+                    SQL_Delete.character_item(character_name, item_name)
+                character_name_list.append(character_name)
+
+    for names in character_name_list:
+        Update_Google_Roster.update_items(names)
+    return "Items Updated"
+
+
+def item_split(command: str):
+    c_list = command.split(",")
+    item_list = []
+    if len(c_list) < 2:
+        return False, "Please enter a character name and an item."
+    # split input into names and items
+    if SQL_Check.character_exists(c_list[0].lstrip()):
+        character_name = c_list[0].lstrip()
+        for rows in range(len(c_list)):
+            if rows == 0:
+                continue
+            item_detail = c_list[rows].split(":")
+            if len(item_detail) > 1:
+                item_list.append([character_name, item_detail[0], item_detail[1]])
+            else:
+                item_list.append([character_name, item_detail[0], 1])
+    else:
+        item_name = c_list[0].lstrip()
+        for rows in range(len(c_list)):
+            if rows == 0:
+                continue
+            character_detail = c_list[rows].split(":")
+            if len(character_detail) > 1:
+                item_list.append([character_detail[0], item_name, character_detail[1]])
+            else:
+                item_list.append([character_detail[0], item_name, 1])
+    return item_list
+
 def add_item_check(command: str):  # [Character Name],[Item],[Quantity]
     c_list = command.split(",")
     if len(c_list) < 2:

@@ -38,3 +38,15 @@ def level_up_check(character_name: str):
     if character_xp >= xp_sheet.XP:
         return True
     return False
+
+
+def character_has_item(character_name: str, item_name: str):
+    cursor = Quick_SQL.db_connection()
+    query = "select * " \
+            "from Link_Character_Items " \
+            "where Character = '{}' AND Item = '{}'".format(character_name, item_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
