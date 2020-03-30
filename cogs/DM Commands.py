@@ -2,7 +2,9 @@ from discord.ext import commands
 import asyncio
 
 from DM_Menu import Scripts
+from DM_Menu import SQL_Lookup
 import Quick_SQL
+import Quick_Discord
 
 
 class DM_Commands(commands.Cog):
@@ -21,9 +23,9 @@ class DM_Commands(commands.Cog):
                 reply = await self.confirm(command)
                 if reply == "Yes":
                     await command.send("Updating roster...")
-                    Quick_SQL.log_command(command)
-                    response = Scripts.kill_character_execute(trim_message)
-                    await command.send(response)
+                    log = Scripts.kill_character_execute(trim_message)
+                    Quick_SQL.log_command(command, log)
+                    await command.send(log)
                     break
                 else:
                     await command.send("Kill character command stopped")
@@ -42,19 +44,19 @@ class DM_Commands(commands.Cog):
                 reply = await self.confirm(command)
                 if reply == "Yes":
                     await command.send("Updating roster...")
-                    Quick_SQL.log_command(command)
-                    response = Scripts.add_gold_execute(trim_message)
-                    await command.send(response)
+                    log = Scripts.add_gold_execute(trim_message)
+                    Quick_SQL.log_command(command, log)
+                    await command.send(log)
                     break
                 else:
                     await command.send("Give gold command stopped")
                     break
 
     @commands.command(name='Item', help="use help for more information"
-                                           "\n1) [Character Name], [Item:Quantity], [Item:Quantity]..."
-                                           "\nExample - Cogs,Dagger:2, Pickaxe:3"
-                                           "\n2) [Item Name], [Character Name:Quantity], [Character Name:Quantity]"
-                                           "\nExample - Rations, Cogs:4,Ratagan:-2")
+                                        "\n1) [Character Name], [Item:Quantity], [Item:Quantity]..."
+                                        "\nExample - Cogs,Dagger:2, Pickaxe:3"
+                                        "\n2) [Item Name], [Character Name:Quantity], [Character Name:Quantity]"
+                                        "\nExample - Rations, Cogs:4,Ratagan:-2")
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
     async def item(self, command):
         trim_message = command.message.content.replace('$Item ', '')
@@ -65,58 +67,14 @@ class DM_Commands(commands.Cog):
             reply = await self.confirm(command)
             if reply == "Yes":
                 await command.send("Updating roster...")
-                Quick_SQL.log_command(command)
-                response = Scripts.item_execute(trim_message)
-                await command.send(response)
+                log = Scripts.item_execute(trim_message)
+                Quick_SQL.log_command(command, log)
+                await command.send(command, log)
                 break
             else:
                 await command.send("Give item command stopped")
                 break
-    '''
-    @commands.command(name='AddItem', help="use help for more information"
-                                           "\n1) [Character Name], [Item:Quantity], [Item:Quantity]..."
-                                           "\nExample - Cogs,Dagger:2, Pickaxe:3, Leather:4"
-                                           "\n2) [Item Name], [Character Name:Quantity], [Character Name:Quantity]"
-                                           "\nExample - Rations, Cogs:4,Ratagan:2")
-    @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
-    async def add_item(self, command):
-        trim_message = command.message.content.replace('$AddItem ', '')
-        command_check = Scripts.add_item_check(trim_message)
-        await command.send(command_check[1])
-        if command_check[0]:
-            while True:
-                # Get confirmation from user
-                reply = await self.confirm(command)
-                if reply == "Yes":
-                    await command.send("Updating roster...")
-                    Quick_SQL.log_command(command)
-                    response = Scripts.add_item_execute(trim_message)
-                    await command.send(response)
-                    break
-                else:
-                    await command.send("Give item command stopped")
-                    break
 
-    @commands.command(name='RemoveItem', help="[Character Name],[Item]:[Quantity]")
-    @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
-    async def remove_item(self, command):
-        trim_message = command.message.content.replace('$RemoveItem ', '')
-        command_check = Scripts.remove_item_check(trim_message)
-        await command.send(command_check[1])
-        if command_check[0]:
-            while True:
-                # Get confirmation from user
-                reply = await self.confirm(command)
-                if reply == "Yes":
-                    await command.send("Updating roster...")
-                    Quick_SQL.log_command(command)
-                    response = Scripts.remove_item_execute(trim_message)
-                    await command.send(response)
-                    break
-                else:
-                    await command.send("Give item command stopped")
-                    break
-    '''
     # XP
     @commands.command(name='AddXP', help="[XP amount],[Character 1],[Character 2]...")
     @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
@@ -130,9 +88,9 @@ class DM_Commands(commands.Cog):
                 reply = await self.confirm(command)
                 if reply == "Yes":
                     await command.send("Updating roster...")
-                    Quick_SQL.log_command(command)
-                    response = Scripts.add_xp_execute(trim_message)
-                    await command.send(response)
+                    log = Scripts.add_xp_execute(trim_message)
+                    Quick_SQL.log_command(command, log)
+                    await command.send(log)
                     break
                 else:
                     await command.send("Reward XP command stopped")
@@ -145,9 +103,11 @@ class DM_Commands(commands.Cog):
         trim_message = command.message.content.replace('$LogXP ', '')
         command_check = Scripts.log_xp_check(trim_message)
         if command_check[0]:
-            Quick_SQL.log_command(command)
-            response = Scripts.log_xp_execute(trim_message)
-            await command.send(response)
+            log = Scripts.log_xp_execute(trim_message)
+            Quick_SQL.log_command(command, log)
+            target_discord = self.bot.get_user(SQL_Lookup.character_owner(trim_message))
+            await Quick_Discord.log_to_discord(self, log)
+            await target_discord.send(log)
         else:
             await command.send(command_check[1])
 

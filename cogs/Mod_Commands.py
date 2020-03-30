@@ -1,9 +1,8 @@
 from discord.ext import commands
 import asyncio
 
-import Command_Check
+from Mod_Menu import Scripts
 import Quick_SQL
-import Command_Execute
 
 
 class Mod_Commands(commands.Cog):
@@ -16,7 +15,7 @@ class Mod_Commands(commands.Cog):
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def create_character(self, command):
         trim_message = command.message.content.replace('$CharacterCreate ', '')
-        command_check = Command_Check.create_character(trim_message)
+        command_check = Scripts.create_character_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
             while True:
@@ -56,7 +55,7 @@ class Mod_Commands(commands.Cog):
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def character_refresh(self, command):
         trim_message = command.message.content.replace('$CharacterRefresh ', '')
-        command_check = Command_Check.character_refresh(trim_message)
+        command_check = Scripts.character_refresh_check(trim_message)
         if command_check[0]:
             await command.send("working...")
             Command_Execute.character_refresh(trim_message)
@@ -69,7 +68,7 @@ class Mod_Commands(commands.Cog):
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def add_feat(self, command):
         trim_message = command.message.content.replace('$AddFeat ', '')
-        command_check = Command_Check.add_feat(trim_message)
+        command_check = Scripts.add_feat_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
             while True:
@@ -89,7 +88,7 @@ class Mod_Commands(commands.Cog):
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def remove_feat(self, command):
         trim_message = command.message.content.replace('$RemoveFeat ', '')
-        command_check = Command_Check.remove_feat(trim_message)
+        command_check = Scripts.remove_feat_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
             while True:
@@ -111,7 +110,7 @@ class Mod_Commands(commands.Cog):
     async def stat_change(self, command):
         await command.message.delete()
         trim_message = command.message.content.replace('$NPC ', '')
-        response = Command_Execute.npc_talk(trim_message)
+        response = Scripts.npc_talk_execute(trim_message)
         await command.send(response)
 
     # Skills
@@ -119,7 +118,7 @@ class Mod_Commands(commands.Cog):
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def add_skill(self, command):
         trim_message = command.message.content.replace('$AddSkill ', '')
-        command_check = Command_Check.skill_add(trim_message)
+        command_check = Scripts.skill_add_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
             while True:
@@ -139,7 +138,7 @@ class Mod_Commands(commands.Cog):
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def skill_remove(self, command):
         trim_message = command.message.content.replace('$RemoveSkill ', '')
-        command_check = Command_Check.skill_remove(trim_message)
+        command_check = Scripts.skill_remove_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
             while True:
@@ -160,7 +159,7 @@ class Mod_Commands(commands.Cog):
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def stat_change(self, command):
         trim_message = command.message.content.replace('$ChangeStat ', '')
-        command_check = Command_Check.stat_raise(trim_message)
+        command_check = Scripts.stat_raise_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
             while True:
@@ -186,7 +185,7 @@ class Mod_Commands(commands.Cog):
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def roll_check(self, command):
         trim_message = command.message.content.replace('$RollCheck ', '')
-        command_check = Command_Check.roll_check(trim_message)
+        command_check = Scripts.roll_check_check(trim_message)
         if command_check[0]:
             response = Command_Execute.roll_check(trim_message)
             await command.send(response)

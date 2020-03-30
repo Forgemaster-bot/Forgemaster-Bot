@@ -1,6 +1,7 @@
 import Quick_SQL
 import SQL_Lookup
 
+
 def class_exists(name: str):
     cursor = Quick_SQL.db_connection()
     query = "select * " \

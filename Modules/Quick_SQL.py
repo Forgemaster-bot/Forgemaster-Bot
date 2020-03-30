@@ -8,9 +8,9 @@ def db_connection():
     return db_connect.cursor()
 
 
-def log_command(message):
+def log_command(message, log: str):
     user = message.message.author.id
-    command = message.message.content
+    command = log
     cursor = db_connection()
     insert = "insert into Command_Logs (User_ID,Command,DateTime) values ('{}','{}','{}')"\
         .format(user, command, time.strftime('%Y-%m-%d %H:%M:%S'))

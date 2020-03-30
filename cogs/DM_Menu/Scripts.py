@@ -84,9 +84,10 @@ def item_check(command: str):  # [Character Name],[Item],[Quantity]
             elif quantity < 0:
                 if SQL_Check.character_has_item(character_name, item_name):
                     current_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
-                    if current_quantity <= quantity:
+                    if current_quantity >= quantity:
                         return_list.append('Remove {} {} from {}'.format(quantity * -1, item_name, character_name))
-                    return_list.append('{} only owns {} {}'.format(character_name, current_quantity, item_name))
+                    else:
+                        return_list.append('{} only owns {} {}'.format(character_name, current_quantity, item_name))
                 else:
                     return_list.append('{} doesnt own any {}, none will be removed'.format(character_name, item_name))
         except IndexError:
@@ -100,6 +101,7 @@ def item_check(command: str):  # [Character Name],[Item],[Quantity]
 def item_execute(command: str):
     item_list = item_split(command)
     character_name_list = []
+    response_list = []
     for rows in range(len(item_list)):
         character_name = item_list[rows][0].lstrip()
         item_name = item_list[rows][1].lstrip()
@@ -112,16 +114,22 @@ def item_execute(command: str):
         if quantity > 0:
             if SQL_Check.character_has_item(character_name, item_name):
                 SQL_Update.character_item_quantity(character_name, item_name, quantity)
+                new_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
+                response_list.append("{} now has {} {}".format(character_name_list, new_quantity, item_name))
             else:
                 SQL_Insert.character_item(character_name, item_name, quantity)
+                response_list.append("{} now has {} {}".format(character_name_list, quantity, item_name))
             character_name_list.append(character_name)
         elif quantity < 0:
             if SQL_Check.character_has_item(character_name, item_name):
                 current_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
                 if quantity < current_quantity:
                     SQL_Update.character_item_quantity(character_name, item_name, quantity)
+                    new_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
+                    response_list.append("{} now has {} {}".format(character_name_list, new_quantity, item_name))
                 elif quantity == current_quantity:
                     SQL_Delete.character_item(character_name, item_name)
+                    response_list.append("{} now has no {}".format(character_name_list, item_name))
                 character_name_list.append(character_name)
 
     for names in character_name_list:
@@ -343,4 +351,3 @@ def npc_talk_execute(command: str):
                "{}" \
                "```".format(npc, speach)
     return response
-
