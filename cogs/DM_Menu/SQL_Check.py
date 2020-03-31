@@ -14,18 +14,6 @@ def character_exists(character_name: str):
     return True
 
 
-def character_has_item(character_name: str, item_name: str):
-    cursor = Connections.sql_db_connection()
-    query = "select * " \
-            "from Link_Character_Items " \
-            "where Character = '{}' AND Item = '{}'".format(character_name, item_name)
-    cursor.execute(query)
-    result = cursor.fetchone()
-    if result is None:
-        return False
-    return True
-
-
 def level_up_check(character_name: str):
     character_level = SQL_Lookup.character_sum_class_levels(character_name)
     character_xp = SQL_Lookup.character_xp(character_name)

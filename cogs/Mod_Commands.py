@@ -24,7 +24,7 @@ class Mod_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.create_character_execute(trim_message)
-                    Connections.log_command(command, log)
+                    Connections.sql_log_command(command, log)
                     await command.send(log)
                     break
                 else:
@@ -57,7 +57,7 @@ class Mod_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.add_feat_execute(trim_message)
-                    Connections.log_command(command, log)
+                    Connections.sql_log_command(command, log)
                     await command.send(log)
                     break
                 else:
@@ -77,12 +77,35 @@ class Mod_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.remove_feat_execute(trim_message)
-                    Connections.log_command(command, log)
+                    Connections.sql_log_command(command, log)
                     await command.send(log)
                     break
                 else:
                     await command.send("Give feat command stopped")
                     break
+
+    @commands.command(name='Item', help="use help for more information"
+                                        "\n1) [Character Name], [Item:Quantity], [Item:Quantity]..."
+                                        "\nExample - Cogs,Dagger:2, Pickaxe:3"
+                                        "\n2) [Item Name], [Character Name:Quantity], [Character Name:Quantity]"
+                                        "\nExample - Rations, Cogs:4,Ratagan:-2")
+    @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
+    async def item(self, command):
+        trim_message = command.message.content.replace('$Item ', '')
+        command_check = Scripts.item_check(trim_message)
+        await command.send(command_check)
+        while True:
+            # Get confirmation from user
+            reply = await self.confirm(command)
+            if reply == "Yes":
+                await command.send("Updating roster...")
+                log = Scripts.item_execute(trim_message)
+                Connections.sql_log_command(command, log)
+                await command.send(command, log)
+                break
+            else:
+                await command.send("Give item command stopped")
+                break
 
     # NPC
     @commands.command(name='NPC', help="[NPC Name]:[Dialog]")
@@ -107,7 +130,7 @@ class Mod_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.skill_add_execute(trim_message)
-                    Connections.log_command(command, log)
+                    Connections.sql_log_command(command, log)
                     await command.send(log)
                     break
                 else:
@@ -127,7 +150,7 @@ class Mod_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.skill_remove_execute(trim_message)
-                    Connections.log_command(command, log)
+                    Connections.sql_log_command(command, log)
                     await command.send(log)
                     break
                 else:
@@ -148,7 +171,7 @@ class Mod_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.stat_change_execute(trim_message)
-                    Connections.log_command(command, log)
+                    Connections.sql_log_command(command, log)
                     await command.send(log)
                     break
                 else:
@@ -158,7 +181,7 @@ class Mod_Commands(commands.Cog):
     @commands.command(name='SyncPlayers', help='updates database with all user Id and names')
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def sync_players(self, command):
-        response = Scripts.character_sync_execute(command)
+        response = Scripts.sync_players_execute(command)
         await command.send(response)
 
     @commands.command(name='RollCheck', help='[Discord Name]')

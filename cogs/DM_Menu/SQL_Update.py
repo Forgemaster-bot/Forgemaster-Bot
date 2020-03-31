@@ -14,16 +14,6 @@ def character_gold(character_name: str, gold: float):
     return new_gold
 
 
-def character_item_quantity(character_name: str, item_name: str, quantity: int):
-    # calculate new total
-    new_amount = SQL_Lookup.character_item_quantity(character_name, item_name) + quantity
-    cursor = Connections.sql_db_connection()
-    query = "UPDATE Link_Character_Items set Quantity = '{}' " \
-            "WHERE Character = '{}' AND Item = '{}'".format(new_amount, character_name, item_name)
-    cursor.execute(query)
-    cursor.commit()
-
-
 def character_xp(character_name: str, xp: int):
     cursor = Connections.sql_db_connection()
     new_xp = SQL_Lookup.character_xp(character_name) + int(xp)

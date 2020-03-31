@@ -17,14 +17,6 @@ def character_gold(character_name: str):
     return character.Gold
 
 
-def character_item_quantity(character_name: str, item_name: str):
-    cursor = Connections.sql_db_connection()
-    query = "select * from Link_Character_Items where Character='{}' AND Item = '{}'".format(character_name, item_name)
-    cursor.execute(query)
-    item = cursor.fetchone()
-    return item.Quantity
-
-
 def character_xp(character_name: str):
     cursor = Connections.sql_db_connection()
     query = "select * from Main_Characters where Character_Name='{}'".format(character_name)

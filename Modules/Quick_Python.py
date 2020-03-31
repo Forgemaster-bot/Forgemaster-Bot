@@ -80,7 +80,7 @@ def find_trade_row(seller_name: str, seller_list: list, item_name: str, item_lis
 
 
 def check_player_exists(user_id: str):
-    cursor = Connections.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Info_Discord where ID='{}'".format(user_id)
     cursor.execute(query)
@@ -104,14 +104,14 @@ def sync_player(discord_id: str, discord_name: str):
 
 
 def insert_players(user_id: str, name: str):
-    cursor = Connections.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "insert into Info_Discord (ID,Name) values ('{}','{}')".format(user_id, name)
     cursor.execute(query)
     cursor.commit()
 
 
 def lookup_player_name_by_id(user_id: str):
-    cursor = Connections.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "select * from Info_Discord where ID= '{}'".format(user_id)
     cursor.execute(query)
     result = cursor.fetchone()
@@ -121,7 +121,7 @@ def lookup_player_name_by_id(user_id: str):
 
 
 def update_player_name(discord_name: str, discord_id: str):
-    cursor = Connections.db_connection()
+    cursor = Connections.sql_db_connection()
     query = "UPDATE Info_Discord " \
             "SET Name = '{}' " \
             "WHERE ID = '{}'".format(discord_name, discord_id)

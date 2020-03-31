@@ -46,3 +46,13 @@ def character_stat_change(character_name: str, ability: str, value: int):
     cursor.execute(query)
     cursor.commit()
     return new_value
+
+
+def character_item_quantity(character_name: str, item_name: str, quantity: int):
+    # calculate new total
+    new_amount = SQL_Lookup.character_item_quantity(character_name, item_name) + quantity
+    cursor = Connections.sql_db_connection()
+    query = "UPDATE Link_Character_Items set Quantity = '{}' " \
+            "WHERE Character = '{}' AND Item = '{}'".format(new_amount, character_name, item_name)
+    cursor.execute(query)
+    cursor.commit()

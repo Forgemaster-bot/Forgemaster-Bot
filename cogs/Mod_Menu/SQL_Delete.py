@@ -25,3 +25,10 @@ def character_skill(character_name: str, skill: str):
             "WHERE Character ='{}' AND Skill = '{}'".format(character_name, skill)
     cursor.execute(query)
     cursor.commit()
+
+
+def character_item(character_name: str, item_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "DELETE FROM Link_Character_Items WHERE Character ='{}' AND Item = '{}'".format(character_name, item_name)
+    cursor.execute(query)
+    cursor.commit()

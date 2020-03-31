@@ -60,3 +60,11 @@ def character_ability_score(character_name: str, ability: str):
     if ability == "CHA":
         value = result.Charisma
     return value
+
+
+def character_item_quantity(character_name: str, item_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Link_Character_Items where Character='{}' AND Item = '{}'".format(character_name, item_name)
+    cursor.execute(query)
+    item = cursor.fetchone()
+    return item.Quantity
