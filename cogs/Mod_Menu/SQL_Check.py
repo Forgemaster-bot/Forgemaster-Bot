@@ -29,7 +29,7 @@ def class_exists(name: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Info_Classes " \
-            "where Name = '{}'".format(name)
+            "where Class = '{}'".format(name)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:

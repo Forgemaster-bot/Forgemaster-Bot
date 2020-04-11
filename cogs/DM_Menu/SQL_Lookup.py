@@ -6,7 +6,7 @@ def character_owner(character_name: str):
     query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
-    return result.Discord_ID
+    return int(result.Discord_ID)
 
 
 def character_gold(character_name: str):

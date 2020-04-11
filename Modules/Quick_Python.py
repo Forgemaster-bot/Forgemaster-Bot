@@ -2,7 +2,7 @@ import random
 import Connections
 
 
-def stitch_string(given_list: list):
+def list_to_string(given_list: list):
     return_string = ""
     for element in given_list:
         if return_string == "":
@@ -12,7 +12,7 @@ def stitch_string(given_list: list):
     return return_string
 
 
-def stitch_table(given_list: list):
+def list_to_table(given_list: list):
     return_string = ""
     for element in given_list:
         if return_string == "":

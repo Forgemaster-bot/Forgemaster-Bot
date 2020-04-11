@@ -22,8 +22,8 @@ def create_character_check(command: str):
     if SQL_Check.character_exists(character_name):
         return False, "That character name is already taken, please choose another."
     # checks to see if the class is spelt correctly
-    if not SQL_Check.race_exists(c_list[2].lstrip()):
-        return False, "The race {} doesnt exist.".format(c_list[2].lstrip())
+    # if not SQL_Check.race_exists(c_list[2].lstrip()):
+        # return False, "The race {} doesnt exist.".format(c_list[2].lstrip())
     if not SQL_Check.class_exists(c_list[4].lstrip()):
         return False, "The class {} doesnt exist.".format(c_list[4].lstrip())
     response = True, "Player's Discord name : {} \nName : {} \nRace : {} \nbackground : {} \n" \
@@ -166,6 +166,9 @@ def item_check(command: str):  # [Character Name],[Item],[Quantity]
         if not SQL_Check.character_exists(character_name):
             return_list.append("The character {} doesnt exist.".format(character_name))
             continue
+        if "'" in item_name:
+            return_list.append("{} cannot have apostrophes, item wont be added".format(item_name))
+            continue
         try:
             quantity = int(item_list[rows][2])
             if quantity > 0:
@@ -174,10 +177,11 @@ def item_check(command: str):  # [Character Name],[Item],[Quantity]
             elif quantity < 0:
                 if SQL_Check.character_has_item(character_name, item_name):
                     current_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
-                    if current_quantity >= quantity:
+                    if current_quantity >= quantity*-1:
                         return_list.append('Remove {} {} from {}'.format(quantity * -1, item_name, character_name))
                     else:
-                        return_list.append('{} only owns {} {}'.format(character_name, current_quantity, item_name))
+                        return_list.append('{} only owns {} {} remove {}?'.format(character_name, current_quantity,
+                                                                                  item_name, current_quantity))
                 else:
                     return_list.append('{} doesnt own any {}, none will be removed'.format(character_name, item_name))
         except IndexError:
@@ -185,7 +189,7 @@ def item_check(command: str):  # [Character Name],[Item],[Quantity]
         except ValueError:
             return_list.append("{} quantity for {} was wrong and wont get any".format(character_name, item_name))
     return_list.append("Do you want to make these changes to items?")
-    return Quick_Python.stitch_table(return_list)
+    return Quick_Python.list_to_table(return_list)
 
 
 def item_execute(command: str):
@@ -195,6 +199,12 @@ def item_execute(command: str):
     for rows in range(len(item_list)):
         character_name = item_list[rows][0].lstrip()
         item_name = item_list[rows][1].lstrip()
+
+        if not SQL_Check.character_exists(character_name):
+            continue
+        if "'" in item_name:
+            continue
+
         try:
             quantity = int(item_list[rows][2])
         except IndexError:
@@ -213,11 +223,11 @@ def item_execute(command: str):
         elif quantity < 0:
             if SQL_Check.character_has_item(character_name, item_name):
                 current_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
-                if quantity < current_quantity:
+                if quantity * -1 < current_quantity:
                     SQL_Update.character_item_quantity(character_name, item_name, quantity)
                     new_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
                     response_list.append("{} now has {} {}".format(character_name_list, new_quantity, item_name))
-                elif quantity == current_quantity:
+                else:
                     SQL_Delete.character_item(character_name, item_name)
                     response_list.append("{} now has no {}".format(character_name_list, item_name))
                 character_name_list.append(character_name)
@@ -243,7 +253,7 @@ def roll_check_execute(command: str):
     if response == "":
         return "Player hasnt rolled stats"
     else:
-        return Quick_Python.stitch_string(response).replace("{},".format(discord_id), "{}:".format(discord_name))
+        return Quick_Python.list_to_string(response).replace("{},".format(discord_id), "{}:".format(discord_name))
 
 
 def skill_add_check(command: str):

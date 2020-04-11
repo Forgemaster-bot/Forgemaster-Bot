@@ -50,7 +50,7 @@ def add_gold_check(command: str):  # [Gold],[Character 1],[Character 2]
         if not SQL_Check.character_exists(character_name.lstrip()):
             return False, "The character {} doesnt exist.".format(character_name)
         paid_characters.append(character_name.lstrip())
-    return True, "Give {} gold to {}?".format(gold, Quick_Python.stitch_string(paid_characters))
+    return True, "Give {} gold to {}?".format(gold, Quick_Python.list_to_string(paid_characters))
 
 
 def add_gold_execute(command: str):  # [Gold],[Character 1],[Character 2]
@@ -63,7 +63,7 @@ def add_gold_execute(command: str):  # [Gold],[Character 1],[Character 2]
         # find the row the character is on
         SQL_Update.character_gold(character_name.lstrip(), gold)
     Update_Google_Roster.update_gold_group(c_list)
-    return "{} Gold has been added to {}".format(gold, Quick_Python.stitch_string(c_list))
+    return "{} Gold has been added to {}".format(gold, Quick_Python.list_to_string(c_list))
 
 
 def add_xp_check(command: str):
@@ -80,7 +80,7 @@ def add_xp_check(command: str):
         # check if the character exists
         if not SQL_Check.character_exists(character_name.lstrip()):
             return False, "The character {} doesnt exist.".format(character_name)
-    return True, "Give {} xp to {}?".format(xp, Quick_Python.stitch_string(c_list))
+    return True, "Give {} xp to {}?".format(xp, Quick_Python.list_to_string(c_list))
 
 
 def add_xp_execute(command: str):  # [Gold],[Character 1],[Character 2]
@@ -94,7 +94,7 @@ def add_xp_execute(command: str):  # [Gold],[Character 1],[Character 2]
         # find the row the character is on
         SQL_Update.character_xp(character_name.lstrip(), xp)
     Update_Google_Roster.update_xp_group(c_list)
-    return "{} xp has been added to {}".format(xp, Quick_Python.stitch_string(c_list))
+    return "{} xp has been added to {}".format(xp, Quick_Python.list_to_string(c_list))
 
 
 def log_xp_check(character_name: str):
@@ -103,7 +103,7 @@ def log_xp_check(character_name: str):
     return True, ""
 
 
-def log_xp_execute(character_name: str):
+def log_xp_execute(character_name: str, author: str):
     character_level = SQL_Lookup.character_sum_class_levels(character_name)
     if SQL_Check.level_up_check(character_name):
         character_level += 1
@@ -111,8 +111,7 @@ def log_xp_execute(character_name: str):
     SQL_Update.character_xp(character_name.lstrip(), xp)
     c_list = [character_name]
     Update_Google_Roster.update_xp_group(c_list)
-    user_ping = "<@{}>".format(SQL_Lookup.character_owner(character_name))
-    return "{} {} got {}xp for posting a log".format(user_ping, character_name, xp)
+    return "{} got {}xp from {} for posting a log".format(character_name, xp, author)
 
 
 def npc_talk_execute(command: str):

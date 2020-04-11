@@ -24,7 +24,7 @@ class Mod_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.create_character_execute(trim_message)
-                    Connections.sql_log_command(command, log)
+                    Connections.sql_log_command(command)
                     await command.send(log)
                     break
                 else:
@@ -57,7 +57,7 @@ class Mod_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.add_feat_execute(trim_message)
-                    Connections.sql_log_command(command, log)
+                    Connections.sql_log_command(command)
                     await command.send(log)
                     break
                 else:
@@ -77,7 +77,7 @@ class Mod_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.remove_feat_execute(trim_message)
-                    Connections.sql_log_command(command, log)
+                    Connections.sql_log_command(command)
                     await command.send(log)
                     break
                 else:
@@ -89,7 +89,7 @@ class Mod_Commands(commands.Cog):
                                         "\nExample - Cogs,Dagger:2, Pickaxe:3"
                                         "\n2) [Item Name], [Character Name:Quantity], [Character Name:Quantity]"
                                         "\nExample - Rations, Cogs:4,Ratagan:-2")
-    @commands.check_any(commands.has_role('Head DM'), commands.has_role('DMs'))
+    @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def item(self, command):
         trim_message = command.message.content.replace('$Item ', '')
         command_check = Scripts.item_check(trim_message)
@@ -100,8 +100,9 @@ class Mod_Commands(commands.Cog):
             if reply == "Yes":
                 await command.send("Updating roster...")
                 log = Scripts.item_execute(trim_message)
-                Connections.sql_log_command(command, log)
-                await command.send(command, log)
+                Connections.sql_log_command(command)
+                await command.send(trim_message)
+                await Connections.log_to_discord(self, trim_message)
                 break
             else:
                 await command.send("Give item command stopped")
@@ -130,7 +131,7 @@ class Mod_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.skill_add_execute(trim_message)
-                    Connections.sql_log_command(command, log)
+                    Connections.sql_log_command(command)
                     await command.send(log)
                     break
                 else:
@@ -150,7 +151,7 @@ class Mod_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.skill_remove_execute(trim_message)
-                    Connections.sql_log_command(command, log)
+                    Connections.sql_log_command(command)
                     await command.send(log)
                     break
                 else:
@@ -171,7 +172,7 @@ class Mod_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.stat_change_execute(trim_message)
-                    Connections.sql_log_command(command, log)
+                    Connections.sql_log_command(command)
                     await command.send(log)
                     break
                 else:

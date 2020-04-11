@@ -69,7 +69,7 @@ def update_feat(character_name: str):
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
     feat_list = lookup_character_feats(character_name)
-    feats = Quick_Python.stitch_string(feat_list)
+    feats = Quick_Python.list_to_string(feat_list)
     roster.update_cell(character_row, 18, feats)
 
 
@@ -87,7 +87,7 @@ def update_items(character_name: str):
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
     item_list = lookup_character_inventory(character_name)
-    items = Quick_Python.stitch_string(item_list)
+    items = Quick_Python.list_to_string(item_list)
     roster.update_cell(character_row, 20, items)
 
 
@@ -124,7 +124,7 @@ def update_skill(character_name: str):
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
     skill_list = lookup_character_skills(character_name)
-    skills = Quick_Python.stitch_string(skill_list)
+    skills = Quick_Python.list_to_string(skill_list)
     roster.update_cell(character_row, 19, skills)
 
 

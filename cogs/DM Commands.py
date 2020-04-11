@@ -23,7 +23,7 @@ class DM_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.kill_character_execute(trim_message)
-                    Connections.sql_log_command(command, log)
+                    Connections.sql_log_command(command)
                     await command.send(log)
                     break
                 else:
@@ -44,7 +44,7 @@ class DM_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.add_gold_execute(trim_message)
-                    Connections.sql_log_command(command, log)
+                    Connections.sql_log_command(command)
                     await command.send(log)
                     break
                 else:
@@ -65,7 +65,7 @@ class DM_Commands(commands.Cog):
                 if reply == "Yes":
                     await command.send("Updating roster...")
                     log = Scripts.add_xp_execute(trim_message)
-                    Connections.sql_log_command(command, log)
+                    Connections.sql_log_command(command)
                     await command.send(log)
                     break
                 else:
@@ -79,10 +79,12 @@ class DM_Commands(commands.Cog):
         trim_message = command.message.content.replace('$LogXP ', '')
         command_check = Scripts.log_xp_check(trim_message)
         if command_check[0]:
-            log = Scripts.log_xp_execute(trim_message)
-            Connections.sql_log_command(command, log)
-            target_discord = self.bot.get_user(SQL_Lookup.character_owner(trim_message))
+            author = command.message.author
+            log = Scripts.log_xp_execute(trim_message, author)
+            Connections.sql_log_command(command)
+            await command.send(log)
             await Connections.log_to_discord(self, log)
+            target_discord = self.bot.get_user(SQL_Lookup.character_owner(trim_message))
             await target_discord.send(log)
         else:
             await command.send(command_check[1])
