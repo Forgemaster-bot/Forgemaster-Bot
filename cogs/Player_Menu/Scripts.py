@@ -64,8 +64,7 @@ def rand_char(discord_id: str):
 
 def question_list(give_list: list):
     return_string = ""
-    list_length = len(give_list)
-    for entry in range(list_length):
+    for entry in range(len(give_list)):
         if return_string == "":
             return_string = "{} : {}".format(entry + 1, give_list[entry])
         else:

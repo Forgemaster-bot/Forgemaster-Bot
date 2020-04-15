@@ -2,6 +2,8 @@
   <dictionary name="Lewis">
     <words>
       <w>botmsg</w>
+      <w>eldritch</w>
+      <w>learnable</w>
       <w>sellable</w>
     </words>
   </dictionary>

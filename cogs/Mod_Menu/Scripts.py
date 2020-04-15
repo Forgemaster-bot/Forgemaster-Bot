@@ -50,6 +50,9 @@ def create_character_execute(command: str):
     # update Link_character_Class
     SQL_Insert.character_create(character_sheet)
     SQL_Insert.character_class(character_name, character_class, 1, 1)
+    if character_class == 'Wizard':
+        SQL_Update.character_wizard_spell(character_name, character_class)
+        SQL_Insert
     SQL_Insert.character_item(character_name, "Rations", 10)
     Update_Google_Roster.insert_new_character(character_name)
     Update_Google_Roster.update_classes(character_name)
@@ -192,7 +195,7 @@ def item_check(command: str):  # [Character Name],[Item],[Quantity]
     return Quick_Python.list_to_table(return_list)
 
 
-def item_execute(command: str):
+def item_execute(command: str, author: str):
     item_list = item_split(command)
     character_name_list = []
     response_list = []
@@ -214,27 +217,24 @@ def item_execute(command: str):
         if quantity > 0:
             if SQL_Check.character_has_item(character_name, item_name):
                 SQL_Update.character_item_quantity(character_name, item_name, quantity)
-                new_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
-                response_list.append("{} now has {} {}".format(character_name_list, new_quantity, item_name))
             else:
                 SQL_Insert.character_item(character_name, item_name, quantity)
-                response_list.append("{} now has {} {}".format(character_name_list, quantity, item_name))
+            response_list.append("{} received {} {}".format(character_name, quantity, item_name))
             character_name_list.append(character_name)
         elif quantity < 0:
             if SQL_Check.character_has_item(character_name, item_name):
                 current_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
                 if quantity * -1 < current_quantity:
                     SQL_Update.character_item_quantity(character_name, item_name, quantity)
-                    new_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
-                    response_list.append("{} now has {} {}".format(character_name_list, new_quantity, item_name))
                 else:
                     SQL_Delete.character_item(character_name, item_name)
-                    response_list.append("{} now has no {}".format(character_name_list, item_name))
+                response_list.append("{} had {} {} removed".format(character_name, quantity, item_name))
                 character_name_list.append(character_name)
 
     for names in character_name_list:
         Update_Google_Roster.update_items(names)
-    return "Items Updated"
+    response_list.insert(0, "{} did the following item changes:".format(author))
+    return response_list
 
 
 def roll_check_check(command: str):

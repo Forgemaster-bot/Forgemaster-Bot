@@ -389,7 +389,7 @@ async def experiment_create(self, discord_id, character_name, profession, recipe
 
 
 def recipe_list(character_name: str, profession: str):
-    result = SQL_Lookup.character_item_quantity(character_name, profession)
+    result = SQL_Lookup.character_known_recipe_details(character_name, profession)
     if len(result) == 0:
         return "{} doesnt know any recipes for {} yet".format(character_name, profession)
     else:

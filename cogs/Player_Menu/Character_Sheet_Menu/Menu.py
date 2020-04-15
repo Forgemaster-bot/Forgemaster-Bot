@@ -24,8 +24,18 @@ async def main_menu(self, command, discord_id: int, character_name: str):
                 menu = await subclass_menu(self, command, discord_id, character_name, class_choice)
                 if menu == "exit" or menu == "stop":
                     return menu
-        elif choice == "View spell book":
-            await command.message.author.send("coming soon")
+        elif "View your " in choice:
+            while True:
+                class_choice = choice.replace("View your ", "").replace(" spells", "")
+                menu = await view_spell_menu(self, command, character_name, class_choice)
+                if menu == "exit" or menu == "stop":
+                    return menu
+        elif "Learn a new " in choice:
+            while True:
+                class_choice = choice.replace("Learn a new ", "").replace(" spell", "")
+                menu = await learn_spell_menu(self, command, discord_id, character_name, class_choice)
+                if menu == "exit" or menu == "stop":
+                    return menu
         elif choice == "exit" or choice == "stop":
             return choice
 
@@ -39,6 +49,11 @@ async def menu_options(self, command, character_name):
                       "What would you like to do?".format(details)
     choice = await self.answer_from_list(command, option_question, option_list)
     return choice
+
+
+'''''''''''''''''''''''''''''''''''''''''
+###############Leveling##################
+'''''''''''''''''''''''''''''''''''''''''
 
 
 async def level_menu(self, command, discord_id, character_name):
@@ -70,12 +85,16 @@ async def level_confirm(self, command, discord_id, character_name, class_choice)
     if reply == "Yes":
         await command.author.send("leveling...")
         log = "{} gained a level in {}".format(character_name, class_choice)
-        await Scripts.level_up(self, character_name, class_choice, discord_id, log)
+        await Scripts.level_up_confirm(self, character_name, class_choice, discord_id, log)
         await command.author.send(log)
     return "stop"
 
 
-# Subclasses
+'''''''''''''''''''''''''''''''''''''''''
+###############Subclass##################
+'''''''''''''''''''''''''''''''''''''''''
+
+
 async def subclass_menu(self, command, discord_id, character_name, class_choice):
     character_levels = Scripts.character_classes(character_name)
     welcome_message = "Subclass Menu: Type **STOP** at any time to go back to the player menu." \
@@ -110,16 +129,20 @@ async def subclass_confirm(self, command, discord_id, character_name, class_choi
     return "stop"
 
 
-# Pick free profession
+'''''''''''''''''''''''''''''''''''''''''
+##############Profession#################
+'''''''''''''''''''''''''''''''''''''''''
+
+
 async def profession_menu(self, command, discord_id, character_name):
     welcome_message = "Profession Menu: Type **STOP** at any time to go back to the player menu " \
                       "\nPick your free crafting profession."
     await command.message.author.send(welcome_message)
     while True:
-        profession_choice = await self.profession_step_1_profession_choice(command)
+        profession_choice = await profession_step_1_profession_choice(self, command)
         if profession_choice == "exit" or profession_choice == "stop":
             return profession_choice
-        confirm = await self.profession_step_2_confirm(command, discord_id, character_name, profession_choice)
+        confirm = await profession_step_2_confirm(self, command, discord_id, character_name, profession_choice)
         if confirm == "exit" or confirm == "stop":
             return confirm
         return
@@ -140,5 +163,132 @@ async def profession_step_2_confirm(self, command, discord_id, character_name, p
         await command.author.send("adding profession...")
         log = "{} gained {} as their free profession".format(character_name, profession_name)
         await Scripts.give_profession(self, character_name, profession_name, discord_id, log)
+        await command.author.send(log)
+    return "stop"
+
+
+'''''''''''''''''''''''''''''''''''''''''
+##############View Spells################
+'''''''''''''''''''''''''''''''''''''''''
+
+
+async def view_spell_menu(self, command, character_name: str, class_name: str):
+    welcome_message = "View {} Spell Menu: Type **STOP** at any time to go back to the player menu." .format(class_name)
+    await command.message.author.send(welcome_message)
+    # if wizard get spell levels from spell books
+    if class_name == 'Wizard':
+        await command.message.author.send(Scripts.view_spells_all_book_spells(character_name))
+        return "stop"
+    elif Scripts.class_must_learn_spells(class_name):
+        await command.message.author.send(Scripts.view_spells_list_all_spells(character_name, class_name))
+        return "stop"
+    else:
+        while True:
+            spell_level_choice = await view_spell_level_choice(self, command, character_name, class_name)
+            if spell_level_choice == "exit" or spell_level_choice == "stop":
+                return spell_level_choice
+            spell_level = spell_level_choice.replace("Level ", "", ).replace(" Spells", "")
+            await command.message.author.send(Scripts.view_spells_by_level(character_name, class_name, spell_level))
+            return "stop"
+
+
+async def view_spell_level_choice(self, command, character_name, class_choice):
+    option_list = Scripts.spells_level_options(character_name, class_choice)
+    option_question = "As a {}, you know all of your class spells, Which level of spell would you like to view?"\
+        .format(class_choice)
+    choice = await self.answer_from_list(command, option_question, option_list)
+    return choice
+
+
+'''''''''''''''''''''''''''''''''''''''''
+#############Learn Spells################
+'''''''''''''''''''''''''''''''''''''''''
+
+
+async def learn_spell_menu(self, command, discord_id, character_name: str, class_name: str):
+    welcome_message = "Learn {} Spell Menu: Type **STOP** at any time to go back to the player menu.".format(class_name)
+    await command.message.author.send(welcome_message)
+    # pick spell level
+    spell_level_choice = await learn_spell_level_choice(self, command, character_name, class_name)
+    if spell_level_choice == "exit" or spell_level_choice == "stop":
+        return spell_level_choice
+
+    spell_choice = await learn_spell_choice(self, command, character_name, class_name, spell_level_choice)
+    if spell_choice == "exit" or spell_choice == "stop":
+        return spell_choice
+
+    confirm = await learn_spell_confirm(self, command, discord_id, character_name, class_name, spell_choice)
+    if confirm == "exit" or confirm == "stop":
+        return confirm
+    return "stop"
+
+
+async def learn_spell_level_choice(self, command, character_name, class_name):
+    option_list = Scripts.spells_level_options(character_name, class_name)
+    option_question = "What level of spell would you like to learn?".format(class_name)
+    choice = await self.answer_from_list(command, option_question, option_list)
+    result = choice.replace("Level ", "").replace(" Spells", "")
+    return result
+
+
+async def learn_spell_choice(self, command, character_name, class_name, spell_level: int):
+    option_list = Scripts.learnable_spells_by_level(character_name, class_name, spell_level)
+    option_question = "Which spell would you like to learn?".format(class_name)
+    choice = await self.answer_from_list(command, option_question, option_list)
+    return choice
+
+
+async def learn_spell_confirm(self, command, discord_id, character_name, class_name, spell_choice):
+    if class_name == 'Wizard':
+        question = "Do you want to add {} to your spell book?".format(spell_choice.replace("''", "'"))
+        log = "{} added {} to their spell book from leveling up.".format(character_name,
+                                                                         spell_choice.replace("''", "'"))
+    else:
+        question = "Do you want to learn {} as a {}?".format(spell_choice.replace("''", "'"), class_name)
+        log = "{} learnt {} as a {}.".format(character_name, spell_choice.replace("''", "'"), class_name)
+    await command.author.send(question)
+    reply = await self.confirm(command)
+    if reply == "Yes":
+        await command.author.send("learning spell...")
+        await Scripts.learning_spell_confirm(self, discord_id, character_name, class_name, spell_choice, log)
+        await command.author.send(log)
+    return "stop"
+
+
+'''''''''''''''''''''''''''''''''''''''''
+#############Forget Spell################
+'''''''''''''''''''''''''''''''''''''''''
+
+
+async def forget_spell_menu(self, command, discord_id, character_name: str, class_name: str):
+    welcome_message = "{} Learn Spell Menu: Type **STOP** at any time to go back to the player menu.".format(class_name)
+    await command.message.author.send(welcome_message)
+    # pick spell level
+
+    spell_choice = await forget_spell_choice(self, command, character_name, class_name)
+    if spell_choice == "exit" or spell_choice == "stop":
+        return spell_choice
+
+    confirm = await forget_spell_confirm(self, command, discord_id, character_name, class_name, spell_choice)
+    if confirm == "exit" or confirm == "stop":
+        return confirm
+    return "stop"
+
+
+async def forget_spell_choice(self, command, character_name, class_name, ):
+    option_list = Scripts.forget_spells_list(character_name, class_name)
+    option_question = "Which spell would you like to forget?".format(class_name)
+    choice = await self.answer_from_list(command, option_question, option_list)
+    return choice
+
+
+async def forget_spell_confirm(self, command, discord_id, character_name, class_name, spell_choice):
+    question = "Do you want to forget the {} spell {}?".format(class_name, spell_choice)
+    log = "{} forgot {} as a {}.".format(character_name, spell_choice, class_name)
+    await command.author.send(question)
+    reply = await self.confirm(command)
+    if reply == "Yes":
+        await command.author.send("Forgetting spell...")
+        await Scripts.learning_spell_confirm(self, discord_id, character_name, class_name, spell_choice, log)
         await command.author.send(log)
     return "stop"

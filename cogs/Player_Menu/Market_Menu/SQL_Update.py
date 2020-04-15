@@ -15,7 +15,7 @@ def character_item_quantity(character_name: str, item_name: str, quantity: int):
 
 def character_gold(character_name: str, gold: float):
     cursor = Connections.sql_db_connection()
-    new_gold = float(SQL_Lookup.character_gold(character_name)) + gold
+    new_gold = round(float(SQL_Lookup.character_gold(character_name)) + gold, 2)
 
     query = "UPDATE Main_Characters " \
             "SET Gold = '{}' " \

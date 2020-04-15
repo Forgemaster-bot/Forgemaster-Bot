@@ -250,7 +250,7 @@ async def give_menu(self, command, discord_id, character_name):
     if quantity == "exit" or quantity == "stop":
         return quantity
     # confirm the gift
-    confirm = await self.give_confirm(command, discord_id, character_name, item_name, quantity, target_name)
+    confirm = await give_confirm(self, command, discord_id, character_name, item_name, quantity, target_name)
     if confirm == "exit" or confirm == "stop":
         return confirm
     return

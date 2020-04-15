@@ -2,47 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a7f42299-d755-4423-9cfc-10cd828ff8b2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Menu.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Check.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Insert.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Lookup.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Update.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Scripts.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/Menu.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Check.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Delete.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Insert.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Lookup.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Update.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/Scripts.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Menu.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Check.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Delete.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Insert.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Lookup.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Update.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Scripts.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Delete.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Lewis.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Lewis.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Modules/Connections.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Connections.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Modules/Quick_Python.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Quick_Python.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Modules/Update_Google_Roster.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Update_Google_Roster.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/DM Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/DM Commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/DM_Menu/SQL_Lookup.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/DM_Menu/SQL_Lookup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/DM_Menu/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/DM_Menu/Scripts.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cogs/Mod_Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Mod_Commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Check.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Check.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Insert.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Insert.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Update.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Update.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cogs/Mod_Menu/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Mod_Menu/Scripts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Check.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Check.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Delete.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Insert.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Insert.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Update.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Update.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Check.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Check.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Insert.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Insert.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Lookup.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Lookup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Update.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Update.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Scripts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/Menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/Menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Update.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Update.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Scripts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Update.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Update.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Scripts.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cogs/Player_Menu_Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu_Commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Utility_Menu/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Utility_Menu/Scripts.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,49 +31,32 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cogs/Player_Menu_Commands.py">
+        <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Menu.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+            <state relative-caret-position="400">
+              <caret line="349" column="29" lean-forward="true" selection-start-line="349" selection-start-column="29" selection-end-line="349" selection-end-column="29" />
               <folding>
-                <element signature="e#0#32#0" expanded="true" />
+                <element signature="e#263#490#0" />
+                <element signature="e#554#784#0" />
+                <element signature="e#957#1187#0" />
+                <element signature="e#2113#2532#0" />
+                <element signature="e#2599#2886#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Update.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="33" column="22" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Insert.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Check.py">
+        <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Scripts.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="187">
+              <caret line="11" column="65" lean-forward="true" selection-start-line="11" selection-start-column="65" selection-end-line="11" selection-end-column="65" />
+              <folding>
+                <element signature="e#0#48#0" expanded="true" />
+                <element signature="e#1811#2258#0" />
+                <element signature="e#2307#2386#0" />
+                <element signature="e#2462#2779#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -111,13 +72,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>craft_essence_list</find>
-      <find>recipe_by_profession</find>
-      <find>character_has_item_quantity</find>
-      <find>craft_possible_essence_combination_list</find>
-      <find>recipe_by_essence</find>
-      <find>character_recipe</find>
-      <find>character_known_recipe_details</find>
       <find>work</find>
       <find>character_has_crafted_this_week</find>
       <find>recipe_essence[0]</find>
@@ -127,7 +81,6 @@
       <find>character_has_item</find>
       <find>character_owner</find>
       <find>character_gold</find>
-      <find>self.</find>
       <find>character_sellable_inventory_list</find>
       <find>Info_item</find>
       <find>trade_quantity</find>
@@ -141,6 +94,14 @@
       <find>target_discord</find>
       <find>Info_classes</find>
       <find>option_list</find>
+      <find>self.</find>
+      <find>send</find>
+      <find>Link_character_re</find>
+      <find>Link_character_c</find>
+      <find>[</find>
+      <find>[A-Z]&quot;</find>
+      <find>\S&quot;</find>
+      <find>+ 1</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -156,15 +117,11 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Lookup.py" />
-        <option value="$PROJECT_DIR$/cogs/DM_Menu/SQL_Update.py" />
-        <option value="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Update.py" />
         <option value="$PROJECT_DIR$/cogs/DM_Menu/SQL_Delete.py" />
         <option value="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Delete.py" />
         <option value="$PROJECT_DIR$/Modules/Connections.py" />
         <option value="$PROJECT_DIR$/cogs/DM_Menu/SQL_Lookup.py" />
         <option value="$PROJECT_DIR$/cogs/DM Commands.py" />
-        <option value="$PROJECT_DIR$/cogs/Mod_Commands.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/level_menu_scripts.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/menu_level_scripts.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/menu_short_scripts.py" />
@@ -174,39 +131,43 @@
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/character_sheet_menu.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/__init__.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/CS_Menu.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Insert.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Check.py" />
         <option value="$PROJECT_DIR$/Modules/Quick_Python.py" />
         <option value="$PROJECT_DIR$/cogs/DM_Menu/Scripts.py" />
         <option value="$PROJECT_DIR$/cogs/Utility_Menu/Scripts.py" />
         <option value="$PROJECT_DIR$/Modules/Update_Google_Roster.py" />
         <option value="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Check.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Update.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Update.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Delete.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Insert.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Check.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Menu.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Check.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Delete.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Update.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Insert.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Lookup.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/Menu.py" />
-        <option value="$PROJECT_DIR$/cogs/Mod_Menu/Scripts.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Lookup.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/Scripts.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Scripts.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Lookup.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Menu.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Scripts.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu_Commands.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/menu_craft_scripts.py" />
-        <option value="$PROJECT_DIR$/cogs/Player_Menu/SQL_Check.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/SQL_Update.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/SQL_Insert.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/SQL_Check.py" />
+        <option value="$PROJECT_DIR$/cogs/Mod_Commands.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/Menu.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Scripts.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Check.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Delete.py" />
+        <option value="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Update.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Update.py" />
+        <option value="$PROJECT_DIR$/cogs/Mod_Menu/Scripts.py" />
+        <option value="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Insert.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Update.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Update.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Scripts.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Lookup.py" />
         <option value="$PROJECT_DIR$/cogs/Player_Menu/Scripts.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu_Commands.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Insert.py" />
+        <option value="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Menu.py" />
       </list>
     </option>
   </component>
@@ -233,6 +194,12 @@
               <item name="Lost-World-Bot" type="b2602c69:ProjectViewProjectNode" />
               <item name="Lost-World-Bot" type="462c0819:PsiDirectoryNode" />
               <item name="cogs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Lost-World-Bot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Lost-World-Bot" type="462c0819:PsiDirectoryNode" />
+              <item name="cogs" type="462c0819:PsiDirectoryNode" />
+              <item name="Player_Menu" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Lost-World-Bot" type="b2602c69:ProjectViewProjectNode" />
@@ -556,7 +523,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585586640389</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="finish migration of scripts into command groups">
+      <created>1586621806834</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1586621806834</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -580,6 +554,25 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Favorites" order="0" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="1" weight="0.25052083" />
+      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="0" />
+      <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.503125" side_tool="true" weight="0.27089947" />
+      <window_info anchor="bottom" id="Python Console" order="2" />
+      <window_info anchor="bottom" id="Message" order="3" />
+      <window_info anchor="bottom" id="Find" order="4" weight="0.32910052" />
+      <window_info anchor="bottom" id="Version Control" order="5" sideWeight="0.49947917" weight="0.32910052" />
+      <window_info anchor="bottom" id="Debug" order="6" sideWeight="0.496875" visible="true" weight="0.27089947" />
+      <window_info anchor="bottom" id="Cvs" order="7" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="8" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="9" />
+      <window_info anchor="bottom" x="0" y="364" width="1920" height="311" id="Run" order="10" sideWeight="0.49947917" weight="0.20952381" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout-to-restore>
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
@@ -610,6 +603,13 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Lookup.py</url>
+          <line>341</line>
+          <option name="timeStamp" value="839" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -622,6 +622,21 @@
   <component name="debuggerHistoryManager">
     <expressions id="setValue">
       <expression>
+        <expression-string>'Jayfoot'</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>'jayfoot'</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>'Oxalis'</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>'Darian'</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
@@ -632,17 +647,7 @@
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>'Oxalis'</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
         <expression-string>'Ratagan'</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>'Jayfoot'</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -661,67 +666,9 @@
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>'Edwyn'</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>'Thessian'</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/cogs/DM Commands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="55" column="79" lean-forward="true" selection-start-line="55" selection-start-column="4" selection-end-line="55" selection-end-column="79" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-            <element signature="e#426#1172#0" />
-            <element signature="e#1406#2129#0" />
-            <element signature="e#2352#3069#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Menus/Character_Sheet_Menu.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Menus/Workshop_Menu.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Menus/Market_Menu.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/character_sheet_menu.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" selection-start-line="25" selection-end-line="25" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Temp/Your videos.url">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Insert.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="18" lean-forward="true" selection-start-column="18" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/Program Files/Python/Lib/asyncio/tasks.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -753,16 +700,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/Quick_Python.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="18" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cogs/Utility Commands.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
@@ -787,66 +724,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Update.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Check.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
-          <caret line="43" selection-start-line="43" selection-end-line="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Update.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Delete.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Mod_Commands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="102" selection-start-line="102" selection-end-line="102" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-            <element signature="e#253#409#0" />
-            <element signature="e#543#1297#0" />
-            <element signature="e#1499#1906#0" />
-            <element signature="e#2116#2839#0" />
-            <element signature="e#3043#3775#0" />
-            <element signature="e#7580#8311#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/Connections.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -898,16 +782,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Update.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
-          <folding>
-            <element signature="e#0#46#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Insert.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
@@ -929,86 +803,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Mod_Menu/Scripts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="213" selection-start-line="213" selection-end-line="213" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-            <element signature="e#5438#6496#0" />
-            <element signature="e#5678#6062#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Lookup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="17" column="44" selection-start-line="17" selection-start-column="44" selection-end-line="17" selection-end-column="44" />
-          <folding>
-            <element signature="e#68#442#0" />
-            <element signature="e#494#1042#0" />
-            <element signature="e#1090#1309#0" />
-            <element signature="e#1361#1607#0" />
-            <element signature="e#1666#2041#0" />
-            <element signature="e#2086#2322#0" />
-            <element signature="e#2396#2796#0" />
-            <element signature="e#2875#3257#0" />
-            <element signature="e#3296#3522#0" />
-            <element signature="e#3595#3835#0" />
-            <element signature="e#3891#4133#0" />
-            <element signature="e#4526#4869#0" />
-            <element signature="e#4916#5176#0" />
-            <element signature="e#5243#5657#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/Scripts.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
           <caret line="70" column="18" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="18" />
           <folding>
             <element signature="e#0#46#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/Menu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="132" column="31" selection-start-line="132" selection-start-column="31" selection-end-line="132" selection-end-column="31" />
-          <folding>
-            <element signature="e#249#470#0" />
-            <element signature="e#520#742#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Lookup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="117" lean-forward="true" selection-start-line="117" selection-end-line="117" />
-          <folding>
-            <element signature="e#376#656#0" />
-            <element signature="e#716#947#0" />
-            <element signature="e#993#1210#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Menu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2262">
-          <caret line="174" column="4" selection-start-line="174" selection-start-column="4" selection-end-line="174" selection-end-column="4" />
-          <folding>
-            <element signature="e#126#2051#0" />
-            <element signature="e#263#490#0" />
-            <element signature="e#554#784#0" />
-            <element signature="e#957#1187#0" />
-            <element signature="e#1244#1458#0" />
-            <element signature="e#2113#2532#0" />
-            <element signature="e#2599#2886#0" />
           </folding>
         </state>
       </provider>
@@ -1025,79 +825,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Menu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="33" column="28" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Scripts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" selection-start-line="24" selection-end-line="24" />
-          <folding>
-            <element signature="e#0#54#0" expanded="true" />
-            <element signature="e#1204#2157#0" />
-            <element signature="e#2329#2457#0" />
-            <element signature="e#2636#2789#0" />
-            <element signature="e#2839#4470#0" />
-            <element signature="e#4573#5123#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Scripts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="30" lean-forward="true" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
-            <element signature="e#1811#2258#0" />
-            <element signature="e#2307#2386#0" />
-            <element signature="e#2462#2779#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Delete.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Scripts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="783">
-          <caret line="96" column="8" lean-forward="true" selection-start-line="96" selection-start-column="8" selection-end-line="96" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu_Commands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Update.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" column="22" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
         </state>
       </provider>
     </entry>
@@ -1108,10 +839,291 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="33" column="22" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Update.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/SQL_Check.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+        <state relative-caret-position="170">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+          <folding>
+            <element signature="e#68#367#0" />
+            <element signature="e#407#652#0" />
+            <element signature="e#698#974#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/aiohttp/connector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="972" selection-start-line="972" selection-end-line="972" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/Connections.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="545">
+          <caret line="68" column="28" lean-forward="true" selection-start-line="68" selection-start-column="28" selection-end-line="68" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Python/Lost Island Bot/venv/Lib/site-packages/discord/abc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="823" selection-start-line="823" selection-end-line="823" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Mod_Commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1325">
+          <caret line="159" column="38" selection-start-line="159" selection-start-column="34" selection-end-line="159" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#253#409#0" />
+            <element signature="e#543#1297#0" />
+            <element signature="e#1499#1906#0" />
+            <element signature="e#2116#2839#0" />
+            <element signature="e#3043#3775#0" />
+            <element signature="e#7580#8311#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Lookup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="407">
+          <caret line="212" column="25" lean-forward="true" selection-start-line="212" selection-start-column="25" selection-end-line="212" selection-end-column="25" />
+          <folding>
+            <element signature="e#68#442#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/Menu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+          <folding>
+            <element signature="e#124#1952#0" />
+            <element signature="e#249#470#0" />
+            <element signature="e#520#742#0" />
+            <element signature="e#2014#2426#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Mod_Menu/SQL_Delete.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" selection-start-line="17" selection-end-line="18" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Delete.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="19" lean-forward="true" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Mod_Menu/SQL_Update.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="607">
+          <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/Quick_Python.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Update.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="556">
+          <caret line="39" selection-start-line="39" selection-end-line="39" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Mod_Menu/Scripts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="655">
+          <caret line="54" column="18" selection-start-line="54" selection-start-column="18" selection-end-line="54" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Mod_Menu/SQL_Insert.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="539">
+          <caret line="66" lean-forward="true" selection-start-line="66" selection-end-line="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Market_Menu/SQL_Update.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+          <folding>
+            <element signature="e#0#46#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Update.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="21" lean-forward="true" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Check.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="97">
+          <caret line="96" column="19" lean-forward="true" selection-start-line="96" selection-start-column="19" selection-end-line="96" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Program Files/Python/Lib/encodings/utf_16_le.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu_Commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="135" column="33" lean-forward="true" selection-start-line="135" selection-start-column="33" selection-end-line="135" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#1652#1940#0" />
+            <element signature="e#2009#2297#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Insert.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Scripts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="382">
+          <caret line="283" column="25" selection-start-line="283" selection-start-column="25" selection-end-line="283" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#54#0" expanded="true" />
+            <element signature="e#1848#2801#0" />
+            <element signature="e#2880#3275#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Lookup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="438">
+          <caret line="338" lean-forward="true" selection-start-line="338" selection-end-line="338" />
+          <folding>
+            <element signature="e#376#656#0" />
+            <element signature="e#716#947#0" />
+            <element signature="e#993#1210#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Scripts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="607">
+          <caret line="51" column="23" selection-start-line="51" selection-start-column="23" selection-end-line="51" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Menu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="248" column="39" lean-forward="true" selection-start-line="248" selection-start-column="39" selection-end-line="248" selection-end-column="39" />
+          <folding>
+            <element signature="e#399#624#0" />
+            <element signature="e#698#882#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Menu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="349" column="29" lean-forward="true" selection-start-line="349" selection-start-column="29" selection-end-line="349" selection-end-column="29" />
+          <folding>
+            <element signature="e#263#490#0" />
+            <element signature="e#554#784#0" />
+            <element signature="e#957#1187#0" />
+            <element signature="e#2113#2532#0" />
+            <element signature="e#2599#2886#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Scripts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="65" lean-forward="true" selection-start-line="11" selection-start-column="65" selection-end-line="11" selection-end-column="65" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+            <element signature="e#1811#2258#0" />
+            <element signature="e#2307#2386#0" />
+            <element signature="e#2462#2779#0" />
+          </folding>
         </state>
       </provider>
     </entry>

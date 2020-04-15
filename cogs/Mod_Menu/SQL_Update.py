@@ -56,3 +56,12 @@ def character_item_quantity(character_name: str, item_name: str, quantity: int):
             "WHERE Character = '{}' AND Item = '{}'".format(new_amount, character_name, item_name)
     cursor.execute(query)
     cursor.commit()
+
+
+def character_wizard_spell(character_name: str, class_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "UPDATE Link_Character_Class " \
+            "SET Free_Wizard_Spells = 6 " \
+            "WHERE Character = '{}' AND Class = '{}'".format(character_name, class_name)
+    cursor.execute(query)
+    cursor.commit()

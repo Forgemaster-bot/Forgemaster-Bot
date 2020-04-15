@@ -1,4 +1,5 @@
 from discord.ext import commands
+import Quick_Python
 import asyncio
 
 from Mod_Menu import Scripts
@@ -99,14 +100,15 @@ class Mod_Commands(commands.Cog):
             reply = await self.confirm(command)
             if reply == "Yes":
                 await command.send("Updating roster...")
-                log = Scripts.item_execute(trim_message)
+                author = command.message.author
+                log = Scripts.item_execute(trim_message, author)
                 Connections.sql_log_command(command)
-                await command.send(trim_message)
-                await Connections.log_to_discord(self, trim_message)
-                break
+                await command.send(Quick_Python.list_to_table(log))
+                await Connections.log_to_discord(self, Quick_Python.list_to_table(log))
+                return
             else:
                 await command.send("Give item command stopped")
-                break
+                return
 
     # NPC
     @commands.command(name='NPC', help="[NPC Name]:[Dialog]")

@@ -132,7 +132,7 @@ class Player_Menu_Commands(commands.Cog):
                 if answer < 1:
                     await command.message.author.send("Please enter a number between 1 and {}".format(maximum))
                 else:
-                    option = option_list[answer - 1]
+                    option = option_list[answer - 1].replace("'", "''")
                     return option
             except IndexError:
                 await command.message.author.send("Please enter a number between 1 and {}".format(maximum))
