@@ -22,22 +22,38 @@ async def main_menu(self, command, discord_id: int, character_name: str):
             while True:
                 class_choice = choice.replace("Pick your subclass for ", "")
                 menu = await subclass_menu(self, command, discord_id, character_name, class_choice)
-                if menu == "exit" or menu == "stop":
+                if menu == "exit":
                     return menu
+                elif menu == "stop":
+                    return
         elif "View your " in choice:
             while True:
                 class_choice = choice.replace("View your ", "").replace(" spells", "")
                 menu = await view_spell_menu(self, command, character_name, class_choice)
-                if menu == "exit" or menu == "stop":
+                if menu == "exit":
                     return menu
+                elif menu == "stop":
+                    return
         elif "Learn a new " in choice:
             while True:
                 class_choice = choice.replace("Learn a new ", "").replace(" spell", "")
                 menu = await learn_spell_menu(self, command, discord_id, character_name, class_choice)
-                if menu == "exit" or menu == "stop":
+                if menu == "exit":
                     return menu
-        elif choice == "exit" or choice == "stop":
+                elif menu == "stop":
+                    return
+        elif "Forget a " in choice:
+            while True:
+                class_choice = choice.replace("Forget a ", "").replace(" spell", "")
+                menu = await forget_spell_menu(self, command, discord_id, character_name, class_choice)
+                if menu == "exit":
+                    return menu
+                elif menu == "stop":
+                    return
+        elif choice == "exit":
             return choice
+        else:
+            return
 
 
 async def menu_options(self, command, character_name):
@@ -242,16 +258,16 @@ async def learn_spell_confirm(self, command, discord_id, character_name, class_n
     if class_name == 'Wizard':
         question = "Do you want to add {} to your spell book?".format(spell_choice.replace("''", "'"))
         log = "{} added {} to their spell book from leveling up.".format(character_name,
-                                                                         spell_choice.replace("''", "'"))
+                                                                         spell_choice)
     else:
         question = "Do you want to learn {} as a {}?".format(spell_choice.replace("''", "'"), class_name)
-        log = "{} learnt {} as a {}.".format(character_name, spell_choice.replace("''", "'"), class_name)
+        log = "{} learnt {} as a {}.".format(character_name, spell_choice, class_name)
     await command.author.send(question)
     reply = await self.confirm(command)
     if reply == "Yes":
         await command.author.send("learning spell...")
         await Scripts.learning_spell_confirm(self, discord_id, character_name, class_name, spell_choice, log)
-        await command.author.send(log)
+        await command.author.send(log.replace("''", "'"))
     return "stop"
 
 
@@ -275,7 +291,7 @@ async def forget_spell_menu(self, command, discord_id, character_name: str, clas
     return "stop"
 
 
-async def forget_spell_choice(self, command, character_name, class_name, ):
+async def forget_spell_choice(self, command, character_name, class_name):
     option_list = Scripts.forget_spells_list(character_name, class_name)
     option_question = "Which spell would you like to forget?".format(class_name)
     choice = await self.answer_from_list(command, option_question, option_list)

@@ -19,8 +19,8 @@ def character_profession(character_name: str, profession_name: str, proficiency:
 
 def spell_book_spell(book_id: int, spell: str):
     cursor = Connections.sql_db_connection()
-    link_class_insert = "insert into Link_Spell_book_Spells (Spell_Book_ID, Spell) " \
-                        "values ('{}','{}')".format(book_id, spell)
+    link_class_insert = "insert into Link_Spell_book_Spells (Spell_Book_ID, Spell, Known) " \
+                        "values ('{}','{}','True')".format(book_id, spell)
     cursor.execute(link_class_insert)
     cursor.commit()
 

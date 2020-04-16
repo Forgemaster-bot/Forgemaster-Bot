@@ -283,7 +283,7 @@ async def learning_spell_confirm(self, discord_id, character_name: str, class_na
             spell_origin = SQL_Lookup.character_class_subclass(character_name, class_name)
         SQL_Insert.character_spell(character_name, spell_origin, spell_name)
     Connections.sql_log_private_command(discord_id, log)
-    await Connections.log_to_discord(self, log)
+    await Connections.log_to_discord(self, log.replace("''", "'"))
 
 
 def forget_spells_list(character_name: str, class_name: str, ):

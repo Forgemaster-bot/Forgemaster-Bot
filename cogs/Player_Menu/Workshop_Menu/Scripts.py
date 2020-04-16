@@ -13,13 +13,20 @@ def menu(character_name: str):
         SQL_Insert.crafting(character_name)
     menu_list = ["Create a mundane item",
                  "Create a consumable item",
-                 "Create a recipe guide",
                  "Experiment with essences",
-                 "View your recipes",
-                 "Create a scroll",
-                 "Scribe a spell into your spell book",
-                 "Work for someone this week"
-                 ]
+                 "View your recipes"]
+    # "Create a recipe guide",
+    # if caster
+    number_of_classes = SQL_Lookup.character_count_classes(character_name)
+    for rows in range(number_of_classes):
+        class_name = SQL_Lookup.character_class_by_number(character_name, rows + 1)
+        class_level = SQL_Lookup.character_class_level_by_class(character_name, class_name)
+        if SQL_Check.class_is_spell_caster(character_name, class_name, class_level):
+            if character_has_spells_to_view(character_name, class_name):
+                menu_list.append("Create a scroll from your {} spells".format(class_name))
+            if class_name == 'Wizard':
+                menu_list.append("Scribe a spell into your spell book")
+    menu_list.append("Work for someone this week")
     return menu_list
 
 
@@ -40,6 +47,27 @@ def character_info(character_name: str):
     gold = SQL_Lookup.character_gold(character_name)
     character_list.append("**Gold:** {}g".format(gold))
     return Quick_Python.list_to_table(character_list)
+
+
+def character_has_spells_to_view(character_name: str, class_name: str):
+    # if wizard
+    if class_name == 'Wizard':
+        if SQL_Check.wizard_has_spells(character_name):
+            return True
+        else:
+            return False
+    # if learner caster
+    elif SQL_Check.class_learn_spells(class_name):
+        if SQL_Check.character_has_spells_by_class(character_name, class_name):
+            return True
+        else:
+            return False
+    return True
+
+
+'''''''''''''''''''''''''''''''''''''''''
+################Crafting##################
+'''''''''''''''''''''''''''''''''''''''''
 
 
 def crafting_limit(character_name: str):
@@ -426,3 +454,84 @@ async def work_confirm(self, discord_id, character_name: str, target_name, log):
     target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_name))
     if target_discord is not None:
         await target_discord.send(log)
+
+
+'''''''''''''''''''''''''''''''''''''''''
+#############Scroll crafting#############
+'''''''''''''''''''''''''''''''''''''''''
+
+
+def craft_scroll_level_options(character_name: str, class_name: str, gold_limit):
+    if gold_limit < 25:
+        return []
+    elif gold_limit < 50:
+        spell_limit = 1
+    elif gold_limit < 100:
+        spell_limit = 2
+    elif gold_limit < 250:
+        spell_limit = 3
+    elif gold_limit < 500:
+        spell_limit = 4
+    else:
+        spell_limit = 4
+
+    if class_name == 'Wizard':
+        spell_level_list = SQL_Lookup.character_spell_level_list_spell_book(character_name)
+    else:
+        spell_level_list = SQL_Lookup.character_spell_level_list_by_class(character_name, class_name)
+    return_list = []
+    for row in spell_level_list:
+        if row.Level <= spell_limit:
+            return_list.append("Level {} spell".format(row.Level))
+    return return_list
+
+
+def craft_scroll_spell_options(character_name: str, class_name: str, spell_level: int):
+    if class_name == 'Wizard':
+        spell_level_list = SQL_Lookup.character_known_wizard_spells_by_level(character_name, spell_level)
+    else:
+        spell_level_list = SQL_Lookup.character_known_spells_by_class_and_level(character_name, class_name, spell_level)
+    return spell_level_list
+
+
+async def create_scroll_confirm(self, command, discord_id, character_name, spell_level: int, spell_name, log):
+    # update reagent
+    reagent_cost = SQL_Lookup.spell_consumable_cost(spell_name)
+    if reagent_cost > 0:
+        reagent_total = SQL_Lookup.character_item_quantity(character_name, 'Universal Reagent')
+        if reagent_cost > reagent_total:
+            msg = "You do not have enough Universal Reagent for the consumable cost of the scroll"
+            await command.message.author.send(msg)
+            return "stop"
+        else:
+            SQL_Update.character_item_quantity(character_name, 'Universal Reagent', reagent_cost*-1)
+    # update gold
+    if spell_level == '1':
+        gold_cost = 25
+    elif spell_level == '2':
+        gold_cost = 50
+    elif spell_level == '3':
+        gold_cost = 100
+    elif spell_level == '4':
+        gold_cost = 250
+    else:
+        gold_cost = 500
+    SQL_Update.character_gold(character_name, gold_cost*-1)
+
+    # update crafting
+    craft_details = SQL_Lookup.character_crafting(character_name)
+    new_craft_value = int(craft_details[1]) - gold_cost
+    SQL_Update.character_crafting(character_name, new_craft_value, 0)
+
+    # create scroll in inventory
+    item_name = "Scroll of {}".format(spell_name)
+    if SQL_Check.character_has_item(character_name, item_name):
+        SQL_Update.character_item_quantity(character_name, item_name, 1)
+    else:
+        SQL_Insert.character_item(character_name, item_name, 1)
+
+    # add to logs
+    Update_Google_Roster.update_items(character_name)
+    Update_Google_Roster.update_gold_group([character_name])
+    Connections.sql_log_private_command(discord_id, log)
+    await Connections.log_to_discord(self, log)

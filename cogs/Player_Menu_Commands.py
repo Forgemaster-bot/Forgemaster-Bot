@@ -107,6 +107,9 @@ class Player_Menu_Commands(commands.Cog):
     async def answer_from_list(self, command, question, option_list):
         options = Scripts.question_list(option_list)
         maximum = len(option_list)
+        if maximum == 0:
+            await command.message.author.send("No options available")
+            return "stop"
         await command.message.author.send("{}\n{}".format(question, options))
 
         # setup sub function to do checks the returned message is from the user in private messages
@@ -142,6 +145,9 @@ class Player_Menu_Commands(commands.Cog):
     async def answer_from_list_craft(self, command, question, option_list):
         options = Scripts.question_list(option_list)
         maximum = len(option_list)
+        if maximum == 0:
+            await command.message.author.send("No options available")
+            return "stop"
         await command.message.author.send("{}\n{}".format(question, options))
 
         # setup sub function to do checks the returned message is from the user in private messages

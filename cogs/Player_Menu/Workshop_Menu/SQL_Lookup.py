@@ -224,3 +224,120 @@ def character_owner(character_name: str):
     cursor.execute(query)
     result = cursor.fetchone()
     return int(result.Discord_ID)
+
+
+def character_count_classes(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select Count(*) Total from Link_Character_Class where Character = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Total
+
+
+def character_class_by_number(character_name: str, number: int):
+    cursor = Connections.sql_db_connection()
+    query = "Select Class " \
+            "From Link_Character_Class " \
+            "Where Character = '{}' and Number = '{}'".format(character_name, number)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Class
+
+
+def character_class_level_by_class(character_name: str, character_class: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * " \
+            "from Link_Character_Class " \
+            "where Character='{}' and Class = '{}'".format(character_name, character_class)
+    cursor.execute(query)
+    class_lookup = cursor.fetchone()
+    return class_lookup.Level
+
+
+def character_spell_level_list_by_class(character_name: str, class_name: str):
+    sub_class = character_class_subclass(character_name, class_name)
+    cursor = Connections.sql_db_connection()
+    query = "select Level " \
+            "from Link_Character_Spells A " \
+            "left Join Info_Spells B " \
+            "on A.Spell = B.Name " \
+            "where Character_name = '{}' and (Origin = '{}' or Origin = '{}') " \
+            "Group By Level " \
+            "Order by Level".format(character_name, class_name, sub_class)
+    cursor.execute(query)
+    result = cursor.fetchall()
+    return result
+
+
+def character_spell_level_list_spell_book(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select Level " \
+            "from Link_Spell_Book_Spells A " \
+            "left join Main_Spell_Book B " \
+            "on A.Spell_Book_ID = B.ID " \
+            "left join Info_Spells C " \
+            "on A.Spell = C.Name " \
+            "Where Owner = '{}' " \
+            "Group By Level " \
+            "Order By Level".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchall()
+    return result
+
+
+def character_known_spells_by_class_and_level(character_name: str, class_name: str, spell_level: int):
+    sub_class = character_class_subclass(character_name, class_name)
+    cursor = Connections.sql_db_connection()
+    query = "select Spell " \
+            "from Link_Character_Spells A " \
+            "left Join Info_Spells B " \
+            "on A.Spell = B.Name " \
+            "where Character_name = '{}' " \
+            "and B.Level = {} " \
+            "and (Origin = '{}' or Origin = '{}') "\
+        .format(character_name, spell_level, class_name, sub_class)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    result = []
+    for row in rows:
+        result.append(row.Spell)
+    return result
+
+
+def character_known_wizard_spells_by_level(character_name: str, spell_level: int):
+    cursor = Connections.sql_db_connection()
+    query = "Select Spell " \
+            "From Main_Spell_Book A " \
+            "Left join Link_Spell_book_Spells B " \
+            "on A.ID = B.Spell_Book_ID " \
+            "left join Info_Spells C " \
+            "on B.Spell = C.Name " \
+            "Where A.owner = '{}' and C.Level = '{}'".format(character_name, spell_level)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    result = []
+    for row in rows:
+        result.append(row.Spell)
+    return result
+
+
+def character_class_subclass(character_name: str, subclass: str):
+    cursor = Connections.sql_db_connection()
+    query = "Select * " \
+            "from Link_character_Class " \
+            "where Character = '{}' and Class = '{}' ".format(character_name, subclass)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result.Sub_Class is None:
+        return None
+    return result.Sub_Class
+
+
+def spell_consumable_cost(spell_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "Select * " \
+            "From Info_Spells " \
+            "Where Name = '{}'".format(spell_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Consumable_Cost

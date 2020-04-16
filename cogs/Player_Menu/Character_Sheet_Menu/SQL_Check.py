@@ -79,7 +79,7 @@ def class_is_spell_caster(character_name: str, class_name: str, class_level: int
     result = cursor.fetchone()
     if result is None:
         return False
-    if result[class_level + 1] > 0:
+    if result[class_level] > 0:
         return True
     return False
 

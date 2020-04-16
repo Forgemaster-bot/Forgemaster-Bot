@@ -34,8 +34,14 @@ async def main_menu(self, command, discord_id: int, character_name: str):
                     return menu
                 elif menu == "stop":
                     return
-        elif choice == "Create a scroll":
-            await command.message.author.send("coming soon")
+        elif "Create a scroll from your " in choice:
+            while True:
+                class_choice = choice.replace("Create a scroll from your ", "").replace(" spells", "")
+                menu = await craft_scroll_menu(self, command, discord_id, character_name, class_choice)
+                if menu == "exit":
+                    return menu
+                elif menu == "stop":
+                    return
         elif choice == "Scribe a spell into your spell book":
             await command.message.author.send("coming soon")
         elif choice == "Work for someone this week":
@@ -78,7 +84,6 @@ async def mundane_menu(self, command, discord_id, character_name: str):
     if gold_limit == 0:
         await command.message.author.send("you cannot craft any more this week")
         return "stop"
-
     profession = await profession_choice(self, command, character_name)
     if profession == "exit" or profession == "stop":
         return profession
@@ -111,9 +116,6 @@ async def mundane_menu(self, command, discord_id, character_name: str):
 
 async def mundane_type_choice(self, command, profession, gold_limit):
     option_list = Scripts.mundane_item_type(profession, gold_limit)
-    if len(option_list) == 0:
-        await command.message.author.send("No options available")
-        return "stop"
     option_question = "What type of item do you want to craft?".format(profession)
     if len(option_list) == 1:
         choice = option_list[0]
@@ -124,9 +126,6 @@ async def mundane_type_choice(self, command, profession, gold_limit):
 
 async def mundane_item_choice(self, command, profession, gold_limit, item_type):
     option_list = Scripts.mundane_item(profession, gold_limit, item_type)
-    if len(option_list) == 0:
-        await command.message.author.send("No options available")
-        return "stop"
     option_question = "What item do you want to craft?"
     choice = await self.answer_from_list(command, option_question, option_list)
     return choice
@@ -158,6 +157,11 @@ async def craft_mundane_confirm(self, command, discord_id, character_name, item_
         await command.author.send(log)
         return
     return "stop"
+
+
+'''''''''''''''''''''''''''''''''''''''''
+##############Consumable#################
+'''''''''''''''''''''''''''''''''''''''''
 
 
 async def consumable_menu(self, command, discord_id, character_name: str):
@@ -265,6 +269,11 @@ async def craft_consumable_confirm(self, command, discord_id, character_name, pr
     return "stop"
 
 
+'''''''''''''''''''''''''''''''''''''''''
+##############Experiment#################
+'''''''''''''''''''''''''''''''''''''''''
+
+
 async def experiment_menu(self, command, discord_id, character_name: str):
     gold_limit = Scripts.crafting_limit(character_name)
     if gold_limit == 0:
@@ -308,9 +317,6 @@ async def experiment_menu(self, command, discord_id, character_name: str):
 
 async def experiment_first_essence(self, command, option_list):
     option_question = "Please enter the number for the first essence you want to experiment with."
-    if len(option_list) == 0:
-        await command.message.author.send("No essence available")
-        return "stop"
     choice = await self.answer_from_list(command, option_question, option_list)
     choice_details = choice.split(" (")
     return choice_details[0]
@@ -342,6 +348,11 @@ async def craft_experiment_confirm(self, command, discord_id, character_name, pr
     return "stop"
 
 
+'''''''''''''''''''''''''''''''''''''''''
+##############Recipe List################
+'''''''''''''''''''''''''''''''''''''''''
+
+
 async def recipe_menu(self, command, character_name: str):
     profession = await profession_choice(self, command, character_name)
     if profession == "exit" or profession == "stop":
@@ -349,6 +360,11 @@ async def recipe_menu(self, command, character_name: str):
 
     response = Scripts.recipe_list(character_name, profession)
     await command.message.author.send(response)
+
+
+'''''''''''''''''''''''''''''''''''''''''
+#############Worker options###############
+'''''''''''''''''''''''''''''''''''''''''
 
 
 async def work_menu(self, command, discord_id, character_name):
@@ -382,5 +398,57 @@ async def work_confirm(self, command, discord_id, character_name, target_name):
         await command.author.send("working...")
         log = "{} is now working for {} this week".format(character_name, target_name)
         await Scripts.work_confirm(self, discord_id, character_name, target_name, log)
+        await command.author.send(log)
+    return "stop"
+
+
+'''''''''''''''''''''''''''''''''''''''''
+##############Craft Scroll###############
+'''''''''''''''''''''''''''''''''''''''''
+
+
+async def craft_scroll_menu(self, command, discord_id, character_name: str, class_name: str):
+    welcome_message = "Craft {} Scroll Menu: Type **STOP** at any time to go back to the player menu."\
+        .format(class_name)
+    await command.message.author.send(welcome_message)
+
+    gold_limit = Scripts.crafting_limit(character_name)
+    spell_level_choice = await craft_scroll_level_choice(self, command, character_name, class_name, gold_limit)
+    if spell_level_choice == "exit" or spell_level_choice == "stop":
+        return spell_level_choice
+
+    spell_choice = await craft_scroll_spell_choice(self, command, character_name, class_name, spell_level_choice)
+    if spell_choice == "exit" or spell_choice == "stop":
+        return spell_choice
+
+    confirm = await create_scroll_confirm(self, command, discord_id, character_name, spell_level_choice, spell_choice)
+    if confirm == "exit" or confirm == "stop":
+        return confirm
+    return "stop"
+
+
+async def craft_scroll_level_choice(self, command, character_name, class_name, gold_limit: float):
+    option_list = Scripts.craft_scroll_level_options(character_name, class_name, gold_limit)
+    option_question = "What spell level is the scroll you want to craft?"
+    choice = await self.answer_from_list(command, option_question, option_list)
+    result = choice.replace("Level ", "").replace(" spell", "")
+    return result
+
+
+async def craft_scroll_spell_choice(self, command, character_name, class_name, spell_level: int):
+    option_list = Scripts.craft_scroll_spell_options(character_name, class_name, spell_level)
+    option_question = "Which spell would you like to create a scroll of?"
+    choice = await self.answer_from_list(command, option_question, option_list)
+    return choice
+
+
+async def create_scroll_confirm(self, command, discord_id, character_name, spell_level: int, spell_name):
+    question = "Do you want to create a scroll of {}?".format(spell_name.replace("''", "'"))
+    log = "{} created a scroll of {}.".format(character_name, spell_name.replace("''", "'"))
+    await command.author.send(question)
+    reply = await self.confirm(command)
+    if reply == "Yes":
+        await command.author.send("creating scroll...")
+        await Scripts.create_scroll_confirm(self, command, discord_id, character_name, spell_level, spell_name, log)
         await command.author.send(log)
     return "stop"
