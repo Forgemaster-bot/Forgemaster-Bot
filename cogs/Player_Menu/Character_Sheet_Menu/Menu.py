@@ -37,6 +37,7 @@ async def main_menu(self, command, discord_id: int, character_name: str):
         elif "Learn a new " in choice:
             while True:
                 class_choice = choice.replace("Learn a new ", "").replace(" spell", "")
+
                 menu = await learn_spell_menu(self, command, discord_id, character_name, class_choice)
                 if menu == "exit":
                     return menu
@@ -50,10 +51,10 @@ async def main_menu(self, command, discord_id: int, character_name: str):
                     return menu
                 elif menu == "stop":
                     return
-        elif choice == "exit":
+        elif choice == "exit" or choice == "stop":
             return choice
         else:
-            return
+            return "stop"
 
 
 async def menu_options(self, command, character_name):
@@ -295,16 +296,17 @@ async def forget_spell_choice(self, command, character_name, class_name):
     option_list = Scripts.forget_spells_list(character_name, class_name)
     option_question = "Which spell would you like to forget?".format(class_name)
     choice = await self.answer_from_list(command, option_question, option_list)
-    return choice
+    result = choice.split(":")
+    return result[1].lstrip()
 
 
 async def forget_spell_confirm(self, command, discord_id, character_name, class_name, spell_choice):
-    question = "Do you want to forget the {} spell {}?".format(class_name, spell_choice)
-    log = "{} forgot {} as a {}.".format(character_name, spell_choice, class_name)
+    question = "Do you want to forget the {} spell {}?".format(class_name, spell_choice.replace("''", "'"))
+    log = "{} forgot {} as a {}.".format(character_name, spell_choice.replace("''", "'"), class_name)
     await command.author.send(question)
     reply = await self.confirm(command)
     if reply == "Yes":
         await command.author.send("Forgetting spell...")
-        await Scripts.learning_spell_confirm(self, discord_id, character_name, class_name, spell_choice, log)
+        await Scripts.forget_spell_confirm(self, discord_id, character_name, class_name, spell_choice, log)
         await command.author.send(log)
     return "stop"

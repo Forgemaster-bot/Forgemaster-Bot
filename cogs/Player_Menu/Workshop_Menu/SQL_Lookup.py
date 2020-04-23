@@ -254,6 +254,16 @@ def character_class_level_by_class(character_name: str, character_class: str):
     return class_lookup.Level
 
 
+def class_max_spell_by_level(class_name: str, class_level):
+    cursor = Connections.sql_db_connection()
+    query = "select * " \
+            "from Info_Max_Spell_Level " \
+            "where Class = '{}'".format(class_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result[class_level]
+
+
 def character_spell_level_list_by_class(character_name: str, class_name: str):
     sub_class = character_class_subclass(character_name, class_name)
     cursor = Connections.sql_db_connection()
@@ -321,6 +331,22 @@ def character_known_wizard_spells_by_level(character_name: str, spell_level: int
     return result
 
 
+def class_spells_by_level(class_name: str, sub_class: str, level: int):
+    cursor = Connections.sql_db_connection()
+    query = "select b.* " \
+            "from Link_Class_Spells A " \
+            "left join Info_Spells B " \
+            "on A.Spell = B.Name " \
+            "where Level = '{}' and (Class = '{}' or Class = '{}') " \
+            "order by name".format(level, class_name, sub_class)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    return_list = []
+    for row in rows:
+        return_list.append(row.Name)
+    return return_list
+
+
 def character_class_subclass(character_name: str, subclass: str):
     cursor = Connections.sql_db_connection()
     query = "Select * " \
@@ -341,3 +367,108 @@ def spell_consumable_cost(spell_name: str):
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Consumable_Cost
+
+
+def character_total_level(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select SUM(Level) Total from Link_Character_Class where Character = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Total
+
+
+def proficiency_bonus(level: int):
+    cursor = Connections.sql_db_connection()
+    query = "select *" \
+            "From Info_XP " \
+            "Where Level = '{}'".format(level)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Proficiency_Bonus
+
+
+def character_intelligence(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    cursor.execute(query)
+    character = cursor.fetchone()
+    return character.Intelligence
+
+
+def character_has_arcane_proficiency(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * " \
+            "from Link_Character_Skills " \
+            "Where Character = '{}' and Skill = 'Arcana'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return 0
+    return result.Proficiency
+
+
+def character_wizard_spells_known(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "Select Spell " \
+            "From Main_Spell_Book A " \
+            "Left join Link_Spell_book_Spells B " \
+            "on A.ID = B.Spell_Book_ID " \
+            "left join Info_Spells C " \
+            "on B.Spell = C.Name " \
+            "Where A.owner = '{}' and A.Type = 'Core' ".format(character_name)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    result = []
+    for row in rows:
+        result.append(row.Spell)
+    return result
+
+
+def character_scribe_spell_options(character_name: str, spell_limit: int):
+    cursor = Connections.sql_db_connection()
+    query = "select * " \
+            "from ( " \
+            "select B.Name,B.Level,A.Origin " \
+            "from ( " \
+            "select replace(item,'Scroll of ','') as Spell, 'a scroll' as Origin " \
+            "from Link_Character_Items " \
+            "where Character = '{}' and item like 'Scroll of %' ) A " \
+            "left join Info_Spells B " \
+            "on A.Spell = B.Name " \
+            "union all " \
+            "select c.Name, C.Level, A.Name " \
+            "from Main_Spell_book A " \
+            "left join Link_Spell_book_Spells B " \
+            "on A.ID = B.Spell_Book_ID " \
+            "left join Info_Spells C " \
+            "on B.Spell = C.Name " \
+            "where A.owner = '{}' and B.Known = 0 " \
+            "union all " \
+            "select B.Name,B.Level, A.Owner + ' Spell Book' as Owner " \
+            "from Main_Wizard_Spell_Share A " \
+            "left join Info_Spells B " \
+            "on A.Spell = B.Name " \
+            "where A.Target = '{}') A " \
+            "where A.Name not in (Select Spell " \
+            "from Link_Spell_book_Spells A " \
+            "left join Main_Spell_book B " \
+            "on A.Spell_Book_ID = B.ID " \
+            "where B.Owner = '{}') " \
+            "and Level <= {} " \
+            "Order by Level,Name".format(character_name, character_name, character_name, character_name, spell_limit)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    result = []
+    for row in rows:
+        result.append("Level {} Spell: {} From: {}".format(row.Level, row.Name, row.Origin))
+    return result
+
+
+def spell_book(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * " \
+            "from Main_Spell_book " \
+            "Where Owner = '{}' and Type = 'Core'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.ID

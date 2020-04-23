@@ -197,9 +197,10 @@ def character_spells_by_class(character_name: str, class_name: str):
             "order by Level, Name ".format(character_name, class_name, sub_class)
     cursor.execute(query)
     rows = cursor.fetchall()
-    return_list = []
+    return_list = ["{} {} spell list".format(character_name, class_name)]
     for row in rows:
-        return_list.append("Level {} Spell : {}".format(row.Level, row.Name))
+        if row.Name is not None:
+            return_list.append("Level {} Spell : {}".format(row.Level, row.Name))
     return return_list
 
 
@@ -211,8 +212,8 @@ def character_spells_in_book(character_name: str):
             "on A.Spell_Book_ID = B.ID " \
             "left join Info_Spells C " \
             "on A.Spell = C.Name " \
-            "Where Owner = '{}' " \
-            "order by Level, Name ".format(character_name)
+            "Where B.Owner = '{}' and B.Type = 'Core' " \
+            "order by C.Level, C.Name ".format(character_name)
     cursor.execute(query)
     rows = cursor.fetchall()
     return_list = []
@@ -256,7 +257,7 @@ def spells_known_by_level(class_name: str, class_level: int):
             "Where Class = '{}'".format(class_name)
     cursor.execute(query)
     result = cursor.fetchone()
-    return result[class_level + 1]
+    return result[class_level]
 
 
 def class_spells_by_level(class_name: str, sub_class: str, level: int):
@@ -299,7 +300,7 @@ def character_known_wizard_spells_by_level(character_name: str, spell_level: int
             "on A.ID = B.Spell_Book_ID " \
             "left join Info_Spells C " \
             "on B.Spell = C.Name " \
-            "Where A.owner = '{}' and C.Level = '{}'".format(character_name, spell_level)
+            "Where A.owner = '{}' and A.Type = 'Core' and C.Level = '{}'".format(character_name, spell_level)
     cursor.execute(query)
     rows = cursor.fetchall()
     result = []
@@ -331,7 +332,7 @@ def spell_book(character_name: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Main_Spell_book " \
-            "Where Owner = '{}'".format(character_name)
+            "Where Owner = '{}' and Type = 'Core'".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
     return result.ID

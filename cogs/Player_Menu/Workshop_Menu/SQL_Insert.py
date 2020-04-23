@@ -23,3 +23,11 @@ def character_recipe(character_name: str, profession: str, recipie_name: str):
                         "values ('{}','{}','{}')".format(character_name, profession, recipie_name)
     cursor.execute(link_class_insert)
     cursor.commit()
+
+
+def spell_book_spell(book_id: int, spell: str):
+    cursor = Connections.sql_db_connection()
+    link_class_insert = "insert into Link_Spell_book_Spells (Spell_Book_ID, Spell, Known) " \
+                        "values ('{}','{}','True')".format(book_id, spell)
+    cursor.execute(link_class_insert)
+    cursor.commit()

@@ -43,7 +43,12 @@ async def main_menu(self, command, discord_id: int, character_name: str):
                 elif menu == "stop":
                     return
         elif choice == "Scribe a spell into your spell book":
-            await command.message.author.send("coming soon")
+            while True:
+                menu = await scribe_spell_menu(self, command, discord_id, character_name)
+                if menu == "exit":
+                    return menu
+                elif menu == "stop":
+                    return
         elif choice == "Work for someone this week":
             while True:
                 menu = await work_menu(self, command, discord_id, character_name)
@@ -452,3 +457,51 @@ async def create_scroll_confirm(self, command, discord_id, character_name, spell
         await Scripts.create_scroll_confirm(self, command, discord_id, character_name, spell_level, spell_name, log)
         await command.author.send(log)
     return "stop"
+
+
+'''''''''''''''''''''''''''''''''''''''''
+##############scribe spell###############
+'''''''''''''''''''''''''''''''''''''''''
+
+
+async def scribe_spell_menu(self, command, discord_id, character_name: str):
+    reagent_quantity = Scripts.reagent_quantity(character_name)
+    ability_bonus = Scripts.scribe_roll_bonus(character_name)
+    welcome_message = "Scribe spell Menu: Type **STOP** at any time to go back to the player menu. \n" \
+                      "It costs 50 universal reagent per level of spell to scribe. you have {}.\n" \
+                      "The DC to copy a spell is 10 + spell level. you have +{} to the roll"\
+        .format(reagent_quantity, ability_bonus)
+    await command.message.author.send(welcome_message)
+
+    spell_choice = await scribe_spell_spell_choice(self, command, character_name, reagent_quantity)
+    if spell_choice == "exit" or spell_choice == "stop":
+        return spell_choice
+
+    confirm = await scribe_spell_confirm(self, command, discord_id, character_name, spell_choice, ability_bonus)
+    if confirm == "exit" or confirm == "stop":
+        return confirm
+    return "stop"
+
+
+async def scribe_spell_spell_choice(self, command, character_name, reagent_quantity):
+    option_list = Scripts.scribe_spell_list(character_name, reagent_quantity)
+    option_question = "Which spell would you like to lend?"
+    choice = await self.answer_from_list(command, option_question, option_list)
+    return choice
+
+
+async def scribe_spell_confirm(self, command, discord_id, character_name, spell, ability_bonus):
+    spell_detail = spell.split(":")
+    spell_level = spell_detail[0].replace("Level ", "").replace(" Spell", "")
+    spell_name = spell_detail[1].replace(" From", "").lstrip()
+    spell_origin = spell_detail[2].lstrip()
+    question = "Do you want to try and scribe {} into your spellbook from {}? " \
+               "\nIt will cost {} universal reagent and you must pass a DC {} Arcane roll"\
+        .format(spell_name.replace("''", "'"), spell_origin, int(spell_level)*50, int(spell_level)+10)
+    await command.author.send(question)
+    reply = await self.confirm(command)
+    if reply == "Yes":
+        await command.author.send("Attempting to scribe...")
+        await Scripts.scribe_spell_confirm(self, command, discord_id, character_name, spell_name,
+                                           spell_origin, spell_level, ability_bonus)
+    return "exit"

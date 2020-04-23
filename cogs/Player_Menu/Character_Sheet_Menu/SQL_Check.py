@@ -136,3 +136,15 @@ def character_class_can_replace_spell(character_name: str, class_name: str):
     if result.Replace_Spell:
         return True
     return False
+
+
+def class_can_replace_spell(class_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "Select *" \
+            "From Info_Spells_Known " \
+            "Where Class = '{}'".format(class_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True

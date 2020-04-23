@@ -22,10 +22,19 @@ def character_subclass(character_name: str, class_name: str, subclass: str):
     cursor.commit()
 
 
-def character_forget_spell(character_name: str, class_name: str):
+def character_forget_spell_allow(character_name: str, class_name: str):
     cursor = Connections.sql_db_connection()
     query = "UPDATE Link_Character_Class " \
             "SET Replace_Spell = 1 " \
+            "WHERE Character = '{}' AND Class = '{}'".format(character_name, class_name)
+    cursor.execute(query)
+    cursor.commit()
+
+
+def character_forget_spell_stop(character_name: str, class_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "UPDATE Link_Character_Class " \
+            "SET Replace_Spell = 0 " \
             "WHERE Character = '{}' AND Class = '{}'".format(character_name, class_name)
     cursor.execute(query)
     cursor.commit()

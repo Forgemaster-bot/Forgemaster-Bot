@@ -9,7 +9,7 @@ import Update_Google_Roster
 import Update_Google_Trade
 
 
-def menu():
+def menu(character_name: str):
     menu_list = ["Buy items",
                  "Sell items",
                  "Stop selling an item",
@@ -17,6 +17,8 @@ def menu():
                  "Give gold to someone",
                  "Recycle an item"
                  ]
+    if SQL_Check.character_is_wizard(character_name):
+        menu_list.append("Share a spell from your spell book with someone")
     return menu_list
 
 
@@ -213,13 +215,28 @@ def sell_character_item(character_name: str, item_name: str):
 
 
 async def sell_confirm(self, discord_id, character_name: str, item_name: str, quantity: int, value: float, log):
+    # find item type
+    item_details = SQL_Lookup.item_detail(item_name)
+    if item_details is not None:
+        item_type = item_details.Type
+    else:
+        if item_name.find(" ") != -1:
+            type_list = ['Potion', 'Scroll', 'Glyph', 'Bomb', 'Snack']
+            item_details = item_name[:item_name.find(" ")]
+            for row in type_list:
+                if item_details == row:
+                    item_type = row
+                    break
+        item_type = "Other"
+
     # update SQL
     character_item_details = SQL_Lookup.character_item(character_name, item_name)
     if quantity == character_item_details.Quantity:
         SQL_Delete.character_item(character_name, item_name)
     else:
         SQL_Update.character_item_quantity(character_name, item_name, quantity * -1)
-    SQL_Insert.trade_sell(character_name, item_name, quantity, value)
+
+    SQL_Insert.trade_sell(character_name, item_name, quantity, value, item_type)
 
     # update google
     Update_Google_Roster.update_items(character_name)
@@ -255,3 +272,29 @@ async def stop_sale_confirm(self, discord_id, character_name: str, item_name: st
 
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
+
+
+'''''''''''''''''''''''''''''''''''''''''
+##############share spell################
+'''''''''''''''''''''''''''''''''''''''''
+
+
+def share_spell_level_options(character_name: str):
+    result = SQL_Lookup.character_spell_level_list_spell_book(character_name)
+    return result
+
+
+def share_spell_options(character_name: str, spell_level: int):
+    result = SQL_Lookup.character_known_wizard_spells_by_level(character_name, spell_level)
+    return result
+
+
+async def share_spell_confirm(self, discord_id, character_name: str, target_name: str, spell_name: str, log):
+    SQL_Insert.share_spell(character_name, target_name, spell_name)
+
+    # inform target
+    Connections.sql_log_private_command(discord_id, log)
+    await Connections.log_to_discord(self, log)
+    target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_name))
+    if target_discord is not None:
+        await target_discord.send(log)

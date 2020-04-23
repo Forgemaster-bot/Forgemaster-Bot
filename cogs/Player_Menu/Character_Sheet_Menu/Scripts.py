@@ -161,8 +161,8 @@ async def level_up_confirm(self, character_name: str, class_name: str, discord_i
         SQL_Insert.character_class(character_name, class_name, 1, number)
 
     # update spell options
-    if SQL_Check.character_class_can_replace_spell(character_name, class_name):
-        SQL_Update.character_forget_spell(character_name, class_name)
+    if SQL_Check.class_can_replace_spell(class_name):
+        SQL_Update.character_forget_spell_allow(character_name, class_name)
     if class_name == 'Wizard':
         SQL_Update.character_wizard_spell(character_name, class_name, 2)
 
@@ -260,14 +260,16 @@ def learnable_spells_by_level(character_name: str, class_name: str, spell_level:
 
 
 def theurgy_check(sub_class: str, spell_level, known_spells: list):
+    if sub_class is None:
+        return False
     domain = sub_class.replace("School of Theurgy ", "")
     domain_spells = SQL_Lookup.class_spells_at_and_below_level(domain, spell_level)
     for spell in known_spells:
         if spell in domain_spells:
             domain_spells.remove(spell)
     if len(domain_spells) > 0:
-        return False
-    return True
+        return True
+    return False
 
 
 async def learning_spell_confirm(self, discord_id, character_name: str, class_name: str, spell_name: str, log):
@@ -296,7 +298,10 @@ async def forget_spell_confirm(self, discord_id, character_name: str, class_name
     if spell_origin is None:
         sub_class = SQL_Lookup.character_class_subclass(character_name, class_name)
         spell_origin = SQL_Lookup.spell_origin(sub_class, spell_name)
+
     SQL_Delete.character_forget_spell(character_name, spell_origin, spell_name)
+    SQL_Update.character_forget_spell_stop(character_name, class_name)
+
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
 

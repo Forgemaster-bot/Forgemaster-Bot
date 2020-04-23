@@ -23,3 +23,15 @@ def character_has_enough_gold_to_buy_trade(gold: float):
     if result is None:
         return False
     return True
+
+
+def character_is_wizard(character_name: str, ):
+    cursor = Connections.sql_db_connection()
+    query = "select * " \
+            "from Link_Character_Class " \
+            "where Character='{}' and Class = 'Wizard'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return None
+    return True

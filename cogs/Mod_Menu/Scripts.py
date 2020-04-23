@@ -52,7 +52,7 @@ def create_character_execute(command: str):
     SQL_Insert.character_class(character_name, character_class, 1, 1)
     if character_class == 'Wizard':
         SQL_Update.character_wizard_spell(character_name, character_class)
-        SQL_Insert
+        SQL_Insert.character_spell_book(character_name)
     SQL_Insert.character_item(character_name, "Rations", 10)
     Update_Google_Roster.insert_new_character(character_name)
     Update_Google_Roster.update_classes(character_name)

@@ -260,7 +260,7 @@ class Player_Menu_Commands(commands.Cog):
         elif msg.content.lower() == "stop":
             reply = "stop"
         else:
-            reply = msg.content.lower()
+            reply = msg.content.replace("'", "''").lower()
         return reply
 
     async def confirm(self, command):

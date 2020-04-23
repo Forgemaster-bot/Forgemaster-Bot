@@ -60,7 +60,7 @@ def character_skill(character_name: str, skill_name: str, proficiency: int):
 
 def character_spell_book(character_name: str):
     cursor = Connections.sql_db_connection()
-    link_class_insert = "insert into Main_Spell_Book (ID,Owner,Name) " \
-                        "values (NEWID(),'{}','{}')".format(character_name, "{} Spell book".format(character_name))
+    link_class_insert = "insert into Main_Spell_Book (ID,Owner,Name,Type) " \
+                        "values (NEWID(),'{}','{} Spell book','Core')".format(character_name,character_name)
     cursor.execute(link_class_insert)
     cursor.commit()

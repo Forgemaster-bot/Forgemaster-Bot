@@ -1,0 +1,1 @@
+1) For all roster changing updates, check names on roster as it causes a Command raised an exception: IncorrectCellLabel: (0, 8) error

@@ -6,6 +6,7 @@ from Player_Menu.Workshop_Menu import SQL_Delete
 import Quick_Python
 import Connections
 import Update_Google_Roster
+import random
 
 
 def menu(character_name: str):
@@ -228,11 +229,13 @@ def consumable_update_essence_inventory(profession: str, recipe: str, essence_in
             if essence_detail[0] == essence:
                 if len(essence_detail) == 1:
                     essence_inventory.remove(essence_inventory[row])
+                    break
                 elif essence_detail[1] == "2":
                     essence_inventory[row] = essence_detail[0]
+                    break
                 else:
                     essence_inventory[row] = "{} ({})".format(essence_detail[0], int(essence_detail[1]) - 1)
-                continue
+                    break
     return essence_inventory
 
 
@@ -477,20 +480,30 @@ def craft_scroll_level_options(character_name: str, class_name: str, gold_limit)
 
     if class_name == 'Wizard':
         spell_level_list = SQL_Lookup.character_spell_level_list_spell_book(character_name)
-    else:
+    elif SQL_Check.class_learn_spells(class_name):
         spell_level_list = SQL_Lookup.character_spell_level_list_by_class(character_name, class_name)
+    else:
+        class_level = SQL_Lookup.character_class_level_by_class(character_name, class_name)
+        max_spell_level = SQL_Lookup.class_max_spell_by_level(class_name, class_level)
+        spell_level_list = []
+        for row in range(1, max_spell_level + 1):
+            row_list = [row, ""]
+            spell_level_list.append(row_list)
     return_list = []
     for row in spell_level_list:
-        if row.Level <= spell_limit:
-            return_list.append("Level {} spell".format(row.Level))
+        if row[0] <= spell_limit:
+            return_list.append("Level {} spell".format(row[0]))
     return return_list
 
 
 def craft_scroll_spell_options(character_name: str, class_name: str, spell_level: int):
     if class_name == 'Wizard':
         spell_level_list = SQL_Lookup.character_known_wizard_spells_by_level(character_name, spell_level)
-    else:
+    elif SQL_Check.class_learn_spells(class_name):
         spell_level_list = SQL_Lookup.character_known_spells_by_class_and_level(character_name, class_name, spell_level)
+    else:
+        sub_class = SQL_Lookup.character_class_subclass(character_name, class_name)
+        spell_level_list = SQL_Lookup.class_spells_by_level(class_name, sub_class, spell_level)
     return spell_level_list
 
 
@@ -535,3 +548,60 @@ async def create_scroll_confirm(self, command, discord_id, character_name, spell
     Update_Google_Roster.update_gold_group([character_name])
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
+
+'''''''''''''''''''''''''''''''''''''''''
+#############Scribe Spell################
+'''''''''''''''''''''''''''''''''''''''''
+
+
+def reagent_quantity(character_name: str):
+    result = SQL_Lookup.character_item_quantity(character_name, 'Universal Reagent')
+    return result
+
+
+def scribe_roll_bonus(character_name: str):
+    arcane_prof = SQL_Lookup.character_has_arcane_proficiency(character_name)
+    total_level = SQL_Lookup.character_total_level(character_name)
+    prof_bonus = SQL_Lookup.proficiency_bonus(total_level)
+    intelligence = SQL_Lookup.character_intelligence(character_name)
+    total = int(arcane_prof * prof_bonus) + int((intelligence-10)/2)
+    return total
+
+
+def scribe_spell_list(character_name: str, reagent_limit: int):
+    spell_limit = int(reagent_limit/50)
+    spell_list = SQL_Lookup.character_scribe_spell_options(character_name, spell_limit)
+    return spell_list
+
+
+async def scribe_spell_confirm(self, command, discord_id, character_name, spell_name, spell_origin,
+                               spell_level, ability_bonus):
+
+    ability_roll = random.randint(1, 20)
+    skill_dc = int(spell_level) + 10
+    if skill_dc > ability_roll + ability_bonus:
+        log = "{} rolled {} + {} against a DC of {} and failed to copy the spell {} into their spell book" \
+            .format(character_name, ability_roll, ability_bonus, skill_dc, spell_name.replace("''", "'"))
+    else:
+        log = "{} rolled {} + {} against a DC of {} and copied the spell {} into their spell book" \
+            .format(character_name, ability_roll, ability_bonus, skill_dc, spell_name.replace("''", "'"))
+        book_id = SQL_Lookup.spell_book(character_name)
+        SQL_Insert.spell_book_spell(book_id, spell_name)
+
+    SQL_Update.character_item_quantity(character_name, 'Universal Reagent', int(spell_level)*-50)
+    if spell_origin == "a scroll":
+        item_name = "Scroll of {}".format(spell_name)
+        item_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
+        if item_quantity > 1:
+            SQL_Update.character_item_quantity(character_name, item_name, 1)
+        else:
+            SQL_Delete.character_item(character_name, item_name)
+    elif " Spell Book" in spell_origin:
+        SQL_Delete.wizard_spell_share(character_name, spell_origin.replace(" Spell Book", ""), spell_name)
+
+    # add to logs
+    Update_Google_Roster.update_items(character_name)
+    Connections.sql_log_private_command(discord_id, log.replace("'", "''"))
+    await Connections.log_to_discord(self, log)
+    await command.author.send(log)
+    return

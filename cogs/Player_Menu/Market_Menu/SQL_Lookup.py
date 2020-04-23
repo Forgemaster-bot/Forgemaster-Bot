@@ -71,20 +71,15 @@ def item_detail(item_name: str):
 
 def trade_goods_types(character_name: str, gold_limit: float):
     cursor = Connections.sql_db_connection()
-    query = "Select distinct b.Type " \
-            "From Main_Trade a " \
-            "Left join Info_Item b " \
-            "On a.Item = b.Name " \
+    query = "Select distinct Type " \
+            "From Main_Trade " \
             "Where a.Price <= '{}' and a.Character != '{}' " \
             "Order by Type".format(gold_limit, character_name)
     cursor.execute(query)
     rows = cursor.fetchall()
     response = []
     for row in rows:
-        if row.Type is None:
-            response.append("Other")
-        else:
-            response.append(row.Type)
+        response.append(row.Type)
     response.sort()
     return response
 
@@ -163,3 +158,42 @@ def trade_item__character(character_name: str, item_name: str):
     cursor.execute(query)
     item = cursor.fetchone()
     return item
+
+
+def character_spell_level_list_spell_book(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select Level " \
+            "from Link_Spell_Book_Spells A " \
+            "left join Main_Spell_Book B " \
+            "on A.Spell_Book_ID = B.ID " \
+            "left join Info_Spells C " \
+            "on A.Spell = C.Name " \
+            "Where Owner = '{}' " \
+            "Group By Level " \
+            "Order By Level".format(character_name)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    result = []
+    for row in rows:
+        result.append("Level {} spell".format(row.Level))
+    return result
+
+
+def character_known_wizard_spells_by_level(character_name: str, spell_level: int):
+    cursor = Connections.sql_db_connection()
+    query = "Select DISTINCT Spell " \
+            "From Main_Spell_Book A " \
+            "Left join Link_Spell_book_Spells B " \
+            "on A.ID = B.Spell_Book_ID " \
+            "left join Info_Spells C " \
+            "on B.Spell = C.Name " \
+            "Where A.owner = '{}' " \
+            "and C.Level = '{}' " \
+            "and Spell in (select Spell from Link_Class_Spells where Class = 'Wizard')".format(character_name,
+                                                                                               spell_level)
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    result = []
+    for row in rows:
+        result.append(row.Spell)
+    return result

@@ -46,12 +46,19 @@ async def main_menu(self, command, discord_id: int, character_name: str):
                     return menu
                 if menu == "stop":
                     return
+        elif choice == "Share a spell from your spell book with someone":
+            while True:
+                menu = await share_spell_menu(self, command, discord_id, character_name)
+                if menu == "exit":
+                    return menu
+                if menu == "stop":
+                    return
         elif choice == "exit" or choice == "stop":
             return choice
 
 
 async def menu_options(self, command, character_name):
-    option_list = Scripts.menu()
+    option_list = Scripts.menu(character_name)
     details = Scripts.character_info(character_name)
     option_question = "Character Sheet Menu: " \
                       "Type **STOP** at any time to go back to the player menu \n" \
@@ -417,5 +424,65 @@ async def recycle_confirm(self, command, discord_id, character_name, item_name, 
         await command.author.send("Selling...")
         log = "{} recycled {} {} for {}g".format(character_name, quantity, item_name, total_value)
         await Scripts.recycle_confirm(self, discord_id, character_name, item_name, quantity, log)
+        await command.author.send(log)
+    return "stop"
+
+'''''''''''''''''''''''''''''''''''''''''
+#############Share Spell#################
+'''''''''''''''''''''''''''''''''''''''''
+
+
+async def share_spell_menu(self, command, discord_id, character_name):
+    welcome_message = "Spell Share Menu: Type **STOP** at any time to go back to the player menu.\n" \
+                      "You can give someone access to a spell in your spell book."
+    await command.message.author.send(welcome_message)
+    # get the target of the share
+    target_name = await share_spell_target_name(self, command, character_name)
+    if target_name == "exit" or target_name == "stop":
+        return target_name
+    # get the spell level
+    spell_level = await share_spell_level_choice(self, command, character_name)
+    if spell_level == "exit" or spell_level == "stop":
+        return spell_level
+    # get the spell
+    spell = await share_spell_spell_choice(self, command, character_name, spell_level)
+    if spell == "exit" or spell == "stop":
+        return spell
+    # confirm
+    confirm = await share_spell_confirm(self, command, discord_id, character_name, target_name, spell)
+    if confirm == "exit" or confirm == "stop":
+        return confirm
+    return
+
+
+async def share_spell_target_name(self, command, character_name):
+    choice_question = "Type the name of the character you want to share a spell with."
+    choice = await self.character_name_lookup(command, choice_question, character_name)
+    return choice
+
+
+async def share_spell_level_choice(self, command, character_name):
+    option_list = Scripts.share_spell_level_options(character_name)
+    option_question = "What level spell you want to lend?"
+    choice = await self.answer_from_list(command, option_question, option_list)
+    result = choice.replace("Level ", "").replace(" spell", "")
+    return result
+
+
+async def share_spell_spell_choice(self, command, character_name, spell_level: int):
+    option_list = Scripts.share_spell_options(character_name, spell_level)
+    option_question = "Which spell would you like to share?"
+    choice = await self.answer_from_list(command, option_question, option_list)
+    return choice
+
+
+async def share_spell_confirm(self, command, discord_id, character_name, target_name, spell_name):
+    question = "Do you want to create a scroll of {}?".format(spell_name.replace("''", "'"))
+    await command.author.send(question)
+    reply = await self.confirm(command)
+    if reply == "Yes":
+        await command.author.send("sharing spell...")
+        log = "{} shared the spell {} with {}.".format(character_name, spell_name.replace("''", "'"), target_name)
+        await Scripts.share_spell_confirm(self, discord_id, character_name, target_name, spell_name, log)
         await command.author.send(log)
     return "stop"
