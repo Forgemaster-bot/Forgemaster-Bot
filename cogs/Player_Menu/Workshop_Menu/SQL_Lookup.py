@@ -1,9 +1,9 @@
 import Connections
 
 
-def character_skills(character_name: str):
+def character_skills(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Link_Character_Skills where Character='{}'".format(character_name)
+    query = "select * from Link_Character_Skills where Character_ID = '{}'".format(character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
     skills = []
@@ -15,13 +15,13 @@ def character_skills(character_name: str):
     return skills
 
 
-def character_essences(character_name: str):
+def character_essences(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Items " \
-            "where Character= '{}' " \
+            "where Character_ID = '{}' " \
             "and item in ( select Name from Info_Item where Type = 'Essence') " \
-            "order by Item".format(character_name)
+            "order by Item".format(character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
     essences = []
@@ -33,30 +33,30 @@ def character_essences(character_name: str):
     return essences
 
 
-def character_gold(character_name: str):
+def character_gold(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    query = "select * from Main_Characters where ID = '{}'".format(character_id)
     cursor.execute(query)
     character = cursor.fetchone()
     return character.Gold
 
 
-def character_crafting(character_name: str):
+def character_crafting(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Main_Crafting " \
-            "Where Character_Name = '{}'".format(character_name)
+            "Where Character_ID = '{}'".format(character_id)
     cursor.execute(query)
     response = cursor.fetchone()
     return response
 
 
-def character_profession_list(character_name: str):
+def character_profession_list(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "Select Skill " \
             "From Link_Character_Skills " \
-            "Where Character = '{}'" \
-            "Order by Skill".format(character_name)
+            "Where Character_ID = '{}'" \
+            "Order by Skill".format(character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
     profession_list = []
@@ -113,9 +113,11 @@ def item_value(item_name: str):
     return item.Value
 
 
-def character_item_quantity(character_name: str, item_name: str):
+def character_item_quantity(character_id: str, item_name: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Link_Character_Items where Character='{}' AND Item = '{}'".format(character_name, item_name)
+    query = "Select * " \
+            "From Link_Character_Items " \
+            "Where Character_ID = '{}' AND Item = '{}'".format(character_id, item_name)
     cursor.execute(query)
     item = cursor.fetchone()
     return item.Quantity
@@ -141,11 +143,11 @@ def recipe_essence_list(profession: str, name: str):
     return result
 
 
-def character_known_recipe(character_name: str, profession: str):
+def character_known_recipe(character_id: str, profession: str):
     cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Link_Character_Recipe " \
-            "Where character = '{}' and Skill = '{}'".format(character_name, profession)
+            "Where Character_ID = '{}' and Skill = '{}'".format(character_id, profession)
     cursor.execute(query)
     result = []
     rows = cursor.fetchall()
@@ -164,12 +166,12 @@ def recipe(profession: str, name: str):
     return result
 
 
-def character_inventory_essence_count(character_name: str):
+def character_inventory_essence_count(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Items " \
-            "where Character='{}' and Item in (select Name from Info_Item where Type = 'Essence') " \
-            "order by Item".format(character_name)
+            "where Character_ID = '{}' and Item in (select Name from Info_Item where Type = 'Essence') " \
+            "order by Item".format(character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
     essence = 0
@@ -203,13 +205,13 @@ def recipe_by_essence(profession: str, essence_1: str, essence_2):
     return result.Name
 
 
-def character_known_recipe_details(character_name: str, profession: str):
+def character_known_recipe_details(character_id: str, profession: str):
     cursor = Connections.sql_db_connection()
     query = "Select b.Name,b.Description,b.Essence_1, b.Essence_2 " \
             "From Link_Character_Recipe a " \
             "left join Info_Crafting_Recipes b " \
             "on a.Recipe = b.Name and a.Skill = b.Skill " \
-            "Where a.character = '{}' and a.Skill = '{}'".format(character_name, profession)
+            "Where a.Character_ID = '{}' and a.Skill = '{}'".format(character_id, profession)
     cursor.execute(query)
     result = []
     rows = cursor.fetchall()
@@ -218,37 +220,37 @@ def character_known_recipe_details(character_name: str, profession: str):
     return result
 
 
-def character_owner(character_name: str):
+def character_owner(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    query = "select * from Main_Characters where ID ='{}'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     return int(result.Discord_ID)
 
 
-def character_count_classes(character_name: str):
+def character_count_classes(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select Count(*) Total from Link_Character_Class where Character = '{}'".format(character_name)
+    query = "select Count(*) Total from Link_Character_Class where Character_ID = '{}'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Total
 
 
-def character_class_by_number(character_name: str, number: int):
+def character_class_by_number(character_id: str, number: int):
     cursor = Connections.sql_db_connection()
     query = "Select Class " \
             "From Link_Character_Class " \
-            "Where Character = '{}' and Number = '{}'".format(character_name, number)
+            "Where Character = '{}' and Number = '{}'".format(character_id, number)
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Class
 
 
-def character_class_level_by_class(character_name: str, character_class: str):
+def character_class_level_by_class(character_id: str, character_class: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Class " \
-            "where Character='{}' and Class = '{}'".format(character_name, character_class)
+            "where Character_ID = '{}' and Class = '{}'".format(character_id, character_class)
     cursor.execute(query)
     class_lookup = cursor.fetchone()
     return class_lookup.Level
@@ -264,22 +266,22 @@ def class_max_spell_by_level(class_name: str, class_level):
     return result[class_level]
 
 
-def character_spell_level_list_by_class(character_name: str, class_name: str):
-    sub_class = character_class_subclass(character_name, class_name)
+def character_spell_level_list_by_class(character_id: str, class_name: str):
+    sub_class = character_class_subclass(character_id, class_name)
     cursor = Connections.sql_db_connection()
     query = "select Level " \
             "from Link_Character_Spells A " \
             "left Join Info_Spells B " \
             "on A.Spell = B.Name " \
-            "where Character_name = '{}' and (Origin = '{}' or Origin = '{}') " \
+            "where Character_ID = '{}' and (Origin = '{}' or Origin = '{}') " \
             "Group By Level " \
-            "Order by Level".format(character_name, class_name, sub_class)
+            "Order by Level".format(character_id, class_name, sub_class)
     cursor.execute(query)
     result = cursor.fetchall()
     return result
 
 
-def character_spell_level_list_spell_book(character_name: str):
+def character_spell_level_list_spell_book(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "select Level " \
             "from Link_Spell_Book_Spells A " \
@@ -287,25 +289,25 @@ def character_spell_level_list_spell_book(character_name: str):
             "on A.Spell_Book_ID = B.ID " \
             "left join Info_Spells C " \
             "on A.Spell = C.Name " \
-            "Where Owner = '{}' " \
+            "Where Owner_ID = '{}' " \
             "Group By Level " \
-            "Order By Level".format(character_name)
+            "Order By Level".format(character_id)
     cursor.execute(query)
     result = cursor.fetchall()
     return result
 
 
-def character_known_spells_by_class_and_level(character_name: str, class_name: str, spell_level: int):
-    sub_class = character_class_subclass(character_name, class_name)
+def character_known_spells_by_class_and_level(character_id: str, class_name: str, spell_level: int):
+    sub_class = character_class_subclass(character_id, class_name)
     cursor = Connections.sql_db_connection()
     query = "select Spell " \
             "from Link_Character_Spells A " \
             "left Join Info_Spells B " \
             "on A.Spell = B.Name " \
-            "where Character_name = '{}' " \
+            "where Character_ID = '{}' " \
             "and B.Level = {} " \
             "and (Origin = '{}' or Origin = '{}') "\
-        .format(character_name, spell_level, class_name, sub_class)
+        .format(character_id, spell_level, class_name, sub_class)
     cursor.execute(query)
     rows = cursor.fetchall()
     result = []
@@ -314,7 +316,7 @@ def character_known_spells_by_class_and_level(character_name: str, class_name: s
     return result
 
 
-def character_known_wizard_spells_by_level(character_name: str, spell_level: int):
+def character_known_wizard_spells_by_level(character_id: str, spell_level: int):
     cursor = Connections.sql_db_connection()
     query = "Select Spell " \
             "From Main_Spell_Book A " \
@@ -322,7 +324,7 @@ def character_known_wizard_spells_by_level(character_name: str, spell_level: int
             "on A.ID = B.Spell_Book_ID " \
             "left join Info_Spells C " \
             "on B.Spell = C.Name " \
-            "Where A.owner = '{}' and C.Level = '{}'".format(character_name, spell_level)
+            "Where A.Owner_ID = '{}' and C.Level = '{}'".format(character_id, spell_level)
     cursor.execute(query)
     rows = cursor.fetchall()
     result = []
@@ -347,11 +349,11 @@ def class_spells_by_level(class_name: str, sub_class: str, level: int):
     return return_list
 
 
-def character_class_subclass(character_name: str, subclass: str):
+def character_class_subclass(character_id: str, subclass: str):
     cursor = Connections.sql_db_connection()
     query = "Select * " \
             "from Link_character_Class " \
-            "where Character = '{}' and Class = '{}' ".format(character_name, subclass)
+            "where Character_ID = '{}' and Class = '{}' ".format(character_id, subclass)
     cursor.execute(query)
     result = cursor.fetchone()
     if result.Sub_Class is None:
@@ -369,9 +371,9 @@ def spell_consumable_cost(spell_name: str):
     return result.Consumable_Cost
 
 
-def character_total_level(character_name: str):
+def character_total_level(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select SUM(Level) Total from Link_Character_Class where Character = '{}'".format(character_name)
+    query = "select SUM(Level) Total from Link_Character_Class where Character_ID = '{}'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Total
@@ -387,19 +389,19 @@ def proficiency_bonus(level: int):
     return result.Proficiency_Bonus
 
 
-def character_intelligence(character_name: str):
+def character_intelligence(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    query = "select * from Main_Characters where ID = '{}'".format(character_id)
     cursor.execute(query)
     character = cursor.fetchone()
     return character.Intelligence
 
 
-def character_has_arcane_proficiency(character_name: str):
+def character_has_arcane_proficiency(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Skills " \
-            "Where Character = '{}' and Skill = 'Arcana'".format(character_name)
+            "Where Character_ID = '{}' and Skill = 'Arcana'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:
@@ -407,7 +409,7 @@ def character_has_arcane_proficiency(character_name: str):
     return result.Proficiency
 
 
-def character_wizard_spells_known(character_name: str):
+def character_wizard_spells_known(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "Select Spell " \
             "From Main_Spell_Book A " \
@@ -415,7 +417,7 @@ def character_wizard_spells_known(character_name: str):
             "on A.ID = B.Spell_Book_ID " \
             "left join Info_Spells C " \
             "on B.Spell = C.Name " \
-            "Where A.owner = '{}' and A.Type = 'Core' ".format(character_name)
+            "Where A.Owner_ID = '{}' and A.Type = 'Core' ".format(character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
     result = []
@@ -424,7 +426,7 @@ def character_wizard_spells_known(character_name: str):
     return result
 
 
-def character_scribe_spell_options(character_name: str, spell_limit: int):
+def character_scribe_spell_options(character_id: str, spell_limit: int):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from ( " \
@@ -432,7 +434,7 @@ def character_scribe_spell_options(character_name: str, spell_limit: int):
             "from ( " \
             "select replace(item,'Scroll of ','') as Spell, 'a scroll' as Origin " \
             "from Link_Character_Items " \
-            "where Character = '{}' and item like 'Scroll of %' ) A " \
+            "where Character_ID = '{}' and item like 'Scroll of %' ) A " \
             "left join Info_Spells B " \
             "on A.Spell = B.Name " \
             "union all " \
@@ -442,20 +444,20 @@ def character_scribe_spell_options(character_name: str, spell_limit: int):
             "on A.ID = B.Spell_Book_ID " \
             "left join Info_Spells C " \
             "on B.Spell = C.Name " \
-            "where A.owner = '{}' and B.Known = 0 " \
+            "where A.Owner_ID = '{}' and B.Known = 0 " \
             "union all " \
             "select B.Name,B.Level, A.Owner + ' Spell Book' as Owner " \
             "from Main_Wizard_Spell_Share A " \
             "left join Info_Spells B " \
             "on A.Spell = B.Name " \
-            "where A.Target = '{}') A " \
+            "where A.Target_ID = '{}') A " \
             "where A.Name not in (Select Spell " \
             "from Link_Spell_book_Spells A " \
             "left join Main_Spell_book B " \
             "on A.Spell_Book_ID = B.ID " \
-            "where B.Owner = '{}') " \
+            "where B.Owner_ID = '{}') " \
             "and Level <= {} " \
-            "Order by Level,Name".format(character_name, character_name, character_name, character_name, spell_limit)
+            "Order by Level,Name".format(character_id, character_id, character_id, character_id, spell_limit)
     cursor.execute(query)
     rows = cursor.fetchall()
     result = []
@@ -464,11 +466,19 @@ def character_scribe_spell_options(character_name: str, spell_limit: int):
     return result
 
 
-def spell_book(character_name: str):
+def spell_book(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Main_Spell_book " \
-            "Where Owner = '{}' and Type = 'Core'".format(character_name)
+            "Where Owner_ID = '{}' and Type = 'Core'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     return result.ID
+
+
+def character_name_by_character_id(character_id: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Main_Characters where ID = '{}'".format(character_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Character_Name

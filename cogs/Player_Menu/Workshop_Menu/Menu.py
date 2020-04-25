@@ -1,19 +1,19 @@
 from Player_Menu.Workshop_Menu import Scripts
 
 
-async def main_menu(self, command, discord_id: int, character_name: str):
+async def main_menu(self, command, discord_id: int, character_id: str):
     while True:
-        choice = await menu_options(self, command, character_name)
+        choice = await menu_options(self, command, character_id)
         if choice == "Create a mundane item":
             while True:
-                menu = await mundane_menu(self, command, discord_id, character_name)
+                menu = await mundane_menu(self, command, discord_id, character_id)
                 if menu == "exit":
                     return menu
                 elif menu == "stop":
                     return
         elif choice == "Create a consumable item":
             while True:
-                menu = await consumable_menu(self, command, discord_id, character_name)
+                menu = await consumable_menu(self, command, discord_id, character_id)
                 if menu == "exit":
                     return menu
                 elif menu == "stop":
@@ -22,14 +22,14 @@ async def main_menu(self, command, discord_id: int, character_name: str):
             await command.message.author.send("coming soon")
         elif choice == "Experiment with essences":
             while True:
-                menu = await experiment_menu(self, command, discord_id, character_name)
+                menu = await experiment_menu(self, command, discord_id, character_id)
                 if menu == "exit":
                     return menu
                 elif menu == "stop":
                     return
         elif choice == "View your recipes":
             while True:
-                menu = await recipe_menu(self, command, character_name)
+                menu = await recipe_menu(self, command, character_id)
                 if menu == "exit":
                     return menu
                 elif menu == "stop":
@@ -37,21 +37,21 @@ async def main_menu(self, command, discord_id: int, character_name: str):
         elif "Create a scroll from your " in choice:
             while True:
                 class_choice = choice.replace("Create a scroll from your ", "").replace(" spells", "")
-                menu = await craft_scroll_menu(self, command, discord_id, character_name, class_choice)
+                menu = await craft_scroll_menu(self, command, discord_id, character_id, class_choice)
                 if menu == "exit":
                     return menu
                 elif menu == "stop":
                     return
         elif choice == "Scribe a spell into your spell book":
             while True:
-                menu = await scribe_spell_menu(self, command, discord_id, character_name)
+                menu = await scribe_spell_menu(self, command, discord_id, character_id)
                 if menu == "exit":
                     return menu
                 elif menu == "stop":
                     return
         elif choice == "Work for someone this week":
             while True:
-                menu = await work_menu(self, command, discord_id, character_name)
+                menu = await work_menu(self, command, discord_id, character_id)
                 if menu == "exit":
                     return menu
                 elif menu == "stop":
@@ -60,9 +60,9 @@ async def main_menu(self, command, discord_id: int, character_name: str):
             return choice
 
 
-async def menu_options(self, command, character_name):
-    option_list = Scripts.menu(character_name)
-    details = Scripts.character_info(character_name)
+async def menu_options(self, command, character_id):
+    option_list = Scripts.menu(character_id)
+    details = Scripts.character_info(character_id)
     option_question = "Workshop Menu: " \
                       "Type **STOP** at any time to go back to the player menu \n" \
                       "{} \n" \
@@ -71,9 +71,9 @@ async def menu_options(self, command, character_name):
     return choice
 
 
-async def profession_choice(self, command, character_name):
+async def profession_choice(self, command, character_id):
     # collect information about how much crafting can be done
-    option_list = Scripts.profession_list(character_name)
+    option_list = Scripts.profession_list(character_id)
     option_question = "Please enter the number of the profession to use."
     choice = await self.answer_from_list(command, option_question, option_list)
     return choice
@@ -84,16 +84,16 @@ async def profession_choice(self, command, character_name):
 '''''''''''''''''''''''''''''''''''''''''
 
 
-async def mundane_menu(self, command, discord_id, character_name: str):
-    gold_limit = Scripts.crafting_limit(character_name)
+async def mundane_menu(self, command, discord_id, character_id: str):
+    gold_limit = Scripts.crafting_limit(character_id)
     if gold_limit == 0:
         await command.message.author.send("you cannot craft any more this week")
         return "stop"
-    profession = await profession_choice(self, command, character_name)
+    profession = await profession_choice(self, command, character_id)
     if profession == "exit" or profession == "stop":
         return profession
 
-    character_has_tools = Scripts.character_has_profession_tools(character_name, profession)
+    character_has_tools = Scripts.character_has_profession_tools(character_id, profession)
     if not character_has_tools[0]:
         await command.message.author.send(character_has_tools[1])
         return
@@ -113,7 +113,7 @@ async def mundane_menu(self, command, discord_id, character_name: str):
         return quantity
 
     # confirm crafting
-    confirm = await craft_mundane_confirm(self, command, discord_id, character_name, item_name, quantity)
+    confirm = await craft_mundane_confirm(self, command, discord_id, character_id, item_name, quantity)
     if confirm == "exit" or confirm == "stop":
         return confirm
     return
@@ -149,16 +149,17 @@ async def mundane_quantity(self, command, gold_limit, item_name):
     return choice
 
 
-async def craft_mundane_confirm(self, command, discord_id, character_name, item_name, quantity: int):
+async def craft_mundane_confirm(self, command, discord_id, character_id, item_name, quantity: int):
     item_craft_cost = Scripts.mundane_craft_cost(item_name)
     total_cost = item_craft_cost * quantity
+    character_name = Scripts.get_character_name(character_id)
     await command.author.send("Do you want to craft {} {} for {}g? [yes/no]"
                               .format(quantity, item_name, total_cost))
     reply = await self.confirm(command)
     if reply == "Yes":
         await command.author.send("crafting..")
         log = "{} made {} {} for {}g".format(character_name, quantity, item_name, total_cost)
-        await Scripts.mundane_create(self, discord_id, character_name, item_name, quantity, log)
+        await Scripts.mundane_create(self, discord_id, character_id, item_name, quantity, log)
         await command.author.send(log)
         return
     return "stop"
@@ -169,29 +170,30 @@ async def craft_mundane_confirm(self, command, discord_id, character_name, item_
 '''''''''''''''''''''''''''''''''''''''''
 
 
-async def consumable_menu(self, command, discord_id, character_name: str):
+async def consumable_menu(self, command, discord_id, character_id: str):
+    character_name = Scripts.get_character_name(character_id)
     # Profession
-    profession = await profession_choice(self, command, character_name)
+    profession = await profession_choice(self, command, character_id)
     if profession == "exit" or profession == "stop":
         return profession
     consumable_type = Scripts.consumable_type_name(profession)
 
     # has profession tools
-    character_has_tools = Scripts.character_has_profession_tools(character_name, profession)
+    character_has_tools = Scripts.character_has_profession_tools(character_id, profession)
     if not character_has_tools[0]:
         await command.message.author.send(character_has_tools[1])
         return "stop"
 
     # get essence and recipe lists
-    essence_inventory = Scripts.consumables_essences_in_inventory(character_name)
-    recipe_list = Scripts.consumables_recipe_list(character_name, profession, essence_inventory)
+    essence_inventory = Scripts.consumables_essences_in_inventory(character_id)
+    recipe_list = Scripts.consumables_recipe_list(character_id, profession, essence_inventory)
     if len(recipe_list) == 0:
         await command.message.author.send("{} does not have the materials to craft any recipes that "
                                           "they know for making a {}".format(character_name, consumable_type))
         return "stop"
 
     # check player can afford to make consumable
-    gold_limit = Scripts.crafting_limit(character_name)
+    gold_limit = Scripts.crafting_limit(character_id)
     if profession.lower() == "cook":
         minimum_gold = 25
         message = "As a cook you can create a snack for 25g. Snacks can only have one effect"
@@ -235,13 +237,13 @@ async def consumable_menu(self, command, discord_id, character_name: str):
             # Update list of effects in the consumable, available essences to use and available recipes
             effect_list.append(recipe)
             essence_inventory = Scripts.consumable_update_essence_inventory(profession, recipe, essence_inventory)
-            recipe_list = Scripts.consumables_recipe_list(character_name, profession, essence_inventory)
+            recipe_list = Scripts.consumables_recipe_list(character_id, profession, essence_inventory)
     # end crafting if no effects chosen
     if len(effect_list) == 0:
         await command.message.author.send("You cannot craft a {} without any effects".format(consumable_type))
         return
 
-    confirm = await craft_consumable_confirm(self, command, discord_id, character_name, profession, effect_list)
+    confirm = await craft_consumable_confirm(self, command, discord_id, character_id, profession, effect_list)
     if confirm == "exit" or confirm == "stop":
         return confirm
     return
@@ -254,7 +256,8 @@ async def consumable_effect(self, command, consumable_type, effect_list: list, r
     return choice_details[0]
 
 
-async def craft_consumable_confirm(self, command, discord_id, character_name, profession, effect_list):
+async def craft_consumable_confirm(self, command, discord_id, character_id, profession, effect_list):
+    character_name = Scripts.get_character_name(character_id)
     consumable_type = Scripts.consumable_type_name(profession)
     cleaned_effect_list = Scripts.consumable_merge_effects(effect_list)
     if profession == "cook":
@@ -267,7 +270,7 @@ async def craft_consumable_confirm(self, command, discord_id, character_name, pr
     if reply == "Yes":
         await command.author.send("crafting..")
         log = "{} made a {} of {} for {}g".format(character_name, consumable_type, cleaned_effect_list, cost)
-        await Scripts.consumable_create(self, discord_id, character_name, profession, consumable_type,
+        await Scripts.consumable_create(self, discord_id, character_id, profession, consumable_type,
                                         cleaned_effect_list, effect_list, cost, log)
         await command.author.send(log)
         return
@@ -279,22 +282,23 @@ async def craft_consumable_confirm(self, command, discord_id, character_name, pr
 '''''''''''''''''''''''''''''''''''''''''
 
 
-async def experiment_menu(self, command, discord_id, character_name: str):
-    gold_limit = Scripts.crafting_limit(character_name)
+async def experiment_menu(self, command, discord_id, character_id: str):
+    character_name = Scripts.get_character_name(character_id)
+    gold_limit = Scripts.crafting_limit(character_id)
     if gold_limit == 0:
         await command.message.author.send("you cannot craft any more this week")
         return "stop"
 
-    profession = await profession_choice(self, command, character_name)
+    profession = await profession_choice(self, command, character_id)
     if profession == "exit" or profession == "stop":
         return profession
 
-    character_has_tools = Scripts.character_has_profession_tools(character_name, profession)
+    character_has_tools = Scripts.character_has_profession_tools(character_id, profession)
     if not character_has_tools[0]:
         await command.message.author.send(character_has_tools[1])
         return "stop"
 
-    total_character_essence = Scripts.experiment_essence_quantity(character_name)
+    total_character_essence = Scripts.experiment_essence_quantity(character_id)
     if total_character_essence < 2:
         await command.message.author.send("{} does not have enough essences to experiment with".format(character_name))
         return "stop"
@@ -303,18 +307,17 @@ async def experiment_menu(self, command, discord_id, character_name: str):
         return "stop"
 
     # get the first essence
-    essence_list = Scripts.experiment_essence_list(character_name, profession)
+    essence_list = Scripts.experiment_essence_list(character_id, profession)
     essence_1 = await experiment_first_essence(self, command, essence_list)
     if essence_1 == "exit" or essence_1 == "stop":
         return essence_1
 
     # get the second essence
-    essence_list = Scripts.experiment_possible_essence_combination(character_name, profession, essence_1)
+    essence_list = Scripts.experiment_possible_essence_combination(character_id, profession, essence_1)
     essence_2 = await experiment_second_essence(self, command, essence_list)
     if essence_2 == "exit" or essence_2 == "stop":
         return essence_2
-    confirm = await craft_experiment_confirm(self, command, discord_id, character_name,
-                                             profession, essence_1, essence_2)
+    confirm = await craft_experiment_confirm(self, command, discord_id, character_id, profession, essence_1, essence_2)
     if confirm == "exit" or confirm == "stop":
         return confirm
     return
@@ -334,7 +337,8 @@ async def experiment_second_essence(self, command, essence_list):
     return choice_details[0]
 
 
-async def craft_experiment_confirm(self, command, discord_id, character_name, profession, essence_1, essence_2):
+async def craft_experiment_confirm(self, command, discord_id, character_id, profession, essence_1, essence_2):
+    character_name = Scripts.get_character_name(character_id)
     await command.author.send("Do you want to experiment using {} and {} as a {} for 20g? [yes/no]"
                               .format(essence_1, essence_2, profession))
     reply = await self.confirm(command)
@@ -346,8 +350,8 @@ async def craft_experiment_confirm(self, command, discord_id, character_name, pr
 
         log = "{} experimented with {} and {} as a {} and discovered {}"\
             .format(character_name, essence_1, essence_2, profession, recipe_name)
-        await Scripts.experiment_create(self, discord_id, character_name, profession,
-                                        recipe_name, essence_1, essence_2, log)
+        await Scripts.experiment_create(self, discord_id, character_id, profession, recipe_name, essence_1, essence_2,
+                                        log)
         await command.author.send(log)
         return "stop"
     return "stop"
@@ -358,12 +362,12 @@ async def craft_experiment_confirm(self, command, discord_id, character_name, pr
 '''''''''''''''''''''''''''''''''''''''''
 
 
-async def recipe_menu(self, command, character_name: str):
-    profession = await profession_choice(self, command, character_name)
+async def recipe_menu(self, command, character_id: str):
+    profession = await profession_choice(self, command, character_id)
     if profession == "exit" or profession == "stop":
         return profession
 
-    response = Scripts.recipe_list(character_name, profession)
+    response = Scripts.recipe_list(character_id, profession)
     await command.message.author.send(response)
 
 
@@ -372,9 +376,9 @@ async def recipe_menu(self, command, character_name: str):
 '''''''''''''''''''''''''''''''''''''''''
 
 
-async def work_menu(self, command, discord_id, character_name):
+async def work_menu(self, command, discord_id, character_id):
     # get target name
-    target_name = await work_character_choice(self, command, character_name)
+    target_name = await work_character_choice(self, command, character_id)
     if target_name == "exit" or target_name == "stop":
         return target_name
 
@@ -383,26 +387,27 @@ async def work_menu(self, command, discord_id, character_name):
                                           .format(target_name))
         return "stop"
     # confirm the transaction
-    confirm = await work_confirm(self, command, discord_id, character_name, target_name)
+    confirm = await work_confirm(self, command, discord_id, character_id, target_name)
     if confirm == "exit" or confirm == "stop":
         return confirm
     return "stop"
 
 
-async def work_character_choice(self, command, character_name):
+async def work_character_choice(self, command, character_id):
     choice_question = "Type the name of the character you want to work for this week."
-    choice = await self.character_name_lookup(command, choice_question, character_name)
+    choice = await self.character_name_lookup(command, choice_question, character_id)
     return choice
 
 
-async def work_confirm(self, command, discord_id, character_name, target_name):
+async def work_confirm(self, command, discord_id, character_id, target_name):
+    character_name = Scripts.get_character_name(character_id)
     question = "Do you want work for {} this week?".format(target_name)
     await command.author.send(question)
     reply = await self.confirm(command)
     if reply == "Yes":
         await command.author.send("working...")
         log = "{} is now working for {} this week".format(character_name, target_name)
-        await Scripts.work_confirm(self, discord_id, character_name, target_name, log)
+        await Scripts.work_confirm(self, discord_id, character_id, target_name, log)
         await command.author.send(log)
     return "stop"
 
@@ -412,49 +417,50 @@ async def work_confirm(self, command, discord_id, character_name, target_name):
 '''''''''''''''''''''''''''''''''''''''''
 
 
-async def craft_scroll_menu(self, command, discord_id, character_name: str, class_name: str):
+async def craft_scroll_menu(self, command, discord_id, character_id: str, class_name: str):
     welcome_message = "Craft {} Scroll Menu: Type **STOP** at any time to go back to the player menu."\
         .format(class_name)
     await command.message.author.send(welcome_message)
 
-    gold_limit = Scripts.crafting_limit(character_name)
-    spell_level_choice = await craft_scroll_level_choice(self, command, character_name, class_name, gold_limit)
+    gold_limit = Scripts.crafting_limit(character_id)
+    spell_level_choice = await craft_scroll_level_choice(self, command, character_id, class_name, gold_limit)
     if spell_level_choice == "exit" or spell_level_choice == "stop":
         return spell_level_choice
 
-    spell_choice = await craft_scroll_spell_choice(self, command, character_name, class_name, spell_level_choice)
+    spell_choice = await craft_scroll_spell_choice(self, command, character_id, class_name, spell_level_choice)
     if spell_choice == "exit" or spell_choice == "stop":
         return spell_choice
 
-    confirm = await create_scroll_confirm(self, command, discord_id, character_name, spell_level_choice, spell_choice)
+    confirm = await create_scroll_confirm(self, command, discord_id, character_id, spell_level_choice, spell_choice)
     if confirm == "exit" or confirm == "stop":
         return confirm
     return "stop"
 
 
-async def craft_scroll_level_choice(self, command, character_name, class_name, gold_limit: float):
-    option_list = Scripts.craft_scroll_level_options(character_name, class_name, gold_limit)
+async def craft_scroll_level_choice(self, command, character_id, class_name, gold_limit: float):
+    option_list = Scripts.craft_scroll_level_options(character_id, class_name, gold_limit)
     option_question = "What spell level is the scroll you want to craft?"
     choice = await self.answer_from_list(command, option_question, option_list)
     result = choice.replace("Level ", "").replace(" spell", "")
     return result
 
 
-async def craft_scroll_spell_choice(self, command, character_name, class_name, spell_level: int):
-    option_list = Scripts.craft_scroll_spell_options(character_name, class_name, spell_level)
+async def craft_scroll_spell_choice(self, command, character_id, class_name, spell_level: int):
+    option_list = Scripts.craft_scroll_spell_options(character_id, class_name, spell_level)
     option_question = "Which spell would you like to create a scroll of?"
     choice = await self.answer_from_list(command, option_question, option_list)
     return choice
 
 
-async def create_scroll_confirm(self, command, discord_id, character_name, spell_level: int, spell_name):
+async def create_scroll_confirm(self, command, discord_id, character_id, spell_level: int, spell_name):
+    character_name = Scripts.get_character_name(character_id)
     question = "Do you want to create a scroll of {}?".format(spell_name.replace("''", "'"))
     log = "{} created a scroll of {}.".format(character_name, spell_name.replace("''", "'"))
     await command.author.send(question)
     reply = await self.confirm(command)
     if reply == "Yes":
         await command.author.send("creating scroll...")
-        await Scripts.create_scroll_confirm(self, command, discord_id, character_name, spell_level, spell_name, log)
+        await Scripts.create_scroll_confirm(self, command, discord_id, character_id, spell_level, spell_name, log)
         await command.author.send(log)
     return "stop"
 
@@ -464,33 +470,33 @@ async def create_scroll_confirm(self, command, discord_id, character_name, spell
 '''''''''''''''''''''''''''''''''''''''''
 
 
-async def scribe_spell_menu(self, command, discord_id, character_name: str):
-    reagent_quantity = Scripts.reagent_quantity(character_name)
-    ability_bonus = Scripts.scribe_roll_bonus(character_name)
+async def scribe_spell_menu(self, command, discord_id, character_id: str):
+    reagent_quantity = Scripts.reagent_quantity(character_id)
+    ability_bonus = Scripts.scribe_roll_bonus(character_id)
     welcome_message = "Scribe spell Menu: Type **STOP** at any time to go back to the player menu. \n" \
                       "It costs 50 universal reagent per level of spell to scribe. you have {}.\n" \
                       "The DC to copy a spell is 10 + spell level. you have +{} to the roll"\
         .format(reagent_quantity, ability_bonus)
     await command.message.author.send(welcome_message)
 
-    spell_choice = await scribe_spell_spell_choice(self, command, character_name, reagent_quantity)
+    spell_choice = await scribe_spell_spell_choice(self, command, character_id, reagent_quantity)
     if spell_choice == "exit" or spell_choice == "stop":
         return spell_choice
 
-    confirm = await scribe_spell_confirm(self, command, discord_id, character_name, spell_choice, ability_bonus)
+    confirm = await scribe_spell_confirm(self, command, discord_id, character_id, spell_choice, ability_bonus)
     if confirm == "exit" or confirm == "stop":
         return confirm
     return "stop"
 
 
-async def scribe_spell_spell_choice(self, command, character_name, reagent_quantity):
-    option_list = Scripts.scribe_spell_list(character_name, reagent_quantity)
+async def scribe_spell_spell_choice(self, command, character_id, reagent_quantity):
+    option_list = Scripts.scribe_spell_list(character_id, reagent_quantity)
     option_question = "Which spell would you like to lend?"
     choice = await self.answer_from_list(command, option_question, option_list)
     return choice
 
 
-async def scribe_spell_confirm(self, command, discord_id, character_name, spell, ability_bonus):
+async def scribe_spell_confirm(self, command, discord_id, character_id, spell, ability_bonus):
     spell_detail = spell.split(":")
     spell_level = spell_detail[0].replace("Level ", "").replace(" Spell", "")
     spell_name = spell_detail[1].replace(" From", "").lstrip()
@@ -502,6 +508,6 @@ async def scribe_spell_confirm(self, command, discord_id, character_name, spell,
     reply = await self.confirm(command)
     if reply == "Yes":
         await command.author.send("Attempting to scribe...")
-        await Scripts.scribe_spell_confirm(self, command, discord_id, character_name, spell_name,
+        await Scripts.scribe_spell_confirm(self, command, discord_id, character_id, spell_name,
                                            spell_origin, spell_level, ability_bonus)
     return "exit"

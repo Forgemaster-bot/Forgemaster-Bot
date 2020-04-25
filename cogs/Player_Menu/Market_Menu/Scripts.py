@@ -9,7 +9,7 @@ import Update_Google_Roster
 import Update_Google_Trade
 
 
-def menu(character_name: str):
+def menu(character_id: str):
     menu_list = ["Buy items",
                  "Sell items",
                  "Stop selling an item",
@@ -17,21 +17,26 @@ def menu(character_name: str):
                  "Give gold to someone",
                  "Recycle an item"
                  ]
-    if SQL_Check.character_is_wizard(character_name):
+    if SQL_Check.character_is_wizard(character_id):
         menu_list.append("Share a spell from your spell book with someone")
     return menu_list
 
 
-def character_info(character_name: str):
+def character_info(character_id: str):
     character_list = []
     # inventory as string
-    item_list = SQL_Lookup.character_inventory(character_name)
+    item_list = SQL_Lookup.character_inventory(character_id)
     character_list.append("**Inventory:** {}".format(Quick_Python.list_to_string(item_list)))
     # Gold
-    gold = SQL_Lookup.character_gold(character_name)
+    gold = SQL_Lookup.character_gold(character_id)
     character_list.append("**Gold:** {}g".format(gold))
 
     return Quick_Python.list_to_table(character_list)
+
+
+def get_character_name(character_id: str):
+    character_name = SQL_Lookup.character_name_by_character_id(character_id)
+    return character_name
 
 
 '''''''''''''''''''''''''''''''''''''''''
@@ -39,23 +44,23 @@ def character_info(character_name: str):
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def give_character_inventory(character_name: str):
-    result = SQL_Lookup.character_inventory(character_name)
+def give_character_inventory(character_id: str):
+    result = SQL_Lookup.character_inventory(character_id)
     return result
 
 
-def give_quantity(character_name: str, item_name: str):
-    result = SQL_Lookup.character_item(character_name, item_name)
+def give_quantity(character_id: str, item_name: str):
+    result = SQL_Lookup.character_item(character_id, item_name)
     return result.Quantity
 
 
-async def give_confirm(self, discord_id, character_name: str, target_name: str, item_name: str, quantity: int, log):
+async def give_confirm(self, discord_id, character_id: str, target_name: str, item_name: str, quantity: int, log):
     # Remove from character
-    character_item_quantity = SQL_Lookup.character_item(character_name, item_name)
+    character_item_quantity = SQL_Lookup.character_item(character_id, item_name)
     if quantity == character_item_quantity.Quantity:
-        SQL_Delete.character_item(character_name, item_name)
+        SQL_Delete.character_item(character_id, item_name)
     else:
-        SQL_Update.character_item_quantity(character_name, item_name, quantity * -1)
+        SQL_Update.character_item_quantity(character_id, item_name, quantity * -1)
 
     # Add to target
     if SQL_Check.character_has_item(target_name, item_name):
@@ -64,7 +69,7 @@ async def give_confirm(self, discord_id, character_name: str, target_name: str, 
         SQL_Insert.character_item(target_name, item_name, quantity)
 
     # update roster
-    Update_Google_Roster.update_items(character_name)
+    Update_Google_Roster.update_items(character_id)
     Update_Google_Roster.update_items(target_name)
 
     # update logs
@@ -79,17 +84,17 @@ async def give_confirm(self, discord_id, character_name: str, target_name: str, 
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def pay_character_gold(character_name: str):
-    result = SQL_Lookup.character_gold(character_name)
+def pay_character_gold(character_id: str):
+    result = SQL_Lookup.character_gold(character_id)
     return result
 
 
-async def pay_confirm(self, discord_id, character_name: str, target_name: str, amount: float, log):
-    SQL_Update.character_gold(character_name, amount*-1)
+async def pay_confirm(self, discord_id, character_id: str, target_name: str, amount: float, log):
+    SQL_Update.character_gold(character_id, amount*-1)
     SQL_Update.character_gold(target_name, amount)
-    Update_Google_Roster.update_gold_group([character_name, target_name])
+    Update_Google_Roster.update_gold_group([character_id, target_name])
 
-    Connections.sql_log_private_command(discord_id, log)
+    Connections.sql_log_private_command(discord_id, log.replace("'", "''"))
     await Connections.log_to_discord(self, log)
     target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_name))
     if target_discord is not None:
@@ -101,13 +106,13 @@ async def pay_confirm(self, discord_id, character_name: str, target_name: str, a
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def recycle_inventory(character_name: str):
-    result = SQL_Lookup.character_recycle_inventory_list(character_name)
+def recycle_inventory(character_id: str):
+    result = SQL_Lookup.character_recycle_inventory_list(character_id)
     return result
 
 
-def recycle_character_item(character_name: str, item_name: str):
-    result = SQL_Lookup.character_item(character_name, item_name)
+def recycle_character_item(character_id: str, item_name: str):
+    result = SQL_Lookup.character_item(character_id, item_name)
     return result
 
 
@@ -116,18 +121,18 @@ def recycle_item_details(item_name: str):
     return result
 
 
-async def recycle_confirm(self, discord_id, character_name: str, item_name: str, quantity: int, log):
+async def recycle_confirm(self, discord_id, character_id: str, item_name: str, quantity: int, log):
     item_details = SQL_Lookup.item_detail(item_name)
     total_value = (item_details.Value/2) * quantity
-    character_item = SQL_Lookup.character_item(character_name, item_name)
+    character_item = SQL_Lookup.character_item(character_id, item_name)
     # update SQL
     if quantity == character_item.Quantity:
-        SQL_Delete.character_item(character_name, item_name)
+        SQL_Delete.character_item(character_id, item_name)
     else:
-        SQL_Update.character_item_quantity(character_name, item_name, quantity*-1)
-    SQL_Update.character_gold(character_name, total_value)
-    Update_Google_Roster.update_items(character_name)
-    Update_Google_Roster.update_gold_group([character_name])
+        SQL_Update.character_item_quantity(character_id, item_name, quantity*-1)
+    SQL_Update.character_gold(character_id, total_value)
+    Update_Google_Roster.update_items(character_id)
+    Update_Google_Roster.update_gold_group([character_id])
 
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
@@ -138,8 +143,8 @@ async def recycle_confirm(self, discord_id, character_name: str, item_name: str,
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def buy_character_gold(character_name: str):
-    result = SQL_Lookup.character_gold(character_name)
+def buy_character_gold(character_id: str):
+    result = SQL_Lookup.character_gold(character_id)
     return result
 
 
@@ -148,13 +153,13 @@ def buy_can_afford_to_buy(gold_limit: float):
     return result
 
 
-def buy_item_types(character_name: str, gold_limit: float):
-    result = SQL_Lookup.trade_goods_types(character_name, gold_limit)
+def buy_item_types(character_id: str, gold_limit: float):
+    result = SQL_Lookup.trade_goods_types(character_id, gold_limit)
     return result
 
 
-def buy_item_list(character_name: str, gold_limit: float, item_type: str):
-    result = SQL_Lookup.trade_goods_items_by_type(character_name, gold_limit, item_type)
+def buy_item_list(character_id: str, gold_limit: float, item_type: str):
+    result = SQL_Lookup.trade_goods_items_by_type(character_id, gold_limit, item_type)
     return result
 
 
@@ -163,17 +168,17 @@ def buy_cheapest_item(item_type: str):
     return result
 
 
-async def buy_confirm(self, discord_id, character_name: str, trade_good, quantity: int, log):
+async def buy_confirm(self, discord_id, character_id: str, trade_good, quantity: int, log):
     trade_value = trade_good.Price * quantity
 
     # add to player inventory
-    if SQL_Check.character_has_item(character_name, trade_good.Item):
-        SQL_Update.character_item_quantity(character_name, trade_good.Item, quantity)
+    if SQL_Check.character_has_item(character_id, trade_good.Item):
+        SQL_Update.character_item_quantity(character_id, trade_good.Item, quantity)
     else:
-        SQL_Insert.character_item(character_name, trade_good.Item, quantity)
+        SQL_Insert.character_item(character_id, trade_good.Item, quantity)
 
     # remove gold from player
-    SQL_Update.character_gold(character_name, trade_value*-1)
+    SQL_Update.character_gold(character_id, trade_value*-1)
     # add gold to seller
     SQL_Update.character_gold(trade_good.Character, trade_value)
 
@@ -186,9 +191,9 @@ async def buy_confirm(self, discord_id, character_name: str, trade_good, quantit
         Update_Google_Trade.trade_update(trade_good.Character, trade_good.Item)
 
     # update roster
-    update_list = [character_name, trade_good.Character]
+    update_list = [character_id, trade_good.Character]
     Update_Google_Roster.update_gold_group(update_list)
-    Update_Google_Roster.update_items(character_name)
+    Update_Google_Roster.update_items(character_id)
     Update_Google_Roster.update_items(trade_good.Character)
 
     # update logs
@@ -204,19 +209,20 @@ async def buy_confirm(self, discord_id, character_name: str, trade_good, quantit
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def sell_inventory(character_name: str):
-    result = SQL_Lookup.character_inventory(character_name)
+def sell_inventory(character_id: str):
+    result = SQL_Lookup.character_inventory(character_id)
     return result
 
 
-def sell_character_item(character_name: str, item_name: str):
-    result = SQL_Lookup.character_item(character_name, item_name)
+def sell_character_item(character_id: str, item_name: str):
+    result = SQL_Lookup.character_item(character_id, item_name)
     return result
 
 
-async def sell_confirm(self, discord_id, character_name: str, item_name: str, quantity: int, value: float, log):
+async def sell_confirm(self, discord_id, character_id: str, item_name: str, quantity: int, value: float, log):
     # find item type
     item_details = SQL_Lookup.item_detail(item_name)
+    item_type = "Other"
     if item_details is not None:
         item_type = item_details.Type
     else:
@@ -227,20 +233,19 @@ async def sell_confirm(self, discord_id, character_name: str, item_name: str, qu
                 if item_details == row:
                     item_type = row
                     break
-        item_type = "Other"
 
     # update SQL
-    character_item_details = SQL_Lookup.character_item(character_name, item_name)
+    character_item_details = SQL_Lookup.character_item(character_id, item_name)
     if quantity == character_item_details.Quantity:
-        SQL_Delete.character_item(character_name, item_name)
+        SQL_Delete.character_item(character_id, item_name)
     else:
-        SQL_Update.character_item_quantity(character_name, item_name, quantity * -1)
+        SQL_Update.character_item_quantity(character_id, item_name, quantity * -1)
 
-    SQL_Insert.trade_sell(character_name, item_name, quantity, value, item_type)
+    SQL_Insert.trade_sell(character_id, item_name, quantity, value, item_type)
 
     # update google
-    Update_Google_Roster.update_items(character_name)
-    Update_Google_Trade.trade_create(character_name, item_name)
+    Update_Google_Roster.update_items(character_id)
+    Update_Google_Trade.trade_create(character_id, item_name)
 
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
@@ -251,24 +256,24 @@ async def sell_confirm(self, discord_id, character_name: str, item_name: str, qu
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def stop_sale_items(character_name: str):
-    result = SQL_Lookup.character_items_for_sale(character_name)
+def stop_sale_items(character_id: str):
+    result = SQL_Lookup.character_items_for_sale(character_id)
     return result
 
 
-async def stop_sale_confirm(self, discord_id, character_name: str, item_name: str, log):
-    trade_good = SQL_Lookup.trade_item__character(character_name, item_name)
+async def stop_sale_confirm(self, discord_id, character_id: str, item_name: str, log):
+    trade_good = SQL_Lookup.trade_item_character(character_id, item_name)
 
     # return to inventory
-    if SQL_Check.character_has_item(character_name, item_name):
-        SQL_Update.character_item_quantity(character_name, item_name, trade_good.Quantity)
+    if SQL_Check.character_has_item(character_id, item_name):
+        SQL_Update.character_item_quantity(character_id, item_name, trade_good.Quantity)
     else:
-        SQL_Insert.character_item(character_name, item_name, trade_good.Quantity)
+        SQL_Insert.character_item(character_id, item_name, trade_good.Quantity)
     # remove trade
-    SQL_Delete.trade_sale(character_name, item_name)
+    SQL_Delete.trade_sale(character_id, item_name)
 
-    Update_Google_Trade.trade_delete(character_name, item_name)
-    Update_Google_Roster.update_items(character_name)
+    Update_Google_Trade.trade_delete(character_id, item_name)
+    Update_Google_Roster.update_items(character_id)
 
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
@@ -279,18 +284,19 @@ async def stop_sale_confirm(self, discord_id, character_name: str, item_name: st
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def share_spell_level_options(character_name: str):
-    result = SQL_Lookup.character_spell_level_list_spell_book(character_name)
+def share_spell_level_options(character_id: str):
+    result = SQL_Lookup.character_spell_level_list_spell_book(character_id)
     return result
 
 
-def share_spell_options(character_name: str, spell_level: int):
-    result = SQL_Lookup.character_known_wizard_spells_by_level(character_name, spell_level)
+def share_spell_options(character_id: str, spell_level: int):
+    result = SQL_Lookup.character_known_wizard_spells_by_level(character_id, spell_level)
     return result
 
 
-async def share_spell_confirm(self, discord_id, character_name: str, target_name: str, spell_name: str, log):
-    SQL_Insert.share_spell(character_name, target_name, spell_name)
+async def share_spell_confirm(self, discord_id, character_id: str, target_name: str, spell_name: str, log):
+    owner_name = get_character_name(character_id)
+    SQL_Insert.share_spell(owner_name, target_name, spell_name)
 
     # inform target
     Connections.sql_log_private_command(discord_id, log)

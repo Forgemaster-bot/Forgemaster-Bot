@@ -26,11 +26,26 @@ def player_stat_roll(discord_id: str):
 
 def player_name_by_id(user_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Info_Discord where ID= '{}'".format(user_id)
+    query = "select * from Info_Discord where ID = '{}'".format(user_id)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:
         return ""
     return result.Name
 
+
+def character_id_by_character_name(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Main_Characters where Character_Name = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.ID
+
+
+def character_name_by_character_id(character_id: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Main_Characters where ID = '{}'".format(character_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Character_Name
 

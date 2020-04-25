@@ -13,7 +13,7 @@ def player_id_by_name(name: str):
 
 def player_name_by_id(user_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Info_Discord where ID= '{}'".format(user_id)
+    query = "select * from Info_Discord where ID = '{}'".format(user_id)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:
@@ -33,17 +33,17 @@ def player_stat_roll(discord_id: str):
     return result
 
 
-def character_owner(character_name: str):
+def character_owner(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    query = "select * from Main_Characters where ID='{}'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Discord_ID
 
 
-def character_ability_score(character_name: str, ability: str):
+def character_ability_score(character_id: str, ability: str):
     cursor = Connections.sql_db_connection()
-    sql_command = "select * from Main_Characters where Character_Name = '{}'".format(character_name)
+    sql_command = "select * from Main_Characters where ID = '{}'".format(character_id)
     cursor.execute(sql_command)
     result = cursor.fetchone()
     value = 0
@@ -62,9 +62,26 @@ def character_ability_score(character_name: str, ability: str):
     return value
 
 
-def character_item_quantity(character_name: str, item_name: str):
+def character_item_quantity(character_id: str, item_name: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Link_Character_Items where Character='{}' AND Item = '{}'".format(character_name, item_name)
+    query = "select * from Link_Character_Items where Character_ID = '{}' AND Item = '{}'".format(character_id,
+                                                                                                  item_name)
     cursor.execute(query)
     item = cursor.fetchone()
     return item.Quantity
+
+
+def character_id_by_character_name(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Main_Characters where Character_Name = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.ID
+
+
+def character_name_by_character_id(character_id: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Main_Characters where ID = '{}'".format(character_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Character_Name

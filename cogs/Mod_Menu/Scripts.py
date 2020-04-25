@@ -19,7 +19,7 @@ def create_character_check(command: str):
     character_name = character[0].lstrip()
     if discord_id == "":
         return False, "Player name not found, please use $SyncPlayers to refresh player list and try again."
-    if SQL_Check.character_exists(character_name):
+    if SQL_Check.character_exists_by_name(character_name):
         return False, "That character name is already taken, please choose another."
     # checks to see if the class is spelt correctly
     # if not SQL_Check.race_exists(c_list[2].lstrip()):
@@ -49,11 +49,12 @@ def create_character_execute(command: str):
 
     # update Link_character_Class
     SQL_Insert.character_create(character_sheet)
-    SQL_Insert.character_class(character_name, character_class, 1, 1)
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
+    SQL_Insert.character_class(character_id, character_class, 1, 1)
     if character_class == 'Wizard':
-        SQL_Update.character_wizard_spell(character_name, character_class)
-        SQL_Insert.character_spell_book(character_name)
-    SQL_Insert.character_item(character_name, "Rations", 10)
+        SQL_Update.character_wizard_spell(character_id, character_class)
+        SQL_Insert.character_spell_book(character_id, character_name)
+    SQL_Insert.character_item(character_id, "Rations", 10)
     Update_Google_Roster.insert_new_character(character_name)
     Update_Google_Roster.update_classes(character_name)
     Update_Google_Roster.update_items(character_name)
@@ -84,8 +85,10 @@ def add_feat_check(command: str):
     if len(c_list) != 2:
         return False, "Please enter a character name and a feat."
     character_name = c_list[0].lstrip()
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
     feat = c_list[1].lstrip()
-    if not SQL_Check.character_exists(character_name):
+
+    if not SQL_Check.character_exists_by_id(character_id):
         return False, "The character {} doesnt exist.".format(character_name)
     # if not SQL_Check.feat_exists(feat):
         # return False, "The feat {} doesnt exist.".format(feat)
@@ -96,10 +99,11 @@ def add_feat_execute(command: str):
     # pull values
     c_list = command.split(",")
     character_name = c_list[0].lstrip()
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
     feat = c_list[1].lstrip()
 
     # get google sheet data
-    SQL_Insert.character_feat(character_name, feat)
+    SQL_Insert.character_feat(character_id, feat)
     Update_Google_Roster.update_feat(character_name)
 
     return "The character {} now has the feat {}".format(character_name, feat)
@@ -110,8 +114,9 @@ def remove_feat_check(command: str):
     if len(c_list) != 2:
         return False, "Please enter a character name and a feat."
     character_name = c_list[0].lstrip()
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
     feat = c_list[1].lstrip()
-    if not SQL_Check.character_exists(character_name):
+    if not SQL_Check.character_exists_by_id(character_id):
         return False, "The character {} doesnt exist.".format(character_name)
     if not SQL_Check.character_has_feat(character_name, feat):
         return False, "The character {} doesnt have the feat {}.".format(character_name, feat)
@@ -122,9 +127,10 @@ def remove_feat_execute(command: str):
     # pull values
     c_list = command.split(",")
     character_name = c_list[0].lstrip()
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
     feat = c_list[1].lstrip()
 
-    SQL_Delete.character_feat(character_name, feat)
+    SQL_Delete.character_feat(character_id, feat)
     Update_Google_Roster.update_feat(character_name)
 
     return "the feat {} has been removed from {}".format(feat, character_name)
@@ -136,7 +142,7 @@ def item_split(command: str):
     if len(c_list) < 2:
         return False, "Please enter a character name and an item."
     # split input into names and items
-    if SQL_Check.character_exists(c_list[0].lstrip()):
+    if SQL_Check.character_exists_by_name(c_list[0].lstrip()):
         character_name = c_list[0].lstrip()
         for rows in range(len(c_list)):
             if rows == 0:
@@ -164,9 +170,10 @@ def item_check(command: str):  # [Character Name],[Item],[Quantity]
     return_list = []
     for rows in range(len(item_list)):
         character_name = item_list[rows][0].lstrip()
+        character_id = SQL_Lookup.character_id_by_character_name(character_name)
         item_name = item_list[rows][1].lstrip()
 
-        if not SQL_Check.character_exists(character_name):
+        if not SQL_Check.character_exists_by_id(character_id):
             return_list.append("The character {} doesnt exist.".format(character_name))
             continue
         if "'" in item_name:
@@ -178,8 +185,9 @@ def item_check(command: str):  # [Character Name],[Item],[Quantity]
                 return_list.append('Add {} {} to {}'.format(quantity, item_name, character_name))
                 continue
             elif quantity < 0:
-                if SQL_Check.character_has_item(character_name, item_name):
-                    current_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
+                character_id = SQL_Lookup.character_id_by_character_name(character_name)
+                if SQL_Check.character_has_item(character_id, item_name):
+                    current_quantity = SQL_Lookup.character_item_quantity(character_id, item_name)
                     if current_quantity >= quantity*-1:
                         return_list.append('Remove {} {} from {}'.format(quantity * -1, item_name, character_name))
                     else:
@@ -201,9 +209,10 @@ def item_execute(command: str, author: str):
     response_list = []
     for rows in range(len(item_list)):
         character_name = item_list[rows][0].lstrip()
+        character_id = SQL_Lookup.character_id_by_character_name(character_name)
         item_name = item_list[rows][1].lstrip()
 
-        if not SQL_Check.character_exists(character_name):
+        if not SQL_Check.character_exists_by_id(character_id):
             continue
         if "'" in item_name:
             continue
@@ -215,19 +224,19 @@ def item_execute(command: str, author: str):
         except ValueError:
             continue
         if quantity > 0:
-            if SQL_Check.character_has_item(character_name, item_name):
-                SQL_Update.character_item_quantity(character_name, item_name, quantity)
+            if SQL_Check.character_has_item(character_id, item_name):
+                SQL_Update.character_item_quantity(character_id, item_name, quantity)
             else:
-                SQL_Insert.character_item(character_name, item_name, quantity)
+                SQL_Insert.character_item(character_id, item_name, quantity)
             response_list.append("{} received {} {}".format(character_name, quantity, item_name))
             character_name_list.append(character_name)
         elif quantity < 0:
-            if SQL_Check.character_has_item(character_name, item_name):
-                current_quantity = SQL_Lookup.character_item_quantity(character_name, item_name)
+            if SQL_Check.character_has_item(character_id, item_name):
+                current_quantity = SQL_Lookup.character_item_quantity(character_id, item_name)
                 if quantity * -1 < current_quantity:
-                    SQL_Update.character_item_quantity(character_name, item_name, quantity)
+                    SQL_Update.character_item_quantity(character_id, item_name, quantity)
                 else:
-                    SQL_Delete.character_item(character_name, item_name)
+                    SQL_Delete.character_item(character_id, item_name)
                 response_list.append("{} had {} {} removed".format(character_name, quantity, item_name))
                 character_name_list.append(character_name)
 
@@ -261,15 +270,16 @@ def skill_add_check(command: str):
     if len(c_list) < 2:
         return False, "Please enter a character name and a skill."
     character_name = c_list[0].lstrip()
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
     skill = c_list[1].lstrip()
-    if not SQL_Check.character_exists(character_name):
+    if not SQL_Check.character_exists_by_id(character_id):
         return False, "The character {} doesnt exist.".format(character_name)
     if not SQL_Check.skill_exists(skill):
         return False, "The skill {} doesnt exist.".format(skill)
     if len(c_list) > 2:
         if c_list[2] != "Double":
             return False, "Only type the word double to show double proficiency"
-    if SQL_Check.character_has_skill(character_name, skill):
+    if SQL_Check.character_has_skill(character_id, skill):
         return False, "{} already has {}".format(character_name, skill)
     return True, "Give {} the skill {}?".format(character_name, skill)
 
@@ -278,12 +288,13 @@ def skill_add_execute(command: str):
     # pull values
     c_list = command.split(",")
     character_name = c_list[0].lstrip()
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
     skill = c_list[1].lstrip()
     proficiency = 1
     if len(c_list) > 2:
         proficiency = 2
 
-    SQL_Insert.character_skill(character_name, skill, proficiency)
+    SQL_Insert.character_skill(character_id, skill, proficiency)
     Update_Google_Roster.update_skill(character_name)
     return "{} now has the skill {}".format(character_name, skill)
 
@@ -293,10 +304,11 @@ def skill_remove_check(command: str):
     if len(c_list) != 2:
         return False, "Please enter a character name and a skill."
     character_name = c_list[0].lstrip()
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
     skill = c_list[1].lstrip()
-    if not SQL_Check.character_exists(character_name):
+    if not SQL_Check.character_exists_by_id(character_name):
         return False, "The character {} doesnt exist.".format(character_name)
-    if not SQL_Check.character_has_skill(character_name, skill):
+    if not SQL_Check.character_has_skill(character_id, skill):
         return False, "The character {} doesnt have the skill {}".format(character_name, skill)
     return True, "Remove the skill {} from {}?".format(skill, character_name)
 
@@ -305,9 +317,10 @@ def skill_remove_execute(command: str):
     # pull values
     c_list = command.split(",")
     character_name = c_list[0].lstrip()
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
     skill = c_list[1].lstrip()
 
-    SQL_Delete.character_skill(character_name, skill)
+    SQL_Delete.character_skill(character_id, skill)
     Update_Google_Roster.update_skill(character_name)
 
     return "the skill {} has been removed from {}".format(skill, character_name)
@@ -318,7 +331,8 @@ def stat_raise_check(command: str):
     if len(c_list) != 3:
         return False, "Please enter a character name, the stat to raise, and the value."
     character_name = c_list[0].lstrip()
-    if not SQL_Check.character_exists(character_name):
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
+    if not SQL_Check.character_exists_by_id(character_id):
         return False, "The character {} doesnt exist.".format(character_name)
     ability = c_list[1].lstrip()
     if not Quick_Python.ability_name_check(ability):
@@ -327,7 +341,7 @@ def stat_raise_check(command: str):
         change = int(c_list[2])
     except ValueError:
         return False, "Make sure the first value is the amount of XP to give to out."
-    if not SQL_Check.character_stat_max(character_name, ability, change):
+    if not SQL_Check.character_stat_max(character_id, ability, change):
         return False, "{} cant have over 20 in {}, can't add {}.".format(character_name, ability, change)
     return True, "Add {} points of {} to {}?".format(change, ability, character_name)
 
@@ -335,15 +349,17 @@ def stat_raise_check(command: str):
 def stat_change_execute(command: str):
     command_split = command.split(",")
     character_name = command_split[0].lstrip()
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
     ability = command_split[1].lstrip()
     value = int(command_split[2].lstrip())
-    new_value = SQL_Update.character_stat_change(character_name, ability, value)
+    new_value = SQL_Update.character_stat_change(character_id, ability, value)
     Update_Google_Roster.update_character_ability(character_name, ability)
     return "{} now has {} in {}".format(character_name, new_value, ability)
 
 
 def character_refresh_check(character_name: str):
-    if not SQL_Check.character_exists(character_name):
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
+    if not SQL_Check.character_exists_by_id(character_id):
         return False, "The character {} doesnt exist.".format(character_name)
     return True, ""
 

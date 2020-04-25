@@ -1,11 +1,23 @@
 import Connections
 
 
-def character_exists(character_name: str):
+def character_exists_by_name(character_name: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Main_Characters " \
             "where Character_Name = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+
+
+def character_exists_by_id(character_id: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * " \
+            "from Main_Characters " \
+            "where ID = '{}'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:
@@ -48,11 +60,11 @@ def player_exists(user_id: str):
     return True
 
 
-def character_has_feat(character_name: str, feat_name: str):
+def character_has_feat(character_id: str, feat_name: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Feats " \
-            "where Character = '{}' AND Feat = '{}'".format(character_name, feat_name)
+            "where Character_ID = '{}' AND Feat = '{}'".format(character_id, feat_name)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:
@@ -72,11 +84,11 @@ def skill_exists(name: str):
     return True
 
 
-def character_has_skill(character_name: str, skill_name: str):
+def character_has_skill(character_id: str, skill_name: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Skills " \
-            "where Character = '{}' AND Skill = '{}'".format(character_name, skill_name)
+            "where Character_ID = '{}' AND Skill = '{}'".format(character_id, skill_name)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:
@@ -84,11 +96,11 @@ def character_has_skill(character_name: str, skill_name: str):
     return True
 
 
-def character_stat_max(character_name: str, stat: str, change: int):
+def character_stat_max(character_id: str, stat: str, change: int):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Main_Characters " \
-            "where Character_Name = '{}'".format(character_name)
+            "where ID = '{}'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     value = 0
@@ -110,11 +122,11 @@ def character_stat_max(character_name: str, stat: str, change: int):
     return True
 
 
-def character_has_item(character_name: str, item_name: str):
+def character_has_item(character_id: str, item_name: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Items " \
-            "where Character = '{}' AND Item = '{}'".format(character_name, item_name)
+            "where Character_ID = '{}' AND Item = '{}'".format(character_id, item_name)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:

@@ -1,11 +1,11 @@
 import Connections
 
 
-def character_has_item(character_name: str, item_name: str):
+def character_has_item(character_id: str, item_name: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Items " \
-            "where Character = '{}' AND Item = '{}'".format(character_name, item_name)
+            "where Character_ID = '{}' AND Item = '{}'".format(character_id, item_name)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:
@@ -25,11 +25,11 @@ def character_has_enough_gold_to_buy_trade(gold: float):
     return True
 
 
-def character_is_wizard(character_name: str, ):
+def character_is_wizard(character_id: str, ):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Class " \
-            "where Character='{}' and Class = 'Wizard'".format(character_name)
+            "where Character_ID = '{}' and Class = 'Wizard'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:

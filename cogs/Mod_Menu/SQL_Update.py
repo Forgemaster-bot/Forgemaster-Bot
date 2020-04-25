@@ -34,34 +34,34 @@ def character_sheet(character: list):
     cursor.commit()
 
 
-def character_stat_change(character_name: str, ability: str, value: int):
+def character_stat_change(character_id: str, ability: str, value: int):
     cursor = Connections.sql_db_connection()
 
-    current_stat = int(SQL_Lookup.character_ability_score(character_name, ability))
+    current_stat = int(SQL_Lookup.character_ability_score(character_id, ability))
     new_value = current_stat + int(value)
     ability_name = Quick_Python.ability_name_convert(ability)
     query = "UPDATE Main_Characters " \
             "SET {} = '{}' " \
-            "WHERE Character_Name = '{}'".format(ability_name, new_value, character_name)
+            "WHERE ID = '{}'".format(ability_name, new_value, character_id)
     cursor.execute(query)
     cursor.commit()
     return new_value
 
 
-def character_item_quantity(character_name: str, item_name: str, quantity: int):
+def character_item_quantity(character_id: str, item_name: str, quantity: int):
     # calculate new total
-    new_amount = SQL_Lookup.character_item_quantity(character_name, item_name) + quantity
+    new_amount = SQL_Lookup.character_item_quantity(character_id, item_name) + quantity
     cursor = Connections.sql_db_connection()
     query = "UPDATE Link_Character_Items set Quantity = '{}' " \
-            "WHERE Character = '{}' AND Item = '{}'".format(new_amount, character_name, item_name)
+            "WHERE ID = '{}' AND Item = '{}'".format(new_amount, character_id, item_name)
     cursor.execute(query)
     cursor.commit()
 
 
-def character_wizard_spell(character_name: str, class_name: str):
+def character_wizard_spell(character_id: str, class_name: str):
     cursor = Connections.sql_db_connection()
     query = "UPDATE Link_Character_Class " \
             "SET Free_Wizard_Spells = 6 " \
-            "WHERE Character = '{}' AND Class = '{}'".format(character_name, class_name)
+            "WHERE ID = '{}' AND Class = '{}'".format(character_id, class_name)
     cursor.execute(query)
     cursor.commit()

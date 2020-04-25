@@ -1,20 +1,21 @@
 import Connections
 
 
-def character_gold(character_name: str):
+def character_gold(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    query = "select * " \
+            "from Main_Characters where ID = '{}'".format(character_id)
     cursor.execute(query)
     character = cursor.fetchone()
     return character.Gold
 
 
-def character_inventory(character_name: str):
+def character_inventory(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Link_Character_Items " \
-            "Where Character='{}' and Item not in (select Item from Main_Trade where Character = '{}') " \
-            "Order by Item".format(character_name, character_name)
+            "Where Character_ID = '{}' and Item not in (select Item from Main_Trade where Character_ID = '{}') " \
+            "Order by Item".format(character_id, character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
     items = []
@@ -26,20 +27,20 @@ def character_inventory(character_name: str):
     return items
 
 
-def character_owner(character_name: str):
+def character_owner(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    query = "select * from Main_Characters where ID = '{}'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     return int(result.Discord_ID)
 
 
-def character_recycle_inventory_list(character_name: str):
+def character_recycle_inventory_list(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Items " \
-            "where Character='{}' and Item in (select Name from Info_Item) " \
-            "order by Item".format(character_name)
+            "where Character_ID = '{}' and Item in (select Name from Info_Item) " \
+            "order by Item".format(character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
     items = []
@@ -51,9 +52,11 @@ def character_recycle_inventory_list(character_name: str):
     return items
 
 
-def character_item(character_name: str, item_name: str):
+def character_item(character_id: str, item_name: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Link_Character_Items where Character='{}' AND Item = '{}'".format(character_name, item_name)
+    query = "select * " \
+            "from Link_Character_Items " \
+            "where Character_ID = '{}' AND Item = '{}'".format(character_id, item_name)
     cursor.execute(query)
     item = cursor.fetchone()
     return item
@@ -69,12 +72,12 @@ def item_detail(item_name: str):
     return item
 
 
-def trade_goods_types(character_name: str, gold_limit: float):
+def trade_goods_types(character_id: str, gold_limit: float):
     cursor = Connections.sql_db_connection()
     query = "Select distinct Type " \
             "From Main_Trade " \
-            "Where a.Price <= '{}' and a.Character != '{}' " \
-            "Order by Type".format(gold_limit, character_name)
+            "Where Price <= '{}' and Character_ID != '{}' " \
+            "Order by Type".format(gold_limit, character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
     response = []
@@ -84,41 +87,30 @@ def trade_goods_types(character_name: str, gold_limit: float):
     return response
 
 
-def trade_goods_items_by_type(character_name: str, gold_limit: float, item_type: str):
+def trade_goods_items_by_type(character_id: str, gold_limit: float, item_type: str):
     cursor = Connections.sql_db_connection()
-    if item_type == "Other":
-        query = "select a.Item " \
-                "from Main_Trade a " \
-                "left join Info_Item b " \
-                "on a.Item = b.Name " \
-                "where b.Type is null and a.price <= '{}' and a.Character != '{}' " \
-                "group by a.Item " \
-                "order by Item".format(gold_limit, character_name)
-    else:
-        query = "select a.Item " \
-                "from Main_Trade a " \
-                "left join Info_Item b " \
-                "on a.Item = b.Name " \
-                "where b.Type = '{}' and a.price <= '{}' " \
-                "group by a.Item " \
-                "order by Item".format(item_type, gold_limit)
+    query = "select Item " \
+            "from Main_Trade " \
+            "where Type = '{}' and price <= '{}' and Character_ID != '{}' " \
+            "group by Item " \
+            "order by Item".format(item_type, gold_limit, character_id)
     cursor.execute(query)
     item_name_list = cursor.fetchall()
     response = []
     for items in item_name_list:
-        item_details = trade_item_not_sold_by_character(character_name, items.Item)
+        item_details = trade_item_not_sold_by_character(character_id, items.Item)
         if item_details is not None:
             response.append("{}: {}g each with {} for sale".format(item_details.Item, item_details.Price,
                                                                    item_details.Quantity))
     return response
 
 
-def trade_item_not_sold_by_character(character_name: str, item_name: str):
+def trade_item_not_sold_by_character(character_id: str, item_name: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "From Main_Trade " \
-            "Where Item = '{}' and Character != '{}' " \
-            "order by Price, Quantity desc".format(item_name, character_name)
+            "Where Item = '{}' and Character_ID != '{}' " \
+            "order by Price, Quantity desc".format(item_name, character_id)
     cursor.execute(query)
     item = cursor.fetchone()
     return item
@@ -135,12 +127,12 @@ def trade_item_cheapest_on_sale(item_name: str):
     return item
 
 
-def character_items_for_sale(character_name: str):
+def character_items_for_sale(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "select Item, Price " \
             "from Main_Trade " \
-            "where Character = '{}' " \
-            "order by Item".format(character_name)
+            "where Character_ID = '{}' " \
+            "order by Item".format(character_id)
     cursor.execute(query)
     result = []
     rows = cursor.fetchall()
@@ -149,18 +141,18 @@ def character_items_for_sale(character_name: str):
     return result
 
 
-def trade_item__character(character_name: str, item_name: str):
+def trade_item_character(character_id: str, item_name: str):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "From Main_Trade " \
-            "Where Item = '{}' and Character = '{}' " \
-            "order by Price, Quantity desc".format(item_name, character_name)
+            "Where Item = '{}' and Character_ID = '{}' " \
+            "order by Price, Quantity desc".format(item_name, character_id)
     cursor.execute(query)
     item = cursor.fetchone()
     return item
 
 
-def character_spell_level_list_spell_book(character_name: str):
+def character_spell_level_list_spell_book(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "select Level " \
             "from Link_Spell_Book_Spells A " \
@@ -168,9 +160,9 @@ def character_spell_level_list_spell_book(character_name: str):
             "on A.Spell_Book_ID = B.ID " \
             "left join Info_Spells C " \
             "on A.Spell = C.Name " \
-            "Where Owner = '{}' " \
+            "Where Owner_ID = '{}' " \
             "Group By Level " \
-            "Order By Level".format(character_name)
+            "Order By Level".format(character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
     result = []
@@ -179,7 +171,7 @@ def character_spell_level_list_spell_book(character_name: str):
     return result
 
 
-def character_known_wizard_spells_by_level(character_name: str, spell_level: int):
+def character_known_wizard_spells_by_level(character_id: str, spell_level: int):
     cursor = Connections.sql_db_connection()
     query = "Select DISTINCT Spell " \
             "From Main_Spell_Book A " \
@@ -187,9 +179,9 @@ def character_known_wizard_spells_by_level(character_name: str, spell_level: int
             "on A.ID = B.Spell_Book_ID " \
             "left join Info_Spells C " \
             "on B.Spell = C.Name " \
-            "Where A.owner = '{}' " \
+            "Where A.Owner_ID = '{}' " \
             "and C.Level = '{}' " \
-            "and Spell in (select Spell from Link_Class_Spells where Class = 'Wizard')".format(character_name,
+            "and Spell in (select Spell from Link_Class_Spells where Class = 'Wizard')".format(character_id,
                                                                                                spell_level)
     cursor.execute(query)
     rows = cursor.fetchall()
@@ -197,3 +189,11 @@ def character_known_wizard_spells_by_level(character_name: str, spell_level: int
     for row in rows:
         result.append(row.Spell)
     return result
+
+
+def character_name_by_character_id(character_id: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Main_Characters where ID = '{}'".format(character_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Character_Name

@@ -28,10 +28,11 @@ class Player_Menu_Commands(commands.Cog):
             await command.message.author.send("Menu closed")
             return
         while True:
-            menu_option = await self.main_menu_choice(command, character_name)
+            character_id = SQL_Lookup.character_id_by_character_name(character_name)
+            menu_option = await self.main_menu_choice(command, character_id)
             if menu_option == "View your character sheet":
                 while True:
-                    menu = await CS_Menu.main_menu(self, command, discord_id, character_name)
+                    menu = await CS_Menu.main_menu(self, command, discord_id, character_id)
                     if menu == "exit":
                         menu_option = "exit"
                         break
@@ -39,7 +40,7 @@ class Player_Menu_Commands(commands.Cog):
                         break
             elif menu_option == "Go to the workshop":
                 while True:
-                    menu = await WS_Menu.main_menu(self, command, discord_id, character_name)
+                    menu = await WS_Menu.main_menu(self, command, discord_id, character_id)
                     if menu == "exit":
                         menu_option = "exit"
                         break
@@ -47,7 +48,7 @@ class Player_Menu_Commands(commands.Cog):
                         break
             elif menu_option == "Go to the market":
                 while True:
-                    menu = await MP_Menu.main_menu(self, command, discord_id, character_name)
+                    menu = await MP_Menu.main_menu(self, command, discord_id, character_id)
                     if menu == "exit":
                         menu_option = "exit"
                         break
@@ -92,7 +93,8 @@ class Player_Menu_Commands(commands.Cog):
             choice = await self.answer_from_list(command, option_question, option_list)
         return choice
 
-    async def main_menu_choice(self, command, character_name):
+    async def main_menu_choice(self, command, character_id):
+        character_name = SQL_Lookup.character_name_by_character_id(character_id)
         option_list = Scripts.main_menu()
         if len(option_list) == 0:
             await command.message.author.send("{} doesnt have any options available".format(character_name))
@@ -260,7 +262,7 @@ class Player_Menu_Commands(commands.Cog):
         elif msg.content.lower() == "stop":
             reply = "stop"
         else:
-            reply = msg.content.replace("'", "''").lower()
+            reply = msg.content.lower()
         return reply
 
     async def confirm(self, command):
@@ -284,7 +286,7 @@ class Player_Menu_Commands(commands.Cog):
             reply = "No"
         return reply
 
-    async def character_name_lookup(self, command, question, character_name):
+    async def character_name_lookup(self, command, question, character_id):
         await command.message.author.send(question)
 
         def check_reply(user_response):
@@ -295,10 +297,12 @@ class Player_Menu_Commands(commands.Cog):
                 msg = await self.bot.wait_for('message', timeout=120.0, check=check_reply)
             except asyncio.TimeoutError:
                 return "exit"
+            character_name = SQL_Lookup.character_name_by_character_id(character_id)
             if msg.content.lower() == "exit":
                 return "exit"
             elif msg.content.lower() == "stop":
                 return "stop"
+
             elif msg.content.lower() == character_name.lower():
                 await command.message.author.send("You cannot give yourself an item")
             elif SQL_Check.character_exists(msg.content.lower()):
