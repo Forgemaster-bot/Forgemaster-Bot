@@ -76,6 +76,8 @@ def character_id_by_character_name(character_name: str):
     query = "select * from Main_Characters where Character_Name = '{}'".format(character_name)
     cursor.execute(query)
     result = cursor.fetchone()
+    if result is None:
+        return False
     return result.ID
 
 

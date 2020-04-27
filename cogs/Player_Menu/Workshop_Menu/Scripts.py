@@ -102,7 +102,8 @@ def character_has_profession_tools(character_id, profession: str):
             return True, ""
     tool = SQL_Lookup.profession_tool(profession)
     if not SQL_Check.character_has_item(character_id, tool):
-        return False, "{} doesnt own a set of {} to craft with".format(character_id, tool)
+        character_name = SQL_Lookup.character_name_by_character_id(character_id)
+        return False, "{} doesnt own a set of {} to craft with".format(character_name, tool)
     return True, ""
 
 
@@ -132,21 +133,21 @@ async def mundane_create(self, discord_id, character_id: str, item_name: str, qu
     # update gold
     craft_cost = item_craft_cost * quantity
     SQL_Update.character_gold(character_id, craft_cost * -1)
-    Update_Google_Roster.update_gold_group([character_name])
+    Update_Google_Roster.update_gold_group([character_id])
 
     # update inventory
     if SQL_Check.character_has_item(character_id, item_name):
         SQL_Update.character_item_quantity(character_id, item_name, quantity)
     else:
         SQL_Insert.character_item(character_id, item_name, quantity)
-    Update_Google_Roster.update_items(character_name)
+    Update_Google_Roster.update_items(character_id)
 
     # update crafting
     craft_details = SQL_Lookup.character_crafting(character_id)
     new_craft_value = float(craft_details.Crafting_Value) - craft_cost
     if new_craft_value <= 0:
         new_craft_value = 0
-    SQL_Update.character_crafting(character_name, new_craft_value, 0)
+    SQL_Update.character_crafting(character_id, new_craft_value, 0)
 
     # Print to logs
     Connections.sql_log_private_command(discord_id, log)
@@ -287,8 +288,8 @@ async def consumable_create(self, discord_id, character_id, profession,
         SQL_Insert.character_item(character_id, name, 1)
 
     # update
-    Update_Google_Roster.update_gold_group([character_name])
-    Update_Google_Roster.update_items(character_name)
+    Update_Google_Roster.update_gold_group([character_id])
+    Update_Google_Roster.update_items(character_id)
 
     # log command
     Connections.sql_log_private_command(discord_id, log)
@@ -414,8 +415,8 @@ async def experiment_create(self, discord_id, character_id, profession, recipe_n
     else:
         SQL_Insert.character_item(character_id, item_name, 1)
 
-    Update_Google_Roster.update_items(character_name)
-    Update_Google_Roster.update_gold_group([character_name])
+    Update_Google_Roster.update_items(character_id)
+    Update_Google_Roster.update_gold_group([character_id])
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
 
@@ -440,7 +441,8 @@ def recipe_list(character_id: str, profession: str):
 
 
 def working_check(target_name: str):
-    result = SQL_Check.character_has_crafted_this_week(target_name)
+    target_id = SQL_Lookup.character_id_by_character_name(target_name)
+    result = SQL_Check.character_has_crafted_this_week(target_id)
     return result
 
 
@@ -550,8 +552,8 @@ async def create_scroll_confirm(self, command, discord_id, character_id, spell_l
         SQL_Insert.character_item(character_id, item_name, 1)
 
     # add to logs
-    Update_Google_Roster.update_items(character_name)
-    Update_Google_Roster.update_gold_group([character_name])
+    Update_Google_Roster.update_items(character_id)
+    Update_Google_Roster.update_gold_group([character_id])
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
 
@@ -606,7 +608,7 @@ async def scribe_spell_confirm(self, command, discord_id, character_id, spell_na
         SQL_Delete.wizard_spell_share(character_id, spell_origin.replace(" Spell Book", ""), spell_name)
 
     # add to logs
-    Update_Google_Roster.update_items(character_name)
+    Update_Google_Roster.update_items(character_id)
     Connections.sql_log_private_command(discord_id, log.replace("'", "''"))
     await Connections.log_to_discord(self, log)
     await command.author.send(log)

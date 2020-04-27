@@ -55,10 +55,10 @@ def create_character_execute(command: str):
         SQL_Update.character_wizard_spell(character_id, character_class)
         SQL_Insert.character_spell_book(character_id, character_name)
     SQL_Insert.character_item(character_id, "Rations", 10)
-    Update_Google_Roster.insert_new_character(character_name)
-    Update_Google_Roster.update_classes(character_name)
-    Update_Google_Roster.update_items(character_name)
-    user_ping = "<@{}>".format(SQL_Lookup.character_owner(character_name))
+    Update_Google_Roster.insert_new_character(character_id)
+    Update_Google_Roster.update_classes(character_id)
+    Update_Google_Roster.update_items(character_id)
+    user_ping = "<@{}>".format(SQL_Lookup.character_owner(character_id))
     return "{} your character {} has been created".format(user_ping, character_name)
 
 
@@ -104,7 +104,7 @@ def add_feat_execute(command: str):
 
     # get google sheet data
     SQL_Insert.character_feat(character_id, feat)
-    Update_Google_Roster.update_feat(character_name)
+    Update_Google_Roster.update_feat(character_id)
 
     return "The character {} now has the feat {}".format(character_name, feat)
 
@@ -131,7 +131,7 @@ def remove_feat_execute(command: str):
     feat = c_list[1].lstrip()
 
     SQL_Delete.character_feat(character_id, feat)
-    Update_Google_Roster.update_feat(character_name)
+    Update_Google_Roster.update_feat(character_id)
 
     return "the feat {} has been removed from {}".format(feat, character_name)
 
@@ -240,8 +240,9 @@ def item_execute(command: str, author: str):
                 response_list.append("{} had {} {} removed".format(character_name, quantity, item_name))
                 character_name_list.append(character_name)
 
-    for names in character_name_list:
-        Update_Google_Roster.update_items(names)
+    for character_name in character_name_list:
+        character_id = SQL_Lookup.character_id_by_character_name(character_name)
+        Update_Google_Roster.update_items(character_id)
     response_list.insert(0, "{} did the following item changes:".format(author))
     return response_list
 
@@ -295,7 +296,7 @@ def skill_add_execute(command: str):
         proficiency = 2
 
     SQL_Insert.character_skill(character_id, skill, proficiency)
-    Update_Google_Roster.update_skill(character_name)
+    Update_Google_Roster.update_skill(character_id)
     return "{} now has the skill {}".format(character_name, skill)
 
 
@@ -321,7 +322,7 @@ def skill_remove_execute(command: str):
     skill = c_list[1].lstrip()
 
     SQL_Delete.character_skill(character_id, skill)
-    Update_Google_Roster.update_skill(character_name)
+    Update_Google_Roster.update_skill(character_id)
 
     return "the skill {} has been removed from {}".format(skill, character_name)
 
@@ -353,23 +354,26 @@ def stat_change_execute(command: str):
     ability = command_split[1].lstrip()
     value = int(command_split[2].lstrip())
     new_value = SQL_Update.character_stat_change(character_id, ability, value)
-    Update_Google_Roster.update_character_ability(character_name, ability)
+    Update_Google_Roster.update_character_ability(character_id, ability)
     return "{} now has {} in {}".format(character_name, new_value, ability)
 
 
 def character_refresh_check(character_name: str):
     character_id = SQL_Lookup.character_id_by_character_name(character_name)
+    if character_id is False:
+        return False, "The character {} doesnt exist.".format(character_name)
     if not SQL_Check.character_exists_by_id(character_id):
         return False, "The character {} doesnt exist.".format(character_name)
     return True, ""
 
 
 def character_refresh_execute(character_name: str):
-    Update_Google_Roster.update_character(character_name)
-    Update_Google_Roster.update_classes(character_name)
-    Update_Google_Roster.update_feat(character_name)
-    Update_Google_Roster.update_items(character_name)
-    Update_Google_Roster.update_skill(character_name)
+    character_id = SQL_Lookup.character_id_by_character_name(character_name)
+    Update_Google_Roster.update_character(character_id)
+    Update_Google_Roster.update_classes(character_id)
+    Update_Google_Roster.update_feat(character_id)
+    Update_Google_Roster.update_items(character_id)
+    Update_Google_Roster.update_skill(character_id)
 
 
 def npc_talk_execute(command: str):

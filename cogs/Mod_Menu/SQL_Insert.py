@@ -52,7 +52,7 @@ def character_feat(character_id: str,  feat_name: str):
 
 def character_skill(character_id: str, skill_name: str, proficiency: int):
     cursor = Connections.sql_db_connection()
-    link_class_insert = "insert into Link_Character_Skills (Character_ID, Character,Skill,Proficiency) " \
+    link_class_insert = "insert into Link_Character_Skills (Character_ID,Skill,Proficiency) " \
                         "values ('{}','{}','{}')".format(character_id, skill_name, proficiency)
     cursor.execute(link_class_insert)
     cursor.commit()

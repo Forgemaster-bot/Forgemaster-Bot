@@ -16,15 +16,15 @@ def character_on_crafting_table(character_id: str):
 
 def character_is_artificer_with_tools(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select A.Character, A.Class, B.Item from " \
-            "(select Character, Class " \
+    query = "select A.Character_ID, A.Class, B.Item from " \
+            "(select Character_ID, Class " \
             "from Link_Character_Class " \
             "where Character_ID = '{}' and Class = 'Artificer' and Level > 2) A " \
             "left join  " \
-            "(select character, Item " \
+            "(select Character_ID, Item " \
             "from Link_Character_Items " \
             "where Character_ID = '{}' and Item = 'Tinker tools') B " \
-            "on a.Character = B.Character".format(character_id, character_id)
+            "on a.Character_Id = B.Character_ID".format(character_id, character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     if result is None:

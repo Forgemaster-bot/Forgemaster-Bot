@@ -3,18 +3,19 @@ import Connections
 
 
 # Character commands
-def insert_new_character(character_name: str):
+def insert_new_character(character_id: str):
+    character_name = character_name_by_character_id(character_id)
     roster = Connections.google_sheet("Roster")
     print_row = len(roster.col_values(1)) + 1
-    character_sheet = lookup_character_sheet(character_name)
-    levelup = check_level_up(character_name)
+    character_sheet = lookup_character_sheet(character_id)
+    levelup = check_level_up(character_id)
 
     # split data
     discord_name = lookup_player_name_by_id(character_sheet.Discord_ID)
     race = character_sheet.Race
     background = character_sheet.Background
     xp = character_sheet.XP
-    level = lookup_character_sum_class_levels(character_name)
+    level = lookup_character_sum_class_levels(character_id)
     strength = character_sheet.Strength
     dexterity = character_sheet.Dexterity
     constitution = character_sheet.Constitution
@@ -28,18 +29,19 @@ def insert_new_character(character_name: str):
     roster.insert_row(new_character, print_row)
 
 
-def update_character(character_name: str):
+def update_character(character_id: str):
+    character_name = character_name_by_character_id(character_id)
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
-    character_sheet = lookup_character_sheet(character_name)
-    levelup = check_level_up(character_name)
+    character_sheet = lookup_character_sheet(character_id)
+    levelup = check_level_up(character_id)
 
     # split data
     discord_name = lookup_player_name_by_id(character_sheet.Discord_ID)
     race = character_sheet.Race
     background = character_sheet.Background
     xp = character_sheet.XP
-    level = lookup_character_sum_class_levels(character_name)
+    level = lookup_character_sum_class_levels(character_id)
     strength = character_sheet.Strength
     dexterity = character_sheet.Dexterity
     constitution = character_sheet.Constitution
@@ -54,48 +56,49 @@ def update_character(character_name: str):
         roster.update_cell(character_row, col+1, new_character[col])
 
 
-def update_classes(character_name: str):
+def update_classes(character_id: str):
+    character_name = character_name_by_character_id(character_id)
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
-    class_count = lookup_character_count_classes(character_name)
+    class_count = lookup_character_count_classes(character_id)
     for class_number in range(1, class_count+1):
-            class_detail = lookup_character_class_by_order(character_name, class_number)
+            class_detail = lookup_character_class_by_order(character_id, class_number)
             roster.update_cell(character_row, class_number+4, "{} {}".format(class_detail[0], class_detail[1]))
 
 
 # Feats
-def update_feat(character_name: str):
+def update_feat(character_id: str):
+    character_name = character_name_by_character_id(character_id)
     # get google sheet data
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
-    feat_list = lookup_character_feats(character_name)
+    feat_list = lookup_character_feats(character_id)
     feats = Quick_Python.list_to_string(feat_list)
     roster.update_cell(character_row, 18, feats)
 
 
 # Gold
-def update_gold_group(character_list: list):
+def update_gold_group(character_id_list: list):
     roster = Connections.google_sheet("Roster")
-    for character_name in character_list:
+    for character_id in character_id_list:
+        character_name = character_name_by_character_id(character_id)
         character_row = Quick_Python.find_character_row(roster.col_values(2), character_name.lstrip())
-        gold = lookup_character_gold(character_name.lstrip())
+        gold = lookup_character_gold(character_id)
         roster.update_cell(character_row, 17, gold)
 
 
 # Items
-def update_items(character_name: str):
+def update_items(character_id: str):
+    character_name = character_name_by_character_id(character_id)
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
-    item_list = lookup_character_inventory(character_name)
+    item_list = lookup_character_inventory(character_id)
     items = Quick_Python.list_to_string(item_list)
     roster.update_cell(character_row, 20, items)
 
 
-def kill_character(command: str):
-    c_list = command.split(",")
-    character_name = c_list[0].lstrip()
-    reason = c_list[1].lstrip()
-
+def kill_character(character_id: str, reason: str):
+    character_name = character_name_by_character_id(character_id)
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
     character_sheet = roster.row_values(character_row)
@@ -105,44 +108,54 @@ def kill_character(command: str):
 
     graveyard.insert_row(character_sheet, print_row)
     graveyard.update_cell(print_row, 20, reason)
+
+    # items
+    item_list = lookup_character_inventory(character_id)
+    items = Quick_Python.list_to_string(item_list)
+    roster.update_cell(character_row, 21, items)
+
     roster.delete_row(character_row)
 
     return "{} died by {}".format(character_name, reason)
 
 
 # Level up
-def update_level(character_name: str):
+def update_level(character_id: str):
+    character_name = character_name_by_character_id(character_id)
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
-    level = lookup_character_sum_class_levels(character_name)
-    level_up = check_level_up(character_name)
+    level = lookup_character_sum_class_levels(character_id)
+    level_up = check_level_up(character_id)
     roster.update_cell(character_row, 9, level)
     roster.update_cell(character_row, 10, level_up)
 
 
-def update_skill(character_name: str):
+def update_skill(character_id: str):
+    character_name = character_name_by_character_id(character_id)
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
-    skill_list = lookup_character_skills(character_name)
+    skill_list = lookup_character_skills(character_id)
     skills = Quick_Python.list_to_string(skill_list)
     roster.update_cell(character_row, 19, skills)
 
 
 # XP
-def update_xp_group(character_list: list):
+def update_xp_group(character_id_list: list):
     roster = Connections.google_sheet("Roster")
-    for character_name in character_list:
+    for character_id in character_id_list:
+        character_name = character_name_by_character_id(character_id)
         character_row = Quick_Python.find_character_row(roster.col_values(2), character_name.lstrip())
-        xp = lookup_character_xp(character_name.lstrip())
-        level_up = check_level_up(character_name.lstrip())
+        xp = lookup_character_xp(character_id.lstrip())
+        level_up = check_level_up(character_id.lstrip())
 
         roster.update_cell(character_row, 8, xp)
         roster.update_cell(character_row, 10, level_up)
 
 
-def update_character_ability(character_name: str, ability: str):
+def update_character_ability(character_id: str, ability: str):
+    character_name = character_name_by_character_id(character_id)
     roster = Connections.google_sheet("Roster")
-    character_sheet = lookup_character_sheet(character_name)
+    character_sheet = lookup_character_sheet(character_id)
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
     if ability == "STR":
         roster.update_cell(character_row, 11, character_sheet.Strength)
@@ -158,9 +171,9 @@ def update_character_ability(character_name: str, ability: str):
         roster.update_cell(character_row, 16, character_sheet.Charisma)
 
 
-def lookup_character_sheet(character_name: str):
+def lookup_character_sheet(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    query = "select * from Main_Characters where ID = '{}'".format(character_id)
     cursor.execute(query)
     return cursor.fetchone()
 
@@ -175,33 +188,36 @@ def lookup_player_name_by_id(user_id: str):
     return result.Name
 
 
-def lookup_character_sum_class_levels(character_name: str):
+def lookup_character_sum_class_levels(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select SUM(Level) Total from Link_Character_Class where Character = '{}'".format(character_name)
+    query = "select SUM(Level) Total from Link_Character_Class where Character_ID = '{}'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Total
 
 
-def lookup_character_count_classes(character_name: str):
+def lookup_character_count_classes(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select Count(*) Total from Link_Character_Class where Character = '{}'".format(character_name)
+    query = "select Count(*) Total from Link_Character_Class where Character_ID = '{}'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Total
 
 
-def lookup_character_class_by_order(character_name: str, order: int):
+def lookup_character_class_by_order(character_id: str, order: int):
     cursor = Connections.sql_db_connection()
-    query = "select * from Link_Character_Class where Character='{}' and Number = '{}'".format(character_name, order)
+    query = "Select * from Link_Character_Class " \
+            "Where Character_ID = '{}' and Number = '{}'".format(character_id, order)
     cursor.execute(query)
     class_lookup = cursor.fetchone()
     return class_lookup.Class, class_lookup.Level
 
 
-def lookup_character_feats(character_name: str):
+def lookup_character_feats(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Link_Character_Feats where Character='{}'".format(character_name)
+    query = "Select * " \
+            "From Link_Character_Feats " \
+            "Where Character_ID = '{}'".format(character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
     feats = []
@@ -210,17 +226,22 @@ def lookup_character_feats(character_name: str):
     return feats
 
 
-def lookup_character_gold(character_name: str):
+def lookup_character_gold(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    query = "Select * " \
+            "From Main_Characters " \
+            "Where ID = '{}'".format(character_id)
     cursor.execute(query)
     character = cursor.fetchone()
     return character.Gold
 
 
-def lookup_character_inventory(character_name: str):
+def lookup_character_inventory(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Link_Character_Items where Character='{}' order by Item".format(character_name)
+    query = "Select * " \
+            "From Link_Character_Items " \
+            "Where Character_ID = '{}' " \
+            "Order by Item".format(character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
     items = []
@@ -232,9 +253,11 @@ def lookup_character_inventory(character_name: str):
     return items
 
 
-def lookup_character_skills(character_name: str):
+def lookup_character_skills(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Link_Character_Skills where Character='{}'".format(character_name)
+    query = "Select * " \
+            "From Link_Character_Skills " \
+            "Where Character_ID = '{}'".format(character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
     skills = []
@@ -246,23 +269,41 @@ def lookup_character_skills(character_name: str):
     return skills
 
 
-def lookup_character_xp(character_name: str):
+def lookup_character_xp(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where Character_Name='{}'".format(character_name)
+    query = "Select * " \
+            "From Main_Characters " \
+            "Where ID = '{}'".format(character_id)
     cursor.execute(query)
     character = cursor.fetchone()
     return character.XP
 
 
-def check_level_up(character_name: str):
-    character_level = lookup_character_sum_class_levels(character_name)
-    character_xp = lookup_character_xp(character_name)
+def check_level_up(character_id: str):
+    character_level = lookup_character_sum_class_levels(character_id)
+    character_xp = lookup_character_xp(character_id)
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Info_XP " \
-            "where Level='{}'".format(character_level)
+            "where Level = '{}'".format(character_level)
     cursor.execute(query)
     xp_sheet = cursor.fetchone()
     if character_xp >= xp_sheet.XP:
         return "Yes"
     return "No"
+
+
+def character_name_by_character_id(character_id: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Main_Characters where ID = '{}'".format(character_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Character_Name
+
+
+def character_id_by_character_name(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Main_Characters where Character_Name = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.ID

@@ -55,6 +55,7 @@ def give_quantity(character_id: str, item_name: str):
 
 
 async def give_confirm(self, discord_id, character_id: str, target_name: str, item_name: str, quantity: int, log):
+    target_id = SQL_Lookup.character_id_by_character_name(target_name)
     # Remove from character
     character_item_quantity = SQL_Lookup.character_item(character_id, item_name)
     if quantity == character_item_quantity.Quantity:
@@ -63,19 +64,20 @@ async def give_confirm(self, discord_id, character_id: str, target_name: str, it
         SQL_Update.character_item_quantity(character_id, item_name, quantity * -1)
 
     # Add to target
-    if SQL_Check.character_has_item(target_name, item_name):
-        SQL_Update.character_item_quantity(target_name, item_name, quantity)
+    if SQL_Check.character_has_item(target_id, item_name):
+        SQL_Update.character_item_quantity(target_id, item_name, quantity)
     else:
-        SQL_Insert.character_item(target_name, item_name, quantity)
+        SQL_Insert.character_item(target_id, item_name, quantity)
 
     # update roster
     Update_Google_Roster.update_items(character_id)
-    Update_Google_Roster.update_items(target_name)
+
+    Update_Google_Roster.update_items(target_id)
 
     # update logs
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
-    target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_name))
+    target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_id))
     if target_discord is not None:
         await target_discord.send(log)
 
@@ -90,13 +92,14 @@ def pay_character_gold(character_id: str):
 
 
 async def pay_confirm(self, discord_id, character_id: str, target_name: str, amount: float, log):
+    target_id = SQL_Lookup.character_id_by_character_name(target_name)
     SQL_Update.character_gold(character_id, amount*-1)
-    SQL_Update.character_gold(target_name, amount)
-    Update_Google_Roster.update_gold_group([character_id, target_name])
+    SQL_Update.character_gold(target_id, amount)
+    Update_Google_Roster.update_gold_group([character_id, target_id])
 
     Connections.sql_log_private_command(discord_id, log.replace("'", "''"))
     await Connections.log_to_discord(self, log)
-    target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_name))
+    target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_id))
     if target_discord is not None:
         await target_discord.send(log)
 
@@ -180,26 +183,26 @@ async def buy_confirm(self, discord_id, character_id: str, trade_good, quantity:
     # remove gold from player
     SQL_Update.character_gold(character_id, trade_value*-1)
     # add gold to seller
-    SQL_Update.character_gold(trade_good.Character, trade_value)
+    SQL_Update.character_gold(trade_good.Character_ID, trade_value)
 
     # remove from trade
     if quantity == trade_good.Quantity:
-        SQL_Delete.trade_sale(trade_good.Character, trade_good.Item)
-        Update_Google_Trade.trade_delete(trade_good.Character, trade_good.Item)
+        SQL_Delete.trade_sale(trade_good.Character_ID, trade_good.Item)
+        Update_Google_Trade.trade_delete(trade_good.Character_ID, trade_good.Item)
     else:
-        SQL_Update.trade_quantity(trade_good.Character, trade_good, quantity * -1)
-        Update_Google_Trade.trade_update(trade_good.Character, trade_good.Item)
+        SQL_Update.trade_quantity(trade_good.Character_ID, trade_good, quantity * -1)
+        Update_Google_Trade.trade_update(trade_good.Character_ID, trade_good.Item)
 
     # update roster
-    update_list = [character_id, trade_good.Character]
+    update_list = [character_id, trade_good.Character_ID]
     Update_Google_Roster.update_gold_group(update_list)
     Update_Google_Roster.update_items(character_id)
-    Update_Google_Roster.update_items(trade_good.Character)
+    Update_Google_Roster.update_items(trade_good.Character_ID)
 
     # update logs
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
-    target_discord = self.bot.get_user(SQL_Lookup.character_owner(trade_good.Character))
+    target_discord = self.bot.get_user(SQL_Lookup.character_owner(trade_good.Character_ID))
     if target_discord is not None:
         await target_discord.send(log)
 
@@ -295,12 +298,13 @@ def share_spell_options(character_id: str, spell_level: int):
 
 
 async def share_spell_confirm(self, discord_id, character_id: str, target_name: str, spell_name: str, log):
+    target_id = SQL_Lookup.character_id_by_character_name(target_name)
     owner_name = get_character_name(character_id)
-    SQL_Insert.share_spell(owner_name, target_name, spell_name)
+    SQL_Insert.share_spell(target_id, spell_name, owner_name)
 
     # inform target
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
-    target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_name))
+    target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_id))
     if target_discord is not None:
         await target_discord.send(log)

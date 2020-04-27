@@ -230,7 +230,9 @@ def character_owner(character_id: str):
 
 def character_count_classes(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select Count(*) Total from Link_Character_Class where Character_ID = '{}'".format(character_id)
+    query = "Select Count(*) Total " \
+            "From Link_Character_Class " \
+            "Where Character_ID = '{}'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Total
@@ -240,7 +242,7 @@ def character_class_by_number(character_id: str, number: int):
     cursor = Connections.sql_db_connection()
     query = "Select Class " \
             "From Link_Character_Class " \
-            "Where Character = '{}' and Number = '{}'".format(character_id, number)
+            "Where Character_ID = '{}' and Number = '{}'".format(character_id, number)
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Class
@@ -482,3 +484,11 @@ def character_name_by_character_id(character_id: str):
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Character_Name
+
+
+def character_id_by_character_name(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Main_Characters where Character_Name = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.ID

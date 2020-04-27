@@ -42,7 +42,7 @@ def kill_character_execute(command: str):
     SQL_Insert.move_to_graveyard(character_id, reason)
     SQL_Delete.character(character_id)
 
-    Update_Google_Roster.kill_character(command)
+    Update_Google_Roster.kill_character(character_id, reason)
     return "{} died because {}".format(character_name, reason)
 
 
@@ -73,11 +73,13 @@ def add_gold_execute(command: str):  # [Gold],[Character 1],[Character 2]
     gold = float(c_list[0])
     del c_list[0]
     # loop through each character
+    character_id_list = []
     for name in c_list:
         character_name = name.lstrip()
         character_id = SQL_Lookup.character_id_by_character_name(character_name)
         SQL_Update.character_gold(character_id, gold)
-    Update_Google_Roster.update_gold_group(c_list)
+        character_id_list.append(character_id)
+    Update_Google_Roster.update_gold_group(character_id_list)
     return "{} Gold has been added to {}".format(gold, Quick_Python.list_to_string(c_list))
 
 
@@ -107,11 +109,13 @@ def add_xp_execute(command: str):  # [Gold],[Character 1],[Character 2]
     del c_list[0]
 
     # loop through each character
+    character_id_list = []
     for name in c_list:
         character_name = name.lstrip()
         character_id = SQL_Lookup.character_id_by_character_name(character_name)
         SQL_Update.character_xp(character_id, xp)
-    Update_Google_Roster.update_xp_group(c_list)
+        character_id_list.append(character_id)
+    Update_Google_Roster.update_xp_group(character_id_list)
     return "{} xp has been added to {}".format(xp, Quick_Python.list_to_string(c_list))
 
 
@@ -129,8 +133,8 @@ def log_xp_execute(character_name: str, author: str):
         character_level += 1
     xp = SQL_Lookup.log_xp(character_level)
     SQL_Update.character_xp(character_id, xp)
-    c_list = [character_name]
-    Update_Google_Roster.update_xp_group(c_list)
+    character_id_list = [character_id]
+    Update_Google_Roster.update_xp_group(character_id_list)
     return "{} got {}xp from {} for posting a log".format(character_name, xp, author)
 
 

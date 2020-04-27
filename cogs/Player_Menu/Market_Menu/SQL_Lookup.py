@@ -197,3 +197,11 @@ def character_name_by_character_id(character_id: str):
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Character_Name
+
+
+def character_id_by_character_name(character_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Main_Characters where Character_Name = '{}'".format(character_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.ID
