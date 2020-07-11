@@ -1,13 +1,13 @@
 import Connections
 
 
-def character_create(character_sheet: list):
+def character_create(character_sheet: list, roll_id: str):
     cursor = Connections.sql_db_connection()
     discord_id = character_sheet[0].lstrip()
     character_name = character_sheet[1].lstrip()
     race = character_sheet[2].lstrip()
     background = character_sheet[3].lstrip()
-    xp = 0
+    xp = 900
     strength = character_sheet[5].lstrip()
     dexterity = character_sheet[6].lstrip()
     constitution = character_sheet[7].lstrip()
@@ -17,10 +17,10 @@ def character_create(character_sheet: list):
     gold = character_sheet[11].lstrip()
 
     character_insert = "insert into Main_Characters (ID, Discord_ID,Character_Name,Race,Background,XP," \
-                       "Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma,Gold) " \
-                       "values (NEWID(),'{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')"\
+                       "Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma,Gold,Roll_ID) " \
+                       "values (NEWID(),'{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')"\
                        .format(discord_id, character_name, race, background, xp,
-                               strength, dexterity, constitution, intelligence, wisdom, charisma, gold)
+                               strength, dexterity, constitution, intelligence, wisdom, charisma, gold, roll_id)
 
     cursor.execute(character_insert)
     cursor.commit()
@@ -44,7 +44,7 @@ def character_item(character_id: str, item_name: str, quantity: int):
 
 def character_feat(character_id: str,  feat_name: str):
     cursor = Connections.sql_db_connection()
-    link_class_insert = "insert into Link_Character_Feats (Character_ID, Character,Feat) " \
+    link_class_insert = "insert into Link_Character_Feats (Character_ID, Feat) " \
                         "values ('{}','{}')".format(character_id, feat_name)
     cursor.execute(link_class_insert)
     cursor.commit()

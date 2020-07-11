@@ -21,8 +21,13 @@ def menu(character_id: str):
         class_name = SQL_Lookup.character_class_by_number(character_id, rows + 1)
         if SQL_Check.character_can_subclass(character_id, class_name):
             menu_list.append("Pick your subclass for {}".format(class_name))
-
         class_level = SQL_Lookup.character_class_level_by_class(character_id, class_name)
+        if SQL_Check.class_choice(character_id, class_name):
+            sub_class_name = SQL_Lookup.character_class_subclass(character_id, class_name)
+            if class_name == 'Warlock':
+                menu_list.append("Warlock Pack Boon choice")
+            elif sub_class_name == 'Divine Soul':
+                menu_list.append("Divine Soul affinity spell choice".format(sub_class_name))
         if SQL_Check.class_is_spell_caster(character_id, class_name, class_level):
             if character_has_spells_to_view(character_id, class_name):
                 menu_list.append("View your {} spells".format(class_name))
@@ -30,6 +35,7 @@ def menu(character_id: str):
                 menu_list.append("Learn a new {} spell".format(class_name))
             if character_can_forget_spell(character_id, class_name):
                 menu_list.append("Forget a {} spell".format(class_name))
+
     return menu_list
 
 
@@ -170,7 +176,10 @@ async def level_up_confirm(self, character_id: str, class_name: str, discord_id:
     if SQL_Check.class_can_replace_spell(class_name):
         SQL_Update.character_forget_spell_allow(character_id, class_name)
     if class_name == 'Wizard':
-        SQL_Update.character_wizard_spell(character_id, class_name, 2)
+        SQL_Update.character_free_spell(character_id, class_name, 2)
+
+    if SQL_Lookup.character_sum_class_levels(character_id) > 6:
+        SQL_Update.update_player_character_total(discord_id)
 
     Update_Google_Roster.update_classes(character_id)
     Update_Google_Roster.update_level(character_id)
@@ -192,7 +201,10 @@ def subclass_options(class_choice):
 async def subclass_confirm(self, character_id: str, class_choice: str, subclass: str, discord_id: str, log: str):
     # update class details
     SQL_Update.character_subclass(character_id, class_choice, subclass)
-
+    if subclass == 'Divine Soul':
+        SQL_Update.character_sub_class_option(character_id, "Sorcerer", True)
+    if class_choice == 'Warlock':
+        SQL_Update.character_sub_class_option(character_id, "Warlock", True)
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
 
@@ -284,7 +296,7 @@ async def learning_spell_confirm(self, discord_id, character_id: str, class_name
         SQL_Insert.spell_book_spell(book_id, spell_name)
         # update number of free spells they have
         spell_number = SQL_Lookup.wizard_spell_number(character_id, class_name)
-        SQL_Update.character_wizard_spell(character_id, class_name, spell_number - 1)
+        SQL_Update.character_free_spell(character_id, class_name, spell_number - 1)
     else:
         spell_origin = SQL_Lookup.spell_origin(class_name, spell_name)
         if spell_origin is None:
@@ -310,6 +322,28 @@ async def forget_spell_confirm(self, discord_id, character_id: str, class_name: 
 
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
+
+
+'''''''''''''''''''''''''''''''''''''''''
+###########Sub_Class Choices#############
+'''''''''''''''''''''''''''''''''''''''''
+
+
+async def divine_soul_confirm(self, discord_id, character_id: str, spell_name: str, log):
+    SQL_Insert.character_spell(character_id, "Divine Soul affinity", spell_name)
+    SQL_Update.character_sub_class_option(character_id, "Sorcerer", False)
+    Connections.sql_log_private_command(discord_id, log)
+    await Connections.log_to_discord(self, log.replace("''", "'"))
+
+
+async def warlock_tome_confirm(self, discord_id, character_id: str, reply: str, log):
+    if reply == 'Yes':
+        character_name = SQL_Lookup.character_name_by_character_id(character_id)
+        SQL_Insert.character_spell_book(character_id, character_name, 'Tome')
+        SQL_Update.character_free_spell(character_id, "Warlock", 2)
+    SQL_Update.character_sub_class_option(character_id, "Warlock", False)
+    Connections.sql_log_private_command(discord_id, log)
+    await Connections.log_to_discord(self, log.replace("''", "'"))
 
 '''''''''''''''''''''''''''''''''''''''''
 ###############Utility##################

@@ -87,3 +87,15 @@ def character_name_by_character_id(character_id: str):
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Character_Name
+
+
+def unused_roll(discord_id: str):
+    cursor = Connections.sql_db_connection()
+    query = "select B.Character_Name, A.* " \
+            "from Discord_Roll A " \
+            "left join Main_Characters B " \
+            "on A.ID = B.Roll_ID " \
+            "where A.Discord_ID = '{}' and B.Character_Name is NULL".format(discord_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.ID

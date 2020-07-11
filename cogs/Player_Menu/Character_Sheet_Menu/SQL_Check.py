@@ -148,3 +148,15 @@ def class_can_replace_spell(class_name: str):
     if result is None:
         return False
     return True
+
+
+def class_choice(character_id: str, class_name: str):
+    cursor = Connections.sql_db_connection()
+    query = "Select * " \
+            "From Link_Character_Class " \
+            "Where Character_ID = '{}' and Class = '{}'".format(character_id, class_name)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result.Class_Choice:
+        return True
+    return False

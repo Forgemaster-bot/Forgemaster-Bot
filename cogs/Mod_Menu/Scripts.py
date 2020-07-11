@@ -22,8 +22,6 @@ def create_character_check(command: str):
     if SQL_Check.character_exists_by_name(character_name):
         return False, "That character name is already taken, please choose another."
     # checks to see if the class is spelt correctly
-    # if not SQL_Check.race_exists(c_list[2].lstrip()):
-        # return False, "The race {} doesnt exist.".format(c_list[2].lstrip())
     if not SQL_Check.class_exists(c_list[4].lstrip()):
         return False, "The class {} doesnt exist.".format(c_list[4].lstrip())
     response = True, "Player's Discord name : {} \nName : {} \nRace : {} \nbackground : {} \n" \
@@ -46,9 +44,10 @@ def create_character_execute(command: str):
     character_name = character[0].lstrip()
     character_sheet[1] = character_name
     character_class = character_sheet[4].lstrip()
+    roll_id = SQL_Lookup.unused_roll(discord_id)
 
     # update Link_character_Class
-    SQL_Insert.character_create(character_sheet)
+    SQL_Insert.character_create(character_sheet, roll_id)
     character_id = SQL_Lookup.character_id_by_character_name(character_name)
     SQL_Insert.character_class(character_id, character_class, 1, 1)
     if character_class == 'Wizard':
@@ -88,7 +87,7 @@ def add_feat_check(command: str):
     character_id = SQL_Lookup.character_id_by_character_name(character_name)
     feat = c_list[1].lstrip()
 
-    if not SQL_Check.character_exists_by_id(character_id):
+    if character_id is False:
         return False, "The character {} doesnt exist.".format(character_name)
     # if not SQL_Check.feat_exists(feat):
         # return False, "The feat {} doesnt exist.".format(feat)
@@ -116,7 +115,7 @@ def remove_feat_check(command: str):
     character_name = c_list[0].lstrip()
     character_id = SQL_Lookup.character_id_by_character_name(character_name)
     feat = c_list[1].lstrip()
-    if not SQL_Check.character_exists_by_id(character_id):
+    if character_id is False:
         return False, "The character {} doesnt exist.".format(character_name)
     if not SQL_Check.character_has_feat(character_name, feat):
         return False, "The character {} doesnt have the feat {}.".format(character_name, feat)
@@ -173,11 +172,8 @@ def item_check(command: str):  # [Character Name],[Item],[Quantity]
         character_id = SQL_Lookup.character_id_by_character_name(character_name)
         item_name = item_list[rows][1].lstrip()
 
-        if not SQL_Check.character_exists_by_id(character_id):
+        if character_id is False:
             return_list.append("The character {} doesnt exist.".format(character_name))
-            continue
-        if "'" in item_name:
-            return_list.append("{} cannot have apostrophes, item wont be added".format(item_name))
             continue
         try:
             quantity = int(item_list[rows][2])
@@ -210,13 +206,10 @@ def item_execute(command: str, author: str):
     for rows in range(len(item_list)):
         character_name = item_list[rows][0].lstrip()
         character_id = SQL_Lookup.character_id_by_character_name(character_name)
-        item_name = item_list[rows][1].lstrip()
+        item_name = item_list[rows][1].lstrip().replace("'", "''")
 
         if not SQL_Check.character_exists_by_id(character_id):
             continue
-        if "'" in item_name:
-            continue
-
         try:
             quantity = int(item_list[rows][2])
         except IndexError:
@@ -228,7 +221,7 @@ def item_execute(command: str, author: str):
                 SQL_Update.character_item_quantity(character_id, item_name, quantity)
             else:
                 SQL_Insert.character_item(character_id, item_name, quantity)
-            response_list.append("{} received {} {}".format(character_name, quantity, item_name))
+            response_list.append("{} received {} {}".format(character_name, quantity, item_name.replace("''", "'")))
             character_name_list.append(character_name)
         elif quantity < 0:
             if SQL_Check.character_has_item(character_id, item_name):
@@ -237,7 +230,8 @@ def item_execute(command: str, author: str):
                     SQL_Update.character_item_quantity(character_id, item_name, quantity)
                 else:
                     SQL_Delete.character_item(character_id, item_name)
-                response_list.append("{} had {} {} removed".format(character_name, quantity, item_name))
+                response_list.append("{} had {} {} removed".format(character_name, quantity,
+                                                                   item_name.replace("''", "'")))
                 character_name_list.append(character_name)
 
     for character_name in character_name_list:
@@ -273,7 +267,7 @@ def skill_add_check(command: str):
     character_name = c_list[0].lstrip()
     character_id = SQL_Lookup.character_id_by_character_name(character_name)
     skill = c_list[1].lstrip()
-    if not SQL_Check.character_exists_by_id(character_id):
+    if character_id is False:
         return False, "The character {} doesnt exist.".format(character_name)
     if not SQL_Check.skill_exists(skill):
         return False, "The skill {} doesnt exist.".format(skill)
@@ -307,7 +301,7 @@ def skill_remove_check(command: str):
     character_name = c_list[0].lstrip()
     character_id = SQL_Lookup.character_id_by_character_name(character_name)
     skill = c_list[1].lstrip()
-    if not SQL_Check.character_exists_by_id(character_name):
+    if character_id is False:
         return False, "The character {} doesnt exist.".format(character_name)
     if not SQL_Check.character_has_skill(character_id, skill):
         return False, "The character {} doesnt have the skill {}".format(character_name, skill)
@@ -333,7 +327,7 @@ def stat_raise_check(command: str):
         return False, "Please enter a character name, the stat to raise, and the value."
     character_name = c_list[0].lstrip()
     character_id = SQL_Lookup.character_id_by_character_name(character_name)
-    if not SQL_Check.character_exists_by_id(character_id):
+    if character_id is False:
         return False, "The character {} doesnt exist.".format(character_name)
     ability = c_list[1].lstrip()
     if not Quick_Python.ability_name_check(ability):

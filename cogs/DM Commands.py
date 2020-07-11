@@ -66,6 +66,7 @@ class DM_Commands(commands.Cog):
                     await command.send("Updating roster...")
                     log = Scripts.add_xp_execute(trim_message)
                     Connections.sql_log_command(command)
+                    await Connections.log_to_discord(self, log)
                     await command.send(log)
                     break
                 else:
@@ -84,8 +85,11 @@ class DM_Commands(commands.Cog):
             Connections.sql_log_command(command)
             await command.send(log)
             await Connections.log_to_discord(self, log)
-            target_discord = self.bot.get_user(SQL_Lookup.character_owner(trim_message))
+            Connections.sql_log_command(command)
+            character_id = SQL_Lookup.character_id_by_character_name(trim_message)
+            target_discord = self.bot.get_user(SQL_Lookup.character_owner(character_id))
             await target_discord.send(log)
+
         else:
             await command.send(command_check[1])
 

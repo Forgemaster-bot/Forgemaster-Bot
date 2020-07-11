@@ -53,7 +53,7 @@ def character_item_quantity(character_id: str, item_name: str, quantity: int):
     new_amount = SQL_Lookup.character_item_quantity(character_id, item_name) + quantity
     cursor = Connections.sql_db_connection()
     query = "UPDATE Link_Character_Items set Quantity = '{}' " \
-            "WHERE ID = '{}' AND Item = '{}'".format(new_amount, character_id, item_name)
+            "WHERE Character_ID = '{}' AND Item = '{}'".format(new_amount, character_id, item_name)
     cursor.execute(query)
     cursor.commit()
 

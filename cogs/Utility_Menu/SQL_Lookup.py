@@ -14,10 +14,10 @@ def info_skills():
 
 def info_classes():
     cursor = Connections.sql_db_connection()
-    query = "select Name from Info_Classes ORDER BY Name"
+    query = "select Class from Info_Classes ORDER BY Class "
     cursor.execute(query)
     rows = cursor.fetchall()
     classes = []
     for row in rows:
-        classes.append(row.Name)
+        classes.append(row.Class)
     return classes

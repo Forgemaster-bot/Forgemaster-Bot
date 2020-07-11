@@ -454,7 +454,8 @@ async def craft_scroll_spell_choice(self, command, character_id, class_name, spe
 
 async def create_scroll_confirm(self, command, discord_id, character_id, spell_level: int, spell_name):
     character_name = Scripts.get_character_name(character_id)
-    question = "Do you want to create a scroll of {}?".format(spell_name.replace("''", "'"))
+    gold_cost = Scripts.scroll_gold_cost(spell_level)
+    question = "Do you want to create a scroll of {} for {}g?".format(spell_name.replace("''", "'"), gold_cost)
     log = "{} created a scroll of {}.".format(character_name, spell_name.replace("''", "'"))
     await command.author.send(question)
     reply = await self.confirm(command)
@@ -479,7 +480,7 @@ async def scribe_spell_menu(self, command, discord_id, character_id: str):
         .format(reagent_quantity, ability_bonus)
     await command.message.author.send(welcome_message)
 
-    spell_choice = await scribe_spell_spell_choice(self, command, character_id, reagent_quantity)
+    spell_choice = await scribe_spell_choice(self, command, character_id, reagent_quantity)
     if spell_choice == "exit" or spell_choice == "stop":
         return spell_choice
 
@@ -489,7 +490,7 @@ async def scribe_spell_menu(self, command, discord_id, character_id: str):
     return "stop"
 
 
-async def scribe_spell_spell_choice(self, command, character_id, reagent_quantity):
+async def scribe_spell_choice(self, command, character_id, reagent_quantity):
     option_list = Scripts.scribe_spell_list(character_id, reagent_quantity)
     option_question = "Which spell would you like to lend?"
     choice = await self.answer_from_list(command, option_question, option_list)

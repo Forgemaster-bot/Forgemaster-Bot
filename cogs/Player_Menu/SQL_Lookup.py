@@ -14,11 +14,14 @@ def player_character_list(discord_id: str):
 
 def player_stat_roll(discord_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * " \
-            "From Discord_Roll " \
-            "where Discord_ID = '{}'".format(discord_id)
+    query = "select B.Character_Name, A.* " \
+            "from Discord_Roll A " \
+            "left join Main_Characters B " \
+            "on A.ID = B.Roll_ID " \
+            "where A.Discord_ID = '{}' " \
+            "order by Character_Name".format(discord_id)
     cursor.execute(query)
-    result = cursor.fetchone()
+    result = cursor.fetchall()
     if result is None:
         return ""
     return result
@@ -49,3 +52,26 @@ def character_name_by_character_id(character_id: str):
     result = cursor.fetchone()
     return result.Character_Name
 
+
+def character_total(discord_id: str):
+    cursor = Connections.sql_db_connection()
+    query = "select count(*) as Total from Main_Characters where Discord_ID = '{}'".format(discord_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Total
+
+
+def character_roll_total(discord_id: str):
+    cursor = Connections.sql_db_connection()
+    query = "select count(*) as Total from Discord_roll where Discord_ID = '{}'".format(discord_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Total
+
+
+def total_characters_allowed(discord_id: str):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Info_Discord where ID = '{}' ".format(discord_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    return result.Character_Number

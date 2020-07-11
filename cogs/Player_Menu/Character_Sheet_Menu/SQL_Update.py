@@ -40,10 +40,28 @@ def character_forget_spell_stop(character_id: str, class_name: str):
     cursor.commit()
 
 
-def character_wizard_spell(character_id: str, class_name: str, spell_number: int):
+def character_free_spell(character_id: str, class_name: str, spell_number: int):
     cursor = Connections.sql_db_connection()
     query = "UPDATE Link_Character_Class " \
-            "SET Free_Wizard_Spells = '{}' " \
+            "SET Free_Book_Spells = '{}' " \
             "WHERE Character_ID = '{}' AND Class = '{}'".format(spell_number, character_id, class_name)
+    cursor.execute(query)
+    cursor.commit()
+
+
+def character_sub_class_option(character_id: str, class_name: str, set_value: bool):
+    cursor = Connections.sql_db_connection()
+    query = "UPDATE Link_Character_Class " \
+            "SET Class_Choice = '{}' " \
+            "WHERE Character_ID = '{}' AND Class = '{}'".format(set_value, character_id, class_name)
+    cursor.execute(query)
+    cursor.commit()
+
+
+def update_player_character_total(discord_id: str):
+    cursor = Connections.sql_db_connection()
+    query = "UPDATE Info_Discord " \
+            "SET Character_Number = 2 " \
+            "WHERE ID = '{}'".format(discord_id)
     cursor.execute(query)
     cursor.commit()

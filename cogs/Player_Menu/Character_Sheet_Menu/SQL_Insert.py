@@ -31,3 +31,11 @@ def character_spell(character_id: str, origin: str, spell_name: str):
                         "values ('{}','{}','{}')".format(character_id, origin, spell_name)
     cursor.execute(link_class_insert)
     cursor.commit()
+
+
+def character_spell_book(character_id: str, character_name: str, book_type: str):
+    cursor = Connections.sql_db_connection()
+    link_class_insert = "insert into Main_Spell_Book (ID, Owner_ID, Name,Type) " \
+                        "values (NEWID(),'{}','{} Spell book','{}')".format(character_id, character_name, book_type)
+    cursor.execute(link_class_insert)
+    cursor.commit()

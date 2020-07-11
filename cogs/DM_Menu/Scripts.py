@@ -133,8 +133,7 @@ def log_xp_execute(character_name: str, author: str):
         character_level += 1
     xp = SQL_Lookup.log_xp(character_level)
     SQL_Update.character_xp(character_id, xp)
-    character_id_list = [character_id]
-    Update_Google_Roster.update_xp_group(character_id_list)
+    Update_Google_Roster.update_xp_group([character_id])
     return "{} got {}xp from {} for posting a log".format(character_name, xp, author)
 
 

@@ -61,23 +61,32 @@ class Player_Menu_Commands(commands.Cog):
     # Roll Stats
     @commands.command(name='randchar', help='Roll character stats')
     async def dice_roll(self, command):
-        Connections.sql_log_command(command)
         discord_id = str(command.message.author.id)
         discord_name = str(command.message.author.display_name)
-
         if not SQL_Check.player_exists(discord_id):
             sync = Scripts.sync_player(discord_id, discord_name)
             if not sync[0]:
                 await command.send(sync)
-        if SQL_Check.player_stat_roll(discord_id):
-            results = SQL_Lookup.player_stat_roll(discord_id)
-            previous_rolls = [results.Roll_1, results.Roll_2, results.Roll_3,
-                              results.Roll_4, results.Roll_5, results.Roll_6]
-            response = Scripts.stitch_list_into_string(previous_rolls)
-            response = "You already have a stat array : {}".format(response)
+        character_limit = SQL_Lookup.total_characters_allowed(discord_id)
+        characters_total = SQL_Lookup.character_total(discord_id)
+        roll_total = SQL_Lookup.character_roll_total(discord_id)
+        if characters_total < character_limit:
+            if roll_total < character_limit:
+                Connections.sql_log_command(command)
+                response = Scripts.rand_char(discord_id)
+                await command.send(response)
         else:
-            response = Scripts.rand_char(discord_id)
-        await command.send(response)
+            rolls = SQL_Lookup.player_stat_roll(discord_id)
+            for roll in rolls:
+                previous_rolls = [roll.Roll_1, roll.Roll_2, roll.Roll_3,
+                                  roll.Roll_4, roll.Roll_5, roll.Roll_6]
+                if roll.Character_Name is None:
+                    character_name = "Not used"
+                else:
+                    character_name = "Used for {}".format(roll.Character_Name)
+                response = Scripts.stitch_list_into_string(previous_rolls)
+                response = "Array: {}. {}".format(response, character_name)
+                await command.send(response)
 
     # Menu commands
     async def character_choice(self, command, discord_id):

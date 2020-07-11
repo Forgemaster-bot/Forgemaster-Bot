@@ -101,7 +101,7 @@ def character_inventory(character_id: str):
     cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Link_Character_Items " \
-            "Where Character_ID = '{}' and Item not in (select Item from Main_Trade where Character_ID = '{}') " \
+            "Where Character_ID = '{}' " \
             "Order by Item ".format(character_id, character_id)
     cursor.execute(query)
     rows = cursor.fetchall()
@@ -188,11 +188,11 @@ def character_max_spell_by_level(class_name: str, class_level):
     return result[class_level]
 
 
-def character_class_subclass(character_id: str, subclass: str):
+def character_class_subclass(character_id: str, class_name: str):
     cursor = Connections.sql_db_connection()
     query = "Select * " \
             "from Link_character_Class " \
-            "where Character_ID = '{}' and Class = '{}' ".format(character_id, subclass)
+            "where Character_ID = '{}' and Class = '{}' ".format(character_id, class_name)
     cursor.execute(query)
     result = cursor.fetchone()
     return result.Sub_Class
@@ -206,7 +206,7 @@ def character_spells_by_class(character_id: str, class_name: str):
             "from Link_Character_Spells A " \
             "left Join Info_Spells B " \
             "on A.Spell = B.Name " \
-            "where A.Character_ID = '{}' and (Origin = '{}' or Origin = '{}') " \
+            "where A.Character_ID = '{}' and (Origin = '{}' or Origin like '{}%') " \
             "order by Level, Name ".format(character_id, class_name, sub_class)
     cursor.execute(query)
     rows = cursor.fetchall()
@@ -258,9 +258,9 @@ def spells_wizard_free_spells(character_id: str):
     result = cursor.fetchone()
     if result is None:
         return 0
-    if result.Free_Wizard_Spells is None:
+    if result.Free_Book_Spells is None:
         return 0
-    return result.Free_Wizard_Spells
+    return result.Free_Book_Spells
 
 
 def spells_known_by_level(class_name: str, class_level: int):
@@ -367,10 +367,10 @@ def wizard_spell_number(character_id: str, class_name: str, ):
     cursor = Connections.sql_db_connection()
     query = "select * " \
             "From Link_Character_Class " \
-            "WHERE ID = '{}' AND Class = '{}'".format(character_id, class_name)
+            "WHERE Character_ID = '{}' AND Class = '{}'".format(character_id, class_name)
     cursor.execute(query)
     result = cursor.fetchone()
-    return result.Free_Wizard_Spells
+    return result.Free_Book_Spells
 
 
 def character_name_by_character_id(character_id: str):

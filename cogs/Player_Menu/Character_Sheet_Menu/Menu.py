@@ -51,6 +51,20 @@ async def main_menu(self, command, discord_id: int, character_id: str):
                     return menu
                 elif menu == "stop":
                     return
+        elif "Divine Soul affinity spell choice" in choice:
+            while True:
+                menu = await divine_soul_menu(self, command, discord_id, character_id)
+                if menu == "exit":
+                    return menu
+                elif menu == "stop":
+                    return
+        elif "Warlock Pack Boon choice" in choice:
+            while True:
+                menu = await warlock_pack_menu(self, command, discord_id, character_id)
+                if menu == "exit":
+                    return menu
+                elif menu == "stop":
+                    return
         elif choice == "exit" or choice == "stop":
             return choice
         else:
@@ -296,7 +310,7 @@ async def forget_spell_menu(self, command, discord_id, character_id: str, class_
 
 async def forget_spell_choice(self, command, character_id, class_name):
     option_list = Scripts.forget_spells_list(character_id, class_name)
-    option_question = "Which spell would you like to forget?".format(class_name)
+    option_question = "Which spell would you like to forget?"
     choice = await self.answer_from_list(command, option_question, option_list)
     result = choice.split(":")
     return result[1].lstrip()
@@ -312,4 +326,72 @@ async def forget_spell_confirm(self, command, discord_id, character_id, class_na
         await command.author.send("Forgetting spell...")
         await Scripts.forget_spell_confirm(self, discord_id, character_id, class_name, spell_choice, log)
         await command.author.send(log)
+    return "stop"
+
+
+'''''''''''''''''''''''''''''''''''''''''
+###########Sub_Class Choices#############
+'''''''''''''''''''''''''''''''''''''''''
+
+
+async def divine_soul_menu(self, command, discord_id, character_id: str):
+    welcome_message = "Divine Soul Spell Menu: Type **STOP** at any time to go back to the player menu."
+    await command.message.author.send(welcome_message)
+    # pick spell level
+
+    spell_choice = await divine_soul_spell_choice(self, command)
+    if spell_choice == "exit" or spell_choice == "stop":
+        return spell_choice
+
+    confirm = await divine_soul_confirm(self, command, discord_id, character_id, spell_choice)
+    if confirm == "exit" or confirm == "stop":
+        return confirm
+    return "stop"
+
+
+async def divine_soul_spell_choice(self, command):
+    option_list = ['Cure Wounds', 'Inflict Wounds', 'Bless', 'Bane', 'Protection from Evil and Good']
+    option_question = "Which spell would you like to learn?"
+    choice = await self.answer_from_list(command, option_question, option_list)
+    return choice
+
+
+async def divine_soul_confirm(self, command, discord_id, character_id, spell_choice):
+    character_name = Scripts.get_character_name(character_id)
+    question = "Do you want to learn {} as your divine soul affinity spell?".format(spell_choice)
+    log = "{} learnt {} as a their divine soul affinity spell.".format(character_name, spell_choice)
+    await command.author.send(question)
+    reply = await self.confirm(command)
+    if reply == "Yes":
+        await command.author.send("learning spell...")
+        await Scripts.divine_soul_confirm(self, discord_id, character_id, spell_choice, log)
+        await command.author.send(log.replace("''", "'"))
+    return "stop"
+
+
+async def warlock_pack_menu(self, command, discord_id, character_id: str):
+    welcome_message = "Warlock Pack boon Menu: Type **STOP** at any time to go back to the player menu."
+    await command.message.author.send(welcome_message)
+    # pick spell level
+
+    confirm = await warlock_pack_confirm(self, command, discord_id, character_id)
+    if confirm == "exit" or confirm == "stop":
+        return confirm
+    return "stop"
+
+
+async def warlock_pack_confirm(self, command, discord_id, character_id):
+    character_name = Scripts.get_character_name(character_id)
+    question = "Do you want to be a pack of the tome warlock with the book of ancient secrets invocation? [Yes/No]"
+    await command.author.send(question)
+    reply = await self.confirm(command)
+    if reply == "Yes" or reply == 'No':
+        if reply == 'Yes':
+            log = "{} is a pack of the tome warlock with the book of ancient secrets invocation.".format(character_name)
+            await command.author.send("creating book of shadows...")
+        else:
+            log = '{} is not a pack of the tome warlock, and wont have a book of secrets'.format(character_name)
+            await command.author.send("working...")
+        await Scripts.warlock_tome_confirm(self, discord_id, character_id, reply, log)
+        await command.author.send(log.replace("''", "'"))
     return "stop"

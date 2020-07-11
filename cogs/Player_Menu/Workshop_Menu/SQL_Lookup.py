@@ -308,7 +308,7 @@ def character_known_spells_by_class_and_level(character_id: str, class_name: str
             "on A.Spell = B.Name " \
             "where Character_ID = '{}' " \
             "and B.Level = {} " \
-            "and (Origin = '{}' or Origin = '{}') "\
+            "and (Origin = '{}' or Origin like '{}%') "\
         .format(character_id, spell_level, class_name, sub_class)
     cursor.execute(query)
     rows = cursor.fetchall()

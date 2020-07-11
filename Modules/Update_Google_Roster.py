@@ -33,6 +33,9 @@ def update_character(character_id: str):
     character_name = character_name_by_character_id(character_id)
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
+    if character_row == 0:
+        character_row = len(roster.col_values(1)) + 1
+        roster.update_cell(character_row, 2, character_name)
     character_sheet = lookup_character_sheet(character_id)
     levelup = check_level_up(character_id)
 

@@ -27,6 +27,8 @@ def menu(character_id: str):
                 menu_list.append("Create a scroll from your {} spells".format(class_name))
             if class_name == 'Wizard':
                 menu_list.append("Scribe a spell into your spell book")
+            if class_level == 'Warlock' and SQL_Check.character_has_tome(character_id):
+                menu_list.append("Scribe a ritual into your book of shadows")
     menu_list.append("Work for someone this week")
     return menu_list
 
@@ -447,9 +449,10 @@ def working_check(target_name: str):
 
 
 async def work_confirm(self, discord_id, character_id: str, target_name, log):
-    employer_details = SQL_Lookup.character_crafting(target_name)
+    target_id = SQL_Lookup.character_id_by_character_name(target_name)
+    employer_details = SQL_Lookup.character_crafting(target_id)
     if employer_details is None:
-        SQL_Insert.crafting(target_name)
+        SQL_Insert.crafting(target_id)
         new_labour = 1
         new_craft_value = 50
     else:
@@ -458,11 +461,11 @@ async def work_confirm(self, discord_id, character_id: str, target_name, log):
     # remove point from player
     SQL_Update.character_crafting(character_id, 0, 0)
     # add labour to employer
-    SQL_Update.character_crafting(target_name, new_craft_value, new_labour)
+    SQL_Update.character_crafting(target_id, new_craft_value, new_labour)
 
     Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
-    target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_name))
+    target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_id))
     if target_discord is not None:
         await target_discord.send(log)
 
@@ -515,18 +518,7 @@ def craft_scroll_spell_options(character_id: str, class_name: str, spell_level: 
     return spell_level_list
 
 
-async def create_scroll_confirm(self, command, discord_id, character_id, spell_level: int, spell_name, log):
-    # update reagent
-    reagent_cost = SQL_Lookup.spell_consumable_cost(spell_name)
-    if reagent_cost > 0:
-        reagent_total = SQL_Lookup.character_item_quantity(character_id, 'Universal Reagent')
-        if reagent_cost > reagent_total:
-            msg = "You do not have enough Universal Reagent for the consumable cost of the scroll"
-            await command.message.author.send(msg)
-            return "stop"
-        else:
-            SQL_Update.character_item_quantity(character_id, 'Universal Reagent', reagent_cost*-1)
-    # update gold
+def scroll_gold_cost(spell_level: int):
     if spell_level == '1':
         gold_cost = 25
     elif spell_level == '2':
@@ -537,11 +529,29 @@ async def create_scroll_confirm(self, command, discord_id, character_id, spell_l
         gold_cost = 250
     else:
         gold_cost = 500
+    return gold_cost
+
+
+async def create_scroll_confirm(self, command, discord_id, character_id, spell_level: int, spell_name, log):
+    # update reagent
+    reagent_cost = SQL_Lookup.spell_consumable_cost(spell_name)
+    if reagent_cost > 0:
+        reagent_total = SQL_Lookup.character_item_quantity(character_id, 'Universal Reagent')
+        if reagent_cost > reagent_total:
+            msg = "You do not have enough Universal Reagent for the consumable cost of the scroll"
+            await command.message.author.send(msg)
+            return "stop"
+        else:
+            SQL_Update.character_item_quantity(character_id, 'Universal Reagent', int(reagent_cost)*-1)
+    # update gold
+    gold_cost = scroll_gold_cost(spell_level)
     SQL_Update.character_gold(character_id, gold_cost*-1)
 
     # update crafting
     craft_details = SQL_Lookup.character_crafting(character_id)
     new_craft_value = int(craft_details[1]) - gold_cost
+    if new_craft_value < 0:
+        new_craft_value = 0
     SQL_Update.character_crafting(character_id, new_craft_value, 0)
 
     # create scroll in inventory

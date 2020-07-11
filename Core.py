@@ -1,6 +1,7 @@
 from discord.ext import commands
+import Connections
 import discord
-
+import time
 
 # connecting to discord
 Token = open("Credentials\DiscordAPI.txt").read()
@@ -22,7 +23,11 @@ if __name__ == '__main__':
 async def on_command_error(message, error):
     if isinstance(error, commands.errors.CheckFailure):
         await message.send('You do not have the correct role for this command.')
+
     else:
+        discord_id = message.author.id
+        discord_command = message.message.clean_content
+        Connections.sql_log_error(discord_id, discord_command, error.args[0])
         await message.send(error)
 
 
@@ -31,7 +36,7 @@ async def on_command_error(message, error):
 async def on_ready():
     game = discord.Game("Assuming Direct Control")
     await bot.change_presence(status=discord.Status.online, activity=game)
-    print('Logged in')
+    print('Logged in at {}'.format(time.strftime('%Y-%m-%d %H:%M:%S')))
 
 
 bot.run(Token, bot=True, reconnect=True)

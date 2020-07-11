@@ -63,6 +63,8 @@ def character_has_crafted_this_week(character_id: str):
             "where Character_ID = '{}'".format(character_id)
     cursor.execute(query)
     result = cursor.fetchone()
+    if result is None:
+        return True
     if result.Crafting_Value != 50:
         return False
     return True
@@ -133,3 +135,15 @@ def character_has_spells_by_class(character_id: str, class_name: str):
     if result.Total > 0:
         return True
     return False
+
+
+def character_has_tome(character_id):
+    cursor = Connections.sql_db_connection()
+    query = "select * from Main_Spell_Book " \
+            "where Owner_ID = '{}' and Type = 'Tome'".format(character_id)
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    return True
+

@@ -11,11 +11,11 @@ class Mod_Commands(commands.Cog):
         self.bot = bot
 
     # Character
-    @commands.command(name='CharacterCreate', help="[Discord ID],[Character name],[Race],[Background],[Class],"
-                                                   "[Str],[Dex],[Con],[Int],[Wis],[Cha],[Gold]")
+    @commands.command(name='Create', help="[Discord ID],[Character name],[Race],[Background],[Class],"
+                                          "[Str],[Dex],[Con],[Int],[Wis],[Cha],[Gold]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def create_character(self, command):
-        trim_message = command.message.content.replace('$CharacterCreate ', '')
+        trim_message = command.message.content.replace('$Create ', '')
         command_check = Scripts.create_character_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
@@ -32,10 +32,10 @@ class Mod_Commands(commands.Cog):
                     await command.send("Create character command stopped")
                     break
 
-    @commands.command(name='CharacterRefresh', help='[Character]')
+    @commands.command(name='Refresh', help='[Character]')
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def character_refresh(self, command):
-        trim_message = command.message.content.replace('$CharacterRefresh ', '')
+        trim_message = command.message.content.replace('$Refresh ', '')
         command_check = Scripts.character_refresh_check(trim_message)
         if command_check[0]:
             await command.send("working...")
