@@ -1,37 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a7f42299-d755-4423-9cfc-10cd828ff8b2" name="Default Changelist" comment="bug fixes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Modules/Connections.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Connections.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Modules/Quick_Python.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Quick_Python.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Modules/Update_Google_Roster.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modules/Update_Google_Roster.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Old/Player Commands.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ToDo" beforeDir="false" afterPath="$PROJECT_DIR$/ToDo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/DM Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/DM Commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/DM_Menu/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/DM_Menu/Scripts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Mod_Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Mod_Commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Insert.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Insert.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Lookup.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Lookup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Update.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Mod_Menu/SQL_Update.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Mod_Menu/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Mod_Menu/Scripts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Check.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Check.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Insert.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Insert.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Lookup.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Lookup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Update.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/SQL_Update.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Character_Sheet_Menu/Scripts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Insert.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Insert.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/SQL_Lookup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Check.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Check.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Lookup.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Lookup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Update.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/SQL_Update.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu/Workshop_Menu/Scripts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Player_Menu_Commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Player_Menu_Commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/Utility_Menu/SQL_Lookup.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/Utility_Menu/SQL_Lookup.py" afterDir="false" />
-    </list>
+    <list default="true" id="a7f42299-d755-4423-9cfc-10cd828ff8b2" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +22,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cogs/Mod_Commands.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1768">
+            <state relative-caret-position="227">
               <caret line="104" column="52" selection-start-line="104" selection-start-column="52" selection-end-line="104" selection-end-column="52" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
@@ -216,7 +186,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -238,6 +207,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -592,7 +562,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588007701176</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="bug fixes">
+      <created>1594473541646</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1594473541647</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1170,7 +1147,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cogs/Mod_Commands.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1768">
+        <state relative-caret-position="227">
           <caret line="104" column="52" selection-start-line="104" selection-start-column="52" selection-end-line="104" selection-end-column="52" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
