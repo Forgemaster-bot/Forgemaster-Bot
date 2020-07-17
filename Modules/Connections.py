@@ -15,7 +15,10 @@ def sql_db_connection():
     driver = 'FreeTDS'
     database = 'LostWorld'
     server = '172.17.0.2'
-    db_connect = pyodbc.connect(driver=driver, database=database, server=server)
+    try:
+        db_connect = pyodbc.connect(driver=driver, database=database, server=server, uid='SA', pwd='{W$lfBaj&q;wmD64TzbXtd$Jtj|jO}', port='1433')
+    except Exception as e:
+        print(e)
     return db_connect.cursor()
 
 
