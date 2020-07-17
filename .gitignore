@@ -1,3 +1,4 @@
 ci/.sql_secrets
 .idea/workspace.xml
 venv
+Modules/__pycache__
