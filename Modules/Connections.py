@@ -76,8 +76,9 @@ def google_find_trade_seller(name: str, item: str):
 '''''''''''''''''''''''''''''''''
 #############Discord#############
 '''''''''''''''''''''''''''''''''
+test_server_channel = 733788956101181600
 
 
 async def log_to_discord(self, log: str):
-    log_channel = self.bot.get_channel(689614915253567564)
+    log_channel = self.bot.get_channel(test_server_channel)
     await log_channel.send(log)
