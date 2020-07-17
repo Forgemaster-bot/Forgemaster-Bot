@@ -100,6 +100,7 @@ def sync_player(discord_id: str, discord_name: str):
         elif discord_name != SQL_Lookup.player_name_by_id(discord_id):
             SQL_Update.player_name(discord_name, discord_id)
             return True, "Update"
-    except:
+    except Exception as e:
+        print(e)
         return False, "Something went wrong adding {} to the list".format(discord_name)
     return False, "No change"
