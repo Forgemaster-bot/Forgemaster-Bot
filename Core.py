@@ -2,9 +2,10 @@ from discord.ext import commands
 import Connections
 import discord
 import time
+import os
 
 # connecting to discord
-Token = open("Credentials\DiscordAPI.txt").read()
+Token = open(os.path.join('Credentials','DiscordAPI.txt').read()
 bot = commands.Bot(command_prefix="$", description="The Lost World Helper Bot")
 
 
