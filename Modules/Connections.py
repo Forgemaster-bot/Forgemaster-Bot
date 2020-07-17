@@ -2,6 +2,7 @@ import pyodbc
 import time
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import os
 
 
 '''''''''''''''''''''''''''''''''
@@ -10,8 +11,13 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 
 def sql_db_connection():
-    db_credential = 'Driver={SQL Server};''Server={DESKTOP-I8HAFTK\DB};''Database=LostWorld;''Trusted_Connection=yes;'
-    db_connect = pyodbc.connect(db_credential)
+    # db_credential = 'Driver={SQL Server};''Server={DESKTOP-I8HAFTK\DB};''Database=LostWorld;''Trusted_Connection=yes;'
+    driver = 'FreeTDS'
+    database = 'LostWorld'
+    uid = 'SA'
+    pwd = '{W$lfBaj&q;wmD64TzbXtd$Jtj|jO}'
+    server = '172.17.0.1'
+    db_connect = pyodbc.connect(driver=driver, database=database, uid=uid, pwd=pwd, server=server)
     return db_connect.cursor()
 
 
@@ -51,7 +57,7 @@ def sql_log_error(user_id, user_command, error):
 def google_sheet(name: str):
     # connecting to google
     scope = ['https://www.googleapis.com/auth/drive']
-    credentials = ServiceAccountCredentials.from_json_keyfile_name('Credentials\GoogleAPI.json', scope)
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(os.path.join('Credentials', 'GoogleAPI.json'), scope)
     client = gspread.authorize(credentials)
     worksheet = client.open_by_key("1LzFoY8OT6ZbYL4lF10Ngz93lqYr97pP3iv8B3crdNyI").worksheet(name)
     return worksheet
