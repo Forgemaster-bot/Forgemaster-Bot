@@ -1,4 +1,4 @@
 ci/.sql_secrets
 .idea/workspace.xml
 venv
-*/__pycache__
+**/__pycache__

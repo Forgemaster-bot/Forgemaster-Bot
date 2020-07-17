@@ -14,7 +14,7 @@ def sql_db_connection():
     # db_credential = 'Driver={SQL Server};''Server={DESKTOP-I8HAFTK\DB};''Database=LostWorld;''Trusted_Connection=yes;'
     driver = 'FreeTDS'
     database = 'LostWorld'
-    server = '172.17.0.1'
+    server = '172.17.0.2'
     db_connect = pyodbc.connect(driver=driver, database=database, server=server)
     return db_connect.cursor()
 
