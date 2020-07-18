@@ -28,21 +28,21 @@ def sql_db_connection():
 def sql_log_command(message):
     user = message.message.author.id
     command = message.message.content.replace("'", "''")
-    insert = "insert into Command_Logs (User_ID,Command,DateTime) values (?,?,?)"\
+    query = "insert into Command_Logs (User_ID,Command,DateTime) values (?,?,?)"\
         
     cursor = run_query(query, [user, command, time.strftime('%Y-%m-%d %H:%M:%S')])
     cursor.commit()
 
 
 def sql_log_private_command(user_id: str, command: str):
-    insert = "insert into Command_Logs (User_ID,Command,DateTime) values (?,?,?)"
+    query = "insert into Command_Logs (User_ID,Command,DateTime) values (?,?,?)"
     cursor = run_query(query, [user_id, command, time.strftime('%Y-%m-%d %H:%M:%S')])
     cursor.commit()
 
 
 def sql_log_error(user_id, user_command, error):
     command = error.replace("'", "''").replace("Command raised an exception: ", "")
-    insert = "insert into Error_Messages (Discord_ID,Discord_Command,Error,DateTime) " \
+    query = "insert into Error_Messages (Discord_ID,Discord_Command,Error,DateTime) " \
              "values (?,?,?,?)"
     cursor = run_query(query, [user_id, user_command[0:50], command[0:200], time.strftime('%Y-%m-%d %H:%M:%S')])
     cursor.commit()
