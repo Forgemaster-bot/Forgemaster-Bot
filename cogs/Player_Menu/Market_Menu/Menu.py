@@ -131,7 +131,7 @@ async def buy_confirm(self, command, discord_id, character_id, item_name, quanti
     trade_good = Scripts.buy_cheapest_item(item_name)
     total_value = trade_good.Price * quantity
     character_name = Scripts.get_character_name(character_id)
-    question = "Do you want to buy {} {} for {}g each for a total of {}g?" \
+    question = "Do you want to buy {} {} for {}g each for a total of {}g? [Yes/No]" \
         .format(quantity, item_name, trade_good.Price, total_value)
     await command.author.send(question)
     reply = await self.confirm(command)
@@ -184,7 +184,7 @@ async def sell_quantity(self, command, character_id, item_name):
 
 
 async def sell_price(self, command, item_name):
-    choice_question = "how much do you want to sell each {} for?".format(item_name)
+    choice_question = "How much do you want to sell each {} for? [Amount in gold]".format(item_name)
     choice = await self.answer_with_float_number(command, choice_question, 100000000000)
     return choice
 
@@ -192,7 +192,7 @@ async def sell_price(self, command, item_name):
 async def sell_confirm(self, command, discord_id, character_id, item_name, quantity: int, price: float):
     total_value = price * quantity
     character_name = Scripts.get_character_name(character_id)
-    question = "Do you want to put {} {} up for trade at {}g each for a total of {}g?" \
+    question = "Do you want to put {} {} up for trade at {}g each for a total of {}g? [Yes/No]" \
         .format(quantity, item_name, price, total_value)
     await command.author.send(question)
     reply = await self.confirm(command)
@@ -229,7 +229,7 @@ async def stop_sell_item(self, command, character_id):
 
 
 async def stop_sell_confirm(self, command, discord_id, character_id, item_name):
-    question = "Do you want stop selling {}?".format(item_name)
+    question = "Do you want stop selling {}? [Yes/No]".format(item_name)
     character_name = Scripts.get_character_name(character_id)
     await command.author.send(question)
     reply = await self.confirm(command)
@@ -267,14 +267,14 @@ async def give_menu(self, command, discord_id, character_id):
 
 
 async def give_target_name(self, command, character_id):
-    choice_question = "Type the name of the character you want to give items to"
+    choice_question = "Type the name of the character you want to give items to:"
     choice = await self.character_name_lookup(command, choice_question, character_id)
     return choice
 
 
 async def give_item_choice(self, command, character_id, target):
     option_list = Scripts.give_character_inventory(character_id)
-    option_question = "Please choose which item you want to give to {}".format(target)
+    option_question = "Please choose which item you want to give to {}:".format(target)
     choice = await self.answer_from_list(command, option_question, option_list)
     choice_details = choice.split(" (")
     item_name = choice_details[0]
@@ -286,7 +286,7 @@ async def give_quantity_choice(self, command, character_id, item_name, target_na
     if maximum == 1:
         choice = 1
     else:
-        choice_question = "you own {} {}, how many do you want to give to {}?" .format(maximum, item_name,
+        choice_question = "You own {} {}, how many do you want to give to {}? " .format(maximum, item_name,
                                                                                        target_name)
         choice = await self.answer_with_int_number(command, choice_question, maximum)
     return choice
@@ -294,7 +294,7 @@ async def give_quantity_choice(self, command, character_id, item_name, target_na
 
 async def give_confirm(self, command, discord_id, character_id, item_name, quantity: int, target_name):
     character_name = Scripts.get_character_name(character_id)
-    question = "Do you want to give {} {} {} from {}?".format(target_name, quantity, item_name, character_name)
+    question = "Do you want to give {} {} {} from {}? [Yes/No]".format(target_name, quantity, item_name, character_name)
     await command.author.send(question)
     reply = await self.confirm(command)
     if reply == "Yes":
@@ -334,27 +334,27 @@ async def pay_menu(self, command, discord_id, character_id):
 
 
 async def pay_target_name(self, command, character_id):
-    choice_question = "Type the name of the character you want to pay."
+    choice_question = "Type the name of the character you want to pay:"
     choice = await self.character_name_lookup(command, choice_question, character_id)
     return choice
 
 
 async def pay_quantity(self, command, character_id, target_name):
     maximum = Scripts.pay_character_gold(character_id)
-    choice_question = "you have {}g, how much do you want to give {}?" .format(maximum, target_name)
+    choice_question = "You currently have {}g, how much do you want to give to {}? [Amount in gold]" .format(maximum, target_name)
     choice = await self.answer_with_float_number(command, choice_question, maximum)
     return choice
 
 
 async def pay_reason(self, command, target_name):
-    question = "Why are you paying {}?" .format(target_name)
+    question = "Why are you paying {}? [Respond to give reason]" .format(target_name)
     await command.author.send(question)
     choice = await self.answer_with_statement(command)
     return choice
 
 
 async def pay_confirm(self, command, discord_id, character_id, quantity: float, target_name, reason):
-    question = "Do you want to give {} {}g because: {}?".format(target_name, quantity, reason)
+    question = "Do you want to give {} {}g because: {}? [Yes/No]".format(target_name, quantity, reason)
     character_name = Scripts.get_character_name(character_id)
     await command.author.send(question)
     reply = await self.confirm(command)
@@ -421,7 +421,7 @@ async def recycle_confirm(self, command, discord_id, character_id, item_name, qu
     item_value = item_details.Value / 2
     total_value = item_value * quantity
     character_name = Scripts.get_character_name(character_id)
-    question = "Do you want to sell {} {} for {}g each for a total of {}g?".format(quantity, item_name,
+    question = "Do you want to sell {} {} for {}g each for a total of {}g? [Yes/No]".format(quantity, item_name,
                                                                                    item_value, total_value)
     await command.author.send(question)
     reply = await self.confirm(command)

@@ -176,15 +176,17 @@ def update_character_ability(character_id: str, ability: str):
 
 def lookup_character_sheet(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where ID = '{}'".format(character_id)
-    cursor.execute(query)
+    query = "select * from Main_Characters where ID = ?"
+    print("Running query: " + query)
+    cursor.execute(query, [character_id])
     return cursor.fetchone()
 
 
 def lookup_player_name_by_id(user_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Info_Discord where ID= '{}'".format(user_id)
-    cursor.execute(query)
+    query = "select * from Info_Discord where ID= ?"
+    print("Running query: " + query)
+    cursor.execute(query, [user_id])
     result = cursor.fetchone()
     if result is None:
         return ""
@@ -193,35 +195,36 @@ def lookup_player_name_by_id(user_id: str):
 
 def lookup_character_sum_class_levels(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select SUM(Level) Total from Link_Character_Class where Character_ID = '{}'".format(character_id)
-    cursor.execute(query)
+    query = "select SUM(Level) Total from Link_Character_Class where Character_ID = ?"
+    print("Running query: " + query)
+    cursor.execute(query, [character_id])
     result = cursor.fetchone()
     return result.Total
 
 
 def lookup_character_count_classes(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select Count(*) Total from Link_Character_Class where Character_ID = '{}'".format(character_id)
-    cursor.execute(query)
+    query = "select Count(*) Total from Link_Character_Class where Character_ID = ?"
+    print("Running query: " + query)
+    cursor.execute(query, [character_id])
     result = cursor.fetchone()
     return result.Total
 
 
 def lookup_character_class_by_order(character_id: str, order: int):
     cursor = Connections.sql_db_connection()
-    query = "Select * from Link_Character_Class " \
-            "Where Character_ID = '{}' and Number = '{}'".format(character_id, order)
-    cursor.execute(query)
+    query = "Select * from Link_Character_Class Where Character_ID = ? and Number = ?"
+    print("Running query: " + query)
+    cursor.execute(query, [character_id, order])
     class_lookup = cursor.fetchone()
     return class_lookup.Class, class_lookup.Level
 
 
 def lookup_character_feats(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "Select * " \
-            "From Link_Character_Feats " \
-            "Where Character_ID = '{}'".format(character_id)
-    cursor.execute(query)
+    query = "Select * From Link_Character_Feats Where Character_ID = ?"
+    print("Running query: " + query)
+    cursor.execute(query, character_id)
     rows = cursor.fetchall()
     feats = []
     for row in rows:
@@ -231,21 +234,18 @@ def lookup_character_feats(character_id: str):
 
 def lookup_character_gold(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "Select * " \
-            "From Main_Characters " \
-            "Where ID = '{}'".format(character_id)
-    cursor.execute(query)
+    query = "Select * From Main_Characters Where ID = ?"
+    print("Running query: " + query)
+    cursor.execute(query, [character_id])
     character = cursor.fetchone()
     return character.Gold
 
 
 def lookup_character_inventory(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "Select * " \
-            "From Link_Character_Items " \
-            "Where Character_ID = '{}' " \
-            "Order by Item".format(character_id)
-    cursor.execute(query)
+    query = "Select * From Link_Character_Items Where Character_ID = ? Order by Item"
+    print("Running query: " + query)
+    cursor.execute(query, character_id)
     rows = cursor.fetchall()
     items = []
     for row in rows:
@@ -258,10 +258,9 @@ def lookup_character_inventory(character_id: str):
 
 def lookup_character_skills(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "Select * " \
-            "From Link_Character_Skills " \
-            "Where Character_ID = '{}'".format(character_id)
-    cursor.execute(query)
+    query = "Select * From Link_Character_Skills Where Character_ID = ?"
+    print("Running query: " + query)
+    cursor.execute(query, character_id)
     rows = cursor.fetchall()
     skills = []
     for row in rows:
@@ -274,10 +273,9 @@ def lookup_character_skills(character_id: str):
 
 def lookup_character_xp(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "Select * " \
-            "From Main_Characters " \
-            "Where ID = '{}'".format(character_id)
-    cursor.execute(query)
+    query = "select * from Main_Characters where ID = ?"
+    print("Running query: " + query)
+    cursor.execute(query, character_id)
     character = cursor.fetchone()
     return character.XP
 
@@ -286,10 +284,9 @@ def check_level_up(character_id: str):
     character_level = lookup_character_sum_class_levels(character_id)
     character_xp = lookup_character_xp(character_id)
     cursor = Connections.sql_db_connection()
-    query = "select * " \
-            "from Info_XP " \
-            "where Level = '{}'".format(character_level)
-    cursor.execute(query)
+    query = "select * from Info_XP where Level = ?"
+    print("Running query: " + query)
+    cursor.execute(query, character_level)
     xp_sheet = cursor.fetchone()
     if character_xp >= xp_sheet.XP:
         return "Yes"
@@ -298,15 +295,17 @@ def check_level_up(character_id: str):
 
 def character_name_by_character_id(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where ID = '{}'".format(character_id)
-    cursor.execute(query)
+    query = "select * from Main_Characters where ID = ?"
+    print("Running query: " + query)
+    cursor.execute(query, character_id)
     result = cursor.fetchone()
     return result.Character_Name
 
 
 def character_id_by_character_name(character_name: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where Character_Name = '{}'".format(character_name)
-    cursor.execute(query)
+    query = "select * from Main_Characters where Character_Name = ?"
+    print("Running query: " + query)
+    cursor.execute(query, character_name)
     result = cursor.fetchone()
     return result.ID

@@ -1,12 +1,12 @@
 import Connections
+from Quick_Python import run_query
 
 
 def character_exists(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "Select Character_Name " \
             "From Main_Characters " \
-            "Where Character_Name = '{}'".format(character_id)
-    cursor.execute(query)
+            "Where Character_Name = ?"
+    cursor = run_query(query, [character_id])
     result = cursor.fetchone()
     if result is None:
         return False
@@ -14,10 +14,9 @@ def character_exists(character_id: str):
 
 
 def player_exists(user_id: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
-            "from Info_Discord where ID='{}'".format(user_id)
-    cursor.execute(query)
+            "from Info_Discord where ID=?"
+    cursor = run_query(query, [user_id])
     result = cursor.fetchone()
     if result is None:
         return False
@@ -25,11 +24,10 @@ def player_exists(user_id: str):
 
 
 def player_stat_roll(discord_id: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "From Discord_Roll " \
-            "where Discord_ID = '{}' ".format(discord_id)
-    cursor.execute(query)
+            "where Discord_ID = ? "
+    cursor = run_query(query, [discord_id])
     result = cursor.fetchone()
     if result is None:
         return False

@@ -1,10 +1,11 @@
 import Connections
+import textwrap
 
 
 def player_id_by_name(name: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Info_Discord where Name = '{}'".format(name)
-    cursor.execute(query)
+    query = "select * from Info_Discord where Name = ?"
+    cursor.execute(query, [name])
     result = cursor.fetchone()
     if result is None:
         return ""
@@ -13,8 +14,8 @@ def player_id_by_name(name: str):
 
 def player_name_by_id(user_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Info_Discord where ID = '{}'".format(user_id)
-    cursor.execute(query)
+    query = "select * from Info_Discord where ID = ?"
+    cursor.execute(query, [user_id])
     result = cursor.fetchone()
     if result is None:
         return ""
@@ -23,10 +24,12 @@ def player_name_by_id(user_id: str):
 
 def player_stat_roll(discord_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * " \
-            "From Discord_Roll " \
-            "where Discord_ID = '{}'".format(discord_id)
-    cursor.execute(query)
+    query = textwrap.dedent("""
+    select * 
+    from Discord_Roll 
+    where Discord_ID = ?
+    """)
+    cursor.execute(query, [discord_id])
     result = cursor.fetchone()
     if result is None:
         return ""
@@ -35,16 +38,16 @@ def player_stat_roll(discord_id: str):
 
 def character_owner(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where ID='{}'".format(character_id)
-    cursor.execute(query)
+    query = "select * from Main_Characters where ID=?"
+    cursor.execute(query, character_id)
     result = cursor.fetchone()
     return result.Discord_ID
 
 
 def character_ability_score(character_id: str, ability: str):
     cursor = Connections.sql_db_connection()
-    sql_command = "select * from Main_Characters where ID = '{}'".format(character_id)
-    cursor.execute(sql_command)
+    sql_command = "select * from Main_Characters where ID = ?"
+    cursor.execute(sql_command, [character_id])
     result = cursor.fetchone()
     value = 0
     if ability == "STR":
@@ -64,17 +67,16 @@ def character_ability_score(character_id: str, ability: str):
 
 def character_item_quantity(character_id: str, item_name: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Link_Character_Items where Character_ID = '{}' AND Item = '{}'".format(character_id,
-                                                                                                  item_name)
-    cursor.execute(query)
+    query = "select * from Link_Character_Items where Character_ID = ? AND Item = ?"
+    cursor.execute(query, [character_id, item_name])
     item = cursor.fetchone()
     return item.Quantity
 
 
 def character_id_by_character_name(character_name: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where Character_Name = '{}'".format(character_name)
-    cursor.execute(query)
+    query = "select * from Main_Characters where Character_Name = ?"
+    cursor.execute(query, [character_name])
     result = cursor.fetchone()
     if result is None:
         return False
@@ -83,19 +85,20 @@ def character_id_by_character_name(character_name: str):
 
 def character_name_by_character_id(character_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where ID = '{}'".format(character_id)
-    cursor.execute(query)
+    query = "select * from Main_Characters where ID = ?".format(character_id)
+    cursor.execute(query, [character_id])
     result = cursor.fetchone()
     return result.Character_Name
 
 
 def unused_roll(discord_id: str):
     cursor = Connections.sql_db_connection()
-    query = "select B.Character_Name, A.* " \
-            "from Discord_Roll A " \
-            "left join Main_Characters B " \
-            "on A.ID = B.Roll_ID " \
-            "where A.Discord_ID = '{}' and B.Character_Name is NULL".format(discord_id)
-    cursor.execute(query)
+    query = textwrap.dedent("""
+    select B.Character_Name, A.* 
+    from Discord_Roll A 
+    left join Main_Characters B on A.ID = B.Roll_ID 
+    where A.Discord_ID = ? and B.Character_Name is NULL
+    """)
+    cursor.execute(query, [discord_id])
     result = cursor.fetchone()
     return result.ID

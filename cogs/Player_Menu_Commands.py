@@ -113,7 +113,8 @@ class Player_Menu_Commands(commands.Cog):
             await command.message.author.send("{} doesnt have any options available".format(character_name))
             choice = "stop"
         else:
-            option_question = "Main Menu: Welcome {}, What would you like to do? Type **EXIT** to close the menu."\
+            option_question = "~~- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -~~\n"\
+                              "Main Menu: Welcome {}, What would you like to do? Type **EXIT** to close the menu."\
                 .format(character_name)
             choice = await self.answer_from_list(command, option_question, option_list)
         return choice

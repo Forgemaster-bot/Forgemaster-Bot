@@ -101,7 +101,7 @@ def profession_list(character_id: str):
 
 def character_has_profession_tools(character_id, profession: str):
     if SQL_Check.character_is_artificer_with_tools(character_id):
-            return True, ""
+        return True, ""
     tool = SQL_Lookup.profession_tool(profession)
     if not SQL_Check.character_has_item(character_id, tool):
         character_name = SQL_Lookup.character_name_by_character_id(character_id)
@@ -431,10 +431,10 @@ def recipe_list(character_id: str, profession: str):
     character_name = get_character_name(character_id)
     result = SQL_Lookup.character_known_recipe_details(character_id, profession)
     if len(result) == 0:
-        return "{} doesnt know any recipes for {} yet".format(character_name, profession)
+        return False, "{} doesnt know any recipes for {} yet".format(character_name, profession)
     else:
         result.insert(0, "{} knows the following {} recipes:".format(character_name, profession))
-        return Quick_Python.list_to_table(result)
+        return True, Quick_Python.list_to_table(result)
 
 
 '''''''''''''''''''''''''''''''''''''''''

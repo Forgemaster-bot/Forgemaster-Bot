@@ -2,6 +2,16 @@ import random
 import Connections
 
 
+def run_query(query: str, args: list = None):
+    print("run_query: query[" + query + "]; args[" + str(args) + "];")
+    cursor = Connections.sql_db_connection()
+    if args is None:
+        cursor.execute(query)
+    else:
+        cursor.execute(query, args)
+    return cursor
+
+
 def list_to_string(given_list: list):
     return_string = ""
     for element in given_list:
@@ -80,10 +90,9 @@ def find_trade_row(seller_name: str, seller_list: list, item_name: str, item_lis
 
 
 def check_player_exists(user_id: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
-            "from Info_Discord where ID= '{}' ".format(user_id)
-    cursor.execute(query)
+            "from Info_Discord where ID= ? "
+    cursor = run_query(query, [user_id])
     result = cursor.fetchone()
     if result is None:
         return False
@@ -92,6 +101,7 @@ def check_player_exists(user_id: str):
 
 def sync_player(discord_id: str, discord_name: str):
     try:
+        print("discord_id: " + discord_id + "; discord_name: " + discord_name)
         if not check_player_exists(discord_id):
             insert_players(discord_id, discord_name)
             return True, "New"
@@ -105,16 +115,14 @@ def sync_player(discord_id: str, discord_name: str):
 
 
 def insert_players(user_id: str, name: str):
-    cursor = Connections.sql_db_connection()
-    query = "insert into Info_Discord (ID,Name,Character_Number) values ('{}','{}',1)".format(user_id, name)
-    cursor.execute(query)
+    query = "insert into Info_Discord (ID,Name,Character_Number) values (?,?,1)"
+    cursor = run_query(query, [user_id, name])
     cursor.commit()
 
 
 def lookup_player_name_by_id(user_id: str):
-    cursor = Connections.sql_db_connection()
-    query = "select * from Info_Discord where ID= '{}'".format(user_id)
-    cursor.execute(query)
+    query = "select * from Info_Discord where ID= ?"
+    cursor = run_query(query, [user_id])
     result = cursor.fetchone()
     if result is None:
         return ""
@@ -122,9 +130,8 @@ def lookup_player_name_by_id(user_id: str):
 
 
 def update_player_name(discord_name: str, discord_id: str):
-    cursor = Connections.sql_db_connection()
     query = "UPDATE Info_Discord " \
-            "SET Name = '{}' " \
-            "WHERE ID = '{}'".format(discord_name, discord_id)
-    cursor.execute(query)
+            "SET Name = ? " \
+            "WHERE ID = ?"
+    cursor = run_query(query, [discord_name, discord_id])
     cursor.commit()

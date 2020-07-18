@@ -94,6 +94,7 @@ def stitch_list_into_table(given_list: list):
 
 def sync_player(discord_id: str, discord_name: str):
     try:
+        print("discord_id: " + discord_id + "; discord_name: " + discord_name)
         if not SQL_Check.player_exists(discord_id):
             SQL_Insert.sync_players(discord_id, discord_name)
             return True, "New"

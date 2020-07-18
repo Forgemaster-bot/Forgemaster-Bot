@@ -1,12 +1,12 @@
 import Connections
+from Quick_Python import run_query
 
 
 def character_exists_by_name(character_name: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Main_Characters " \
-            "where Character_Name = '{}'".format(character_name)
-    cursor.execute(query)
+            "where Character_Name = ?"
+    cursor = run_query(query, [character_name])
     result = cursor.fetchone()
     if result is None:
         return False
@@ -14,11 +14,10 @@ def character_exists_by_name(character_name: str):
 
 
 def character_exists_by_id(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Main_Characters " \
-            "where ID = '{}'".format(character_id)
-    cursor.execute(query)
+            "where ID = ?"
+    cursor = run_query(query, [character_id])
     result = cursor.fetchone()
     if result is None:
         return False
@@ -26,11 +25,10 @@ def character_exists_by_id(character_id: str):
 
 
 def race_exists(name: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Info_Races " \
-            "where Name = '{}'".format(name)
-    cursor.execute(query)
+            "where Name = ?"
+    cursor = run_query(query, [name])
     result = cursor.fetchone()
     if result is None:
         return False
@@ -38,11 +36,10 @@ def race_exists(name: str):
 
 
 def class_exists(name: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Info_Classes " \
-            "where Class = '{}'".format(name)
-    cursor.execute(query)
+            "where Class = ?"
+    cursor = run_query(query, [name])
     result = cursor.fetchone()
     if result is None:
         return False
@@ -50,10 +47,9 @@ def class_exists(name: str):
 
 
 def player_exists(user_id: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
-            "from Info_Discord where ID='{}'".format(user_id)
-    cursor.execute(query)
+            "from Info_Discord where ID=?"
+    cursor = run_query(query, [user_id])
     result = cursor.fetchone()
     if result is None:
         return False
@@ -61,11 +57,10 @@ def player_exists(user_id: str):
 
 
 def character_has_feat(character_id: str, feat_name: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Feats " \
-            "where Character_ID = '{}' AND Feat = '{}'".format(character_id, feat_name)
-    cursor.execute(query)
+            "where Character_ID = ? AND Feat = ?"
+    cursor = run_query(query, [character_id, feat_name])
     result = cursor.fetchone()
     if result is None:
         return False
@@ -73,11 +68,10 @@ def character_has_feat(character_id: str, feat_name: str):
 
 
 def skill_exists(name: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Info_Skills " \
-            "where Name = '{}'".format(name)
-    cursor.execute(query)
+            "where Name = ?"
+    cursor = run_query(query, [name])
     result = cursor.fetchone()
     if result is None:
         return False
@@ -85,11 +79,10 @@ def skill_exists(name: str):
 
 
 def character_has_skill(character_id: str, skill_name: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Skills " \
-            "where Character_ID = '{}' AND Skill = '{}'".format(character_id, skill_name)
-    cursor.execute(query)
+            "where Character_ID = ? AND Skill = ?"
+    cursor = run_query(query, [character_id, skill_name])
     result = cursor.fetchone()
     if result is None:
         return False
@@ -97,11 +90,10 @@ def character_has_skill(character_id: str, skill_name: str):
 
 
 def character_stat_max(character_id: str, stat: str, change: int):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Main_Characters " \
-            "where ID = '{}'".format(character_id)
-    cursor.execute(query)
+            "where ID = ?"
+    cursor = run_query(query, [character_id])
     result = cursor.fetchone()
     value = 0
     if stat == "STR":
@@ -123,11 +115,10 @@ def character_stat_max(character_id: str, stat: str, change: int):
 
 
 def character_has_item(character_id: str, item_name: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Items " \
-            "where Character_ID = '{}' AND Item = '{}'".format(character_id, item_name)
-    cursor.execute(query)
+            "where Character_ID = ? AND Item = ?"
+    cursor = run_query(query, [character_id, item_name])
     result = cursor.fetchone()
     if result is None:
         return False

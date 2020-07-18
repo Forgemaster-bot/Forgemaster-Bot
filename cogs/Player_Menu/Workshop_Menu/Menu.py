@@ -96,7 +96,7 @@ async def mundane_menu(self, command, discord_id, character_id: str):
     character_has_tools = Scripts.character_has_profession_tools(character_id, profession)
     if not character_has_tools[0]:
         await command.message.author.send(character_has_tools[1])
-        return
+        return "stop"
 
     # get the type of item they want to craft
     item_type = await mundane_type_choice(self, command, profession, gold_limit)
@@ -153,7 +153,7 @@ async def craft_mundane_confirm(self, command, discord_id, character_id, item_na
     item_craft_cost = Scripts.mundane_craft_cost(item_name)
     total_cost = item_craft_cost * quantity
     character_name = Scripts.get_character_name(character_id)
-    await command.author.send("Do you want to craft {} {} for {}g? [yes/no]"
+    await command.author.send("Do you want to craft {} {} for {}g? [Yes/No]"
                               .format(quantity, item_name, total_cost))
     reply = await self.confirm(command)
     if reply == "Yes":
@@ -264,7 +264,7 @@ async def craft_consumable_confirm(self, command, discord_id, character_id, prof
         cost = 25
     else:
         cost = len(effect_list)*10
-    await command.author.send("Do you want to craft a {} with: {} \nFor {}g? [yes/no]"
+    await command.author.send("Do you want to craft a {} with: {} \nFor {}g? [Yes/No]"
                               .format(consumable_type, cleaned_effect_list, cost))
     reply = await self.confirm(command)
     if reply == "Yes":
@@ -339,7 +339,7 @@ async def experiment_second_essence(self, command, essence_list):
 
 async def craft_experiment_confirm(self, command, discord_id, character_id, profession, essence_1, essence_2):
     character_name = Scripts.get_character_name(character_id)
-    await command.author.send("Do you want to experiment using {} and {} as a {} for 20g? [yes/no]"
+    await command.author.send("Do you want to experiment using {} and {} as a {} for 20g? [Yes/No]"
                               .format(essence_1, essence_2, profession))
     reply = await self.confirm(command)
     if reply == "Yes":
@@ -368,7 +368,9 @@ async def recipe_menu(self, command, character_id: str):
         return profession
 
     response = Scripts.recipe_list(character_id, profession)
-    await command.message.author.send(response)
+    await command.message.author.send(response[1])
+    if not response[0]:
+        return "stop"
 
 
 '''''''''''''''''''''''''''''''''''''''''
@@ -401,7 +403,7 @@ async def work_character_choice(self, command, character_id):
 
 async def work_confirm(self, command, discord_id, character_id, target_name):
     character_name = Scripts.get_character_name(character_id)
-    question = "Do you want work for {} this week?".format(target_name)
+    question = "Do you want work for {} this week? [Yes/No]".format(target_name)
     await command.author.send(question)
     reply = await self.confirm(command)
     if reply == "Yes":
@@ -455,7 +457,7 @@ async def craft_scroll_spell_choice(self, command, character_id, class_name, spe
 async def create_scroll_confirm(self, command, discord_id, character_id, spell_level: int, spell_name):
     character_name = Scripts.get_character_name(character_id)
     gold_cost = Scripts.scroll_gold_cost(spell_level)
-    question = "Do you want to create a scroll of {} for {}g?".format(spell_name.replace("''", "'"), gold_cost)
+    question = "Do you want to create a scroll of {} for {}g? [Yes/No]".format(spell_name.replace("''", "'"), gold_cost)
     log = "{} created a scroll of {}.".format(character_name, spell_name.replace("''", "'"))
     await command.author.send(question)
     reply = await self.confirm(command)
@@ -502,7 +504,7 @@ async def scribe_spell_confirm(self, command, discord_id, character_id, spell, a
     spell_level = spell_detail[0].replace("Level ", "").replace(" Spell", "")
     spell_name = spell_detail[1].replace(" From", "").lstrip()
     spell_origin = spell_detail[2].lstrip()
-    question = "Do you want to try and scribe {} into your spellbook from {}? " \
+    question = "Do you want to try and scribe {} into your spellbook from {}? [Yes/No]" \
                "\nIt will cost {} universal reagent and you must pass a DC {} Arcane roll"\
         .format(spell_name.replace("''", "'"), spell_origin, int(spell_level)*50, int(spell_level)+10)
     await command.author.send(question)

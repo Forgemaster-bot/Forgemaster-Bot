@@ -1,10 +1,10 @@
 import Connections
+from Quick_Python import run_query
 
 
 def info_skills():
-    cursor = Connections.sql_db_connection()
     query = "select Name from Info_Skills Where Job = 'True' ORDER BY Name"
-    cursor.execute(query)
+    cursor = run_query(query)
     rows = cursor.fetchall()
     skills = []
     for row in rows:
@@ -13,9 +13,8 @@ def info_skills():
 
 
 def info_classes():
-    cursor = Connections.sql_db_connection()
     query = "select Class from Info_Classes ORDER BY Class "
-    cursor.execute(query)
+    cursor = run_query(query)
     rows = cursor.fetchall()
     classes = []
     for row in rows:

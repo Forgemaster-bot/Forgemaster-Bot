@@ -1,48 +1,44 @@
 import Connections
+from Quick_Python import run_query
 
 
 def character_count_classes(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "select Count(*) Total " \
             "From Link_Character_Class " \
-            "Where Character_ID = '{}'".format(character_id)
-    cursor.execute(query)
+            "Where Character_ID = ?"
+    cursor = run_query(query, [character_id])
     result = cursor.fetchone()
     return result.Total
 
 
 def character_class_by_number(character_id: str, number: int):
-    cursor = Connections.sql_db_connection()
     query = "Select Class " \
             "From Link_Character_Class " \
-            "Where Character_ID = '{}' and Number = '{}'".format(character_id, number)
-    cursor.execute(query)
+            "Where Character_ID = ? and Number = ?"
+    cursor = run_query(query, [character_id, number])
     result = cursor.fetchone()
     return result.Class
 
 
 def character_sum_class_levels(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "select SUM(Level) Total " \
             "from Link_Character_Class " \
-            "where Character_ID = '{}'".format(character_id)
-    cursor.execute(query)
+            "where Character_ID = ?"
+    cursor = run_query(query, [character_id])
     result = cursor.fetchone()
     return result.Total
 
 
 def character_xp(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Main_Characters " \
-            "Where ID = '{}'".format(character_id)
-    cursor.execute(query)
+            "Where ID = ?"
+    cursor = run_query(query, [character_id])
     character = cursor.fetchone()
     return character.XP
 
 
 def character_stats(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "select " \
             "Strength as STR, " \
             "Dexterity as DEX, " \
@@ -51,19 +47,18 @@ def character_stats(character_id: str):
             "Wisdom as WIS, " \
             "Charisma as CHA " \
             "From Main_Characters " \
-            "where ID = '{}'".format(character_id)
-    cursor.execute(query)
+            "where ID = ?"
+    cursor = run_query(query, [character_id])
     results = cursor.fetchone()
     return results
 
 
 def character_class_and_levels(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Link_Character_Class " \
-            "Where Character_ID = '{}' " \
-            "Order by Level desc, Number ".format(character_id)
-    cursor.execute(query)
+            "Where Character_ID = ? " \
+            "Order by Level desc, Number "
+    cursor = run_query(query, [character_id])
     rows = cursor.fetchall()
     response = []
     for row in rows:
@@ -75,11 +70,10 @@ def character_class_and_levels(character_id: str):
 
 
 def character_class_list(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "Select distinct Class " \
             "From Link_Character_Class " \
-            "Where Character_ID = '{}'".format(character_id)
-    cursor.execute(query)
+            "Where Character_ID = ?"
+    cursor = run_query(query, [character_id])
     rows = cursor.fetchall()
     response = []
     for row in rows:
@@ -88,22 +82,20 @@ def character_class_list(character_id: str):
 
 
 def character_class_level_by_class(character_id: str, character_class: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Class " \
-            "where Character_ID = '{}' and Class = '{}'".format(character_id, character_class)
-    cursor.execute(query)
+            "where Character_ID = ? and Class = ?"
+    cursor = run_query(query, [character_id, character_class])
     class_lookup = cursor.fetchone()
     return class_lookup.Level
 
 
 def character_inventory(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Link_Character_Items " \
-            "Where Character_ID = '{}' " \
-            "Order by Item ".format(character_id, character_id)
-    cursor.execute(query)
+            "Where Character_ID = ? " \
+            "Order by Item "
+    cursor = run_query(query, [character_id])
     rows = cursor.fetchall()
     items = []
     for row in rows:
@@ -115,9 +107,8 @@ def character_inventory(character_id: str):
 
 
 def info_skills():
-    cursor = Connections.sql_db_connection()
     query = "select Name from Info_Skills Where Job = 'True' ORDER BY Name "
-    cursor.execute(query)
+    cursor = run_query(query)
     rows = cursor.fetchall()
     skills = []
     for row in rows:
@@ -126,9 +117,8 @@ def info_skills():
 
 
 def info_classes():
-    cursor = Connections.sql_db_connection()
     query = "select Class from Info_Classes group by Class ORDER BY Class"
-    cursor.execute(query)
+    cursor = run_query(query)
     rows = cursor.fetchall()
     classes = []
     for row in rows:
@@ -137,11 +127,10 @@ def info_classes():
 
 
 def subclasses(class_choice: str):
-    cursor = Connections.sql_db_connection()
     query = "Select Sub_Class from Info_Subclass " \
-            "Where Class = '{}' " \
-            "ORDER BY Sub_Class ".format(class_choice)
-    cursor.execute(query)
+            "Where Class = ? " \
+            "ORDER BY Sub_Class "
+    cursor = run_query(query, [class_choice])
     rows = cursor.fetchall()
     classes = []
     for row in rows:
@@ -150,11 +139,10 @@ def subclasses(class_choice: str):
 
 
 def character_feats(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Link_Character_Feats " \
-            "Where Character_ID = '{}'".format(character_id)
-    cursor.execute(query)
+            "Where Character_ID = ?"
+    cursor = run_query(query, [character_id])
     rows = cursor.fetchall()
     feats = []
     for row in rows:
@@ -163,11 +151,10 @@ def character_feats(character_id: str):
 
 
 def character_skills(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Link_Character_Skills " \
-            "Where Character_ID = '{}'".format(character_id)
-    cursor.execute(query)
+            "Where Character_ID = ?"
+    cursor = run_query(query, [character_id])
     rows = cursor.fetchall()
     skills = []
     for row in rows:
@@ -179,38 +166,38 @@ def character_skills(character_id: str):
 
 
 def character_max_spell_by_level(class_name: str, class_level):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Info_Max_Spell_Level " \
-            "where Class = '{}'".format(class_name)
-    cursor.execute(query)
+            "where Class = ?"
+    cursor = run_query(query, [class_name])
     result = cursor.fetchone()
     return result[class_level]
 
 
 def character_class_subclass(character_id: str, class_name: str):
-    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "from Link_character_Class " \
-            "where Character_ID = '{}' and Class = '{}' ".format(character_id, class_name)
-    cursor.execute(query)
+            "where Character_ID = ? and Class = ? "
+    cursor = run_query(query, [character_id, class_name])
     result = cursor.fetchone()
     return result.Sub_Class
 
 
 def character_spells_by_class(character_id: str, class_name: str):
     sub_class = character_class_subclass(character_id, class_name)
+    sub_class = str(sub_class) + "%"
     character_name = character_name_by_character_id(character_id)
-    cursor = Connections.sql_db_connection()
     query = "select B.* " \
             "from Link_Character_Spells A " \
             "left Join Info_Spells B " \
             "on A.Spell = B.Name " \
-            "where A.Character_ID = '{}' and (Origin = '{}' or Origin like '{}%') " \
-            "order by Level, Name ".format(character_id, class_name, sub_class)
-    cursor.execute(query)
+            "where A.Character_ID = ? and (Origin = ? or Origin like ?) " \
+            "order by Level, Name "
+    cursor = run_query(query, [character_id, class_name, sub_class])
     rows = cursor.fetchall()
-    return_list = ["{} {} spell list".format(character_name, class_name)]
+    # TODO: Determine if return_list should mention '<character_name> <class_name> spell list'
+    # return_list = ["{} {} spell list".format(character_name, class_name)]
+    return_list = []
     for row in rows:
         if row.Name is not None:
             return_list.append("Level {} Spell : {}".format(row.Level, row.Name))
@@ -218,16 +205,15 @@ def character_spells_by_class(character_id: str, class_name: str):
 
 
 def character_spells_in_book(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "select C.* " \
             "from Link_Spell_Book_Spells A " \
             "left join Main_Spell_Book B " \
             "on A.Spell_Book_ID = B.ID " \
             "left join Info_Spells C " \
             "on A.Spell = C.Name " \
-            "Where B.Owner_ID = '{}' and B.Type = 'Core' " \
-            "order by C.Level, C.Name ".format(character_id)
-    cursor.execute(query)
+            "Where B.Owner_ID = ? and B.Type = 'Core' " \
+            "order by C.Level, C.Name "
+    cursor = run_query(query, [character_id])
     rows = cursor.fetchall()
     return_list = []
     for row in rows:
@@ -237,24 +223,22 @@ def character_spells_in_book(character_id: str):
 
 def character_known_spells_by_class(character_id: str, class_name: str):
     sub_class = character_class_subclass(character_id, class_name)
-    cursor = Connections.sql_db_connection()
     query = "select count(*) as Total " \
             "from Link_Character_Spells A " \
             "left Join Info_Spells B " \
             "on A.Spell = B.Name " \
-            "where A.Character_ID = '{}' and (Origin = '{}' or Origin = '{}')"\
-        .format(character_id, class_name, sub_class)
-    cursor.execute(query)
+            "where A.Character_ID = ? and (Origin = ? or Origin = ?)"
+        
+    cursor = run_query(query, [character_id, class_name, sub_class])
     result = cursor.fetchone()
     return result.Total
 
 
 def spells_wizard_free_spells(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Link_Character_Class " \
-            "where Character_ID = '{}' and Class = 'Wizard' ".format(character_id)
-    cursor.execute(query)
+            "where Character_ID = ? and Class = 'Wizard' "
+    cursor = run_query(query, [character_id])
     result = cursor.fetchone()
     if result is None:
         return 0
@@ -264,24 +248,22 @@ def spells_wizard_free_spells(character_id: str):
 
 
 def spells_known_by_level(class_name: str, class_level: int):
-    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Info_Spells_Known " \
-            "Where Class = '{}'".format(class_name)
-    cursor.execute(query)
+            "Where Class = ?"
+    cursor = run_query(query, [class_name])
     result = cursor.fetchone()
     return result[class_level]
 
 
 def class_spells_by_level(class_name: str, sub_class: str, level: int):
-    cursor = Connections.sql_db_connection()
     query = "select b.* " \
             "from Link_Class_Spells A " \
             "left join Info_Spells B " \
             "on A.Spell = B.Name " \
-            "where Level = '{}' and (Class = '{}' or Class = '{}') " \
-            "order by name".format(level, class_name, sub_class)
-    cursor.execute(query)
+            "where Level = ? and (Class = ? or Class = ?) " \
+            "order by name"
+    cursor = run_query(query, [level, class_name, sub_class])
     rows = cursor.fetchall()
     return_list = []
     for row in rows:
@@ -290,14 +272,13 @@ def class_spells_by_level(class_name: str, sub_class: str, level: int):
 
 
 def class_spells_at_and_below_level(class_name: str, level: int):
-    cursor = Connections.sql_db_connection()
     query = "select b.* " \
             "from Link_Class_Spells A " \
             "left join Info_Spells B " \
             "on A.Spell = B.Name " \
-            "where Level <= '{}' and Class = '{}' " \
-            "order by name".format(level, class_name)
-    cursor.execute(query)
+            "where Level <= ? and Class = ? " \
+            "order by name"
+    cursor = run_query(query, [level, class_name])
     rows = cursor.fetchall()
     return_list = []
     for row in rows:
@@ -306,15 +287,14 @@ def class_spells_at_and_below_level(class_name: str, level: int):
 
 
 def character_known_wizard_spells_by_level(character_id: str, spell_level: int):
-    cursor = Connections.sql_db_connection()
     query = "Select Spell " \
             "From Main_Spell_Book A " \
             "Left join Link_Spell_book_Spells B " \
             "on A.ID = B.Spell_Book_ID " \
             "left join Info_Spells C " \
             "on B.Spell = C.Name " \
-            "Where A.Owner_ID = '{}' and A.Type = 'Core' and C.Level = '{}'".format(character_id, spell_level)
-    cursor.execute(query)
+            "Where A.Owner_ID = ? and A.Type = 'Core' and C.Level = ?"
+    cursor = run_query(query, [character_id, spell_level])
     rows = cursor.fetchall()
     result = []
     for row in rows:
@@ -324,16 +304,15 @@ def character_known_wizard_spells_by_level(character_id: str, spell_level: int):
 
 def character_known_spells_by_class_and_level(character_id: str, class_name: str, spell_level: int):
     sub_class = character_class_subclass(character_id, class_name)
-    cursor = Connections.sql_db_connection()
     query = "select Spell " \
             "from Link_Character_Spells A " \
             "left Join Info_Spells B " \
             "on A.Spell = B.Name " \
-            "where A.Character_ID = '{}' " \
-            "and B.Level = {} " \
-            "and (Origin = '{}' or Origin = '{}') "\
-        .format(character_id, spell_level, class_name, sub_class)
-    cursor.execute(query)
+            "where A.Character_ID = ? " \
+            "and B.Level = ? " \
+            "and (Origin = ? or Origin = ?) "\
+        
+    cursor = run_query(query, [character_id, spell_level, class_name, sub_class])
     rows = cursor.fetchall()
     result = []
     for row in rows:
@@ -342,21 +321,19 @@ def character_known_spells_by_class_and_level(character_id: str, class_name: str
 
 
 def spell_book(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "from Main_Spell_book " \
-            "Where Owner_ID = '{}' and Type = 'Core'".format(character_id)
-    cursor.execute(query)
+            "Where Owner_ID = ? and Type = 'Core'"
+    cursor = run_query(query, [character_id])
     result = cursor.fetchone()
     return result.ID
 
 
 def spell_origin(class_name: str, spell_name: str):
-    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Link_Class_Spells " \
-            "Where Class = '{}' and Spell = '{}'".format(class_name, spell_name)
-    cursor.execute(query)
+            "Where Class = ? and Spell = ?"
+    cursor = run_query(query, [class_name, spell_name])
     result = cursor.fetchone()
     if result is None:
         return None
@@ -364,20 +341,18 @@ def spell_origin(class_name: str, spell_name: str):
 
 
 def wizard_spell_number(character_id: str, class_name: str, ):
-    cursor = Connections.sql_db_connection()
     query = "select * " \
             "From Link_Character_Class " \
-            "WHERE Character_ID = '{}' AND Class = '{}'".format(character_id, class_name)
-    cursor.execute(query)
+            "WHERE Character_ID = ? AND Class = ?"
+    cursor = run_query(query, [character_id, class_name])
     result = cursor.fetchone()
     return result.Free_Book_Spells
 
 
 def character_name_by_character_id(character_id: str):
-    cursor = Connections.sql_db_connection()
     query = "Select * " \
             "From Main_Characters " \
-            "Where ID = '{}'".format(character_id)
-    cursor.execute(query)
+            "Where ID = ?"
+    cursor = run_query(query, [character_id])
     result = cursor.fetchone()
     return result.Character_Name

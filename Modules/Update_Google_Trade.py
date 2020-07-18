@@ -1,5 +1,6 @@
 import Quick_Python
 import Connections
+from Quick_Python import run_query
 
 
 def trade_create(character_id: str, item_name: str):  # [Character], [Item]
@@ -34,16 +35,14 @@ def trade_delete(character_id: str, item_name):  # [Character],[Item]
 
 
 def lookup_trade_item(character_id: str, item_name: str):
-    cursor = Connections.sql_db_connection()
-    query = "select * from Main_Trade where Character_ID = '{}' AND Item = '{}'".format(character_id, item_name)
-    cursor.execute(query)
+    query = "select * from Main_Trade where Character_ID = ? AND Item = ?"
+    cursor = run_query(query, [character_id, item_name])
     item = cursor.fetchone()
     return item
 
 
 def character_name_by_character_id(character_id: str):
-    cursor = Connections.sql_db_connection()
-    query = "select * from Main_Characters where ID = '{}'".format(character_id)
-    cursor.execute(query)
+    query = "select * from Main_Characters where ID = ?"
+    cursor = run_query(query, [character_id])
     result = cursor.fetchone()
     return result.Character_Name

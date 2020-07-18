@@ -3,6 +3,7 @@ import Connections
 import discord
 import time
 import os
+# os.environ['TDSVER'] = '8.0'
 
 # connecting to discord
 Token = open(os.path.join('Credentials','DiscordAPI.txt')).read()

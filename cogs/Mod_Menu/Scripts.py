@@ -37,14 +37,18 @@ def create_character_check(command: str):
 
 def create_character_execute(command: str):
     character_sheet = command.split(",")
-
-    discord_id = SQL_Lookup.player_id_by_name(character_sheet[0].lstrip())
+    discord_name = character_sheet[0].lstrip()
+    discord_id = SQL_Lookup.player_id_by_name(discord_name)
     character_sheet[0] = discord_id
     character = character_sheet[1].lstrip().split(" ")
     character_name = character[0].lstrip()
     character_sheet[1] = character_name
     character_class = character_sheet[4].lstrip()
-    roll_id = SQL_Lookup.unused_roll(discord_id)
+    try:
+        roll_id = SQL_Lookup.unused_roll(discord_id)
+    except AttributeError as e:
+        return "ERROR: User['{}'] has not rolled stats using 'randchar' command.".format(discord_name)
+
 
     # update Link_character_Class
     SQL_Insert.character_create(character_sheet, roll_id)
@@ -66,7 +70,7 @@ def sync_players_execute(command):
     update_player = 0
     for member in command.guild.members:
         discord_name = member.display_name.replace("'", "")
-        discord_id = member.id
+        discord_id = str(member.id)
         result = Quick_Python.sync_player(discord_id, discord_name)
         if result[0]:
             if result[1] == "New":

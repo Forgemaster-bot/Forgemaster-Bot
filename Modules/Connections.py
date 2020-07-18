@@ -1,9 +1,11 @@
 import pyodbc
 import time
 import gspread
+from google.oauth2.service_account import Credentials as gCredentials
 from oauth2client.service_account import ServiceAccountCredentials
 import os
 
+spreadsheet_id = "1jcL82F3cCBrcOHkQtW-cepiwkcPYRcej5ZMFNQ8CirI"
 
 '''''''''''''''''''''''''''''''''
 ################SQL#############
@@ -57,10 +59,14 @@ def sql_log_error(user_id, user_command, error):
 
 def google_sheet(name: str):
     # connecting to google
-    scope = ['https://www.googleapis.com/auth/drive']
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(os.path.join('Credentials', 'GoogleAPI.json'), scope)
+    scope = ['https://www.googleapis.com/auth/spreadsheets',
+             'https://www.googleapis.com/auth/drive']
+    file_path = os.path.join('Credentials', 'GoogleAPI.json')
+    credentials = gCredentials.from_service_account_file(file_path, scopes=scope)
+    # credentials = ServiceAccountCredentials.from_json_keyfile_name(file_path, scopes=scope)
+
     client = gspread.authorize(credentials)
-    worksheet = client.open_by_key("1LzFoY8OT6ZbYL4lF10Ngz93lqYr97pP3iv8B3crdNyI").worksheet(name)
+    worksheet = client.open_by_key(spreadsheet_id).worksheet(name)
     return worksheet
 
 

@@ -1,26 +1,24 @@
 import Connections
+from Quick_Python import run_query
 
 
 def character_feat(character_id: str, feat: str):
-    cursor = Connections.sql_db_connection()
     query = "DELETE FROM " \
             "Link_Character_Feats " \
-            "WHERE Character_ID ='{}' AND Feat = '{}'".format(character_id, feat)
-    cursor.execute(query)
+            "WHERE Character_ID =? AND Feat = ?"
+    cursor = run_query(query, [character_id, feat])
     cursor.commit()
 
 
 def character_skill(character_id: str, skill: str):
-    cursor = Connections.sql_db_connection()
     query = "DELETE FROM Link_Character_Skills " \
-            "WHERE Character_ID ='{}' AND Skill = '{}'".format(character_id, skill)
-    cursor.execute(query)
+            "WHERE Character_ID =? AND Skill = ?"
+    cursor = run_query(query, [character_id, skill])
     cursor.commit()
 
 
 def character_item(character_id: str, item_name: str):
-    cursor = Connections.sql_db_connection()
     query = "DELETE FROM Link_Character_Items " \
-            "WHERE Character_ID = '{}' AND Item = '{}'".format(character_id, item_name)
-    cursor.execute(query)
+            "WHERE Character_ID = ? AND Item = ?"
+    cursor = run_query(query, [character_id, item_name])
     cursor.commit()
