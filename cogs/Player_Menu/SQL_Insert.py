@@ -14,6 +14,6 @@ def discord_roll(discord_id: str, stat_array: list):
 
 def sync_players(user_id: str, name: str):
     cursor = Connections.sql_db_connection()
-    query = "insert into Info_Discord (ID,Name) values ('{}','{}')".format(user_id, name)
+    query = "insert into Info_Discord (ID,Name,Character_Number) values ('{}','{}',1)".format(user_id, name)
     cursor.execute(query)
     cursor.commit()
