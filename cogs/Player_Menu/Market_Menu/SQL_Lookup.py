@@ -60,7 +60,8 @@ def character_item(character_id: str, item_name: str):
 
 def item_detail(item_name: str):
     query = "Select cast(Name as text), " \
-            "cast(Description as text), Weight, Value, cast(Type as text), cast(Crafting as text) " \
+            "cast(Description as text) as Description, Weight, Value, cast(Type as text) as Type," \
+            " cast(Crafting as text) as Crafting " \
             "From Info_Item " \
             "Where Name = ? "
     cursor = run_query(query, [item_name])
