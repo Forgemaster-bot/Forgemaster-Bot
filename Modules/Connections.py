@@ -4,6 +4,7 @@ import gspread
 from google.oauth2.service_account import Credentials as gCredentials
 from oauth2client.service_account import ServiceAccountCredentials
 import os
+from Quick_Python import run_query
 
 spreadsheet_id = "1jcL82F3cCBrcOHkQtW-cepiwkcPYRcej5ZMFNQ8CirI"
 
@@ -27,28 +28,23 @@ def sql_db_connection():
 def sql_log_command(message):
     user = message.message.author.id
     command = message.message.content.replace("'", "''")
-    cursor = sql_db_connection()
-    insert = "insert into Command_Logs (User_ID,Command,DateTime) values ('{}','{}','{}')"\
-        .format(user, command, time.strftime('%Y-%m-%d %H:%M:%S'))
-    cursor.execute(insert)
+    insert = "insert into Command_Logs (User_ID,Command,DateTime) values (?,?,?)"\
+        
+    cursor = run_query(query, [user, command, time.strftime('%Y-%m-%d %H:%M:%S')])
     cursor.commit()
 
 
 def sql_log_private_command(user_id: str, command: str):
-    cursor = sql_db_connection()
-    insert = "insert into Command_Logs (User_ID,Command,DateTime) values ('{}','{}','{}')"\
-        .format(user_id, command, time.strftime('%Y-%m-%d %H:%M:%S'))
-    cursor.execute(insert)
+    insert = "insert into Command_Logs (User_ID,Command,DateTime) values (?,?,?)"
+    cursor = run_query(query, [user_id, command, time.strftime('%Y-%m-%d %H:%M:%S')])
     cursor.commit()
 
 
 def sql_log_error(user_id, user_command, error):
     command = error.replace("'", "''").replace("Command raised an exception: ", "")
-    cursor = sql_db_connection()
     insert = "insert into Error_Messages (Discord_ID,Discord_Command,Error,DateTime) " \
-             "values ('{}','{}','{}','{}')"\
-        .format(user_id, user_command[0:50], command[0:200], time.strftime('%Y-%m-%d %H:%M:%S'))
-    cursor.execute(insert)
+             "values (?,?,?,?)"
+    cursor = run_query(query, [user_id, user_command[0:50], command[0:200], time.strftime('%Y-%m-%d %H:%M:%S')])
     cursor.commit()
 
 
