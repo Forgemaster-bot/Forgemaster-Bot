@@ -20,10 +20,10 @@ def character_sheet(character: list):
     gold = character[16]
     query = "UPDATE Main_Characters " \
                   "SET " \
-                  "Discord_ID = '{}',Race = '{}',Background = '{}'," \
-                  "XP = '{}', Strength = '{}', Dexterity = '{}', Constitution = '{}', " \
-                  "Intelligence = '{}', Wisdom = '{}', Charisma = '{}', Gold = '{}' " \
-                  "WHERE Character_Name = '{}'" \
+                  "Discord_ID = ?,Race = ?,Background = ?," \
+                  "XP = ?, Strength = ?, Dexterity = ?, Constitution = ?, " \
+                  "Intelligence = ?, Wisdom = ?, Charisma = ?, Gold = ? " \
+                  "WHERE Character_Name = ?" \
         
     cursor = run_query(query, [discord_id, race, background, xp, strength, dexterity, constitution, intelligence, 
                                wisdom, charisma, gold, character_name])
@@ -35,8 +35,8 @@ def character_stat_change(character_id: str, ability: str, value: int):
     new_value = current_stat + int(value)
     ability_name = Quick_Python.ability_name_convert(ability)
     query = "UPDATE Main_Characters " \
-            "SET {} = '{}' " \
-            "WHERE ID = '{}'"
+            "SET {} = ? " \
+            "WHERE ID = ?"
     cursor = run_query(query, [ability_name, new_value, character_id])
     cursor.commit()
     return new_value
@@ -46,8 +46,8 @@ def character_item_quantity(character_id: str, item_name: str, quantity: int):
     # calculate new total
     new_amount = SQL_Lookup.character_item_quantity(character_id, item_name) + quantity
 
-    query = "UPDATE Link_Character_Items set Quantity = '{}' " \
-            "WHERE Character_ID = '{}' AND Item = '{}'"
+    query = "UPDATE Link_Character_Items set Quantity = ? " \
+            "WHERE Character_ID = ? AND Item = ?"
     cursor = run_query(query, [new_amount, character_id, item_name])
     cursor.commit()
 
@@ -55,6 +55,6 @@ def character_item_quantity(character_id: str, item_name: str, quantity: int):
 def character_wizard_spell(character_id: str, class_name: str):
     query = "UPDATE Link_Character_Class " \
             "SET Free_Wizard_Spells = 6 " \
-            "WHERE ID = '{}' AND Class = '{}'"
+            "WHERE ID = ? AND Class = ?"
     cursor = run_query(query, [character_id, class_name])
     cursor.commit()
