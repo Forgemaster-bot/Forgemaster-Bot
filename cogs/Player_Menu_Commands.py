@@ -75,6 +75,11 @@ class Player_Menu_Commands(commands.Cog):
                 Connections.sql_log_command(command)
                 response = Scripts.rand_char(discord_id)
                 await command.send(response)
+            else:
+                response = "You have already rolled for your character. " \
+                           "A mod can verify your rolls using the 'RoleCheck' command."
+                await command.send(response)
+
         else:
             rolls = SQL_Lookup.player_stat_roll(discord_id)
             for roll in rolls:
@@ -90,7 +95,6 @@ class Player_Menu_Commands(commands.Cog):
 
     # Menu commands
     async def character_choice(self, command, discord_id):
-
         option_list = SQL_Lookup.player_character_list(discord_id)
         if len(option_list) == 0:
             await command.message.author.send("You dont have any characters yet.")
