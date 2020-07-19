@@ -28,7 +28,15 @@ class Player_Menu_Commands(commands.Cog):
             await command.message.author.send("Menu closed")
             return
         while True:
-            character_id = SQL_Lookup.character_id_by_character_name(character_name)
+            try:
+                character_id = SQL_Lookup.character_id_by_character_name(character_name)
+            except AttributeError as e:
+                error_message = "You do not have a character which can access the menu."\
+                                "You will need to roll your stats and talk with a Mod to create your character."\
+                                "The 'randchar' command will randomly roll your characters stats. Once this is done," \
+                                "a Mod can use the 'Create' command to create your character."
+                await command.message.author.send(error_message)
+                break
             menu_option = await self.main_menu_choice(command, character_id)
             if menu_option == "View your character sheet":
                 while True:

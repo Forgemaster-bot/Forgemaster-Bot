@@ -101,24 +101,28 @@ def update_items(character_id: str):
 
 
 def kill_character(character_id: str, reason: str, character_name: str):
+    # Grab roster and get current character info
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
     character_sheet = roster.row_values(character_row)
 
+    # Grab graveyard and figure out latest open row
     graveyard = Connections.google_sheet("Graveyard")
     print_row = len(graveyard.col_values(1))+1
 
+    # Insert character sheet into the graveyard
     graveyard.insert_row(character_sheet, print_row)
     graveyard.update_cell(print_row, 20, reason)
 
-    # items
+    # Insert character's items into the graveyard
     item_list = lookup_character_inventory(character_id)
     items = Quick_Python.list_to_string(item_list)
-    roster.update_cell(character_row, 21, items)
+    graveyard.update_cell(print_row, 21, items)
 
+    # Delete the character from the roster. He's dead Jim
     roster.delete_row(character_row)
 
-    return "{} died by {}".format(character_name, reason)
+    return "{} died by '{}'".format(character_name, reason)
 
 
 # Level up
