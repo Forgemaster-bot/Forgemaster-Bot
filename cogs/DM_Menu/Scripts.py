@@ -42,7 +42,7 @@ def kill_character_execute(command: str):
     SQL_Insert.move_to_graveyard(character_id, reason)
     SQL_Delete.character(character_id)
 
-    Update_Google_Roster.kill_character(character_id, reason)
+    Update_Google_Roster.kill_character(character_id, reason, character_name)
     return "{} died because {}".format(character_name, reason)
 
 
