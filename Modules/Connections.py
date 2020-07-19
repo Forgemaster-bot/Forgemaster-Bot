@@ -17,7 +17,7 @@ def sql_db_connection():
     # db_credential = 'Driver={SQL Server};''Server={DESKTOP-I8HAFTK\DB};''Database=LostWorld;''Trusted_Connection=yes;'
     driver = 'FreeTDS'
     database = 'LostWorld'
-    server = '172.17.0.2'
+    server = 'sql-server'
     try:
         db_connect = pyodbc.connect(driver=driver, database=database, server=server, uid='SA', pwd='{W$lfBaj&q;wmD64TzbXtd$Jtj|jO}', port='1433')
     except Exception as e:
