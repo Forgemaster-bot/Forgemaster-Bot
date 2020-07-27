@@ -11,7 +11,7 @@ config = dict()
 
 
 def print_config(tag):
-    print("{}: {}".format(config[tag], config[tag])
+    print("{}: {}".format(config[tag], config[tag]))
 
 
 def load_config(path):
