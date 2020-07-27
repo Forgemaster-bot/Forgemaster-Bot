@@ -38,7 +38,9 @@ async def on_command_error(message, error):
 async def on_ready():
     game = discord.Game("Assuming Direct Control")
     await bot.change_presence(status=discord.Status.online, activity=game)
-    print('Logged in at {}'.format(time.strftime('%Y-%m-%d %H:%M:%S')))
+    log = 'Logged in at {}'.format(time.strftime('%Y-%m-%d %H:%M:%S'))
+    print(log)
+    await Connections.log_to_discord(log)
 
 
 bot.run(Token, bot=True, reconnect=True)
