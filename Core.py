@@ -40,7 +40,7 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.online, activity=game)
     log = 'Logged in at {}'.format(time.strftime('%Y-%m-%d %H:%M:%S'))
     print(log)
-    await Connections.log_to_discord(log)
+    await Connections.log_to_bot(bot, log)
 
 
 bot.run(Token, bot=True, reconnect=True)
