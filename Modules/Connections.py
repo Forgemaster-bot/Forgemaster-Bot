@@ -10,19 +10,10 @@ import json
 config = dict()
 
 
-def print_config(tag):
-    print("{}: {}".format(config[tag], config[tag]))
-
-
 def load_config(path):
     with open(path, "r") as config_file:
         config = json.load(config_file)
-        print_config("driver")
-        print_config("database")
-        print_config("server")
-        print_config("spreadsheet-id")
-        print_config("log-channel-id")
-
+        print(str(config))
 
 
 '''''''''''''''''''''''''''''''''
