@@ -5,8 +5,25 @@ from google.oauth2.service_account import Credentials as gCredentials
 from oauth2client.service_account import ServiceAccountCredentials
 import os
 from Quick_Python import run_query
+import json
 
-spreadsheet_id = "1jcL82F3cCBrcOHkQtW-cepiwkcPYRcej5ZMFNQ8CirI"
+config = dict()
+
+
+def print_config(tag):
+    print("{}: {}".format(config[tag], config[tag])
+
+
+def load_config(path):
+    with open(path, "r") as config_file:
+        config = json.load(config_file)
+        print_config("driver")
+        print_config("database")
+        print_config("server")
+        print_config("spreadsheet-id")
+        print_config("log-channel-id")
+
+
 
 '''''''''''''''''''''''''''''''''
 ################SQL#############
@@ -14,12 +31,14 @@ spreadsheet_id = "1jcL82F3cCBrcOHkQtW-cepiwkcPYRcej5ZMFNQ8CirI"
 
 
 def sql_db_connection():
-    # db_credential = 'Driver={SQL Server};''Server={DESKTOP-I8HAFTK\DB};''Database=LostWorld;''Trusted_Connection=yes;'
-    driver = 'FreeTDS'
-    database = 'LostWorld'
-    server = 'sql-server'
+    driver      = config["sql-driver"]
+    database    = config["sql-database"]
+    server      = config["sql-server"]
+    uid         = config["sql-uid"]
+    pwd         = config["sql-pwd"]
+    port        = config["sql-port"]
     try:
-        db_connect = pyodbc.connect(driver=driver, database=database, server=server, uid='SA', pwd='{W$lfBaj&q;wmD64TzbXtd$Jtj|jO}', port='1433')
+        db_connect = pyodbc.connect(driver=driver, database=database, server=server, uid=uid, pwd=pwd, port=port)
     except Exception as e:
         print(e)
     return db_connect.cursor()
@@ -62,7 +81,7 @@ def google_sheet(name: str):
     # credentials = ServiceAccountCredentials.from_json_keyfile_name(file_path, scopes=scope)
 
     client = gspread.authorize(credentials)
-    worksheet = client.open_by_key(spreadsheet_id).worksheet(name)
+    worksheet = client.open_by_key(config["spreadsheet-id"]).worksheet(name)
     return worksheet
 
 
@@ -81,9 +100,6 @@ def google_find_trade_seller(name: str, item: str):
 '''''''''''''''''''''''''''''''''
 #############Discord#############
 '''''''''''''''''''''''''''''''''
-test_server_channel = 733788956101181600
-
-
 async def log_to_discord(self, log: str):
-    log_channel = self.bot.get_channel(test_server_channel)
+    log_channel = self.bot.get_channel(config["log-channel-id")
     await log_channel.send(log)
