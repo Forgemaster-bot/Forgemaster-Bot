@@ -16,7 +16,6 @@ initial_extensions = ['cogs.DM Commands', 'cogs.Utility Commands',
 
 
 if __name__ == '__main__':
-    Connections.load_config(os.path.join('Credentials','config.json'))
     for extension in initial_extensions:
         bot.load_extension(extension)
 

@@ -7,14 +7,14 @@ import os
 from Quick_Python import run_query
 import json
 
-config = dict()
-
 
 def load_config(path):
+    config = dict()
     with open(path, "r") as config_file:
         config = json.load(config_file)
-        print(str(config))
+    return config
 
+config = load_config(os.path.join('Credentials','config.json'))
 
 '''''''''''''''''''''''''''''''''
 ################SQL#############
