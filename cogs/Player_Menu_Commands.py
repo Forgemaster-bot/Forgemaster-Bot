@@ -85,7 +85,7 @@ class Player_Menu_Commands(commands.Cog):
                 await command.send(response)
             else:
                 response = "You have already rolled for your character. " \
-                           "A mod can verify your rolls using the 'RoleCheck' command."
+                           "A mod can verify your rolls using the 'RollCheck' command."
                 await command.send(response)
 
         else:
