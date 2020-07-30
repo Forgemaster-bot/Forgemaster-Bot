@@ -55,6 +55,6 @@ def character_item_quantity(character_id: str, item_name: str, quantity: int):
 def character_wizard_spell(character_id: str, class_name: str):
     query = "UPDATE Link_Character_Class " \
             "SET Free_Wizard_Spells = 6 " \
-            "WHERE ID = ? AND Class = ?"
+            "WHERE Character_ID = ? AND Class = ?"
     cursor = run_query(query, [character_id, class_name])
     cursor.commit()
