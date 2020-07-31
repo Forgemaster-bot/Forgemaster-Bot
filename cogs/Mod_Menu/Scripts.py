@@ -182,24 +182,27 @@ def item_check(command: str):  # [Character Name],[Item],[Quantity]
         try:
             quantity = int(item_list[rows][2])
             if quantity > 0:
-                return_list.append('Add {} {} to {}'.format(quantity, item_name, character_name))
+                return_list.append('Add {}x**[{}]** to **{}**'.format(quantity, item_name, character_name))
                 continue
             elif quantity < 0:
                 character_id = SQL_Lookup.character_id_by_character_name(character_name)
                 if SQL_Check.character_has_item(character_id, item_name):
                     current_quantity = SQL_Lookup.character_item_quantity(character_id, item_name)
                     if current_quantity >= quantity*-1:
-                        return_list.append('Remove {} {} from {}'.format(quantity * -1, item_name, character_name))
+                        return_list.append('Remove {}x**[{}]** from **{}**'
+                                           .format(quantity * -1, item_name, character_name))
                     else:
-                        return_list.append('{} only owns {} {} remove {}?'.format(character_name, current_quantity,
-                                                                                  item_name, current_quantity))
+                        return_list.append('**{}** only owns {}x**[{}]** remove **{}**?'
+                                           .format(character_name, current_quantity, item_name, current_quantity))
                 else:
-                    return_list.append('{} doesnt own any {}, none will be removed'.format(character_name, item_name))
+                    return_list.append('**{}** doesnt own any **[{}]**, none will be removed'
+                                       .format(character_name, item_name))
         except IndexError:
-            return_list.append('Add {} 1 to {}'.format(character_name, item_name))
+            return_list.append('Add 1x**[{}]** to **[{}]**'.format(item_name, character_name))
         except ValueError:
-            return_list.append("{} quantity for {} was wrong and wont get any".format(character_name, item_name))
-    return_list.append("Do you want to make these changes to items?")
+            return_list.append("**{}** quantity for **{}** was wrong and wont get any"
+                               .format(character_name, item_name))
+    return_list.append("Do you want to make these item changes? [Yes/No]")
     return Quick_Python.list_to_table(return_list)
 
 
