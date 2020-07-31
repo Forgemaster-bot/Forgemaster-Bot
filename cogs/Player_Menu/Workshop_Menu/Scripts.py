@@ -572,9 +572,18 @@ async def create_scroll_confirm(self, command, discord_id, character_id, spell_l
 '''''''''''''''''''''''''''''''''''''''''
 
 
+def item_quantity(character_id: str, item_name: str):
+    return SQL_Lookup.character_item_quantity(character_id, item_name)
+
+
 def reagent_quantity(character_id: str):
-    result = SQL_Lookup.character_item_quantity(character_id, 'Universal Reagent')
-    return result
+    item = 'Universal Reagent'
+    return item_quantity(character_id, item)
+
+
+def gold_quantity(character_id: str):
+    item = 'Gold'
+    return item_quantity(character_id, item)
 
 
 def scribe_roll_bonus(character_id: str):
@@ -586,17 +595,21 @@ def scribe_roll_bonus(character_id: str):
     return total
 
 
-def scribe_spell_list(character_id: str, reagent_limit: int):
-    spell_limit = int(reagent_limit/50)
+def scribe_spell_list(character_id: str, reagent_limit: int, is_guaranteed: bool):
+    # if the wizard wants a guaranteed scribe, then it'll cost 4x the modifier
+    modifier = 50*4 if is_guaranteed else 50
+    spell_limit = int(reagent_limit/modifier)
     spell_list = SQL_Lookup.character_scribe_spell_options(character_id, spell_limit)
     return spell_list
 
 
 async def scribe_spell_confirm(self, command, discord_id, character_id, spell_name, spell_origin,
-                               spell_level, ability_bonus):
+                               spell_level, ability_bonus, reagent_cost, skill_dc):
+    # Constants
+    item_consumed = 'Gold'
+
     character_name = get_character_name(character_id)
     ability_roll = random.randint(1, 20)
-    skill_dc = int(spell_level) + 10
     if skill_dc > ability_roll + ability_bonus:
         log = "{} rolled {} + {} against a DC of {} and failed to copy the spell {} into their spell book" \
             .format(character_name, ability_roll, ability_bonus, skill_dc, spell_name.replace("''", "'"))
@@ -606,7 +619,7 @@ async def scribe_spell_confirm(self, command, discord_id, character_id, spell_na
         book_id = SQL_Lookup.spell_book(character_id)
         SQL_Insert.spell_book_spell(book_id, spell_name)
 
-    SQL_Update.character_item_quantity(character_id, 'Universal Reagent', int(spell_level)*-50)
+    SQL_Update.character_item_quantity(character_id, item_consumed, -1 * reagent_cost)
     if spell_origin == "a scroll":
         item_name = "Scroll of {}".format(spell_name)
         item_quantity = SQL_Lookup.character_item_quantity(character_id, item_name)
