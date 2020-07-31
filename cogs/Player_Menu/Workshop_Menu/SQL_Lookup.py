@@ -433,7 +433,7 @@ def character_scribe_spell_options(character_id: str, spell_limit: int):
     rows = cursor.fetchall()
     result = []
     for row in rows:
-        result.append("Level {} Spell: {} From: {}".format(row.Level, row.Name, row.Origin))
+        result.append("[Level {} Spell]:  **{}**;\t From: {}".format(row.Level, row.Name, row.Origin))
     return result
 
 

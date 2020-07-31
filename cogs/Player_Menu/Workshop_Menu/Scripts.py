@@ -614,10 +614,10 @@ async def scribe_spell_confirm(self, command, discord_id, character_id, spell_na
     # Perform skill check
     ability_roll = random.randint(1, 20)
     if skill_dc > ability_roll + ability_bonus:
-        log = "{} rolled {} + {} against a DC of {} and failed to copy the spell {} into their spell book" \
+        log = "**FAILURE**: {} rolled [{} + {}] against DC[{}]. **{}** was **not** copied into their spell book." \
             .format(character_name, ability_roll, ability_bonus, skill_dc, spell_name.replace("''", "'"))
     else:
-        log = "{} rolled {} + {} against a DC of {} and copied the spell {} into their spell book" \
+        log = "**SUCCESS**: {} rolled [{} + {}] against a DC[{}]. **{}** was copied into their spell book." \
             .format(character_name, ability_roll, ability_bonus, skill_dc, spell_name.replace("''", "'"))
         book_id = SQL_Lookup.spell_book(character_id)
         SQL_Insert.spell_book_spell(book_id, spell_name)
@@ -633,12 +633,13 @@ async def scribe_spell_confirm(self, command, discord_id, character_id, spell_na
             SQL_Update.character_item_quantity(character_id, item_name, 1)
         else:
             SQL_Delete.character_item(character_id, item_name)
+        log = "{} **{}** was consumed.".format(log, item_name)
     elif " Spell Book" in spell_origin:
         SQL_Delete.wizard_spell_share(character_id, spell_origin.replace(" Spell Book", ""), spell_name)
 
     # add to logs
     Update_Google_Roster.update_items(character_id)
-    Connections.sql_log_private_command(discord_id, log.replace("'", "''"))
-    await Connections.log_to_discord(self, log)
+    Connections.sql_log_private_command(discord_id, "Scribing: " + log.replace("'", "''"))
+    await Connections.log_to_discord(self, "Scribing:" + log)
     await command.author.send(log)
     return
