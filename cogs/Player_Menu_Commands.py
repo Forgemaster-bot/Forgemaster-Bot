@@ -122,7 +122,8 @@ class Player_Menu_Commands(commands.Cog):
             choice = "stop"
         else:
             option_question = "~~- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -~~\n"\
-                              "Main Menu: Welcome {}, What would you like to do? Type **EXIT** to close the menu."\
+                              "Main Menu: Welcome {}, What would you like to do? Type **EXIT** to close the menu.\n" \
+                              "~~- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -~~\n" \
                 .format(character_name)
             choice = await self.answer_from_list(command, option_question, option_list)
         return choice
