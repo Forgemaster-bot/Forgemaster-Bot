@@ -73,6 +73,10 @@ def get_character_name(character_id: str):
     return character_name
 
 
+def update_character_gold(character_id: str, reagent_cost):
+    SQL_Update.character_gold(character_id, reagent_cost * -1)
+    Update_Google_Roster.update_gold_group([character_id])
+
 '''''''''''''''''''''''''''''''''''''''''
 ################Crafting##################
 '''''''''''''''''''''''''''''''''''''''''
@@ -572,18 +576,17 @@ async def create_scroll_confirm(self, command, discord_id, character_id, spell_l
 '''''''''''''''''''''''''''''''''''''''''
 
 
-def item_quantity(character_id: str, item_name: str):
+def get_item_quantity(character_id: str, item_name: str):
     return SQL_Lookup.character_item_quantity(character_id, item_name)
 
 
 def reagent_quantity(character_id: str):
     item = 'Universal Reagent'
-    return item_quantity(character_id, item)
+    return get_item_quantity(character_id, item)
 
 
 def gold_quantity(character_id: str):
-    item = 'Gold'
-    return item_quantity(character_id, item)
+    return SQL_Lookup.character_gold(character_id)
 
 
 def scribe_roll_bonus(character_id: str):
@@ -605,10 +608,10 @@ def scribe_spell_list(character_id: str, reagent_limit: int, is_guaranteed: bool
 
 async def scribe_spell_confirm(self, command, discord_id, character_id, spell_name, spell_origin,
                                spell_level, ability_bonus, reagent_cost, skill_dc):
-    # Constants
     item_consumed = 'Gold'
-
     character_name = get_character_name(character_id)
+
+    # Perform skill check
     ability_roll = random.randint(1, 20)
     if skill_dc > ability_roll + ability_bonus:
         log = "{} rolled {} + {} against a DC of {} and failed to copy the spell {} into their spell book" \
@@ -619,7 +622,10 @@ async def scribe_spell_confirm(self, command, discord_id, character_id, spell_na
         book_id = SQL_Lookup.spell_book(character_id)
         SQL_Insert.spell_book_spell(book_id, spell_name)
 
-    SQL_Update.character_item_quantity(character_id, item_consumed, -1 * reagent_cost)
+    # Update users gold
+    update_character_gold(character_id, reagent_cost)
+
+    # Update item quantities
     if spell_origin == "a scroll":
         item_name = "Scroll of {}".format(spell_name)
         item_quantity = SQL_Lookup.character_item_quantity(character_id, item_name)
