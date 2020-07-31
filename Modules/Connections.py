@@ -9,12 +9,13 @@ import json
 
 
 def load_config(path):
-    config = dict()
+    local_config = dict()
     with open(path, "r") as config_file:
-        config = json.load(config_file)
-    return config
+        local_config = json.load(config_file)
+    return local_config
 
-config = load_config(os.path.join('Credentials','config.json'))
+
+config = load_config(os.path.join('Credentials', 'config.json'))
 
 '''''''''''''''''''''''''''''''''
 ################SQL#############
@@ -22,12 +23,12 @@ config = load_config(os.path.join('Credentials','config.json'))
 
 
 def sql_db_connection():
-    driver      = config["sql-driver"]
-    database    = config["sql-database"]
-    server      = config["sql-server"]
-    uid         = config["sql-uid"]
-    pwd         = config["sql-pwd"]
-    port        = config["sql-port"]
+    driver = config["sql-driver"]
+    database = config["sql-database"]
+    server = config["sql-server"]
+    uid = config["sql-uid"]
+    pwd = config["sql-pwd"]
+    port = config["sql-port"]
     try:
         db_connect = pyodbc.connect(driver=driver, database=database, server=server, uid=uid, pwd=pwd, port=port)
     except Exception as e:
