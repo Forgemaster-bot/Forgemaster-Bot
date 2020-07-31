@@ -474,43 +474,76 @@ async def create_scroll_confirm(self, command, discord_id, character_id, spell_l
 
 
 async def scribe_spell_menu(self, command, discord_id, character_id: str):
-    reagent_quantity = Scripts.reagent_quantity(character_id)
+    gold_quantity = SQL_Lookup.character_gold(character_id)
     ability_bonus = Scripts.scribe_roll_bonus(character_id)
     welcome_message = "Scribe spell Menu: Type **STOP** at any time to go back to the player menu. \n" \
-                      "It costs 50 universal reagent per level of spell to scribe. you have {}.\n" \
-                      "The DC to copy a spell is 10 + spell level. you have +{} to the roll"\
-        .format(reagent_quantity, ability_bonus)
+                      "There are two options for scribing.\n" \
+                      "The first option costs 50gp per level of spell to scribe, BUT you must also " \
+                      "meet a DC of 10 + spell level or it will fail to copy.\n" \
+                      "The second option options costs 200gp per level to scribe, but you are " \
+                      "guaranteed to copy the spell.\n" \
+                      "You currently have {}gp and +{} to your DC roll.\n"\
+        .format(gold_quantity, ability_bonus)
     await command.message.author.send(welcome_message)
 
-    spell_choice = await scribe_spell_choice(self, command, character_id, reagent_quantity)
+    # Determine if wizard wants to be guaranteed the result
+    is_guaranteed = scribe_modifier_choice(self, command)
+    if is_guaranteed == "exit" or is_guaranteed == "stop":
+        return "exit"
+
+    # Display list of spells and get user to pick spell based on available gold
+    spell_choice = await scribe_spell_choice(self, command, character_id, gold_quantity, is_guaranteed)
     if spell_choice == "exit" or spell_choice == "stop":
         return spell_choice
 
-    confirm = await scribe_spell_confirm(self, command, discord_id, character_id, spell_choice, ability_bonus)
+    # Confirm the costs and roll withe user
+    confirm = \
+        await scribe_spell_confirm(self, command, discord_id, character_id, spell_choice, ability_bonus, is_guaranteed)
     if confirm == "exit" or confirm == "stop":
         return confirm
     return "stop"
 
 
-async def scribe_spell_choice(self, command, character_id, reagent_quantity):
-    option_list = Scripts.scribe_spell_list(character_id, reagent_quantity)
-    option_question = "Which spell would you like to lend?"
+async def scribe_modifier_choice(self, command):
+    option_question = "Which option would you like to continue scribing with?"
+    # Create list for asking user
+    option_random = "DC Check"
+    option_guaranteed = "Guaranteed"
+    option_list = [option_random, option_guaranteed]
+    # Ask user question
+    choice = await self.answer_from_list(command, option_question, option_list)
+    # Check the answer
+    if choice == "exit" or choice == "stop":
+        return choice
+    elif choice == option_guaranteed:
+        return True
+    return False
+
+
+async def scribe_spell_choice(self, command, character_id, reagent_quantity, is_guaranteed):
+    option_list = Scripts.scribe_spell_list(character_id, reagent_quantity, is_guaranteed)
+    option_question = "Which spell would you like to learn?"
     choice = await self.answer_from_list(command, option_question, option_list)
     return choice
 
 
-async def scribe_spell_confirm(self, command, discord_id, character_id, spell, ability_bonus):
+async def scribe_spell_confirm(self, command, discord_id, character_id, spell, ability_bonus, is_guaranteed):
     spell_detail = spell.split(":")
     spell_level = spell_detail[0].replace("Level ", "").replace(" Spell", "")
     spell_name = spell_detail[1].replace(" From", "").lstrip()
     spell_origin = spell_detail[2].lstrip()
-    question = "Do you want to try and scribe {} into your spellbook from {}? [Yes/No]" \
-               "\nIt will cost {} universal reagent and you must pass a DC {} Arcane roll"\
-        .format(spell_name.replace("''", "'"), spell_origin, int(spell_level)*50, int(spell_level)+10)
+
+    # Determine costs
+    reagent_cost = int(spell_level) * (50*4 if is_guaranteed else 50)
+    skill_dc = 0 if is_guaranteed else (int(spell_level)+10)
+
+    question = "Do you want to try and scribe {} into your spellbook from {}?" \
+               "It will cost {}gp and you must pass a DC[{}] Arcane roll"\
+        .format(spell_name.replace("''", "'"), spell_origin, reagent_cost, skill_dc)
     await command.author.send(question)
     reply = await self.confirm(command)
     if reply == "Yes":
         await command.author.send("Attempting to scribe...")
         await Scripts.scribe_spell_confirm(self, command, discord_id, character_id, spell_name,
-                                           spell_origin, spell_level, ability_bonus)
+                                           spell_origin, spell_level, ability_bonus, reagent_cost, skill_dc)
     return "exit"
