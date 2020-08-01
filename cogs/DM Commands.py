@@ -11,7 +11,7 @@ class DM_Commands(commands.Cog):
         self.bot = bot
 
     @commands.command(name='CharacterKill', help="[Character Name],[Reason]")
-    @commands.check_any(commands.has_role('Admin'), commands.has_role('DMs'))
+    @commands.check_any(commands.has_role('Admins'), commands.has_role('DMs'))
     async def kill_character(self, command):
         trim_message = command.message.content.replace('$CharacterKill ', '')
         command_check = Scripts.kill_character_check(trim_message)
@@ -32,7 +32,7 @@ class DM_Commands(commands.Cog):
 
     # Gold
     @commands.command(name='AddGold', help="[Gold amount],[Character 1],[Character 2]...")
-    @commands.check_any(commands.has_role('Admin'), commands.has_role('DMs'))
+    @commands.check_any(commands.has_role('Admins'), commands.has_role('DMs'))
     async def change_gold(self, command):
         trim_message = command.message.content.replace('$AddGold ', '')
         command_check = Scripts.add_gold_check(trim_message)
@@ -53,7 +53,7 @@ class DM_Commands(commands.Cog):
 
     # XP
     @commands.command(name='AddXP', help="[XP amount],[Character 1],[Character 2]...")
-    @commands.check_any(commands.has_role('Admin'), commands.has_role('DMs'))
+    @commands.check_any(commands.has_role('Admins'), commands.has_role('DMs'))
     async def add_xp(self, command):
         trim_message = command.message.content.replace('$AddXP ', '')
         command_check = Scripts.add_xp_check(trim_message)
@@ -75,7 +75,7 @@ class DM_Commands(commands.Cog):
 
     # Add logxp
     @commands.command(name='LogXP', help="[Character]")
-    @commands.check_any(commands.has_role('Admin'), commands.has_role('DMs'))
+    @commands.check_any(commands.has_role('Admins'), commands.has_role('DMs'))
     async def log_xp(self, command):
         trim_message = command.message.content.replace('$LogXP ', '')
         command_check = Scripts.log_xp_check(trim_message)
