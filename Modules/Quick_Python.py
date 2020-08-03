@@ -61,6 +61,7 @@ def ability_name_convert(ability: str):
         return 'Wisdom'
     elif ability == 'CHA':
         return 'Charisma'
+    return None
 
 
 def dice_roll(low: int, high: int):

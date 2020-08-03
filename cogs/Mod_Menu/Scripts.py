@@ -345,7 +345,7 @@ def stat_raise_check(command: str):
         return False, "Make sure the first value is the amount of XP to give to out."
     if not SQL_Check.character_stat_max(character_id, ability, change):
         return False, "{} cant have over 20 in {}, can't add {}.".format(character_name, ability, change)
-    return True, "Add {} points of {} to {}?".format(change, ability, character_name)
+    return True, "Would you like to add **{} {}** points to **{}**? [Yes/No]".format(change, ability, character_name)
 
 
 def stat_change_execute(command: str):
