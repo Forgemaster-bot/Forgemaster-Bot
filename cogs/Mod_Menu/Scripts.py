@@ -356,7 +356,7 @@ def stat_change_execute(command: str):
     value = int(command_split[2].lstrip())
     new_value = SQL_Update.character_stat_change(character_id, ability, value)
     Update_Google_Roster.update_character_ability(character_id, ability)
-    return "{} now has {} in {}".format(character_name, new_value, ability)
+    return "**{}** now has **{}** in **{}**".format(character_name, new_value, ability)
 
 
 def character_refresh_check(character_name: str):
