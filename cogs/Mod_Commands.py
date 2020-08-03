@@ -191,28 +191,32 @@ class Mod_Commands(commands.Cog):
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def roll_check(self, command):
         trim_message = command.message.content.replace('$RollCheck ', '')
+        trim_message = trim_message.replace('$RollCheck', '')
+        if trim_message == "":
+            await command.send("You must pass the discord id of player you'd like to check.")
+            return
         command_check = Scripts.roll_check_check(trim_message)
         if command_check[0]:
             response = Scripts.roll_check_execute(trim_message)
             await command.send(response)
 
     async def confirm(self, command):
-            # setup sub function to store new message
-            def check_reply(m):
-                return m.author == command.author
+        # setup sub function to store new message
+        def check_reply(m):
+            return m.author == command.author
 
-            # send the user the message
-            try:
-                msg = await self.bot.wait_for('message', timeout=60.0, check=check_reply)
-            except asyncio.TimeoutError:
-                return "No"
-            # check content of response to see what the person wrote
-            if msg.content.lower() == "yes":
-                reply = "Yes"
-            else:
-                reply = "No"
+        # send the user the message
+        try:
+            msg = await self.bot.wait_for('message', timeout=60.0, check=check_reply)
+        except asyncio.TimeoutError:
+            return "No"
+        # check content of response to see what the person wrote
+        if msg.content.lower() == "yes":
+            reply = "Yes"
+        else:
+            reply = "No"
 
-            return reply
+        return reply
 
 
 def setup(bot):

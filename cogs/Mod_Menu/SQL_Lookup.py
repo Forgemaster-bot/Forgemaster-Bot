@@ -25,7 +25,7 @@ def player_name_by_id(user_id: str):
 def player_stat_roll(discord_id: str):
     cursor = Connections.sql_db_connection()
     query = textwrap.dedent("""
-    select * 
+    select Discord_ID, Roll_1, Roll_2, Roll_3, Roll_4, Roll_5, Roll_6 
     from Discord_Roll 
     where Discord_ID = ?
     """)
