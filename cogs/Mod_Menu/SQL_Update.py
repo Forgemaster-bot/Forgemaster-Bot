@@ -35,7 +35,7 @@ def character_stat_change(character_id: str, ability: str, value: int):
     new_value = current_stat + int(value)
     ability_name = Quick_Python.ability_name_convert(ability)
     query = "UPDATE Main_Characters " \
-            "SET {} = ? " \
+            "SET ? = ? " \
             "WHERE ID = ?"
     cursor = run_query(query, [ability_name, new_value, character_id])
     cursor.commit()
