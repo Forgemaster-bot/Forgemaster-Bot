@@ -166,9 +166,11 @@ def level_up_options(character_id: str):
 
 async def level_up_confirm(self, character_id: str, class_name: str, discord_id: str, log: str):
     # get inputs data
+    is_first_level = False
     if SQL_Check.character_has_class(character_id, class_name):
         SQL_Update.character_class_level(character_id, class_name)
     else:
+        is_first_level = True
         number = SQL_Lookup.character_count_classes(character_id) + 1
         SQL_Insert.character_class(character_id, class_name, 1, number)
 
@@ -176,7 +178,13 @@ async def level_up_confirm(self, character_id: str, class_name: str, discord_id:
     if SQL_Check.class_can_replace_spell(class_name):
         SQL_Update.character_forget_spell_allow(character_id, class_name)
     if class_name == 'Wizard':
-        SQL_Update.character_free_spell(character_id, class_name, 2)
+        num_spells = SQL_Lookup.spells_wizard_free_spells(character_id)
+        # Give 2 spell slots; except if their a first level wizard give them 6 spells slots
+        if is_first_level:
+            num_spells += 6
+        else:
+            num_spells += 2
+        SQL_Update.character_free_spell(character_id, class_name, num_spells)
 
     if SQL_Lookup.character_sum_class_levels(character_id) > 6:
         SQL_Update.update_player_character_total(discord_id)
