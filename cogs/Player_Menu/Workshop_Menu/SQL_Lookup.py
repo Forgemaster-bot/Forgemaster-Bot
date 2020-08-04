@@ -72,19 +72,19 @@ def profession_tool(profession: str):
 
 def profession_item_type_list(profession: str, gold_limit: float):
     gold_value = gold_limit * 2
-    query = "Select Type from Info_Item " \
+    query = "Select CAST(Type AS TEXT) data from Info_Item " \
             "Where Crafting = ? and Value <= ? " \
             "group by Type order by Type"
     cursor = run_query(query, [profession, gold_value])
     rows = cursor.fetchall()
     item_types = []
     for row in rows:
-        item_types.append(row.Type)
+        item_types.append(row.data)
     return item_types
 
 
 def profession_item_list(profession: str, item_type: str, gold: float):
-    query = "select * " \
+    query = "select CAST(Name AS TEXT) data " \
             "from Info_Item " \
             "Where Crafting = ? and Type = ? and Value <= ? " \
             "order by Name"
@@ -92,12 +92,12 @@ def profession_item_list(profession: str, item_type: str, gold: float):
     rows = cursor.fetchall()
     results = []
     for row in rows:
-        results.append(row.Name)
+        results.append(row.data)
     return results
 
 
 def item_value(item_name: str):
-    query = "Select * " \
+    query = "Select Value " \
             "From Info_Item " \
             "Where Name = ? "
     cursor = run_query(query, [item_name])
