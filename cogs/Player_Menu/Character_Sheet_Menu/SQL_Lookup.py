@@ -326,6 +326,8 @@ def spell_book(character_id: str):
             "Where Owner_ID = ? and Type = 'Core'"
     cursor = run_query(query, [character_id])
     result = cursor.fetchone()
+    if result is None:
+        return None
     return result.ID
 
 

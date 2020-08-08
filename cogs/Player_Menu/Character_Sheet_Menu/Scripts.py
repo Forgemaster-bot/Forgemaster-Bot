@@ -164,11 +164,13 @@ def level_up_options(character_id: str):
     return class_list
 
 
-def wizard_update_core_spellbook(character_id: str, is_first_level: bool):
-    if not is_first_level:
-        return
-    character_name = SQL_Lookup.character_name_by_character_id(character_id)
-    SQL_Insert.character_spell_book(character_id, character_name, 'Core')
+def wizard_update_core_spellbook(character_id: str):
+    book_id = SQL_Lookup.spell_book(character_id)
+    if book_id is None:
+        character_name = SQL_Lookup.character_name_by_character_id(character_id)
+        SQL_Insert.character_spell_book(character_id, character_name, 'Core')
+        book_id = SQL_Lookup.spell_book(character_id)
+    return book_id
 
 
 def wizard_update_spellslots(character_id: str, class_name: str, is_first_level: bool):
@@ -193,7 +195,7 @@ async def level_up_confirm(self, character_id: str, class_name: str, discord_id:
         SQL_Update.character_forget_spell_allow(character_id, class_name)
     if class_name == 'Wizard':
         wizard_update_spellslots(character_id, class_name, is_first_level)
-        wizard_update_core_spellbook(character_id, is_first_level)
+        wizard_update_core_spellbook(character_id)
 
     if SQL_Lookup.character_sum_class_levels(character_id) > 6:
         SQL_Update.update_player_character_total(discord_id)
@@ -309,11 +311,13 @@ def theurgy_check(sub_class: str, spell_level, known_spells: list):
 
 async def learning_spell_confirm(self, discord_id, character_id: str, class_name: str, spell_name: str, log):
     if class_name == 'Wizard':
-        book_id = SQL_Lookup.spell_book(character_id)
+        # insert spell into spell book
+        book_id = wizard_update_core_spellbook(character_id)
         SQL_Insert.spell_book_spell(book_id, spell_name)
         # update number of free spells they have
         spell_number = SQL_Lookup.wizard_spell_number(character_id, class_name)
         SQL_Update.character_free_spell(character_id, class_name, spell_number - 1)
+
     else:
         spell_origin = SQL_Lookup.spell_origin(class_name, spell_name)
         if spell_origin is None:
