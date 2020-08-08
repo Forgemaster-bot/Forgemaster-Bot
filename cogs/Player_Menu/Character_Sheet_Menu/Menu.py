@@ -279,18 +279,19 @@ async def learn_spell_choice(self, command, character_id, class_name, spell_leve
 
 async def learn_spell_confirm(self, command, discord_id, character_id, class_name, spell_choice):
     character_name = Scripts.get_character_name(character_id)
+    spell_name = spell_choice.replace("''", "'")
     if class_name == 'Wizard':
-        question = "Do you want to add {} to your spell book? [Yes/No]".format(spell_choice.replace("''", "'"))
-        log = "{} added {} to their spell book from leveling up.".format(character_name, spell_choice)
+        question = "Do you want to add {} to your spell book? [Yes/No]".format(spell_name)
+        log = "{} added {} to their spell book from leveling up.".format(character_name, spell_name)
     else:
-        question = "Do you want to learn {} as a {}? [Yes/No]".format(spell_choice.replace("''", "'"), class_name)
-        log = "{} learnt {} as a {}.".format(character_name, spell_choice, class_name)
+        question = "Do you want to learn {} as a {}? [Yes/No]".format(spell_name, class_name)
+        log = "{} learnt {} as a {}.".format(character_name, spell_name, class_name)
     await command.author.send(question)
     reply = await self.confirm(command)
     if reply == "Yes":
         await command.author.send("learning spell...")
-        await Scripts.learning_spell_confirm(self, discord_id, character_id, class_name, spell_choice, log)
-        await command.author.send(log.replace("''", "'"))
+        await Scripts.learning_spell_confirm(self, discord_id, character_id, class_name, spell_name, log)
+        await command.author.send(log)
     return "stop"
 
 
