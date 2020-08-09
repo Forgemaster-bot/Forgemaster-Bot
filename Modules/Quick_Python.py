@@ -1,15 +1,27 @@
 import random
 import Connections
+import pyodbc
+from textwrap import dedent
 
 
-def run_query(query: str, args: list = None):
-    print("run_query: query[" + query + "]; args[" + str(args) + "];")
+def run_query(query: str, args: list = None) -> pyodbc.Cursor:
+    # Strip common leading whitespace
+    query = dedent(query)
+    # remove new lines to make a single line
+    query = query.replace('\n', '')
+    # log the query
+    print("run_query: query[" + query.replace('\n', '') + "]; args[" + str(args) + "];")
+    # Connect to db, execute the query, and return cursor
     cursor = Connections.sql_db_connection()
     if args is None:
         cursor.execute(query)
     else:
         cursor.execute(query, args)
     return cursor
+
+
+def run_query_commit(query: str, args: list = None):
+    run_query(query, args).commit()
 
 
 def list_to_string(given_list: list):
