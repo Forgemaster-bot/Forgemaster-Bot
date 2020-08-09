@@ -4,7 +4,7 @@ import gspread
 from google.oauth2.service_account import Credentials as gCredentials
 from oauth2client.service_account import ServiceAccountCredentials
 import os
-from Quick_Python import run_query
+import Quick_Python
 import json
 
 
@@ -22,7 +22,7 @@ config = load_config(os.path.join('Credentials', 'config.json'))
 '''''''''''''''''''''''''''''''''
 
 
-def sql_db_connection():
+def sql_db_connection() -> pyodbc.Cursor:
     driver = config["sql-driver"]
     database = config["sql-database"]
     server = config["sql-server"]
@@ -41,13 +41,13 @@ def sql_log_command(message):
     command = message.message.content.replace("'", "''")
     query = "insert into Command_Logs (User_ID,Command,DateTime) values (?,?,?)"\
         
-    cursor = run_query(query, [user, command, time.strftime('%Y-%m-%d %H:%M:%S')])
+    cursor = Quick_Python.run_query(query, [user, command, time.strftime('%Y-%m-%d %H:%M:%S')])
     cursor.commit()
 
 
 def sql_log_private_command(user_id: str, command: str):
     query = "insert into Command_Logs (User_ID,Command,DateTime) values (?,?,?)"
-    cursor = run_query(query, [user_id, command, time.strftime('%Y-%m-%d %H:%M:%S')])
+    cursor = Quick_Python.run_query(query, [user_id, command, time.strftime('%Y-%m-%d %H:%M:%S')])
     cursor.commit()
 
 
@@ -55,7 +55,8 @@ def sql_log_error(user_id, user_command, error):
     command = error.replace("'", "''").replace("Command raised an exception: ", "")
     query = "insert into Error_Messages (Discord_ID,Discord_Command,Error,DateTime) " \
              "values (?,?,?,?)"
-    cursor = run_query(query, [user_id, user_command[0:50], command[0:200], time.strftime('%Y-%m-%d %H:%M:%S')])
+    cursor = Quick_Python.run_query(query,
+                                    [user_id, user_command[0:50], command[0:200], time.strftime('%Y-%m-%d %H:%M:%S')])
     cursor.commit()
 
 
@@ -93,7 +94,9 @@ def google_find_trade_seller(name: str, item: str):
 #############Discord#############
 '''''''''''''''''''''''''''''''''
 async def log_to_bot(bot, log: str):
-    log_channel = bot.get_channel(config["log-channel-id"])
+    await bot.wait_until_ready()
+    log_channel_id = "738558460970532946"
+    log_channel = bot.get_channel(log_channel_id)
     await log_channel.send(log)
 
 
