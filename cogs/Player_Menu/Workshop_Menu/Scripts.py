@@ -523,7 +523,7 @@ def craft_scroll_spell_options(character_id: str, class_name: str, spell_level: 
 
 def scroll_gold_cost(spell_level: int):
     if spell_level == '1':
-        gold_cost = 25
+        gold_cost = 30
     elif spell_level == '2':
         gold_cost = 50
     elif spell_level == '3':
