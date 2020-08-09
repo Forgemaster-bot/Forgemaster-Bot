@@ -2,12 +2,18 @@ from discord.ext import commands
 import asyncio
 
 import Connections
+import Patreon.PatreonStatus as PatreonStatus
 from Player_Menu import SQL_Lookup
 from Player_Menu import SQL_Check
 from Player_Menu import Scripts
 from Player_Menu.Character_Sheet_Menu import Menu as CS_Menu
 from Player_Menu.Workshop_Menu import Menu as WS_Menu
 from Player_Menu.Market_Menu import Menu as MP_Menu
+
+
+def get_character_limit(discord_id: str):
+    character_limit = SQL_Lookup.total_characters_allowed(discord_id)
+    return character_limit + PatreonStatus.get(discord_id)
 
 
 class Player_Menu_Commands(commands.Cog):
@@ -66,7 +72,7 @@ class Player_Menu_Commands(commands.Cog):
                 break
         await command.message.author.send("Menu closed")
 
-    # Roll Stats
+    # Roll StatsPatreonStatus
     @commands.command(name='randchar', help='Roll character stats')
     async def dice_roll(self, command):
         discord_id = str(command.message.author.id)
@@ -75,7 +81,7 @@ class Player_Menu_Commands(commands.Cog):
             sync = Scripts.sync_player(discord_id, discord_name)
             if not sync[0]:
                 await command.send(sync)
-        character_limit = SQL_Lookup.total_characters_allowed(discord_id)
+        character_limit = get_character_limit(discord_id)
         characters_total = SQL_Lookup.character_total(discord_id)
         roll_total = SQL_Lookup.character_roll_total(discord_id)
         if characters_total < character_limit:
