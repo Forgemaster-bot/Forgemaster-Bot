@@ -36,7 +36,7 @@ class PatreonStatus:
         :return: True is patreon, false otherwise
         """
         # Find patreon role from server of the context
-        role = discord.utils.find(lambda r: r.name == Constants.role, ctx.message.server.roles)
+        role = discord.utils.find(lambda r: r.name == Constants.role, ctx.message.guild.roles)
         # Return true if role found in author's roles
         return True if role in ctx.message.author.roles else False
 

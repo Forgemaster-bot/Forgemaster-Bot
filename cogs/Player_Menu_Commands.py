@@ -2,7 +2,7 @@ from discord.ext import commands
 import asyncio
 
 import Connections
-import Patreon.PatreonStatus as PatreonStatus
+from Patreon.PatreonStatus import PatreonStatus
 from Player_Menu import SQL_Lookup
 from Player_Menu import SQL_Check
 from Player_Menu import Scripts
@@ -11,7 +11,7 @@ from Player_Menu.Workshop_Menu import Menu as WS_Menu
 from Player_Menu.Market_Menu import Menu as MP_Menu
 
 
-def get_character_limit(command):
+def get_character_limit(command: commands.Context):
     character_limit = SQL_Lookup.total_characters_allowed(command.message.author.id)
     return character_limit + PatreonStatus.get(command)
 
@@ -81,7 +81,7 @@ class Player_Menu_Commands(commands.Cog):
             sync = Scripts.sync_player(discord_id, discord_name)
             if not sync[0]:
                 await command.send(sync)
-        character_limit = get_character_limit(discord_id)
+        character_limit = get_character_limit(command)
         characters_total = SQL_Lookup.character_total(discord_id)
         roll_total = SQL_Lookup.character_roll_total(discord_id)
         if characters_total < character_limit:
