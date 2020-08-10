@@ -224,7 +224,7 @@ async def stop_sell_item(self, command, character_id):
     option_list = Scripts.stop_sale_items(character_id)
     option_question = "What would you like to stop selling?"
     choice_details = await self.answer_from_list(command, option_question, option_list)
-    choice = choice_details.split(" - ")
+    choice = choice_details.rsplit(" - ", 1)
     return choice[0]
 
 
