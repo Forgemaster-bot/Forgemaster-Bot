@@ -1,12 +1,10 @@
 from enum import Enum
-import Quick_Python
+import discord
 
 
 class Constants(str, Enum):
     """Storage for location of Patreon Status within database."""
-    table = "Info_Discord"
-    column = "Patreon"
-    key = "ID"
+    role = "Patreon"
 
     @staticmethod
     def to_dict() -> dict:
@@ -28,46 +26,20 @@ class Constants(str, Enum):
 
 class PatreonStatus:
     """
-    Container of static methods for handling Patreon Status
+    Storage for methods related to getting PatreonStatus
     """
     @staticmethod
-    def update(discord_id: str, is_patreon: bool) -> None:
+    def get(ctx: discord.ext.commands.Context) -> bool:
         """
-        Update patreon status of a discord member to enable/disable features for them.
-        :param discord_id: Unique ID of the discord user.
-        :param is_patreon: boolean value for value to set in database
-        :return: None
+        Returns weather context passed has patreon status/role
+        :param ctx: Discord context from command
+        :return: True is patreon, false otherwise
         """
-        query = """\
-                UPDATE [{table}]
-                SET [{column}] = ?
-                WHERE ID = ?
-                """
-        query = Constants.format(query)
-        args = [is_patreon, discord_id]  # status_column = <is_patreon>; ID = <discord_id>
-        Quick_Python.run_query_commit(query, args)
-
-    @staticmethod
-    def select(discord_id: str) -> bool:
-        """
-        Select patreon status of a discord member.
-        :param discord_id: Unique ID of discord user.
-        :return: boolean value of patreon status
-        """
-        query = """\
-                SELECT [{column}]
-                FROM [{table}]
-                WHERE [{key}] = ?
-                """
-        args = [discord_id]
-        result = Quick_Python.run_query(Constants.format(query), args).fetchone()
-        return None if result is None else result[0]
+        # Find patreon role from server of the context
+        role = discord.utils.find(lambda r: r.name == Constants.role, ctx.message.server.roles)
+        # Return true if role found in author's roles
+        return True if role in ctx.message.author.roles else False
 
 
-    """
-    Alias static method above from sql operation names to standard getter/setter 
-    """
-    set = update
-    get = select
 
 

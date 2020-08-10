@@ -11,9 +11,9 @@ from Player_Menu.Workshop_Menu import Menu as WS_Menu
 from Player_Menu.Market_Menu import Menu as MP_Menu
 
 
-def get_character_limit(discord_id: str):
-    character_limit = SQL_Lookup.total_characters_allowed(discord_id)
-    return character_limit + PatreonStatus.get(discord_id)
+def get_character_limit(command):
+    character_limit = SQL_Lookup.total_characters_allowed(command.message.author.id)
+    return character_limit + PatreonStatus.get(command)
 
 
 class Player_Menu_Commands(commands.Cog):
