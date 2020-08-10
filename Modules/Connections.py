@@ -6,6 +6,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import os
 import Quick_Python
 import json
+import discord
 
 
 def load_config(path):
@@ -93,11 +94,14 @@ def google_find_trade_seller(name: str, item: str):
 '''''''''''''''''''''''''''''''''
 #############Discord#############
 '''''''''''''''''''''''''''''''''
+
+
 async def log_to_bot(bot, log: str):
-    await bot.wait_until_ready()
-    log_channel_id = "738558460970532946"
-    log_channel = bot.get_channel(log_channel_id)
-    await log_channel.send(log)
+    log_channel = bot.get_channel(config["log-channel-id"])
+    if log_channel is None:
+        print(log)
+    else:
+        await log_channel.send(log)
 
 
 async def log_to_discord(self, log: str):

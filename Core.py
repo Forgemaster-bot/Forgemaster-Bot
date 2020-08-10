@@ -36,10 +36,10 @@ async def on_command_error(message, error):
 # what the bot does when its turned on
 @bot.event
 async def on_ready():
+    await bot.wait_until_ready()
     game = discord.Game("Assuming Direct Control")
     await bot.change_presence(status=discord.Status.online, activity=game)
     log = 'Logged in at {}'.format(time.strftime('%Y-%m-%d %H:%M:%S'))
-    print(log)
     await Connections.log_to_bot(bot, log)
 
 
