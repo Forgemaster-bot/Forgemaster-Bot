@@ -1,27 +1,6 @@
 from enum import Enum
 import discord
-
-
-class Constants(str, Enum):
-    """Storage for location of Patreon Status within database."""
-    role = "Patreon"
-
-    @staticmethod
-    def to_dict() -> dict:
-        """
-        Helper function to convert this classes enumerated fields to a dictionary
-        :return: [dict] dictionary of enumerated fields
-        """
-        return {k: v for k, v in Constants.__members__.items()}
-
-    @staticmethod
-    def format(query: str) -> str:
-        """
-        Helper function which returns passed string formatted with Constants enumerated values replaced.
-        :param query: string with *only* fields from this class
-        :return: [str] formatted string
-        """
-        return query.format(**Constants.to_dict())
+import Patreon.PatreonConfig
 
 
 class PatreonStatus:
@@ -35,8 +14,11 @@ class PatreonStatus:
         :param ctx: Discord context from command
         :return: True is patreon, false otherwise
         """
-        # Find patreon role from server of the context
-        role = discord.utils.find(lambda r: r.name == Constants.role, ctx.message.guild.roles)
+        if not Patreon.PatreonConfig.is_enabled():
+            return False
+        # Search through server roles for extra character role
+        extra_character_role = Patreon.PatreonConfig.get_extra_character_role()
+        role = discord.utils.find(lambda r: r.name == extra_character_role, ctx.message.guild.roles)
         # Return true if role found in author's roles
         return True if role in ctx.message.author.roles else False
 

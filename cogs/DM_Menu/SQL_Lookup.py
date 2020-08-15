@@ -37,11 +37,18 @@ def log_xp(level: int):
     return result.XP_To_Level/20
 
 
-def character_id_by_character_name(character_id: str):
+def character_id_by_character_name(character_name: str):
     query = "select * from Main_Characters where Character_Name = ?"
-    cursor = run_query(query, [character_id])
+    cursor = run_query(query, [character_name])
     result = cursor.fetchone()
     return result.ID
+
+
+def character_roll_by_character_id(character_id: str):
+    query = "select * from Main_Characters where ID = ?"
+    cursor = run_query(query, [character_id])
+    result = cursor.fetchone()
+    return result.Roll_ID
 
 
 def character_trade_items(character_id: str):

@@ -90,12 +90,19 @@ class Player_Menu_Commands(commands.Cog):
                 response = Scripts.rand_char(discord_id)
                 await command.send(response)
             else:
-                response = "You have already rolled for your character. " \
+                response = "You have already hit your max number of rolls. " \
                            "A mod can verify your rolls using the 'RollCheck' command."
                 await command.send(response)
 
         else:
             rolls = SQL_Lookup.player_stat_roll(discord_id)
+            info = "Current maximum number of characters reached [{}/{}].".format(characters_total, character_limit)
+            await command.send(info)
+            if not rolls:
+                response = "Error: Player has no rolls stored. But, player has " \
+                           "{}/{} characters.".format(characters_total, character_limit)
+                await command.send(response)
+                return
             for roll in rolls:
                 previous_rolls = [roll.Roll_1, roll.Roll_2, roll.Roll_3,
                                   roll.Roll_4, roll.Roll_5, roll.Roll_6]

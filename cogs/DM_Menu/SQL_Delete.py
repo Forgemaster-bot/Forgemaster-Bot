@@ -2,10 +2,10 @@ import Connections
 from Quick_Python import run_query
 
 
-def discord_roll(discord_id):
+def discord_roll(roll_id):
     query = "DELETE FROM Discord_Roll " \
-            "WHERE Discord_ID = ?"
-    cursor = run_query(query, [discord_id])
+            "WHERE ID = ?"
+    cursor = run_query(query, [roll_id])
     cursor.commit()
 
 
