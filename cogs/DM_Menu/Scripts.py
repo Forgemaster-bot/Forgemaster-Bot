@@ -26,7 +26,7 @@ def kill_character_execute(command: str):
     character_name = c_list[0].lstrip()
     character_id = SQL_Lookup.character_id_by_character_name(character_name)
     reason = c_list[1].lstrip()
-    discord_id = SQL_Lookup.character_owner(character_id)
+    roll_id = SQL_Lookup.character_roll_by_character_id(character_id)
 
     trade_item_list = SQL_Lookup.character_trade_items(character_id)
     for item_name in trade_item_list:
@@ -38,7 +38,7 @@ def kill_character_execute(command: str):
         # remove trade
         SQL_Delete.trade_sale(character_id, item_name)
 
-    SQL_Delete.discord_roll(discord_id)
+    SQL_Delete.discord_roll(roll_id)
     SQL_Insert.move_to_graveyard(character_id, reason)
     SQL_Delete.character(character_id)
 

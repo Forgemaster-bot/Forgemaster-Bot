@@ -2,12 +2,18 @@ from discord.ext import commands
 import asyncio
 
 import Connections
+from Patreon.PatreonStatus import PatreonStatus
 from Player_Menu import SQL_Lookup
 from Player_Menu import SQL_Check
 from Player_Menu import Scripts
 from Player_Menu.Character_Sheet_Menu import Menu as CS_Menu
 from Player_Menu.Workshop_Menu import Menu as WS_Menu
 from Player_Menu.Market_Menu import Menu as MP_Menu
+
+
+def get_character_limit(command: commands.Context):
+    character_limit = SQL_Lookup.total_characters_allowed(command.message.author.id)
+    return character_limit + PatreonStatus.get(command)
 
 
 class Player_Menu_Commands(commands.Cog):
@@ -66,7 +72,7 @@ class Player_Menu_Commands(commands.Cog):
                 break
         await command.message.author.send("Menu closed")
 
-    # Roll Stats
+    # Roll StatsPatreonStatus
     @commands.command(name='randchar', help='Roll character stats')
     async def dice_roll(self, command):
         discord_id = str(command.message.author.id)
@@ -75,7 +81,7 @@ class Player_Menu_Commands(commands.Cog):
             sync = Scripts.sync_player(discord_id, discord_name)
             if not sync[0]:
                 await command.send(sync)
-        character_limit = SQL_Lookup.total_characters_allowed(discord_id)
+        character_limit = get_character_limit(command)
         characters_total = SQL_Lookup.character_total(discord_id)
         roll_total = SQL_Lookup.character_roll_total(discord_id)
         if characters_total < character_limit:
@@ -84,12 +90,19 @@ class Player_Menu_Commands(commands.Cog):
                 response = Scripts.rand_char(discord_id)
                 await command.send(response)
             else:
-                response = "You have already rolled for your character. " \
+                response = "You have already hit your max number of rolls. " \
                            "A mod can verify your rolls using the 'RollCheck' command."
                 await command.send(response)
 
         else:
             rolls = SQL_Lookup.player_stat_roll(discord_id)
+            info = "Current maximum number of characters reached [{}/{}].".format(characters_total, character_limit)
+            await command.send(info)
+            if not rolls:
+                response = "Error: Player has no rolls stored. But, player has " \
+                           "{}/{} characters.".format(characters_total, character_limit)
+                await command.send(response)
+                return
             for roll in rolls:
                 previous_rolls = [roll.Roll_1, roll.Roll_2, roll.Roll_3,
                                   roll.Roll_4, roll.Roll_5, roll.Roll_6]
@@ -160,8 +173,8 @@ class Player_Menu_Commands(commands.Cog):
                 if answer < 1:
                     await command.message.author.send("Please enter a number between 1 and {}".format(maximum))
                 else:
-                    option = option_list[answer - 1].replace("'", "''")
-                    return option
+                    # option = option_list[answer - 1].replace("'", "''")
+                    return option_list[answer - 1]
             except IndexError:
                 await command.message.author.send("Please enter a number between 1 and {}".format(maximum))
             except ValueError:
