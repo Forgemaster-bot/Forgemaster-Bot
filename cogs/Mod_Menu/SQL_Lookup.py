@@ -1,6 +1,6 @@
 import Connections
 import textwrap
-
+import Quick_Python
 
 def player_id_by_name(name: str):
     cursor = Connections.sql_db_connection()
@@ -12,25 +12,27 @@ def player_id_by_name(name: str):
     return result.ID
 
 
-def player_name_by_id(user_id: str):
+def player_names_by_id(user_id: str):
     cursor = Connections.sql_db_connection()
     query = "select * from Info_Discord where ID = ?"
     cursor.execute(query, [user_id])
-    result = cursor.fetchone()
-    if result is None:
-        return ""
-    return result.Name
+    rows = cursor.fetchall()
+    results = []
+    for row in rows:
+        results.append(row.Name)
+    return None if not results else results
 
 
 def player_stat_roll(discord_id: str):
-    cursor = Connections.sql_db_connection()
     query = textwrap.dedent("""
-    select Discord_ID, Roll_1, Roll_2, Roll_3, Roll_4, Roll_5, Roll_6 
-    from Discord_Roll 
-    where Discord_ID = ?
+    select B.Character_Name, A.* 
+    from Discord_Roll A 
+    left join Main_Characters B on A.ID = B.Roll_ID 
+    where A.Discord_ID = ?
+    order by Character_Name
     """)
-    cursor.execute(query, [discord_id])
-    result = cursor.fetchone()
+    cursor = Quick_Python.run_query(query, [discord_id])
+    result = cursor.fetchall()
     if result is None:
         return ""
     return result
@@ -100,5 +102,5 @@ def unused_roll(discord_id: str):
     where A.Discord_ID = ? and B.Character_Name is NULL
     """)
     cursor.execute(query, [discord_id])
-    result = cursor.fetchone()
-    return result.ID
+    results = cursor.fetchall()
+    return None if not results else results

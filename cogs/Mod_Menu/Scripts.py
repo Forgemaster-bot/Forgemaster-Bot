@@ -44,11 +44,10 @@ def create_character_execute(command: str):
     character_name = character[0].lstrip()
     character_sheet[1] = character_name
     character_class = character_sheet[4].lstrip()
-    try:
-        roll_id = SQL_Lookup.unused_roll(discord_id)
-    except AttributeError as e:
+    unused_rolls = SQL_Lookup.unused_roll(discord_id)
+    if unused_rolls is None:
         return "ERROR: User['{}'] has not rolled stats using 'randchar' command.".format(discord_name)
-
+    roll_id = unused_rolls[0].ID
 
     # update Link_character_Class
     SQL_Insert.character_create(character_sheet, roll_id)
@@ -260,11 +259,18 @@ def roll_check_execute(command: str):
     command_split = command.split(",")
     discord_name = command_split[0]
     discord_id = SQL_Lookup.player_id_by_name(discord_name)
-    response = SQL_Lookup.player_stat_roll(discord_id)
-    if response == "":
-        return "Player hasnt rolled stats"
-    else:
-        return Quick_Python.list_to_string(response).replace("{},".format(discord_id), "{}:".format(discord_name))
+    rolls = SQL_Lookup.player_stat_roll(discord_id)
+    if not rolls:
+        return "Player does not have any stat rolls recorded. Please ask them to roll using `$randchar`"
+    responses = ""
+    for roll in rolls:
+        response = Quick_Python.list_to_string(roll)
+        response = response.replace("{},".format(discord_id), "")
+        response = response.replace("{},".format(roll.ID), "")
+        response = response.replace("{},".format(roll.Character_Name), "**{}**:".format(roll.Character_Name))
+        response = response.replace("None,", "**Unused**:")
+        responses += "{}\n".format(response)
+    return responses
 
 
 def skill_add_check(command: str):
