@@ -199,6 +199,8 @@ class Mod_Commands(commands.Cog):
         if command_check[0]:
             response = Scripts.roll_check_execute(trim_message)
             await command.send(response)
+        else:
+            await command.send(command_check[1])
 
     async def confirm(self, command):
         # setup sub function to store new message

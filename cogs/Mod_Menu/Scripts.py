@@ -249,9 +249,12 @@ def item_execute(command: str, author: str):
 
 def roll_check_check(command: str):
     c_list = command.split(",")
-    discord_id = SQL_Lookup.player_id_by_name(c_list[0].lstrip())
+    player_name = c_list[0].lstrip()
+    discord_id = SQL_Lookup.player_id_by_name(player_name)
     if discord_id == "":
-        return False, "Player name not found, please use $SyncPlayers to refresh player list and try again."
+        response = "Discord username '**{}**' not found. " \
+                   "(Have you tried refreshing the player list using $SyncPlayers?)".format(player_name)
+        return False, response
     return True, ""
 
 
@@ -261,7 +264,7 @@ def roll_check_execute(command: str):
     discord_id = SQL_Lookup.player_id_by_name(discord_name)
     rolls = SQL_Lookup.player_stat_roll(discord_id)
     if not rolls:
-        return "Player does not have any stat rolls recorded. Please ask them to roll using `$randchar`"
+        return "{} does not have any rolls recorded. Please ask them to roll using `$randchar`".format(discord_name)
     responses = ""
     for roll in rolls:
         response = Quick_Python.list_to_string(roll)
