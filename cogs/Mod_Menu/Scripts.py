@@ -24,7 +24,7 @@ def create_character_check(command: str):
     # checks to see if the class is spelt correctly
     if not SQL_Check.class_exists(c_list[4].lstrip()):
         return False, "The class {} doesnt exist.".format(c_list[4].lstrip())
-    response = True, "Player's Discord name : {} \nName : {} \nRace : {} \nbackground : {} \n" \
+    response = True, "Player's Discord name : {} \nName : {} \nRace : {} \nBackground : {} \n" \
                      "Class : {} \nStrength : {} \nDexterity : {} \nConstitution : {} \n" \
                      "Intelligence : {} \nWisdom : {} \nCharisma : {} \nGold : {} \n" \
                      "Do you want to make this character? [Yes/No]"\
