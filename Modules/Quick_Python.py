@@ -24,6 +24,11 @@ def run_query_commit(query: str, args: list = None):
     run_query(query, args).commit()
 
 
+def get_column_names_and_types(table: str):
+    cursor = Connections.sql_db_connection()
+    return {c.column_name: c.data_type for c in cursor.columns(table=table)}
+
+
 def list_to_string(given_list: list):
     return_string = ""
     for element in given_list:

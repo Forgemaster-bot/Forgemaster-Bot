@@ -5,8 +5,19 @@ import time
 import os
 # os.environ['TDSVER'] = '8.0'
 
+
+def get_discord_api_path():
+    """
+    Returns the path to patreon config file, prioritizing FORGEMASTER_GOOGLE_API_PATH env var.
+    :return: patreon config file path
+    """
+    default_config_path = os.path.join('Credentials', 'DiscordAPI.txt')
+    environment_path = os.getenv('FORGEMASTER_DISCORD_API_PATH')
+    return default_config_path if environment_path is None else environment_path
+
+
 # connecting to discord
-Token = open(os.path.join('Credentials','DiscordAPI.txt')).read()
+Token = open(os.path.join('Credentials', 'DiscordAPI.txt')).read()
 bot = commands.Bot(command_prefix="$", description="The Lost World Helper Bot")
 
 
