@@ -6,7 +6,21 @@ from oauth2client.service_account import ServiceAccountCredentials
 import os
 import Quick_Python
 import json
-import discord
+
+
+'''''''''''''''''''''''''''''''''
+############# CONFIG ############
+'''''''''''''''''''''''''''''''''
+
+
+def get_config_path():
+    """
+    Returns the path to patreon config file, prioritizing PATREON_CONFIG_PATH env var.
+    :return: patreon config file path
+    """
+    default_config_path = os.path.join('Credentials', 'config.json')
+    environment_path = os.getenv('FORGEMASTER_CONFIG_PATH')
+    return default_config_path if environment_path is None else environment_path
 
 
 def load_config(path):
@@ -16,10 +30,10 @@ def load_config(path):
     return local_config
 
 
-config = load_config(os.path.join('Credentials', 'config.json'))
+config = load_config(get_config_path())
 
 '''''''''''''''''''''''''''''''''
-################SQL#############
+############## SQL ##############
 '''''''''''''''''''''''''''''''''
 
 
@@ -55,7 +69,7 @@ def sql_log_private_command(user_id: str, command: str):
 def sql_log_error(user_id, user_command, error):
     command = error.replace("'", "''").replace("Command raised an exception: ", "")
     query = "insert into Error_Messages (Discord_ID,Discord_Command,Error,DateTime) " \
-             "values (?,?,?,?)"
+            "values (?,?,?,?)"
     cursor = Quick_Python.run_query(query,
                                     [user_id, user_command[0:50], command[0:200], time.strftime('%Y-%m-%d %H:%M:%S')])
     cursor.commit()
@@ -64,6 +78,16 @@ def sql_log_error(user_id, user_command, error):
 '''''''''''''''''''''''''''''''''
 ##############Google#############
 '''''''''''''''''''''''''''''''''
+
+
+def get_google_api_path():
+    """
+    Returns the path to patreon config file, prioritizing FORGEMASTER_GOOGLE_API_PATH env var.
+    :return: patreon config file path
+    """
+    default_config_path = os.path.join('Credentials', 'GoogleAPI.json')
+    environment_path = os.getenv('FORGEMASTER_GOOGLE_API_PATH')
+    return default_config_path if environment_path is None else environment_path
 
 
 def google_sheet(name: str):
