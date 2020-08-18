@@ -4,6 +4,7 @@ from Character.Data.DiscordID import DiscordID
 from Character.Data.Character import Character
 from Character.Tables.Queries import Queries
 from typing import List
+import Quick_Python
 
 
 class MainCharacterMapper:
@@ -17,26 +18,6 @@ class MainCharacterMapper:
         self._queries = queries
         self._table_info = table_info
 
-    def transform_query_dict(self, query_dict: dict) -> dict:
-        """
-        Transform dictionary containing keys of Main_Character columns to Character attribute names
-        :param query_dict: dictionary containing key:value where key is column name from Main_Character
-        :return: dict containing new keys relating to Character attributes
-        """
-        column_attribute_dict = self._table_info.to_column_dict()
-        character_dict = dict((column_attribute_dict[k], v) for k, v in query_dict.items())
-        return character_dict
-
-    def transform_character_dict(self, character_dict: dict) -> dict:
-        """
-        Transform dictionary containing keys of Character attribute names to Main_Character columns
-        :param character_dict: dictionary containing key:value where key is column name from Main_Character
-        :return: dict containing new keys relating to Character attributes
-        """
-        column_attribute_dict = self._table_info.to_dict()
-        character_dict = dict((column_attribute_dict[k], v) for k, v in character_dict.items())
-        return character_dict
-
     def fetch(self, character_id: CharacterID) -> Character:
         """
         Fetch Character from tables using character_id as key
@@ -44,14 +25,15 @@ class MainCharacterMapper:
         :return: Character object
         """
         query_dict = self._queries.select_by_key(self._table_info, character_id.value)
-        character = Character(**self.transform_query_dict(query_dict))
+        character = Character(**Quick_Python.transform_dict_keys(query_dict, self._table_info.to_column_dict()))
         return character
 
     def fetch_by_discord_id(self, discord_id: DiscordID) -> List[Character]:
         data = self._queries.select(self._table_info, self._table_info.discord_id, discord_id.value)
         characters = []
         for query_dict in data:
-            characters.append(Character(**self.transform_query_dict(query_dict)))
+            character = Character(**Quick_Python.transform_dict_keys(query_dict, self._table_info.to_column_dict()))
+            characters.append(character)
         return characters
 
     def update(self, character: Character) -> None:
@@ -61,7 +43,8 @@ class MainCharacterMapper:
         self._queries.update_by_key(self._table_info, data, where_value)
 
     def insert(self, character: Character) -> None:
-        self._queries.insert(self._table_info, self.transform_character_dict(character.to_dict()))
+        query_dict = Quick_Python.transform_dict_keys(character.to_dict(), self._table_info.to_dict())
+        self._queries.insert(self._table_info, query_dict)
 
 
 class Constants(str, Enum):

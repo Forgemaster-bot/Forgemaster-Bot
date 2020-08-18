@@ -4,6 +4,16 @@ import pyodbc
 from textwrap import dedent
 
 
+def transform_dict_keys(values_dict: dict, keys_dict: dict) -> dict:
+    """
+    Transform values_dict to contain new keys of matching value in keys_dict
+    :param values_dict: dictionary containing key:value pairs where value contains final values
+    :param keys_dict: dictionary containing key:value where key matches key in values_dict and value is the new key
+    :return: dict containing new keys relating to Character attributes
+    """
+    return dict((keys_dict[k], v) for k, v in values_dict.items())
+
+
 def run_query(query: str, args: list = None) -> pyodbc.Cursor:
     # Strip common leading whitespace
     query = dedent(query)

@@ -32,5 +32,4 @@ class Character:
             - value = Attribute **Value**
         :return: [dict] dictionary of enumerated fields
         """
-        # return {k: v for k, v in self.__members__.items()}
         return {s: getattr(self, s, None) for s in self.__slots__}
