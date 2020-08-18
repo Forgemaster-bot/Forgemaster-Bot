@@ -1,6 +1,6 @@
 import Character.Data.CharacterID as CharacterID
 import Character.Data.DiscordID as DiscordID
-import Character.Tables.Main_Characters
+import Character.Tables.MainCharacterMapper
 import Character.Data.Character
 from typing import List
 
@@ -25,4 +25,4 @@ class CharacterFacade:
         return self._character_mapper.insert(character)
 
 
-character_facade = CharacterFacade(Character.Tables.Main_Characters.mapper)
+character_facade = CharacterFacade(Character.Tables.MainCharacterMapper.mapper)
