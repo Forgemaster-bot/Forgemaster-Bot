@@ -6,7 +6,10 @@ from Player_Menu.Character_Sheet_Menu import SQL_Delete
 import Update_Google_Roster
 import Connections
 import Quick_Python
-
+import Character.CharacterFacade
+import Character.CharacterClassFacade
+import Character.CharacterFeatFacade
+import Character.CharacterSkillFacade
 
 def menu(character_id: str):
     menu_list = ["View inventory"]
@@ -40,24 +43,20 @@ def menu(character_id: str):
 
 
 def character_info(character_id: str):
-    character_name = get_character_name(character_id)
-    character_list = ["**Name:** {}".format(character_name)]
-    # classes
-    classes_and_levels = Quick_Python.list_to_string(SQL_Lookup.character_class_and_levels(character_id))
-    character_list.append("**Class:** {}".format(classes_and_levels))
-    # stats
-    stats = SQL_Lookup.character_stats(character_id)
-    character_list.append("**Stats:** STR: {}, DEX: {}, CON: {}, INT: {}, WIS: {}, CHA: {}"
-                          .format(stats.STR, stats.DEX, stats.CON, stats.INT, stats.WIS, stats.CHA))
-    # feats
-    feats = SQL_Lookup.character_feats(character_id)
-    if len(feats) > 0:
-        character_list.append("**Feats:** {}".format(Quick_Python.list_to_string(feats)))
-    # professions
-    professions = SQL_Lookup.character_skills(character_id)
-    if len(professions) > 0:
-        character_list.append("**Professions:** {}".format(Quick_Python.list_to_string(professions)))
-    return Quick_Python.list_to_table(character_list)
+    info_list = []
+
+    character = Character.CharacterFacade.interface.fetch(character_id)
+    classes = Character.CharacterClassFacade.interface.fetch(character_id)
+    feats = Character.CharacterFeatFacade.interface.fetch(character_id)
+    skills = Character.CharacterSkillFacade.interface.fetch(character_id)
+
+    info_list.append("**Name:** {}".format(character.name))
+    info_list.append("**Stats:** STR: {}, DEX: {}, CON: {}, INT: {}, WIS: {}, CHA: {}"
+                     .format(character.str, character.dex, character.con, character.int, character.wis, character.cha))
+    info_list.append("**Class:** {}".format(", ").join(c.__str__() for c in classes))
+    info_list.append("**Feats:** {}".format(", ".join(feat.name for feat in feats)))
+    info_list.append("**Skills:** {}".format(", ".join(skill.__str__() for skill in skills)))
+    return Quick_Python.list_to_table(info_list)
 
 
 def character_has_spells_to_view(character_id: str, class_name: str):
