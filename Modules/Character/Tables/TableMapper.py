@@ -4,7 +4,7 @@ from Quick_Python import transform_dict_keys
 
 class TableMapper:
     """
-    Character info storage
+    CharacterInfo info storage
     """
     def __init__(self, queries, table_info, storage_type):
         """

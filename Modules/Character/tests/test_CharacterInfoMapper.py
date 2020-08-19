@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import unittest
 from Quick_Python import run_query_commit
-import Character.CharacterFacade
-import Character.Data.Character
+import Character.CharacterInfoFacade
+import Character.Data.CharacterInfo
 import Connections
 
 
@@ -53,19 +53,19 @@ class TestCharacter(unittest.TestCase):
         delete_table_rows("Main_Characters")
 
     def test_initializer_empty(self):
-        character = Character.Data.Character.Character()
+        character = Character.Data.CharacterInfo.CharacterInfo()
         self.assertEqual(character.name, None)
 
     def test_initializer_valid(self):
-        character = Character.Data.Character.Character(name=name)
+        character = Character.Data.CharacterInfo.CharacterInfo(name=name)
         self.assertEqual(character.name, name)
 
     def test_initializer_invalid(self):
         with self.assertRaises(AttributeError):
-            character = Character.Data.Character.Character(**{'not_real_attr': None})
+            character = Character.Data.CharacterInfo.CharacterInfo(**{'not_real_attr': None})
 
     def test_fetch_info(self):
-        character_list = Character.CharacterFacade.interface.fetch(character_id)
+        character_list = Character.CharacterInfoFacade.interface.fetch(character_id)
         self.assertEqual(len(character_list), 1)
         character = character_list[0]
         # Assert each field
@@ -84,24 +84,24 @@ class TestCharacter(unittest.TestCase):
 
     def test_insert(self):
         discid = discord_id+'1'
-        start_size = len(Character.CharacterFacade.interface.fetch_by_discord_id(discid))
+        start_size = len(Character.CharacterInfoFacade.interface.fetch_by_discord_id(discid))
         self.assertEqual(start_size, 0)
-        character = Character.Data.Character.Character(discord_id=discid,
-                                                       name=name,
-                                                       race=race,
-                                                       background=background,
-                                                       str=strength,
-                                                       dex=dex,
-                                                       con=con,
-                                                       int=intelligence,
-                                                       wis=wis,
-                                                       cha=cha,
-                                                       gold=gold,
-                                                       xp=xp,
-                                                       roll_id=roll_id)
+        character = Character.Data.CharacterInfo.CharacterInfo(discord_id=discid,
+                                                               name=name,
+                                                               race=race,
+                                                               background=background,
+                                                               str=strength,
+                                                               dex=dex,
+                                                               con=con,
+                                                               int=intelligence,
+                                                               wis=wis,
+                                                               cha=cha,
+                                                               gold=gold,
+                                                               xp=xp,
+                                                               roll_id=roll_id)
         print(character.to_dict())
-        Character.CharacterFacade.interface.insert(character)
-        characters = Character.CharacterFacade.interface.fetch_by_discord_id(discid)
+        Character.CharacterInfoFacade.interface.insert(character)
+        characters = Character.CharacterInfoFacade.interface.fetch_by_discord_id(discid)
         end_size = len(characters)
         self.assertEqual(start_size + 1, end_size)
         inserted_character = characters[end_size-1]

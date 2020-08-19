@@ -1,7 +1,7 @@
 from enum import Enum
 from Character.Data.CharacterID import CharacterID
 from Character.Data.DiscordID import DiscordID
-from Character.Data.Character import Character
+from Character.Data.CharacterInfo import CharacterInfo
 from Character.Tables.Queries import Queries
 from Character.Tables.TableMapper import TableMapper
 from typing import List
@@ -10,7 +10,7 @@ from Quick_Python import transform_dict_keys
 
 class MainCharacterMapper(TableMapper):
     """
-    Character info storage
+    CharacterInfo info storage
     """
     def __init__(self, queries, table_info, storage_type):
         """
@@ -21,7 +21,7 @@ class MainCharacterMapper(TableMapper):
         """
         super().__init__(queries, table_info, storage_type)
 
-    def fetch_by_discord_id(self, discord_id: str) -> List[Character]:
+    def fetch_by_discord_id(self, discord_id: str) -> List[CharacterInfo]:
         return self.fetch(column=self._table_info.discord_id, value=discord_id)
 
 
@@ -77,4 +77,4 @@ class Constants(str, Enum):
         return query.format(**Constants.to_dict())
 
 
-mapper = MainCharacterMapper(Queries, Constants, Character)
+mapper = MainCharacterMapper(Queries, Constants, CharacterInfo)

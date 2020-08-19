@@ -4,7 +4,7 @@ class CharacterClass:
 
     def __init__(self, **kwargs):
         self.character_id = None
-        self.class_name = None
+        self.name = None
         self.level = None
         self.number = None
         self.subclass = None
@@ -23,8 +23,15 @@ class CharacterClass:
         """
         return {s: getattr(self, s, None) for s in self.__slots__}
 
-    def __str__(self):        
+    def __str__(self):
         if self.subclass is None:
-            return "{}: {}".format(self.class_name, self.level)
+            return "{}: {}".format(self.name, self.level)
         else:
-            return "{} {}: {}".format(self.class_name, self.subclass, self.level)
+            return "{} {}: {}".format(self.name, self.subclass, self.level)
+
+    def subclass_is_picked(self):
+        return False if self.subclass is None else True
+
+    def is_spell_caster(self):
+        raise NotImplementedError("Not implemented yet")
+

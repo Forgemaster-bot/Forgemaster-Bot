@@ -1,4 +1,4 @@
-class Character:
+class CharacterInfo:
     __slots__ = ['background', 'cha', 'character_id', 'con',
                  'dex', 'discord_id', 'gold', 'int', 'name',
                  'race', 'roll_id', 'str', 'wis', 'xp']

@@ -1,12 +1,12 @@
 from enum import Enum
-from Character.Data.CharacterClass import CharacterClass
+from Character.Data.CharacterItem import CharacterItem
 from Character.Tables.Queries import Queries
 from Character.Tables.TableMapper import TableMapper
 
 
-class CharacterClassMapper(TableMapper):
+class CharacterItemMapper(TableMapper):
     """
-    CharacterInfo's class mapper
+    CharacterInfo's skill mapper
     """
     def __init__(self, queries, table_info, storage_type):
         """
@@ -20,21 +20,16 @@ class CharacterClassMapper(TableMapper):
 
 class Constants(str, Enum):
     """
-    Storage for Link_Character_Class column/db labels and info
+    Storage for Link_Character_Items column/db labels and info
     """
-    table = "Link_Character_Class"
+    table = "Link_Character_Items"
     key = "Character_ID"
     # -------------------------- #
     character_id = key
-    name = "Class"
-    level = "Level"
-    number = "Number"
-    subclass = "Sub_Class"
-    free_book_spells = "Free_Book_Spells"
-    can_replace_spells = "Replace_Spell"
-    has_class_choice = "Class_Choice"
+    name = 'Item'
+    quantity = 'Quantity'
     # -------------------------- #
-    update_keys = [character_id, name]
+    update_keys = [key]
 
     @staticmethod
     def to_dict() -> dict:
@@ -66,4 +61,4 @@ class Constants(str, Enum):
         return query.format(**Constants.to_dict())
 
 
-mapper = CharacterClassMapper(Queries, Constants, CharacterClass)
+mapper = CharacterItemMapper(Queries, Constants, CharacterItem)

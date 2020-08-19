@@ -6,7 +6,7 @@ from Character.Tables.TableMapper import TableMapper
 
 class CharacterFeatMapper(TableMapper):
     """
-    Character's feat mapper
+    CharacterInfo's feat mapper
     """
     def __init__(self, queries, table_info, storage_type):
         """
