@@ -3,48 +3,26 @@ from Character.Data.CharacterID import CharacterID
 from Character.Data.DiscordID import DiscordID
 from Character.Data.Character import Character
 from Character.Tables.Queries import Queries
+from Character.Tables.TableMapper import TableMapper
 from typing import List
-import Quick_Python
+from Quick_Python import transform_dict_keys
 
 
-class MainCharacterMapper:
+class MainCharacterMapper(TableMapper):
     """
     Character info storage
     """
-    def __init__(self, queries, table_info):
+    def __init__(self, queries, table_info, storage_type):
         """
-        Define dependencies
+        Define dependency injection objects
+        :param queries:
+        :param table_info:
+        :param storage_type:
         """
-        self._queries = queries
-        self._table_info = table_info
+        super().__init__(queries, table_info, storage_type)
 
-    def fetch(self, character_id: CharacterID) -> Character:
-        """
-        Fetch Character from tables using character_id as key
-        :param character_id: key for fetching data from tables
-        :return: Character object
-        """
-        query_dict = self._queries.select_by_key(self._table_info, character_id.value)
-        character = Character(**Quick_Python.transform_dict_keys(query_dict, self._table_info.to_column_dict()))
-        return character
-
-    def fetch_by_discord_id(self, discord_id: DiscordID) -> List[Character]:
-        data = self._queries.select(self._table_info, self._table_info.discord_id, discord_id.value)
-        characters = []
-        for query_dict in data:
-            character = Character(**Quick_Python.transform_dict_keys(query_dict, self._table_info.to_column_dict()))
-            characters.append(character)
-        return characters
-
-    def update(self, character: Character) -> None:
-        data = character.to_dict()
-        where_key = self._table_info.key
-        where_value = data.pop(where_key)
-        self._queries.update_by_key(self._table_info, data, where_value)
-
-    def insert(self, character: Character) -> None:
-        query_dict = Quick_Python.transform_dict_keys(character.to_dict(), self._table_info.to_dict())
-        self._queries.insert(self._table_info, query_dict)
+    def fetch_by_discord_id(self, discord_id: str) -> List[Character]:
+        return self.fetch(column=self._table_info.discord_id, value=discord_id)
 
 
 class Constants(str, Enum):
@@ -67,6 +45,7 @@ class Constants(str, Enum):
     gold = "Gold"
     roll_id = "Roll_ID"
     # -------------------------- #
+    update_keys = [character_id]
 
     @staticmethod
     def to_dict() -> dict:
@@ -98,4 +77,4 @@ class Constants(str, Enum):
         return query.format(**Constants.to_dict())
 
 
-mapper = MainCharacterMapper(Queries, Constants)
+mapper = MainCharacterMapper(Queries, Constants, Character)

@@ -7,53 +7,6 @@ class Queries:
     """
     Container of static methods for handling player queries
     """
-    @staticmethod
-    def select_by_key(table_info, where_value: str) -> dict:
-        """
-        Select database row by key
-        :param table_info: table constants containing table definitions. Where table is table name, and key is table key
-        :param where_value: where value
-        :return: dict containing database info
-        """
-        query = """\
-                SELECT * 
-                FROM [{table}] 
-                WHERE [{key}] = ?
-                """.format(**table_info.to_dict())
-        args = [where_value]
-        cursor = Quick_Python.run_query(query, args)
-
-        # Convert cursor into dict with column as the key
-        columns = [column[0] for column in cursor.description]
-        row = cursor.fetchone()
-        if row is not None:
-            result = dict(zip(columns, row))
-
-        return None if not result else result
-
-    @staticmethod
-    def select_by_key(table_info, where_value: str) -> dict:
-        """
-        Select database row by key
-        :param table_info: table constants containing table definitions. Where table is table name, and key is table key
-        :param where_value: where value
-        :return: dict containing database info
-        """
-        query = """\
-                SELECT * 
-                FROM [{table}] 
-                WHERE [{key}] = ?
-                """.format(**table_info.to_dict())
-        args = [where_value]
-        cursor = Quick_Python.run_query(query, args)
-
-        # Convert cursor into dict with column as the key
-        columns = [column[0] for column in cursor.description]
-        row = cursor.fetchone()
-        if row is not None:
-            result = dict(zip(columns, row))
-
-        return None if not result else result
 
     @staticmethod
     def select(table_info, where_column: str, where_value: str) -> List[dict]:
@@ -80,17 +33,6 @@ class Queries:
             results.append(dict(zip(columns, row)))
 
         return [] if not results else results
-
-    @staticmethod
-    def update_by_key(table_info, data: dict, where_value: str):
-        # create set clause after splitting dictionary into keys and values
-        keys, values = zip(*data.items())
-        set_clause = 'SET {}'.format(', '.join('[{}]=?'.format(k) for k in keys))
-        # add where_value to values for query
-        values.append(where_value)
-        # Construct query and run it
-        query = "UPDATE [{table}] {set_clause} WHERE [{key}] = ?".format(set_clause=set_clause, **table_info.to_dict)
-        Quick_Python.run_query_commit(query, values)
 
     @staticmethod
     def update(table_info, data_info: dict, key_info: dict):

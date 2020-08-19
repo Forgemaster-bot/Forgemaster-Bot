@@ -12,10 +12,10 @@ class CharacterFacade:
     def __init__(self, character_mapper):
         self._character_mapper = character_mapper
 
-    def fetch(self, character_id: CharacterID.CharacterID) -> Character.Data.Character.Character:
+    def fetch(self, character_id: str) -> List[Character.Data.Character.Character]:
         return self._character_mapper.fetch(character_id)
 
-    def fetch_by_discord_id(self, discord_id: DiscordID.DiscordID) -> List[Character.Data.Character.Character]:
+    def fetch_by_discord_id(self, discord_id: str) -> List[Character.Data.Character.Character]:
         return self._character_mapper.fetch_by_discord_id(discord_id)
 
     def update(self, character: Character.Data.Character.Character):

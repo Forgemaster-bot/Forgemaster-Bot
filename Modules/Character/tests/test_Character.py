@@ -2,7 +2,6 @@
 import unittest
 from Quick_Python import run_query_commit
 import Character.CharacterFacade
-import Character.Data.CharacterID
 import Character.Data.Character
 import Connections
 
@@ -66,8 +65,9 @@ class TestCharacter(unittest.TestCase):
             character = Character.Data.Character.Character(**{'not_real_attr': None})
 
     def test_fetch_info(self):
-        charid = Character.Data.CharacterID.CharacterID(character_id)
-        character = Character.CharacterFacade.character_facade.fetch(charid)
+        character_list = Character.CharacterFacade.character_facade.fetch(character_id)
+        self.assertEqual(len(character_list), 1)
+        character = character_list[0]
         # Assert each field
         self.assertEqual(character.discord_id, discord_id)
         self.assertEqual(character.name, name)
@@ -83,10 +83,10 @@ class TestCharacter(unittest.TestCase):
         self.assertEqual(character.roll_id, roll_id_binary)
 
     def test_insert(self):
-        discid = Character.CharacterFacade.DiscordID.DiscordID(discord_id+'1')
+        discid = discord_id+'1'
         start_size = len(Character.CharacterFacade.character_facade.fetch_by_discord_id(discid))
         self.assertEqual(start_size, 0)
-        character = Character.Data.Character.Character(discord_id=discid.value,
+        character = Character.Data.Character.Character(discord_id=discid,
                                                        name=name,
                                                        race=race,
                                                        background=background,

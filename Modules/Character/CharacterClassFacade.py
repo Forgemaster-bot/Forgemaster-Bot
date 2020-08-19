@@ -11,7 +11,7 @@ class CharacterClassFacade:
     def __init__(self, mapper):
         self._mapper = mapper
 
-    def fetch(self, character_id: CharacterID.CharacterID) -> Character.Data.CharacterClass.CharacterClass:
+    def fetch(self, character_id: str) -> List:
         return self._mapper.fetch(character_id)
 
     def update(self, character: Character.Data.CharacterClass.CharacterClass):

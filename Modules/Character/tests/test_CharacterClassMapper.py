@@ -43,29 +43,23 @@ class InitializerTestCase(unittest.TestCase):
 class MapperTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        delete_table_rows("Main_Characters")
-        character_class = CharacterClass(**test_data)
-        CharacterClassFacade.interface.insert(character_class)
+        delete_table_rows(CharacterClassFacade.interface._mapper._table_info.table)
 
     @classmethod
     def tearDownClass(cls):
-        delete_table_rows("Main_Characters")
-
-    # def test_fetch_info(self):
-    #     character_class = CharacterClassFacade.interface.fetch(CharacterID(test_data['character_id']))
-    #     for k, v in test_data:
-    #         self.assertEqual(getattr(character_class, k), v)
+        delete_table_rows(CharacterClassFacade.interface._mapper._table_info.table)
 
     def test_insert_and_fetch(self):
-        character_id = CharacterID(test_data['character_id'])
+        character_id = test_data['character_id']
         start_size = len(CharacterClassFacade.interface.fetch(character_id))
         self.assertEqual(start_size, 0)
 
         CharacterClassFacade.interface.insert(CharacterClass(**test_data))
         character_classes = CharacterClassFacade.interface.fetch(character_id)
-        self.assertEqual(start_size + 1, character_classes)
+        self.assertEqual(start_size + 1, len(character_classes))
 
         for character_class in character_classes:
+            test_item = test_data.pop('character_id')
             for k, v in test_data.items():
                 self.assertEqual(getattr(character_class, k), v)
 

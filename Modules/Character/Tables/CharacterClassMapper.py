@@ -1,51 +1,21 @@
 from enum import Enum
-from Character.Data.CharacterID import CharacterID
 from Character.Data.CharacterClass import CharacterClass
 from Character.Tables.Queries import Queries
-from typing import List
-import Quick_Python
+from Character.Tables.TableMapper import TableMapper
 
 
-class CharacterClassMapper:
+class CharacterClassMapper(TableMapper):
     """
     Character's class mapper
     """
-    def __init__(self, queries, table_info):
+    def __init__(self, queries, table_info, storage_type):
         """
-        Define dependencies
+        Define dependency injection objects
         :param queries:
         :param table_info:
+        :param storage_type:
         """
-        self._queries = queries
-        self._table_info = table_info
-
-    def fetch(self, character_id: CharacterID) -> List[CharacterClass]:
-        """
-        Fetch CharacterClass objects from tables using character_id as key
-        :param character_id: key for fetching data from tables
-        :return: List of CharacterClass objects
-        """
-        table_dicts = self.queries.select(self._table_info, character_id.value)
-        character_classes = []
-        for row_dict in table_dicts:
-            transformed_dict = Quick_Python.transform_dict_keys(row_dict, self._table_info.to_column_dict())
-            character_classes.append(CharacterClass(**transformed_dict))
-        print(self)
-
-    def update(self, character_class: CharacterClass) -> None:
-        """
-        Updates row in table matching key
-        :param character_class: CharacterClass object to update
-        :return: None
-        """
-        data = character_class.to_dict()
-        key_info = [self._table_info.character_id, self._table_info.class_name]
-        where_info = {k: data.pop(k) for k in key_info}
-        self._queries.update(self._table_info, data, where_info)
-
-    def insert(self, character_class: CharacterClass) -> None:
-        query_dict = Quick_Python.transform_dict_keys(character_class.to_dict(), self._table_info.to_dict())
-        self._queries.insert(self._table_info, query_dict)
+        super().__init__(queries, table_info, storage_type)
 
 
 class Constants(str, Enum):
@@ -64,6 +34,7 @@ class Constants(str, Enum):
     can_replace_spells = "Replace_Spell"
     has_class_choice = "Class_Choice"
     # -------------------------- #
+    update_keys = [character_id, class_name]
 
     @staticmethod
     def to_dict() -> dict:
@@ -95,4 +66,4 @@ class Constants(str, Enum):
         return query.format(**Constants.to_dict())
 
 
-mapper = CharacterClassMapper(Queries, Constants)
+mapper = CharacterClassMapper(Queries, Constants, CharacterClass)
