@@ -65,7 +65,7 @@ class TestCharacter(unittest.TestCase):
             character = Character.Data.Character.Character(**{'not_real_attr': None})
 
     def test_fetch_info(self):
-        character_list = Character.CharacterFacade.character_facade.fetch(character_id)
+        character_list = Character.CharacterFacade.interface.fetch(character_id)
         self.assertEqual(len(character_list), 1)
         character = character_list[0]
         # Assert each field
@@ -84,7 +84,7 @@ class TestCharacter(unittest.TestCase):
 
     def test_insert(self):
         discid = discord_id+'1'
-        start_size = len(Character.CharacterFacade.character_facade.fetch_by_discord_id(discid))
+        start_size = len(Character.CharacterFacade.interface.fetch_by_discord_id(discid))
         self.assertEqual(start_size, 0)
         character = Character.Data.Character.Character(discord_id=discid,
                                                        name=name,
@@ -100,8 +100,8 @@ class TestCharacter(unittest.TestCase):
                                                        xp=xp,
                                                        roll_id=roll_id)
         print(character.to_dict())
-        Character.CharacterFacade.character_facade.insert(character)
-        characters = Character.CharacterFacade.character_facade.fetch_by_discord_id(discid)
+        Character.CharacterFacade.interface.insert(character)
+        characters = Character.CharacterFacade.interface.fetch_by_discord_id(discid)
         end_size = len(characters)
         self.assertEqual(start_size + 1, end_size)
         inserted_character = characters[end_size-1]

@@ -12,8 +12,8 @@ class CharacterFacade:
     def __init__(self, character_mapper):
         self._character_mapper = character_mapper
 
-    def fetch(self, character_id: str) -> List[Character.Data.Character.Character]:
-        return self._character_mapper.fetch(character_id)
+    def fetch(self, character_id: str) -> Character.Data.Character.Character:
+        return self._character_mapper.fetch(character_id)[0]
 
     def fetch_by_discord_id(self, discord_id: str) -> List[Character.Data.Character.Character]:
         return self._character_mapper.fetch_by_discord_id(discord_id)
@@ -25,4 +25,4 @@ class CharacterFacade:
         return self._character_mapper.insert(character)
 
 
-character_facade = CharacterFacade(Character.Tables.MainCharacterMapper.mapper)
+interface = CharacterFacade(Character.Tables.MainCharacterMapper.mapper)

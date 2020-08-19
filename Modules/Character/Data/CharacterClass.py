@@ -22,3 +22,9 @@ class CharacterClass:
         :return: [dict] dictionary of enumerated fields
         """
         return {s: getattr(self, s, None) for s in self.__slots__}
+
+    def __str__(self):        
+        if self.subclass is None:
+            return "{}: {}".format(self.class_name, self.level)
+        else:
+            return "{} {}: {}".format(self.class_name, self.subclass, self.level)
