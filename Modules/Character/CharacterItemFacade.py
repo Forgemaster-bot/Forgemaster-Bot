@@ -19,5 +19,8 @@ class CharacterItemFacade:
     def insert(self, character: CharacterItem):
         return self._mapper.insert(character)
 
+    def delete(self, character: CharacterItem):
+        return self._mapper.delete(character)
+
 
 interface = CharacterItemFacade(CharacterItemMapper.mapper)

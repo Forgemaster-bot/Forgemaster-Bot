@@ -1,5 +1,5 @@
 class CharacterClass:
-    __slots__ = ["character_id", "class_name", "level", "number", "subclass",
+    __slots__ = ["character_id", "name", "level", "number", "subclass",
                  "free_book_spells", "can_replace_spells", "has_class_choice"]
 
     def __init__(self, **kwargs):

@@ -1,6 +1,6 @@
 from typing import List
 from Quick_Python import transform_dict_keys
-
+import ast
 
 class TableMapper:
     """
@@ -33,11 +33,19 @@ class TableMapper:
         return storage_obj_list
 
     def update(self, storage_obj) -> None:
-        data = storage_obj.to_dict()
-        where_info = {k: data.pop(k) for k in self._table_info.update_keys}
+        data = transform_dict_keys(storage_obj.to_dict(), self._table_info.to_dict())
+        # where_info = {k: data.pop(k) for k in self._table_info.update_keys}
+        where_info = {}
+        for k in ast.literal_eval(self._table_info.update_keys):
+            where_info[k] = data.pop(k)
         self._queries.update(self._table_info, data, where_info)
 
     def insert(self, storage_obj) -> None:
         query_dict = transform_dict_keys(storage_obj.to_dict(), self._table_info.to_dict())
         self._queries.insert(self._table_info, query_dict)
+
+    def delete(self, storage_obj) -> None:
+        data = storage_obj.to_dict()
+        where_info = {k: data.pop(k) for k in self._table_info.update_keys}
+        self._queries.delete(self._table_info, where_info)
 

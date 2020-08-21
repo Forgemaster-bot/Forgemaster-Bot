@@ -37,26 +37,27 @@ class Queries:
     @staticmethod
     def update(table_info, data_info: dict, key_info: dict):
         # create set clause after splitting dictionary into keys and values
-        data_keys, data_values = zip(*data_info.items())
+        data_keys = list(data_info.keys())
+        data_values = list(data_info.values())
         set_clause = 'SET {}'.format(', '.join('[{}]=?'.format(k) for k in data_keys))
 
         # create where clause after splitting dictionary
-        key_keys, key_values = zip(*key_info.items())
-        where_clause = 'WHERE {}'.format(', '.join('[{}]=?'.format(k) for k in key_keys))
+        key_keys = list(key_info.keys())
+        key_values = list(key_info.values())
+        where_clause = 'WHERE {}'.format(' AND '.join('[{}]=?'.format(k) for k in key_keys))
         # add where_value to values for query
         for value in key_values:
             data_values.append(value)
         # Construct query and run it
         query = "UPDATE [{table}] {set_clause} {where_clause}".format(set_clause=set_clause,
                                                                       where_clause=where_clause,
-                                                                      **table_info.to_dict)
+                                                                      **table_info.to_dict())
         Quick_Python.run_query_commit(query, data_values)
 
     @staticmethod
     def insert(table_info, data: dict):
         # get column information for table attr of table_info
         column_data = Quick_Python.get_column_names_and_types(table_info.table)
-        print(column_data)
         # split data into keys and values and convert values which need to be unique ids
         keys = []
         values = []
@@ -84,3 +85,14 @@ class Queries:
                                                                              columns=columns_string,
                                                                              values=values_string)
         Quick_Python.run_query_commit(query, args)
+
+    @staticmethod
+    def delete(table_info, key_info: dict):
+        # create where clause after splitting dictionary
+        key_keys = list(key_info.keys())
+        key_values = list(key_info.values())
+        where_clause = 'WHERE {}'.format(', '.join('[{}]=?'.format(k) for k in key_keys))
+        # create query
+        query = "DELETE FROM [{table}] {where_clause}".format(**table_info.to_dict(), where_clause=where_clause)
+        # run query
+        Quick_Python.run_query_commit(query, key_values)

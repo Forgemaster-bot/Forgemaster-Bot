@@ -19,5 +19,8 @@ class CharacterSkillFacade:
     def insert(self, character: CharacterSkill):
         return self._mapper.insert(character)
 
+    def delete(self, character: CharacterSkill):
+        return self._mapper.delete(character)
+
 
 interface = CharacterSkillFacade(CharacterSkillMapper.mapper)

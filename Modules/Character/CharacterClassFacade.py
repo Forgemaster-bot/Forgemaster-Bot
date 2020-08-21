@@ -1,6 +1,5 @@
-import Character.Data.CharacterID as CharacterID
 import Character.Tables.CharacterClassMapper
-import Character.Data.CharacterClass
+from Character.Data.CharacterClass import CharacterClass
 from typing import List
 
 
@@ -14,11 +13,14 @@ class CharacterClassFacade:
     def fetch(self, character_id: str) -> List:
         return self._mapper.fetch(character_id)
 
-    def update(self, character: Character.Data.CharacterClass.CharacterClass):
+    def update(self, character: CharacterClass):
         return self._mapper.update(character)
 
-    def insert(self, character: Character.Data.CharacterClass.CharacterClass):
+    def insert(self, character: CharacterClass):
         return self._mapper.insert(character)
+
+    def delete(self, character: CharacterClass):
+        return self._mapper.delete(character)
 
 
 interface = CharacterClassFacade(Character.Tables.CharacterClassMapper.mapper)

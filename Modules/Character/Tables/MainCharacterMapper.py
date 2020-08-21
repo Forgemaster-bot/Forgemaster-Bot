@@ -1,11 +1,8 @@
 from enum import Enum
-from Character.Data.CharacterID import CharacterID
-from Character.Data.DiscordID import DiscordID
 from Character.Data.CharacterInfo import CharacterInfo
 from Character.Tables.Queries import Queries
 from Character.Tables.TableMapper import TableMapper
 from typing import List
-from Quick_Python import transform_dict_keys
 
 
 class MainCharacterMapper(TableMapper):
@@ -45,7 +42,7 @@ class Constants(str, Enum):
     gold = "Gold"
     roll_id = "Roll_ID"
     # -------------------------- #
-    update_keys = [character_id]
+    update_keys = [character_id, ]
 
     @staticmethod
     def to_dict() -> dict:

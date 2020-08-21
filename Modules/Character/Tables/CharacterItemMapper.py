@@ -29,7 +29,7 @@ class Constants(str, Enum):
     name = 'Item'
     quantity = 'Quantity'
     # -------------------------- #
-    update_keys = [key]
+    update_keys = [key, name]
 
     @staticmethod
     def to_dict() -> dict:
