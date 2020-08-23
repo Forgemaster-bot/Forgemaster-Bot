@@ -1,0 +1,57 @@
+# How I forsee this yaml file working:
+#
+# Categories: Contain list of items which can be made. Each category gets turned into a menu option 'Create a <category> item'. 
+#   I.e. 'thaumstyn ' turns into 'Create a thaumstyn item'
+# 
+# Items: When player goes into a menu, each item's costs will be checked and if the player can meet the costs it will get turned into a menu option '<label>'.
+# 
+# When a player selects an item do the following: 
+#   1. Check that player can meet the costs by checking that character.has_item_quantity(item, quantity). 'stop' if check is failed.
+#   2. Determine pre-requisites based on type:
+#       - dc: dc check is performed using field 'dc'. recipe['dc']['check'] is number to meet. recipe['dc']['mod'] is the modifier to roll.
+#   3. List costs.
+#   4. List pre-requisites to meet *after consuming the costs*.
+#   5. Query player to confirm their choice.
+#   6. Remove costs from player and update their inventory.
+#   7. Perform pre-requisite check. 'stop' if check is failed.
+#       - dc: Roll d20, add modifier, and return comparision to check.
+#   8. If outcomes exist, get random value from list. Set item name to prefix + ' ' + outcome.
+#   9. Add item name to players inventory and update.
+test:   # label displayed when crafting                          
+  - 
+    name: Test                     
+    prefix: Beta                   
+    prereq:                        
+      has_class: Cleric            
+      has_either_class:            
+      - Cleric
+      - Paladin
+      has_subclass: Divine Soul    
+      has_item: Blue Dust          
+      has_skill: Cook              
+      has_skill_proficiency: Arcana
+      has_feat: ASI
+      has_item_quantity_by_keyword:
+        Gold: 50
+        RandomItem: 10
+    cost:                          
+      Gold: 1
+      RandomItem: 1 
+    special:                       
+      dc_check:                    
+        die: 20                    
+        mod: 1                     
+        dc: 15
+      random_amount:
+        die: 6
+        mod: 1        
+    outcomes:                      
+    - Test
+    - Tester
+  - 
+    name: Test2
+    prefix: Release
+    cost:
+      Blue Dust: 10
+    outcomes:
+    - Some Random Item

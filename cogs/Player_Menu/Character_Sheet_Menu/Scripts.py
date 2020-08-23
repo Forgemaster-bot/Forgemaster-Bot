@@ -6,10 +6,26 @@ from Player_Menu.Character_Sheet_Menu import SQL_Delete
 import Update_Google_Roster
 import Connections
 import Quick_Python
-import Character.CharacterFacade
-import Character.CharacterClassFacade
-import Character.CharacterFeatFacade
-import Character.CharacterSkillFacade
+from Character.Character import Character
+
+
+# def menu(character: Character):
+#     # Check for conditional menu conditions
+#     can_level_up = character.can_level_up()
+#     has_profession = any(character.skills)
+#     available_subclasses = [c for c in character.classes if not c.subclass_is_picked()]
+#     is_warlock = character.has_class("Warlock")
+#     is_divine_soul = character.has_subclass("Divine Soul")
+#
+#     menu_list = []
+#     menu_list.append("View inventory")
+#     menu_list.append("Level up your character" if can_level_up else None)
+#     menu_list.append("Pick your free crafting profession" if has_profession else None)
+#     menu_list.append("Pick your subclass for {}".format(c) for c in available_subclasses)
+#     menu_list.append("Warlock Pack Boon choice" if is_warlock else None)
+#     menu_list.append("Divine Soul affinity spell choice" if is_divine_soul else None)
+#     return menu_list
+
 
 def menu(character_id: str):
     menu_list = ["View inventory"]
@@ -43,20 +59,8 @@ def menu(character_id: str):
 
 
 def character_info(character_id: str):
-    info_list = []
-
-    character = Character.CharacterFacade.interface.fetch(character_id)
-    classes = Character.CharacterClassFacade.interface.fetch(character_id)
-    feats = Character.CharacterFeatFacade.interface.fetch(character_id)
-    skills = Character.CharacterSkillFacade.interface.fetch(character_id)
-
-    info_list.append("**Name:** {}".format(character.name))
-    info_list.append("**Stats:** STR: {}, DEX: {}, CON: {}, INT: {}, WIS: {}, CHA: {}"
-                     .format(character.str, character.dex, character.con, character.int, character.wis, character.cha))
-    info_list.append("**Class:** {}".format(", ").join(c.__str__() for c in classes))
-    info_list.append("**Feats:** {}".format(", ".join(feat.name for feat in feats)))
-    info_list.append("**Skills:** {}".format(", ".join(skill.__str__() for skill in skills)))
-    return Quick_Python.list_to_table(info_list)
+    character = Character(character_id)
+    return character.formatted_character_info()
 
 
 def character_has_spells_to_view(character_id: str, class_name: str):

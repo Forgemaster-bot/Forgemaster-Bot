@@ -1,7 +1,12 @@
 from Player_Menu.Workshop_Menu import Scripts
+from Crafting.Crafting import craft_item_menu
+from Crafting.Utils import StopException
+from Crafting.Utils import ExitException
+from Character.Character import Character
 
 
 async def main_menu(self, command, discord_id: int, character_id: str):
+    character = Character(character_id)
     while True:
         choice = await menu_options(self, command, character_id)
         if choice == "Create a mundane item":
@@ -18,22 +23,30 @@ async def main_menu(self, command, discord_id: int, character_id: str):
                     return menu
                 elif menu == "stop":
                     return
-        elif choice == "Create a recipe guide":
-            await command.message.author.send("coming soon")
-        elif choice == "Experiment with essences":
-            while True:
-                menu = await experiment_menu(self, command, discord_id, character_id)
-                if menu == "exit":
-                    return menu
-                elif menu == "stop":
-                    return
-        elif choice == "View your recipes":
-            while True:
-                menu = await recipe_menu(self, command, character_id)
-                if menu == "exit":
-                    return menu
-                elif menu == "stop":
-                    return
+        # elif choice == "Create a recipe guide":
+        #     await command.message.author.send("coming soon")
+        # elif choice == "Experiment with essences":
+        #     while True:
+        #         menu = await experiment_menu(self, command, discord_id, character_id)
+        #         if menu == "exit":
+        #             return menu
+        #         elif menu == "stop":
+        #             return
+        # elif choice == "View your recipes":
+        #     while True:
+        #         menu = await recipe_menu(self, command, character_id)
+        #         if menu == "exit":
+        #             return menu
+        #         elif menu == "stop":
+        #             return
+        elif choice == "Experiment with thaumstyn":
+            try:
+                # while True:
+                await craft_item_menu(self, command, character, 'thaumstyn')
+            except StopException as e:
+                return
+            except ExitException as e:
+                return "exit"
         elif "Create a scroll from your " in choice:
             while True:
                 class_choice = choice.replace("Create a scroll from your ", "").replace(" spells", "")

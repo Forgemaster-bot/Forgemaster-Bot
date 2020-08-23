@@ -41,6 +41,7 @@ async def on_command_error(message, error):
         discord_id = message.author.id
         discord_command = message.message.clean_content
         Connections.sql_log_error(discord_id, discord_command, error.args[0])
+        print(error)
         await message.send(error)
 
 

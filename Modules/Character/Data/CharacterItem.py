@@ -18,4 +18,4 @@ class CharacterItem:
         return {s: getattr(self, s, None) for s in self.__slots__}
 
     def __str__(self):
-        return "{}x[{}]".format(self.quantity, self.name)
+        return "**{}**x[**{}**]".format(self.quantity, self.name)

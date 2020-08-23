@@ -15,3 +15,6 @@ class CharacterFeat:
         :return: [dict] dictionary of enumerated fields
         """
         return {s: getattr(self, s, None) for s in self.__slots__}
+
+    def __str__(self):
+        return self.name

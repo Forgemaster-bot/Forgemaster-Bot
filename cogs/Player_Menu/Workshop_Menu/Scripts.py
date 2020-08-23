@@ -14,7 +14,7 @@ def menu(character_id: str):
         SQL_Insert.crafting(character_id)
     menu_list = ["Create a mundane item",
                  "Create a consumable item",
-                 "View your recipes"]
+                 "Experiment with thaumstyn"]
     # "Create a recipe guide",
     # if caster
     number_of_classes = SQL_Lookup.character_count_classes(character_id)

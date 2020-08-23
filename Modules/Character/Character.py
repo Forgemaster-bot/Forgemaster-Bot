@@ -6,6 +6,15 @@ import Character.CharacterItemFacade as CharacterItemFacade
 from Character.Data.CharacterItem import CharacterItem
 
 
+def labelled_str(label, data):
+    return "**{}:** {}".format(label, data)
+
+
+def labelled_list(label, data: list):
+    csv = ", ".join(str(item) for item in data) if data else "None"
+    return labelled_str(label, csv)
+
+
 class Character:
 
     def __init__(self, character_id: str):
@@ -18,6 +27,9 @@ class Character:
 
     def has_class(self, name: str):
         return any(c for c in self.classes if c.name == name)
+
+    def has_either_class(self, *args):
+        return any(c for c in self.classes if c.name in args)
 
     def has_subclass(self, sub_class: str):
         return any(c for c in self.classes if c.sub_class == sub_class)
@@ -32,7 +44,7 @@ class Character:
         return any(s for s in self.skills if s.name == name and s.proficiency >= 0)
 
     def has_item(self, name: str):
-        return True if name in self.items else False
+        return True if (name in self.items) and (self.items[name].quantity > 0) else False
 
     def has_item_quantity(self, name: str, quantity: int):
         return True if (name in self.items) and (self.items[name].quantity >= quantity) else False
@@ -115,3 +127,43 @@ class Character:
 
     def refresh(self):
         self.__init__(self.info.character_id)
+
+    def formatted_name(self) -> str:
+        return labelled_str("Name", self.info.formatted_name())
+
+    def formatted_stats(self) -> str:
+        return labelled_str("Stats", self.info.formatted_stats())
+
+    def formatted_gold(self) -> str:
+        return labelled_str("Gold", self.info.formatted_gold())
+
+    def formatted_xp(self) -> str:
+        return labelled_str("XP", self.info.formatted_xp())
+
+    def formatted_classes(self) -> str:
+        return labelled_list("Classes", self.classes)
+
+    def formatted_feats(self) -> str:
+        return labelled_list("Feats", self.feats)
+
+    def formatted_skills(self) -> str:
+        return labelled_list("Skills", self.skills)
+
+    def formatted_items(self) -> str:
+        return labelled_list("Items", self.items.values())
+
+    def formatted_character_info(self):
+        info_list = [
+            self.formatted_name(),
+            self.formatted_stats(),
+            self.formatted_xp(),
+            self.formatted_classes(),
+            self.formatted_feats(),
+            self.formatted_skills(),
+            self.formatted_gold(),
+            self.formatted_items()
+        ]
+        return "\n".join(info_list)
+
+
+
