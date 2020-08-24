@@ -1,0 +1,889 @@
+outcome lists:
+  Blue Thaumstyn:
+    Spell_Gems:
+      Level_1: &Outcomes_Spell_Gems_Level_1
+        - Absorb Elements
+        - Color Spray
+        - Command
+        - Cure Wounds
+        - Earth Tremor
+        - Grease
+        - Guiding Bolt
+        - Long Strider
+        - Shield
+        - Thunderwave
+      Level_2: &Outcomes_Spell_Gems_Level_2
+        - Aganazzar's Scorcher
+        - Blindness/Deafness
+        - Darkvision
+        - Lesser Restoration
+        - Knock
+        - Melf's Acid Arrow
+        - Mirror Image
+        - Misty Step
+        - See Invisibility
+        - Shatter
+      Level_3: &Outcomes_Spell_Gems_Level_3
+        - Blink
+        - Daylight
+        - Dispel Magic
+        - Conjure Barrage
+        - Erupting Earth
+        - Fireball
+        - Life Transference
+        - Lightning Bolt
+        - Remove Curse
+        - Sending
+        - Speak With Dead
+        - Thunder Step
+        - Tongues
+        - Water Breathing
+        - Water Walk
+      Level_4: &Outcomes_Spell_Gems_Level_4
+        - Blight
+        - Charm Monster
+        - Death Ward
+        - Dimension Door
+        - Fire Shield
+        - Freedom of Movement
+        - Guardian of Faith
+        - Ice Storm
+        - Stone Shape
+        - Vitriolic Sphere
+      Level_5: &Outcomes_Spell_Gems_Level_5
+        - Cone of Cold
+        - Conjure Volley
+        - Destructive Wave
+        - Flame Strike
+        - Greater Restoration
+        - Maxx Cure Wounds
+        - Negative Energy Flood
+        - Passwall
+        - Seeming
+        - Steel Wind Strike
+        - Synaptic Static
+        - Transmute Rock
+      All: &Outcomes_Spell_Gems_All
+        - *Outcomes_Spell_Gems_Level_1
+        - *Outcomes_Spell_Gems_Level_2
+        - *Outcomes_Spell_Gems_Level_3
+        - *Outcomes_Spell_Gems_Level_4
+        - *Outcomes_Spell_Gems_Level_5
+  Red Thaumstyn:
+    Magic_Item:
+      Common:
+        Armor: &Outcomes_Magic_Item_Common_Armor
+  #        - Armor of Gleaming
+          - Breastplate of Gleaming
+          - Chain Mail of Gleaming
+          - Chain Shirt of Gleaming
+          - Half Plate Armor of Gleaming
+          - Hide Armor of Gleaming
+          - Leather Armor of Gleaming
+          - Padded Armor of Gleaming
+          - Plate Armor of Gleaming
+          - Ring Mail of Gleaming
+          - Scale Mail of Gleaming
+          - Spiked Armor of Gleaming
+          - Splint Armor of Gleaming
+          - Studded Leather Armor of Gleaming
+  #        - Cast-Off Armor
+          - Cast-Off Breastplate
+          - Cast-Off Chain Mail
+          - Cast-Off Chain Shirt
+          - Cast-Off Half Plate Armor
+          - Cast-Off Hide Armor
+          - Cast-Off Leather Armor
+          - Cast-Off Padded Leather Armor
+          - Cast-Off Plate Armor
+          - Cast-Off Ring Mail
+          - Cast-Off Scale Mail
+          - Cast-Off Spiked Armor
+          - Cast-Off Splint Armor
+          - Cast-Off Studded Leather Armor
+  #        - Smoldering Armor
+          - Smoldering Breastplate
+          - Smoldering Chain Mail
+          - Smoldering Chain Shirt
+          - Smoldering Half Plate Armor
+          - Smoldering Hide Armor
+          - Smoldering Leather Armor
+          - Smoldering Padded Leather Armor
+          - Smoldering Plate Armor
+          - Smoldering Ring Mail
+          - Smoldering Scale Mail
+          - Smoldering Spiked Armor
+          - Smoldering Splint Armor
+          - Smoldering Studded Leather Armor
+        Staff: &Outcomes_Magic_Item_Common_Staff
+          - Staff of Adornment
+          - Staff of Birdcalls
+          - Staff of Flowers
+        Wand: &Outcomes_Magic_Item_Common_Wand
+          - Wand of Conducting
+          - Wand of Pyrotechnics
+          - Wand of Scowls
+          - Wand of Smiles
+        Weapon: &Outcomes_Magic_Item_Common_Weapon
+          # Moon-Touched Sword
+          - Moon-Touched Greatsword
+          - Moon-Touched Longsword
+          - Moon-Touched Rapier
+          - Moon-Touched Scimitar
+          - Moon-Touched Shortsword
+        Wondrous: &Outcomes_Magic_Item_Common_Wondrous
+          - Bead of Nourishment
+          - Bead of Refreshment
+          - Boots of False Tricks
+          - Candle of the Deep
+          - Charlatan's Die
+          - Chest of Preserving
+          - Cloak of Billowing
+          - Cloak of Many Fashions
+          - Clockwork Amulet
+          - Clothes of Mending
+          - Dark Shard Amulet
+          - Dread Helm
+          - Ear Horn of Hearing
+          - Enduring Spellbook
+          - Ersatz Eye
+          - Hat of Vermin
+          - Hat of Wizardry
+          - Heward's Handy Spice Pouch
+          - Horn of Silent Alarm
+          - Lock of Trickery
+          - Mystery Key
+          - Orb of Direction
+          - Orb on Gonging
+          - Orb of Time
+          - Perfume of Bewitching
+          - Pipe of Remembrance
+          - Pipe of Smoke Monsters
+          - Pole of Angling
+          - Pole of Collapsing
+          - Pot of Awakening
+          - Pressure Capsule
+          - Rope of Mending
+          - Ruby of the War Mage
+          - Talking Doll
+          - Tankard of Sobriety
+          - Veteran's Cane
+          - Instrument of Illusions
+          - Instrument of Scribing
+        All: &Outcomes_Magic_Item_Common_All
+          - *Outcomes_Magic_Item_Common_Armor
+          - *Outcomes_Magic_Item_Common_Staff
+          - *Outcomes_Magic_Item_Common_Wand
+          - *Outcomes_Magic_Item_Common_Weapon
+          - *Outcomes_Magic_Item_Common_Wondrous
+
+#####################################################################################################################
+# 'Range' rules:
+# Definitions for random_outcome ranges within recipes. Only the base choices should really need maintenance.
+# The other options in here link anchors together. I.e. Links the rarity, slot, outcomes, and ranges anchors into one
+#####################################################################################################################
+Range_rules:
+  Red Thaumstyn:
+    Magic Item:
+      base: &Ranges_Magic_Item_Base_Ranges
+        fail range: &Ranges_Magic_Item_Base_Fail
+          label: "An extreme reaction in the thaumstyn occurs... The item frame changes and has been destroyed."
+          start: 1
+          stop: 25
+          outcomes: null
+        rarity range: &Ranges_Magic_Item_Base_Rarity
+          label: "A large reaction in the thaumstyn occurs... The item frame changes and a different item of the same rarity lies before you."
+          start: 26
+          stop: 50
+        slot range: &Ranges_Magic_Item_Base_Slot
+          label: "A medium reaction in the thaumstyn occurs... The item frame changes and a very similar item lies before you."
+          start: 51
+          stop: 75
+        succeed range: &Ranges_Magic_Item_Base_Succeed
+          label: "A small reaction in the thaumstyn occurs... The item frame changes and your desired item lies before you."
+          start: 76
+          stop: 100
+          original: True
+      Common:
+        #################################################################################################################
+        # Define 'Common' rarity base ranges. Each slot will use this and set their own slot range.
+        #################################################################################################################
+        ranges: &Ranges_Magic_Item_Common_Ranges
+          <<: *Ranges_Magic_Item_Base_Ranges
+          # Rarity range definition: Common
+          rarity range:
+            <<: *Ranges_Magic_Item_Base_Rarity
+            outcomes:
+              - *Outcomes_Magic_Item_Common_All
+        #################################################################################################################
+        # Begin defining slots by merging common range anchor in and setting the slot range
+        #################################################################################################################
+        Armor:  &Ranges_Magic_Item_Armor_Ranges
+          ranges:
+            <<: *Ranges_Magic_Item_Common_Ranges
+            # Slot definition: Armor
+            slot range:
+              <<: *Ranges_Magic_Item_Base_Slot
+              outcomes:
+                - *Outcomes_Magic_Item_Common_Armor
+        Staff: &Ranges_Magic_Item_Staff_Ranges
+          ranges:
+            <<: *Ranges_Magic_Item_Common_Ranges
+            # Slot definition: Staff
+            slot range:
+              <<: *Ranges_Magic_Item_Base_Slot
+              outcomes:
+                - *Outcomes_Magic_Item_Common_Staff
+        Wand: &Ranges_Magic_Item_Wand_Ranges
+          ranges:
+            <<: *Ranges_Magic_Item_Common_Ranges
+            # Slot definition: Wand
+            slot range:
+              <<: *Ranges_Magic_Item_Base_Slot
+              outcomes:
+                - *Outcomes_Magic_Item_Common_Wand
+        Weapon: &Ranges_Magic_Item_Weapon_Ranges
+          ranges:
+            <<: *Ranges_Magic_Item_Common_Ranges
+            # Slot definition: Weapon
+            slot range:
+              <<: *Ranges_Magic_Item_Base_Slot
+              outcomes:
+                - *Outcomes_Magic_Item_Common_Weapon
+        Wondrous: &Ranges_Magic_Item_Wondrous_Ranges
+          ranges:
+            <<: *Ranges_Magic_Item_Common_Ranges
+            # Slot definition: Wondrous
+            slot range:
+              <<: *Ranges_Magic_Item_Base_Slot
+              outcomes:
+                - *Outcomes_Magic_Item_Common_Wondrous
+
+
+
+
+#####################################################################################################################
+# 'Special' rules
+# Definitions for random_outcome anchors for use within recipes.
+#####################################################################################################################
+Special_rules:
+  Red Thaumstyn:
+    Magic Item:
+      base:
+      #################################################################################################################
+      # Define base rules for random outcome
+      #################################################################################################################
+        random outcome: &Special_Magic_Item_Base_Random_Outcome
+          die: 100
+      Common:
+      #################################################################################################################
+      # Define random outcome rules for each Common slot
+      #################################################################################################################
+        Armor: &Special_Magic_Item_Common_Armor_Random_Outcome
+          random outcome:
+            <<: *Special_Magic_Item_Base_Random_Outcome
+            <<: *Ranges_Magic_Item_Armor_Ranges
+        Staff: &Special_Magic_Item_Common_Staff_Random_Outcome
+          random outcome:
+            <<: *Special_Magic_Item_Base_Random_Outcome
+            <<: *Ranges_Magic_Item_Staff_Ranges
+        Wand: &Special_Magic_Item_Common_Wand_Random_Outcome
+          random outcome:
+            <<: *Special_Magic_Item_Base_Random_Outcome
+            <<: *Ranges_Magic_Item_Wand_Ranges
+        Weapon: &Special_Magic_Item_Common_Weapon_Random_Outcome
+          random outcome:
+            <<: *Special_Magic_Item_Base_Random_Outcome
+            <<: *Ranges_Magic_Item_Weapon_Ranges
+        Wondrous: &Special_Magic_Item_Common_Wondrous_Random_Outcome
+          random outcome:
+            <<: *Special_Magic_Item_Base_Random_Outcome
+            <<: *Ranges_Magic_Item_Wondrous_Ranges
+
+#####################################################################################################################
+# 'Recipe' rules
+# Definitions for random_outcome anchors for use within recipes.
+#####################################################################################################################
+recipe_rules:
+  Red Thaumstyn:
+    Magic Item:
+      #################################################################################################################
+      # Define base cost for crating magic items
+      #################################################################################################################
+      base: &Recipe_Magic_Item_Base_Cost
+        cost:
+          Red Dust: 100
+      Common:
+        #################################################################################################################
+        # Define recipe rules for each Common slot
+        #################################################################################################################
+        Armor: &Recipe_Magic_Item_Common_Armor_Rules
+          <<: *Recipe_Magic_Item_Base_Cost
+          special:
+            <<: *Special_Magic_Item_Common_Armor_Random_Outcome
+        Staff: &Recipe_Magic_Item_Common_Staff_Rules
+          <<: *Recipe_Magic_Item_Base_Cost
+          special:
+            <<: *Special_Magic_Item_Common_Staff_Random_Outcome
+        Wand: &Recipe_Magic_Item_Common_Wand_Rules
+          <<: *Recipe_Magic_Item_Base_Cost
+          special:
+            <<: *Special_Magic_Item_Common_Wand_Random_Outcome
+        Weapon: &Recipe_Magic_Item_Common_Weapon_Rules
+          <<: *Recipe_Magic_Item_Base_Cost
+          special:
+            <<: *Special_Magic_Item_Common_Weapon_Random_Outcome
+        Wondrous: &Recipe_Magic_Item_Common_Wondrous_Rules
+          <<: *Recipe_Magic_Item_Base_Cost
+          special:
+            <<: *Special_Magic_Item_Common_Wondrous_Random_Outcome
+
+
+
+#####################################################################################################################
+# 'Recipe' definitions:
+# Definitions for how to craft items.
+#####################################################################################################################
+recipes:
+  Blue Thaumstyn:
+    #################################################################################################################
+    # SPELL GEMS
+    #################################################################################################################
+    Spell Gems:
+      - 
+        name: Level 1 Spell Gem
+        prefix: Flickering Gem of
+        cost: 
+          Gold: 10
+          Blue Dust: 50
+        outcomes:
+          - *Outcomes_Spell_Gems_Level_1
+      - 
+        name: Level 2 Spell Gem
+        prefix: Steady Gem of
+        cost: 
+          Gold: 20
+          Blue Dust: 100
+        outcomes:
+          - *Outcomes_Spell_Gems_Level_2
+      -
+        name: Level 3 Spell Gem
+        prefix: Bright Gem of
+        cost: 
+          Gold: 30
+          Blue Dust: 150
+        outcomes:
+          - *Outcomes_Spell_Gems_Level_3
+      - 
+        name: Level 4 Spell Gem
+        prefix: Radiant Gem of
+        cost: 
+          Gold: 40
+          Blue Dust: 200
+        outcomes:
+          - *Outcomes_Spell_Gems_Level_4
+      -
+        name: Level 5 Spell Gem
+        prefix: Flawless Gem of
+        cost: 
+          Gold: 50
+          Blue Dust: 250
+        outcomes:
+          - *Outcomes_Spell_Gems_Level_5
+
+  Red Thaumstyn:
+  #################################################################################################################
+  # WAND AMMO
+  #################################################################################################################
+    Wand Ammo:
+      - 
+        name: Wand of Fireball Ammo
+        prereq:
+          has_item: Wand of Fireball
+          has_item_quantity_by_keyword:
+            Red Dust: 10
+        cost:
+          Red Dust: 1
+        special:
+          random amount:
+            die: 6
+            mod: 1
+        outcomes:
+          - Wand of Fireball Ammo
+
+
+#    Magic Item:
+#      Common:
+#        Armor:
+#          -
+#            # TODO: Have user select from original outcomes and just name this 'Armor of Gleaming'?
+#            name: Breastplate of Gleaming
+#            <<: *Recipe_Magic_Item_Common_Armor_Rules
+#            outcomes:
+#              - Breastplate of Gleaming
+#  Holy Water:
+#    -
+#      name: Holy Water Flask
+#      prereq:
+#        has_either_class:
+#        - Cleric
+#        - Paladin
+#      cost:
+#        Gold: 25
+#      outcomes:
+#      - Holy Water Flask
+  #################################################################################################################
+  # MAGIC ITEM CRAFTING
+  #################################################################################################################
+    Magic Item:
+      Common:
+        Armor:
+          -
+            name: Breastplate of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Breastplate of Gleaming
+          -
+            name: Chain Mail of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Chain Mail of Gleaming
+          -
+            name: Chain Shirt of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Chain Shirt of Gleaming
+          -
+            name: Half Plate Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Half Plate Armor of Gleaming
+          -
+            name: Hide Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Hide Armor of Gleaming
+          -
+            name: Leather Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Leather Armor of Gleaming
+          -
+            name: Padded Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Padded Armor of Gleaming
+          -
+            name: Plate Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Plate Armor of Gleaming
+          -
+            name: Ring Mail of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Ring Mail of Gleaming
+          -
+            name: Scale Mail of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Scale Mail of Gleaming
+          -
+            name: Spiked Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Spiked Armor of Gleaming
+          -
+            name: Splint Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Splint Armor of Gleaming
+          -
+            name: Studded Leather Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Studded Leather Armor of Gleaming
+          -
+            name: Cast-Off Breastplate
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Breastplate
+          -
+            name: Cast-Off Chain Mail
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Chain Mail
+          -
+            name: Cast-Off Chain Shirt
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Chain Shirt
+          -
+            name: Cast-Off Half Plate Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Half Plate Armor
+          -
+            name: Cast-Off Hide Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Hide Armor
+          -
+            name: Cast-Off Leather Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Leather Armor
+          -
+            name: Cast-Off Padded Leather Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Padded Leather Armor
+          -
+            name: Cast-Off Plate Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Plate Armor
+          -
+            name: Cast-Off Ring Mail
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Ring Mail
+          -
+            name: Cast-Off Scale Mail
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Scale Mail
+          -
+            name: Cast-Off Spiked Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Spiked Armor
+          -
+            name: Cast-Off Splint Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Splint Armor
+          -
+            name: Cast-Off Studded Leather Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Studded Leather Armor
+          -
+            name: Smoldering Breastplate
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Breastplate
+          -
+            name: Smoldering Chain Mail
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Chain Mail
+          -
+            name: Smoldering Chain Shirt
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Chain Shirt
+          -
+            name: Smoldering Half Plate Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Half Plate Armor
+          -
+            name: Smoldering Hide Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Hide Armor
+          -
+            name: Smoldering Leather Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Leather Armor
+          -
+            name: Smoldering Padded Leather Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Padded Leather Armor
+          -
+            name: Smoldering Plate Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Plate Armor
+          -
+            name: Smoldering Ring Mail
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Ring Mail
+          -
+            name: Smoldering Scale Mail
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Scale Mail
+          -
+            name: Smoldering Spiked Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Spiked Armor
+          -
+            name: Smoldering Splint Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Splint Armor
+          -
+            name: Smoldering Studded Leather Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Studded Leather Armor
+        Staff:
+          -
+            name: Staff of Adornment
+            <<: *Recipe_Magic_Item_Common_Staff_Rules
+            outcomes:
+              - Staff of Adornment
+          -
+            name: Staff of Birdcalls
+            <<: *Recipe_Magic_Item_Common_Staff_Rules
+            outcomes:
+              - Staff of Birdcalls
+          -
+            name: Staff of Flowers
+            <<: *Recipe_Magic_Item_Common_Staff_Rules
+            outcomes:
+              - Staff of Flowers
+        Wand:
+          -
+            name: Wand of Conducting
+            <<: *Recipe_Magic_Item_Common_Wand_Rules
+            outcomes:
+              - Wand of Conducting
+          -
+            name: Wand of Pyrotechnics
+            <<: *Recipe_Magic_Item_Common_Wand_Rules
+            outcomes:
+              - Wand of Pyrotechnics
+          -
+            name: Wand of Scowls
+            <<: *Recipe_Magic_Item_Common_Wand_Rules
+            outcomes:
+              - Wand of Scowls
+          -
+            name: Wand of Smiles
+            <<: *Recipe_Magic_Item_Common_Wand_Rules
+            outcomes:
+              - Wand of Smiles
+        Weapon:
+          -
+            name: Moon-Touched Greatsword
+            <<: *Recipe_Magic_Item_Common_Weapon_Rules
+            outcomes:
+              - Moon-Touched Greatsword
+          -
+            name: Moon-Touched Longsword
+            <<: *Recipe_Magic_Item_Common_Weapon_Rules
+            outcomes:
+              - Moon-Touched Longsword
+          -
+            name: Moon-Touched Rapier
+            <<: *Recipe_Magic_Item_Common_Weapon_Rules
+            outcomes:
+              - Moon-Touched Rapier
+          -
+            name: Moon-Touched Scimitar
+            <<: *Recipe_Magic_Item_Common_Weapon_Rules
+            outcomes:
+              - Moon-Touched Scimitar
+          -
+            name: Moon-Touched Shortsword
+            <<: *Recipe_Magic_Item_Common_Weapon_Rules
+            outcomes:
+              - Moon-Touched Shortsword
+        Wondrous:
+          -
+            name: Bead of Nourishment
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Bead of Nourishment
+          -
+            name: Bead of Refreshment
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Bead of Refreshment
+          -
+            name: Boots of False Tricks
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Boots of False Tricks
+          -
+            name: Candle of the Deep
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Candle of the Deep
+          -
+            name: Charlatan's Die
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Charlatan's Die
+          -
+            name: Chest of Preserving
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Chest of Preserving
+          -
+            name: Cloak of Billowing
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Cloak of Billowing
+          -
+            name: Cloak of Many Fashions
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Cloak of Many Fashions
+          -
+            name: Clockwork Amulet
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Clockwork Amulet
+          -
+            name: Clothes of Mending
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Clothes of Mending
+          -
+            name: Dark Shard Amulet
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Dark Shard Amulet
+          -
+            name: Dread Helm
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Dread Helm
+          -
+            name: Ear Horn of Hearing
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Ear Horn of Hearing
+          -
+            name: Enduring Spellbook
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Enduring Spellbook
+          -
+            name: Ersatz Eye
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Ersatz Eye
+          -
+            name: Hat of Vermin
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Hat of Vermin
+          -
+            name: Hat of Wizardry
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Hat of Wizardry
+          -
+            name: Heward's Handy Spice Pouch
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Heward's Handy Spice Pouch
+          -
+            name: Horn of Silent Alarm
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Horn of Silent Alarm
+          -
+            name: Lock of Trickery
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Lock of Trickery
+          -
+            name: Mystery Key
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Mystery Key
+          -
+            name: Orb of Direction
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Orb of Direction
+          -
+            name: Orb on Gonging
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Orb on Gonging
+          -
+            name: Orb of Time
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Orb of Time
+          -
+            name: Perfume of Bewitching
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Perfume of Bewitching
+          -
+            name: Pipe of Remembrance
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Pipe of Remembrance
+          -
+            name: Pipe of Smoke Monsters
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Pipe of Smoke Monsters
+          -
+            name: Pole of Angling
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Pole of Angling
+          -
+            name: Pole of Collapsing
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Pole of Collapsing
+          -
+            name: Pot of Awakening
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Pot of Awakening
+          -
+            name: Pressure Capsule
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Pressure Capsule
+          -
+            name: Rope of Mending
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Rope of Mending
+          -
+            name: Ruby of the War Mage
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Ruby of the War Mage
+          -
+            name: Talking Doll
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Talking Doll
+          -
+            name: Tankard of Sobriety
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Tankard of Sobriety
+          -
+            name: Veteran's Cane
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Veteran's Cane
+          -
+            name: Instrument of Illusions
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Instrument of Illusions
+          -
+            name: Instrument of Scribing
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Instrument of Scribing

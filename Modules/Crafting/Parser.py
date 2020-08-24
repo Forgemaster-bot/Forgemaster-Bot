@@ -2,7 +2,7 @@ import yaml
 import os
 
 config_env_var = "CRAFTING_CONFIG_PATH"
-default_path = os.path.join('Credentials')
+default_path = os.path.join('yaml')
 
 
 def get_path():
