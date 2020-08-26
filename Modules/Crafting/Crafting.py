@@ -17,9 +17,10 @@ async def craft_item_menu(cog, context, character, file_label):
     """
     available_recipes = data['recipes']
     recipe = await Crafting.Utils.ask_user_to_select_recipe(cog, context, available_recipes, file_label)
-    if await Crafting.Utils.verify_prerequisites(context, character, recipe):
-        if await Crafting.Utils.recipe_confirm(cog, context, recipe):
-            await craft_recipe(cog, context, character, recipe)
+    if recipe is not None:
+        if await Crafting.Utils.verify_prerequisites(context, character, recipe):
+            if await Crafting.Utils.recipe_confirm(cog, context, recipe):
+                await craft_recipe(cog, context, character, recipe)
 
     await Crafting.Utils.send_message(context, "Returning to menu.")
     return

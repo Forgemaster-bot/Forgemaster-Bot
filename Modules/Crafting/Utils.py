@@ -146,7 +146,13 @@ async def query_until_recipe(cog, context, data, label):
     :param label: name of current category
     :return: non-dictionary value
     """
-    if isinstance(data, dict):
+    if not data:
+        """
+        No entries available 
+        """
+        await send_message(context, f"No valid recipes exist for **{label}**")
+        return None
+    elif isinstance(data, dict):
         """
         Query user to select next dict to parse and recurse.
         """
