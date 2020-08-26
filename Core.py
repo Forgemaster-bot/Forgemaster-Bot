@@ -22,9 +22,9 @@ bot = commands.Bot(command_prefix="$", description="The Lost World Helper Bot")
 
 
 # List cog files then load them in
-initial_extensions = ['cogs.DM Commands', 'cogs.Utility Commands',
-                      'cogs.Mod_Commands', 'cogs.Player_Menu_Commands']
-
+initial_extensions = ['cogs.DM', 'cogs.Utility',
+                      'cogs.Mod', 'cogs.Player',
+                      'cogs.Admin']
 
 if __name__ == '__main__':
     for extension in initial_extensions:

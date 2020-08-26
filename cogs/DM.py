@@ -6,11 +6,11 @@ from DM_Menu import SQL_Lookup
 import Connections
 
 
-class DM_Commands(commands.Cog):
+class DMCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='CharacterKill', help="[Character Name],[Reason]")
+    @commands.command(name='CharacterKill', help="[Character Name],[Reason]", aliases=['KillCharacter'])
     @commands.check_any(commands.has_role('Admins'), commands.has_role('DMs'))
     async def kill_character(self, command):
         trim_message = command.message.content.replace('$CharacterKill ', '')
@@ -112,4 +112,4 @@ class DM_Commands(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(DM_Commands(bot))
+    bot.add_cog(DMCog(bot))

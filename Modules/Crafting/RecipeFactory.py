@@ -1,21 +1,14 @@
 # TODO: Cleanup validate_special_field functions. These can definitely be refactored into a lookup table.
 import random
 import types
-# from itertools import chain
-
-
-def flatten(S):
-    if not S:
-        return S
-    if isinstance(S[0], list):
-        return flatten(S[0]) + flatten(S[1:])
-    return S[:1] + flatten(S[1:])
+import Quick_Python
 
 
 class RecipeResult:
-    def __init__(self, result, message):
+    def __init__(self, result, message, prereq_message=None):
         self.result = result
         self.message = message
+        self.prereq_message = prereq_message
 
 
 class Recipe:
@@ -32,6 +25,7 @@ class Recipe:
                                    If any of these return 'False', then the item is not crafted but costs are removed.
             - amount = Quantity of item to make. Default: 1
         """
+        self.name = None
         self.amount = 1
         self.cost = None
         self.outcomes = None
@@ -61,18 +55,17 @@ class Recipe:
         special_step_result = [step.execute(self, character) for step in self.special_steps]
         self.__remove_costs(character)
 
-        result_message = ""
+        prereq_messages = []
         for step in special_step_result:
             if not step.result:
                 return step
-            if step.message is not None:
-                result_message = f"{result_message}\n{step.message}"
+            prereq_messages.append(step.message)
 
         item_crafted = self.__create_item()
         character.modify_item_amount(item_crafted, self.amount)
 
-        result_message = f"{result_message}\nYou successfully crafted **{self.amount}x[{item_crafted}]**"
-        return RecipeResult(True, result_message)
+        result_message = f"You successfully crafted **{self.amount}x[{item_crafted}]**"
+        return RecipeResult(True, result_message, "\n".join(m for m in prereq_messages if m))
         
     def __remove_costs(self, character) -> None:
         """
@@ -88,7 +81,7 @@ class Recipe:
         Returns item name by randomly selecting an outcome and prefixing it with prefix attribute.
         :return: str - item name
         """
-        flattened_outcomes = flatten(self.outcomes)
+        flattened_outcomes = Quick_Python.flatten(self.outcomes)
         outcome = random.sample(flattened_outcomes, 1)[0]
         return " ".join(item for item in [self.prefix, outcome] if item)
 
@@ -123,7 +116,7 @@ def validate_special_field_int(step, data: dict, key, recipe):
     value = data[key]
     try:
         setattr(step, key, int(value))
-    except ValueError as err:
+    except ValueError:
         raise ValueError(f"Non-integer value '{value}' in step '{step.step_label}' and field '{key}' for {str(recipe)}")
 
 
@@ -133,7 +126,7 @@ def validate_special_field_bool(step, data: dict, key, recipe):
     value = data[key]
     try:
         setattr(step, key, bool(value))
-    except ValueError as err:
+    except ValueError:
         raise ValueError(f"Non-boolean value '{value}' in step '{step.step_label}' and field '{key}' for {str(recipe)}")
 
 
@@ -172,6 +165,9 @@ class DifficultyClassCheckStep:
     step_label = 'dc check'
 
     def __init__(self):
+        self.dc = None
+        self.die = None
+        self.mod = None
         self.fields = ['die', 'mod', 'dc']
 
     def validate_fields(self, recipe: Recipe):
@@ -181,7 +177,7 @@ class DifficultyClassCheckStep:
             validate_special_field_int(self, data_dict, option, recipe)
         return self
 
-    def execute(self, recipe: Recipe, character) -> RecipeResult:
+    def execute(self, recipe: Recipe = None, character=None) -> RecipeResult:
         roll = random.randint(1, self.die)
         result = (roll + self.mod) >= self.dc
         message = "" if result else f"DC not met. Roll={roll}; Mod={self.mod}; DC={self.dc};"
@@ -204,6 +200,8 @@ class RandomAmountStep:
     step_label = 'random amount'
 
     def __init__(self):
+        self.mod = None
+        self.die = None
         self.fields = ['die', 'mod']
 
     def validate_fields(self, recipe: Recipe):
@@ -240,6 +238,7 @@ class RandomOutcomeStep:
     step_label = 'random outcome'
 
     def __init__(self):
+        self.die = None
         self.field_label_die = 'die'
         self.field_label_ranges = 'ranges'
         self.field_label_ranges_label = 'label'

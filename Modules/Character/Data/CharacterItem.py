@@ -17,5 +17,8 @@ class CharacterItem:
         """
         return {s: getattr(self, s, None) for s in self.__slots__}
 
+    def roster_str(self):
+        return f"{self.name} ({self.quantity})"
+
     def __str__(self):
         return "**{}**x[**{}**]".format(self.quantity, self.name)

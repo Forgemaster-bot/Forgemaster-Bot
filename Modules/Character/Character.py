@@ -1,18 +1,13 @@
+import math
+import Quick_Python
+import Character.Data.LevelExperience as LevelExperience
 import Character.CharacterInfoFacade as CharacterInfoFacade
 import Character.CharacterClassFacade as CharacterClassFacade
 import Character.CharacterFeatFacade as CharacterFeatFacade
 import Character.CharacterSkillFacade as CharacterSkillFacade
 import Character.CharacterItemFacade as CharacterItemFacade
 from Character.Data.CharacterItem import CharacterItem
-
-
-def labelled_str(label, data):
-    return "**{}:** {}".format(label, data)
-
-
-def labelled_list(label, data: list):
-    csv = ", ".join(str(item) for item in data) if data else "None"
-    return labelled_str(label, csv)
+from Connections import RosterColumns
 
 
 class Character:
@@ -22,26 +17,32 @@ class Character:
         self.classes = CharacterClassFacade.interface.fetch(character_id)
         self.feats = CharacterFeatFacade.interface.fetch(character_id)
         self.skills = CharacterSkillFacade.interface.fetch(character_id)
-        # self.items = CharacterItemFacade.interface.fetch(character_id)
         self.items = {i.name: i for i in CharacterItemFacade.interface.fetch(character_id)}
 
+    def refresh_info(self):
+        self.info = CharacterInfoFacade.interface.fetch(self.info.character_id)
+
+    def refresh_items(self):
+        self.items = {i.name: i for i in CharacterItemFacade.interface.fetch(self.info.character_id)}
+
     def has_class(self, name: str):
-        return any(c for c in self.classes if c.name == name)
+        return any(c for c in self.classes if c.name.lower() == name.lower())
 
     def has_either_class(self, *args):
-        return any(c for c in self.classes if c.name in args)
+        names = [name.lower() for name in args]
+        return any(c for c in self.classes if c.name in names)
 
     def has_subclass(self, sub_class: str):
-        return any(c for c in self.classes if c.sub_class == sub_class)
+        return any(c for c in self.classes if c.sub_class.lower() == sub_class.lower())
 
     def has_feat(self, name: str):
-        return any(f for f in self.feats if f.name == name)
+        return any(f for f in self.feats if f.name.lower() == name.lower())
 
     def has_skill(self, name: str):
-        return any(s for s in self.skills if s.name == name)
+        return any(s for s in self.skills if s.name.lower() == name.lower())
 
     def has_skill_proficiency(self, name: str):
-        return any(s for s in self.skills if s.name == name and s.proficiency >= 0)
+        return any(s for s in self.skills if s.name.lower() == name.lower() and s.proficiency >= 0)
 
     def has_item(self, name: str):
         return True if (name in self.items) and (self.items[name].quantity > 0) else False
@@ -49,22 +50,31 @@ class Character:
     def has_item_quantity(self, name: str, quantity: int):
         return True if (name in self.items) and (self.items[name].quantity >= quantity) else False
 
+    def has_level(self, level: int):
+        return True if (self.get_character_level() >= level) else False
+
     def has_item_quantity_by_keyword(self, **kwargs):
         # Check gold
         if "Gold" in kwargs:
+            self.refresh_info()
             if self.get_gold() < kwargs.pop("Gold"):
                 return False
         # Check remaining items
+        self.refresh_items()
         matches = {k: v for k, v in kwargs.items() if (k in self.items) and (self.items[k].quantity >= v)}
         return len(kwargs) == len(matches)
 
     def get_character_level(self):
         return sum(c.level for c in self.classes)
 
+    def get_xp(self):
+        return self.info.xp
+
     def can_level_up(self):
-        raise NotImplemented("XP info not implemented yet")
+        return LevelExperience.can_level_up(self.get_character_level(), self.get_xp())
 
     def get_gold(self):
+        self.refresh_info()
         return self.info.gold
 
     def set_item_amount(self, name: str, amount: int):
@@ -75,7 +85,7 @@ class Character:
 
         if name in self.items:
             item = self.items[name]
-            item.quantity += amount
+            item.quantity = amount
             CharacterItemFacade.interface.update(item)
         else:
             item = CharacterItem(character_id=self.info.character_id, name=name, quantity=amount)
@@ -84,14 +94,18 @@ class Character:
 
     def modify_item_amount(self, name: str, amount):
         if name == "Gold":
+            self.refresh_info()
             new_quantity = self.info.gold + amount
             if new_quantity >= 0:
                 self.info.gold += amount
                 CharacterInfoFacade.interface.update(self.info)
+                return
             else:
                 raise RuntimeError("modify_item_amount cannot remove gold due to lack of quantity. {} > {}"
                                    .format(amount, self.info.gold))
-        elif name in self.items:
+
+        self.refresh_items()
+        if name in self.items:
             # update existing quantity if item already exists
             item = self.items[name]
             new_quantity = item.quantity + amount
@@ -129,28 +143,28 @@ class Character:
         self.__init__(self.info.character_id)
 
     def formatted_name(self) -> str:
-        return labelled_str("Name", self.info.formatted_name())
+        return Quick_Python.labelled_str("Name", self.info.formatted_name())
 
     def formatted_stats(self) -> str:
-        return labelled_str("Stats", self.info.formatted_stats())
+        return Quick_Python.labelled_str("Stats", self.info.formatted_stats())
 
     def formatted_gold(self) -> str:
-        return labelled_str("Gold", self.info.formatted_gold())
+        return Quick_Python.labelled_str("Gold", self.info.formatted_gold())
 
     def formatted_xp(self) -> str:
-        return labelled_str("XP", self.info.formatted_xp())
+        return Quick_Python.labelled_str("XP", self.info.formatted_xp())
 
     def formatted_classes(self) -> str:
-        return labelled_list("Classes", self.classes)
+        return Quick_Python.labelled_list("Classes", self.classes)
 
     def formatted_feats(self) -> str:
-        return labelled_list("Feats", self.feats)
+        return Quick_Python.labelled_list("Feats", self.feats)
 
     def formatted_skills(self) -> str:
-        return labelled_list("Skills", self.skills)
+        return Quick_Python.labelled_list("Skills", self.skills)
 
     def formatted_items(self) -> str:
-        return labelled_list("Items", self.items.values())
+        return Quick_Python.labelled_list("Items", list(self.items.values()))
 
     def formatted_character_info(self):
         info_list = [
@@ -165,5 +179,43 @@ class Character:
         ]
         return "\n".join(info_list)
 
+    def item_list_as_str(self):
+        return Quick_Python.list_to_string(list(self.items.values()))
 
+    def item_list_as_roster_str(self):
+        return Quick_Python.list_to_string([item.roster_str() for item in self.items.values()])
 
+    def feat_list_as_str(self):
+        return Quick_Python.list_to_string(self.feats)
+
+    def skills_list_as_str(self):
+        return Quick_Python.list_to_string(self.skills)
+
+    def get_roster_data(self):
+        # list = [None] * (RosterColumns.END-1)
+        roster_dict = {
+            RosterColumns.DISCORD_NAME: Quick_Python.lookup_player_name_by_id(self.info.discord_id),
+            RosterColumns.CHARACTER_NAME: self.info.name,
+            RosterColumns.RACE: self.info.race,
+            RosterColumns.BACKGROUND: self.info.background,
+            RosterColumns.CLASS_1: self.classes[0] if 0 < len(self.classes) else None,
+            RosterColumns.CLASS_2: self.classes[1] if 1 < len(self.classes) else None,
+            RosterColumns.CLASS_3: self.classes[2] if 2 < len(self.classes) else None,
+            RosterColumns.EXPERIENCE: self.info.xp,
+            RosterColumns.LEVEL: self.get_character_level(),
+            RosterColumns.LEVELUP: self.can_level_up(),
+            RosterColumns.STR: self.info.str,
+            RosterColumns.DEX: self.info.dex,
+            RosterColumns.CON: self.info.con,
+            RosterColumns.INT: self.info.int,
+            RosterColumns.WIS: self.info.wis,
+            RosterColumns.CHA: self.info.cha,
+            RosterColumns.GOLD: self.info.gold,
+            RosterColumns.FEATS: self.feat_list_as_str(),
+            RosterColumns.SKILLS: self.skills_list_as_str(),
+            RosterColumns.ITEMS: self.item_list_as_roster_str()
+        }
+        return roster_dict
+
+    def get_proficiency_bonus(self):
+        return math.ciel(self.get_character_level() * (1 / 4)) + 1

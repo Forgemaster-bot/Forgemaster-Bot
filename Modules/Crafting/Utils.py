@@ -1,6 +1,8 @@
 from Crafting.RecipeFactory import create_recipe
 import asyncio
 
+available_prereq = ['has_class', 'has_item', 'has_feat', 'has_skill', 'has_skill_proficiency', 'has_level',
+                    'has_item_quantity_by_keyword', 'has_subclass', 'has_either_class']
 
 class StopException(Exception):
     """
@@ -25,7 +27,10 @@ async def send_message(context, message) -> None:
     :param message: message to send to user.
     :return: None
     """
-    await context.message.author.send(message)
+    if message is None:
+        print("Send_message was called with None value.")
+    else:
+        await context.message.author.send(message)
     # print(message)
 
 
@@ -171,9 +176,6 @@ async def recipe_confirm(cog, context, recipe):
 async def ask_user_to_select_recipe(cog, context, data: dict, label):
     recipe_dict = await query_until_recipe(cog, context, data, label)
     return create_recipe(recipe_dict)
-
-available_prereq = ['has_class', 'has_item', 'has_feat', 'has_skill', 'has_skill_proficiency',
-                    'has_item_quantity_by_keyword', 'has_subclass', 'has_either_class']
 
 
 async def verify_prerequisites(context, character, recipe) -> bool:

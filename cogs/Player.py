@@ -16,12 +16,12 @@ def get_character_limit(command: commands.Context):
     return character_limit + PatreonStatus.get(command)
 
 
-class Player_Menu_Commands(commands.Cog):
+class PlayerCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     # Menu
-    @commands.command(name='Menu', help="in development ")
+    @commands.command(name='Menu', help="Main Player Menu", aliases=['menu'])
     async def player_menu(self, command):
         discord_id = command.message.author.id
         # welcome message
@@ -73,7 +73,7 @@ class Player_Menu_Commands(commands.Cog):
         await command.message.author.send("Menu closed")
 
     # Roll StatsPatreonStatus
-    @commands.command(name='randchar', help='Roll character stats')
+    @commands.command(name='randchar', help='Roll character stats', aliases=['rollstats'])
     async def dice_roll(self, command):
         discord_id = str(command.message.author.id)
         discord_name = str(command.message.author.display_name)
@@ -349,4 +349,4 @@ class Player_Menu_Commands(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Player_Menu_Commands(bot))
+    bot.add_cog(PlayerCog(bot))

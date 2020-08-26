@@ -123,4 +123,3 @@ def character_has_item(character_id: str, item_name: str):
     if result is None:
         return False
     return True
-

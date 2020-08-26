@@ -1,15 +1,15 @@
 import unittest
-# from unittest import mock
 from unittest.mock import patch
+import asyncio
+
 import Crafting.Crafting
 import Crafting.Utils
 import Crafting.Parser
-from Crafting.Utils import StopException
-from Crafting.Utils import ExitException
-import Character.Character
 import Crafting.RecipeFactory
-import asyncio
-import random
+import Character.Character
+import Connections
+
+from Crafting.Utils import ExitException
 
 
 sent_messages = []
@@ -35,6 +35,17 @@ def async_test(f):
         loop = asyncio.get_event_loop()
         loop.run_until_complete(future)
     return wrapper
+
+
+class MockBot:
+    def get_channel(self, id):
+        return None
+
+
+class MockCog:
+    bot = MockBot()
+
+
 
 
 character_id = "E4CEFA15-B3C7-4B6E-8EA9-DC140B5D0338"
@@ -70,7 +81,8 @@ class MyTestCase(unittest.TestCase):
 
     @patch('Crafting.Utils.send_message', side_effect=mock_send_message)
     @patch('Crafting.Utils.wait_for_reply', side_effect=mock_wait_for_reply)
-    def test_magic_item_crafting(self, mock_msg, mock_reply):
+    @patch('Update_Google_Roster.update_character_in_roster')
+    def test_magic_item_crafting(self, mock_msg, mock_reply, mock_update):
 
         event_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(event_loop)
@@ -79,8 +91,8 @@ class MyTestCase(unittest.TestCase):
             global replies
             global sent_messages
 
-            exp_recipe_name = "Breastplate of Gleaming"
-            exp_message = "1 : Breastplate of Gleaming"
+            exp_recipe_name = "Leather Armor of Gleaming"
+            exp_message = "1 : Leather Armor of Gleaming"
             replies = ['2', '2', '1', '1', '1', 'Yes']
             replies.reverse()
             sent_messages.clear()
@@ -95,8 +107,8 @@ class MyTestCase(unittest.TestCase):
             # random_outcome success range
             with patch('random.randint', return_value=100) as mock_random:
                 exp_message1 = "You rolled '100'."
-                exp_message2 = "You successfully crafted **1x[Breastplate of Gleaming]**"
-                await Crafting.Crafting.craft_recipe(None, None, character, recipe)
+                exp_message2 = f"You successfully crafted **1x[{exp_recipe_name}]**"
+                await Crafting.Crafting.craft_recipe(MockCog(), None, character, recipe)
                 assert(any([True for msg in sent_messages if exp_message1 in msg]))
                 assert (any([True for msg in sent_messages if exp_message2 in msg]))
 
@@ -105,7 +117,7 @@ class MyTestCase(unittest.TestCase):
                 exp_message1 = "You rolled '70'."
                 exp_message2 = f"You successfully crafted **1x["
 
-                await Crafting.Crafting.craft_recipe(None, None, character, recipe)
+                await Crafting.Crafting.craft_recipe(MockCog(), None, character, recipe)
                 assert (any([True for msg in sent_messages if exp_message1 in msg]))
                 assert (any([True for msg in sent_messages if exp_message2 in msg]))
 
@@ -114,7 +126,7 @@ class MyTestCase(unittest.TestCase):
                 exp_message1 = "You rolled '30'."
                 exp_message2 = f"You successfully crafted **1x["
 
-                await Crafting.Crafting.craft_recipe(None, None, character, recipe)
+                await Crafting.Crafting.craft_recipe(MockCog(), None, character, recipe)
                 assert (any([True for msg in sent_messages if exp_message1 in msg]))
                 assert (any([True for msg in sent_messages if exp_message2 in msg]))
 
@@ -123,9 +135,9 @@ class MyTestCase(unittest.TestCase):
                 exp_message1 = "You rolled '5'."
                 exp_message2 = f"Crafting failed"
 
-                await Crafting.Crafting.craft_recipe(None, None, character, recipe)
-                assert (any([True for msg in sent_messages if exp_message1 in msg]))
-                assert (any([True for msg in sent_messages if exp_message2 in msg]))
+                await Crafting.Crafting.craft_recipe(MockCog(), None, character, recipe)
+                assert (any([True for msg in sent_messages if msg if exp_message1 in msg]))
+                assert (any([True for msg in sent_messages if msg if exp_message2 in msg]))
 
         # Run the async test
         coro = asyncio.coroutine(run_test)

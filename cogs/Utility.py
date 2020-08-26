@@ -2,7 +2,7 @@ from discord.ext import commands
 from Utility_Menu import Scripts
 
 
-class Support_Commands(commands.Cog):
+class UtilityCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -24,4 +24,4 @@ class Support_Commands(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Support_Commands(bot))
+    bot.add_cog(UtilityCog(bot))

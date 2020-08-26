@@ -11,8 +11,11 @@ class Mod_Commands(commands.Cog):
         self.bot = bot
 
     # Character
-    @commands.command(name='Create', help="[Discord ID],[Character name],[Race],[Background],[Class],"
-                                          "[Str],[Dex],[Con],[Int],[Wis],[Cha],[Gold]")
+    @commands.command(name='Create',
+                      help="[Discord ID],[Character name],[Race],[Background],"
+                           "[Class],[Str],[Dex],[Con],[Int],[Wis],[Cha],[Gold]",
+                      aliases=['create']
+                      )
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def create_character(self, command):
         trim_message = command.message.content.replace('$Create ', '')
@@ -32,7 +35,7 @@ class Mod_Commands(commands.Cog):
                     await command.send("Create character command stopped")
                     break
 
-    @commands.command(name='Refresh', help='[Character]')
+    @commands.command(name='Refresh', help='[Character]', aliases=['refresh'])
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def character_refresh(self, command):
         trim_message = command.message.content.replace('$Refresh ', '')
@@ -89,7 +92,8 @@ class Mod_Commands(commands.Cog):
                                         "\n1) [Character Name], [Item:Quantity], [Item:Quantity]..."
                                         "\nExample - Cogs,Dagger:2, Pickaxe:3"
                                         "\n2) [Item Name], [Character Name:Quantity], [Character Name:Quantity]"
-                                        "\nExample - Rations, Cogs:4,Ratagan:-2")
+                                        "\nExample - Rations, Cogs:4,Ratagan:-2",
+                      aliases=['item'])
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def item(self, command):
         trim_message = command.message.content.replace('$Item ', '')
@@ -113,7 +117,7 @@ class Mod_Commands(commands.Cog):
     # NPC
     @commands.command(name='NPC', help="[NPC Name]:[Dialog]")
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
-    async def stat_change(self, command):
+    async def npc_say(self, command):
         await command.message.delete()
         trim_message = command.message.content.replace('$NPC ', '')
         response = Scripts.npc_talk_execute(trim_message)
