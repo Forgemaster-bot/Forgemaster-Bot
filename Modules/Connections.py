@@ -7,14 +7,20 @@ import Quick_Python
 import json
 from enum import IntEnum, auto
 
-'''''''''''''''''''''''''''''''''
-############# CONFIG ############
-'''''''''''''''''''''''''''''''''
+
+def get_discord_api_path():
+    """
+    Returns the path to patreon config file, prioritizing FORGEMASTER_GOOGLE_API_PATH env var.
+    :return: patreon config file path
+    """
+    default_config_path = os.path.join('Credentials', 'DiscordAPI.txt')
+    environment_path = os.getenv('FORGEMASTER_DISCORD_API_PATH')
+    return default_config_path if environment_path is None else environment_path
 
 
 def get_config_path():
     """
-    Returns the path to patreon config file, prioritizing PATREON_CONFIG_PATH env var.
+    Returns the path to patreon config file, prioritizing FORGEMASTER_CONFIG_PATH env var.
     :return: patreon config file path
     """
     default_config_path = os.path.join('Credentials', 'config.json')
@@ -22,14 +28,30 @@ def get_config_path():
     return default_config_path if environment_path is None else environment_path
 
 
+def get_bot_config_path():
+    """
+    Returns the path to patreon config file, prioritizing FORGEMASTER_BOT_CONFIG_PATH env var.
+    :return: patreon config file path
+    """
+    default_config_path = os.path.join('Credentials', 'BotConfig.json')
+    environment_path = os.getenv('FORGEMASTER_BOT_CONFIG_PATH')
+    return default_config_path if environment_path is None else environment_path
+
+
+'''''''''''''''''''''''''''''''''
+############# CONFIG ############
+'''''''''''''''''''''''''''''''''
+
+
 def load_config(path):
-    local_config = dict()
     with open(path, "r") as config_file:
         local_config = json.load(config_file)
     return local_config
 
 
 config = load_config(get_config_path())
+bot_config = load_config(get_bot_config_path())
+
 
 '''''''''''''''''''''''''''''''''
 ############## SQL ##############
@@ -140,6 +162,10 @@ def google_find_trade_seller(name: str, item: str):
 '''''''''''''''''''''''''''''''''
 #############Discord#############
 '''''''''''''''''''''''''''''''''
+
+
+def get_discord_token():
+    return open(get_discord_api_path()).read()
 
 
 async def log_to_bot(bot, log: str):

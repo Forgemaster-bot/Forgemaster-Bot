@@ -1,58 +1,53 @@
 from discord.ext import commands
-import Connections
-import discord
-import time
-import os
-# os.environ['TDSVER'] = '8.0'
+from bot import Forgemaster
+import asyncio
+import uvloop
+import contextlib
+import logging
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
-def get_discord_api_path():
+@contextlib.contextmanager
+def setup_logging():
     """
-    Returns the path to patreon config file, prioritizing FORGEMASTER_GOOGLE_API_PATH env var.
-    :return: patreon config file path
+    Setup logging via context manager.
+    Credit: https://github.com/Rapptz/RoboDanny/blob/rewrite/launcher.py
     """
-    default_config_path = os.path.join('Credentials', 'DiscordAPI.txt')
-    environment_path = os.getenv('FORGEMASTER_DISCORD_API_PATH')
-    return default_config_path if environment_path is None else environment_path
+    try:
+        # __enter__
+        logging.getLogger('discord').setLevel(logging.INFO)
+        logging.getLogger('discord.http').setLevel(logging.WARNING)
+
+        log = logging.getLogger()
+        log.setLevel(logging.DEBUG)
+        handler = logging.FileHandler(filename='Forgemaster.log', encoding='utf-8', mode='w')
+        dt_fmt = '%Y-%m-%d %H:%M:%S'
+        fmt = logging.Formatter('[{asctime}] [{levelname:<7}] {name}: {message}', dt_fmt, style='{')
+        handler.setFormatter(fmt)
+        log.addHandler(handler)
+        yield
+    finally:
+        # __exit__
+        handlers = log.handlers[:]
+        for hdlr in handlers:
+            hdlr.close()
+            log.removeHandler(hdlr)
 
 
-# connecting to discord
-Token = open(os.path.join('Credentials', 'DiscordAPI.txt')).read()
-bot = commands.Bot(command_prefix="$", description="The Lost World Helper Bot")
+def main():
+    """
+    Sets up logging and launches the bot
+    :return:
+    """
+    # Make sure event loop has been created
+    loop = asyncio.get_event_loop()
+    with setup_logging():
+        # Start bot and run event loop
+        bot = Forgemaster()
+        bot.run()
 
-
-# List cog files then load them in
-initial_extensions = ['cogs.DM', 'cogs.Utility',
-                      'cogs.Mod', 'cogs.Player',
-                      'cogs.Admin']
 
 if __name__ == '__main__':
-    for extension in initial_extensions:
-        bot.load_extension(extension)
+    main()
 
-
-# Auto response if user doesnt have role
-@bot.event
-async def on_command_error(message, error):
-    if isinstance(error, commands.errors.CheckFailure):
-        await message.send('You do not have the correct role for this command.')
-
-    else:
-        discord_id = message.author.id
-        discord_command = message.message.clean_content
-        Connections.sql_log_error(discord_id, discord_command, error.args[0])
-        print(error)
-        await message.send(error)
-
-
-# what the bot does when its turned on
-@bot.event
-async def on_ready():
-    await bot.wait_until_ready()
-    game = discord.Game("Assuming Direct Control")
-    await bot.change_presence(status=discord.Status.online, activity=game)
-    log = 'Logged in at {}'.format(time.strftime('%Y-%m-%d %H:%M:%S'))
-    await Connections.log_to_bot(bot, log)
-
-
-bot.run(Token, bot=True, reconnect=True)
