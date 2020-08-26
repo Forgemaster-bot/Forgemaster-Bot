@@ -1,0 +1,4730 @@
+outcome lists:
+  Blue Thaumstyn:
+    Spell_Gems:
+      Level_1: &Outcomes_Spell_Gems_Level_1
+        - Absorb Elements
+        - Color Spray
+        - Command
+        - Cure Wounds
+        - Earth Tremor
+        - Grease
+        - Guiding Bolt
+        - Long Strider
+        - Shield
+        - Thunderwave
+      Level_2: &Outcomes_Spell_Gems_Level_2
+        - Aganazzar's Scorcher
+        - Blindness/Deafness
+        - Darkvision
+        - Lesser Restoration
+        - Knock
+        - Melf's Acid Arrow
+        - Mirror Image
+        - Misty Step
+        - See Invisibility
+        - Shatter
+      Level_3: &Outcomes_Spell_Gems_Level_3
+        - Blink
+        - Daylight
+        - Dispel Magic
+        - Conjure Barrage
+        - Erupting Earth
+        - Fireball
+        - Life Transference
+        - Lightning Bolt
+        - Remove Curse
+        - Sending
+        - Speak With Dead
+        - Thunder Step
+        - Tongues
+        - Water Breathing
+        - Water Walk
+      Level_4: &Outcomes_Spell_Gems_Level_4
+        - Blight
+        - Charm Monster
+        - Death Ward
+        - Dimension Door
+        - Fire Shield
+        - Freedom of Movement
+        - Guardian of Faith
+        - Ice Storm
+        - Stone Shape
+        - Vitriolic Sphere
+      Level_5: &Outcomes_Spell_Gems_Level_5
+        - Cone of Cold
+        - Conjure Volley
+        - Destructive Wave
+        - Flame Strike
+        - Greater Restoration
+        - Maxx Cure Wounds
+        - Negative Energy Flood
+        - Passwall
+        - Seeming
+        - Steel Wind Strike
+        - Synaptic Static
+        - Transmute Rock
+      All: &Outcomes_Spell_Gems_All
+        - *Outcomes_Spell_Gems_Level_1
+        - *Outcomes_Spell_Gems_Level_2
+        - *Outcomes_Spell_Gems_Level_3
+        - *Outcomes_Spell_Gems_Level_4
+        - *Outcomes_Spell_Gems_Level_5
+  Red Thaumstyn:
+    Magic_Item:
+      Common:
+        Armor: &Outcomes_Magic_Item_Common_Armor
+        - Leather Armor of Gleaming
+        - Padded Armor of Gleaming
+        - Studded Leather Armor of Gleaming
+        - Hide Armor of Gleaming
+        - Breastplate of Gleaming
+        - Chain Shirt of Gleaming
+        - Half Plate Armor of Gleaming
+        - Scale Mail of Gleaming
+        - Spiked Armor of Gleaming
+        - Chain Mail of Gleaming
+        - Plate Armor of Gleaming
+        - Ring Mail of Gleaming
+        - Splint Armor of Gleaming
+        - Cast-Off Leather Armor
+        - Cast-Off Padded Armor
+        - Cast-Off Studded Leather Armor
+        - Cast-Off Hide Armor
+        - Cast-Off Breastplate
+        - Cast-Off Chain Shirt
+        - Cast-Off Half Plate Armor
+        - Cast-Off Scale Mail
+        - Cast-Off Spiked Armor
+        - Cast-Off Chain Mail
+        - Cast-Off Plate Armor
+        - Cast-Off Ring Mail
+        - Cast-Off Splint Armor
+        - Smoldering Leather Armor
+        - Smoldering Padded Armor
+        - Smoldering Studded Leather Armor
+        - Smoldering Hide Armor
+        - Smoldering Breastplate
+        - Smoldering Chain Shirt
+        - Smoldering Half Plate Armor
+        - Smoldering Scale Mail
+        - Smoldering Spiked Armor
+        - Smoldering Chain Mail
+        - Smoldering Plate Armor
+        - Smoldering Ring Mail
+        - Smoldering Splint Armor
+        - Shield of Expression
+        Staff: &Outcomes_Magic_Item_Common_Staff
+        - Staff of Adornment
+        - Staff of Birdcalls
+        - Staff of Flowers
+        Wand: &Outcomes_Magic_Item_Common_Wand
+        - Wand of Conducting
+        - Wand of Pyrotechnics
+        - Wand of Scowls
+        - Wand of Smiles
+        Weapon: &Outcomes_Magic_Item_Common_Weapon
+        - Moon-Touched Greatsword
+        - Moon-Touched Longsword
+        - Moon-Touched Scimitar
+        - Moon-Touched Rapier
+        - Moon-Touched Shortsword
+        Wondrous: &Outcomes_Magic_Item_Common_Wondrous
+        - Bead of Nourishment
+        - Bead of Refreshment
+        - Boots of False Tricks
+        - Candle of the Deep
+        - Charlatan's Die
+        - Chest of Preserving
+        - Cloak of Billowing
+        - Cloak of Many Fashions
+        - Clockwork Amulet
+        - Clothes of Mending
+        - Dark Shard Amulet
+        - Dread Helm
+        - Ear Horn of Hearing
+        - Enduring Spellbook
+        - Ersatz Eye
+        - Hat of Vermin
+        - Hat of Wizardry
+        - Heward's Handy Spice Pouch
+        - Horn of Silent Alarm
+        - Lock of Trickery
+        - Mystery Key
+        - Orb of Direction
+        - Orb on Gonging
+        - Orb of Time
+        - Perfume of Bewitching
+        - Pipe of Remembrance
+        - Pipe of Smoke Monsters
+        - Pole of Angling
+        - Pole of Collapsing
+        - Pot of Awakening
+        - Pressure Capsule
+        - Rope of Mending
+        - Ruby of the War Mage
+        - Talking Doll
+        - Tankard of Sobriety
+        - Veteran's Cane
+        - Instrument of Illusions
+        - Instrument of Scribing
+        All: &Outcomes_Magic_Item_Common_All
+        - *Outcomes_Magic_Item_Common_Armor
+        - *Outcomes_Magic_Item_Common_Staff
+        - *Outcomes_Magic_Item_Common_Wand
+        - *Outcomes_Magic_Item_Common_Weapon
+        - *Outcomes_Magic_Item_Common_Wondrous
+      Rare:
+        Armor: &Outcomes_Magic_Item_Rare_Armor
+        - Leather Armor +1
+        - Padded Armor +1
+        - Studded Leather Armor +1
+        - Hide Armor +1
+        - Breastplate +1
+        - Chain Shirt +1
+        - Half Plate Armor +1
+        - Scale Mail +1
+        - Spiked Armor +1
+        - Chain Mail +1
+        - Plate Armor +1
+        - Ring Mail +1
+        - Splint Armor +1
+        - Leather Armor of Acid Resistance
+        - Leather Armor of Cold Resistance
+        - Leather Armor of Fire Resistance
+        - Leather Armor of Force Resistance
+        - Leather Armor of Lightning Resistance
+        - Leather Armor of Necrotic Resistance
+        - Leather Armor of Poison Resistance
+        - Leather Armor of Psychic Resistance
+        - Leather Armor of Radiant Resistance
+        - Leather Armor of Thunder Resistance
+        - Padded Armor of Acid Resistance
+        - Padded Armor of Cold Resistance
+        - Padded Armor of Fire Resistance
+        - Padded Armor of Force Resistance
+        - Padded Armor of Lightning Resistance
+        - Padded Armor of Necrotic Resistance
+        - Padded Armor of Poison Resistance
+        - Padded Armor of Psychic Resistance
+        - Padded Armor of Radiant Resistance
+        - Padded Armor of Thunder Resistance
+        - Studded Leather Armor of Acid Resistance
+        - Studded Leather Armor of Cold Resistance
+        - Studded Leather Armor of Fire Resistance
+        - Studded Leather Armor of Force Resistance
+        - Studded Leather Armor of Lightning Resistance
+        - Studded Leather Armor of Necrotic Resistance
+        - Studded Leather Armor of Poison Resistance
+        - Studded Leather Armor of Psychic Resistance
+        - Studded Leather Armor of Radiant Resistance
+        - Studded Leather Armor of Thunder Resistance
+        - Hide Armor of Acid Resistance
+        - Hide Armor of Cold Resistance
+        - Hide Armor of Fire Resistance
+        - Hide Armor of Force Resistance
+        - Hide Armor of Lightning Resistance
+        - Hide Armor of Necrotic Resistance
+        - Hide Armor of Poison Resistance
+        - Hide Armor of Psychic Resistance
+        - Hide Armor of Radiant Resistance
+        - Hide Armor of Thunder Resistance
+        - Breastplate of Acid Resistance
+        - Breastplate of Cold Resistance
+        - Breastplate of Fire Resistance
+        - Breastplate of Force Resistance
+        - Breastplate of Lightning Resistance
+        - Breastplate of Necrotic Resistance
+        - Breastplate of Poison Resistance
+        - Breastplate of Psychic Resistance
+        - Breastplate of Radiant Resistance
+        - Breastplate of Thunder Resistance
+        - Chain Shirt of Acid Resistance
+        - Chain Shirt of Cold Resistance
+        - Chain Shirt of Fire Resistance
+        - Chain Shirt of Force Resistance
+        - Chain Shirt of Lightning Resistance
+        - Chain Shirt of Necrotic Resistance
+        - Chain Shirt of Poison Resistance
+        - Chain Shirt of Psychic Resistance
+        - Chain Shirt of Radiant Resistance
+        - Chain Shirt of Thunder Resistance
+        - Half Plate Armor of Acid Resistance
+        - Half Plate Armor of Cold Resistance
+        - Half Plate Armor of Fire Resistance
+        - Half Plate Armor of Force Resistance
+        - Half Plate Armor of Lightning Resistance
+        - Half Plate Armor of Necrotic Resistance
+        - Half Plate Armor of Poison Resistance
+        - Half Plate Armor of Psychic Resistance
+        - Half Plate Armor of Radiant Resistance
+        - Half Plate Armor of Thunder Resistance
+        - Scale Mail of Acid Resistance
+        - Scale Mail of Cold Resistance
+        - Scale Mail of Fire Resistance
+        - Scale Mail of Force Resistance
+        - Scale Mail of Lightning Resistance
+        - Scale Mail of Necrotic Resistance
+        - Scale Mail of Poison Resistance
+        - Scale Mail of Psychic Resistance
+        - Scale Mail of Radiant Resistance
+        - Scale Mail of Thunder Resistance
+        - Spiked Armor of Acid Resistance
+        - Spiked Armor of Cold Resistance
+        - Spiked Armor of Fire Resistance
+        - Spiked Armor of Force Resistance
+        - Spiked Armor of Lightning Resistance
+        - Spiked Armor of Necrotic Resistance
+        - Spiked Armor of Poison Resistance
+        - Spiked Armor of Psychic Resistance
+        - Spiked Armor of Radiant Resistance
+        - Spiked Armor of Thunder Resistance
+        - Chain Mail of Acid Resistance
+        - Chain Mail of Cold Resistance
+        - Chain Mail of Fire Resistance
+        - Chain Mail of Force Resistance
+        - Chain Mail of Lightning Resistance
+        - Chain Mail of Necrotic Resistance
+        - Chain Mail of Poison Resistance
+        - Chain Mail of Psychic Resistance
+        - Chain Mail of Radiant Resistance
+        - Chain Mail of Thunder Resistance
+        - Plate Armor of Acid Resistance
+        - Plate Armor of Cold Resistance
+        - Plate Armor of Fire Resistance
+        - Plate Armor of Force Resistance
+        - Plate Armor of Lightning Resistance
+        - Plate Armor of Necrotic Resistance
+        - Plate Armor of Poison Resistance
+        - Plate Armor of Psychic Resistance
+        - Plate Armor of Radiant Resistance
+        - Plate Armor of Thunder Resistance
+        - Ring Mail of Acid Resistance
+        - Ring Mail of Cold Resistance
+        - Ring Mail of Fire Resistance
+        - Ring Mail of Force Resistance
+        - Ring Mail of Lightning Resistance
+        - Ring Mail of Necrotic Resistance
+        - Ring Mail of Poison Resistance
+        - Ring Mail of Psychic Resistance
+        - Ring Mail of Radiant Resistance
+        - Ring Mail of Thunder Resistance
+        - Splint Armor of Acid Resistance
+        - Splint Armor of Cold Resistance
+        - Splint Armor of Fire Resistance
+        - Splint Armor of Force Resistance
+        - Splint Armor of Lightning Resistance
+        - Splint Armor of Necrotic Resistance
+        - Splint Armor of Poison Resistance
+        - Splint Armor of Psychic Resistance
+        - Splint Armor of Radiant Resistance
+        - Splint Armor of Thunder Resistance
+        - Elven Chain
+        - Glamoured Studded Leather
+        - Arrow Catching Shield
+        - Shield +2
+        Ring: &Outcomes_Magic_Item_Rare_Ring
+        - Ring of <Resistance>
+        - Ring of Animal Influence
+        - Ring of Evasion
+        - Ring of Feather Falling
+        - Ring of Free Action
+        - Ring of Protection
+        - Ring of Spell Storing
+        - Ring of the Ram
+        - Ring of X-Ray Vision
+        Rod: &Outcomes_Magic_Item_Rare_Rod
+        - Rod of Rulership
+        - Rod of the Pact Keeper +2
+        - Tentacle Rod
+        Staff: &Outcomes_Magic_Item_Rare_Staff
+        - Staff of Charming
+        - Staff of Healing
+        - Staff of Swarming Insects
+        - Staff of the Woodlands
+        - Staff of Withering
+        Wand: &Outcomes_Magic_Item_Rare_Wand
+        - Wand of Binding
+        - Wand of Enemy Detection
+        - Wand of Fear
+        - Wand of Fireballs
+        - Wand of Lightning Bolts
+        - Wand of Paralysis
+        - Wand of the War Mage +2
+        - Wand of Wonder
+        Weapon: &Outcomes_Magic_Item_Rare_Weapon
+        - Berserker Battleaxe
+        - Berserker Greataxe
+        - Berserker Handaxe
+        - Dragon Slayer Greatsword
+        - Dragon Slayer Longsword
+        - Dragon Slayer Scimitar
+        - Dragon Slayer Rapier
+        - Dragon Slayer Shortsword
+        - Flame Tongue Greatsword
+        - Flame Tongue Longsword
+        - Flame Tongue Scimitar
+        - Flame Tongue Rapier
+        - Flame Tongue Shortsword
+        - Giant Slayer Greatsword
+        - Giant Slayer Longsword
+        - Giant Slayer Scimitar
+        - Giant Slayer Rapier
+        - Giant Slayer Shortsword
+        - Giant Slayer Battleaxe
+        - Giant Slayer Greataxe
+        - Giant Slayer Handaxe
+        - Mind Blade Greatsword Greatsword
+        - Mind Mind Blade Longsword Greatsword
+        - Mind Mind Blade Scimitar Greatsword
+        - Mind Mind Blade Rapier Greatsword
+        - Mind Mind Blade Shortsword Greatsword
+        - Mind Mind Blade Greatsword Longsword
+        - Mind Mind Blade Longsword Longsword
+        - Mind Mind Blade Scimitar Longsword
+        - Mind Mind Blade Rapier Longsword
+        - Mind Mind Blade Shortsword Longsword
+        - Mind Mind Blade Greatsword Scimitar
+        - Mind Mind Blade Longsword Scimitar
+        - Mind Mind Blade Scimitar Scimitar
+        - Mind Mind Blade Rapier Scimitar
+        - Mind Mind Blade Shortsword Scimitar
+        - Mind Mind Blade Greatsword Rapier
+        - Mind Mind Blade Longsword Rapier
+        - Mind Mind Blade Scimitar Rapier
+        - Mind Mind Blade Rapier Rapier
+        - Mind Mind Blade Shortsword Rapier
+        - Mind Mind Blade Greatsword Shortsword
+        - Mind Mind Blade Longsword Shortsword
+        - Mind Mind Blade Scimitar Shortsword
+        - Mind Mind Blade Rapier Shortsword
+        - Mind Mind Blade Shortsword Shortsword
+        - Sun Blade
+        - Greatsword of Life Stealing
+        - Longsword of Life Stealing
+        - Scimitar of Life Stealing
+        - Rapier of Life Stealing
+        - Shortsword of Life Stealing
+        - Greatsword of Wounding
+        - Longsword of Wounding
+        - Scimitar of Wounding
+        - Rapier of Wounding
+        - Shortsword of Wounding
+        - Vicious Blowgun
+        - Vicious Club
+        - Vicious Dagger
+        - Vicious Dart
+        - Vicious Flail
+        - Vicious Glaive
+        - Vicious Greatclub
+        - Vicious Halberd
+        - Vicious Javelin
+        - Vicious Lance
+        - Vicious Light Hammer
+        - Vicious Longbow
+        - Vicious Mace
+        - Vicious Maul
+        - Vicious Morningstar
+        - Vicious Pike
+        - Vicious Quarterstaff
+        - Vicious Shortbow
+        - Vicious Sickle
+        - Vicious Sling
+        - Vicious Spear
+        - Vicious Trident
+        - Vicious War Pick
+        - Vicious Warhammer
+        - Vicious Whip
+        - Vicious Battleaxe
+        - Vicious Greataxe
+        - Vicious Handaxe
+        - Vicious Hand Crossbow
+        - Vicious Heavy Crossbow
+        - Vicious Light Crossbow
+        - Vicious Greatsword
+        - Vicious Longsword
+        - Vicious Scimitar
+        - Vicious Rapier
+        - Vicious Shortsword
+        - Blowgun +2
+        - Club +2
+        - Dagger +2
+        - Dart +2
+        - Flail +2
+        - Glaive +2
+        - Greatclub +2
+        - Halberd +2
+        - Javelin +2
+        - Lance +2
+        - Light Hammer +2
+        - Longbow +2
+        - Mace +2
+        - Maul +2
+        - Morningstar +2
+        - Pike +2
+        - Quarterstaff +2
+        - Shortbow +2
+        - Sickle +2
+        - Sling +2
+        - Spear +2
+        - Trident +2
+        - War Pick +2
+        - Warhammer +2
+        - Whip +2
+        - Battleaxe +2
+        - Greataxe +2
+        - Handaxe +2
+        - Hand Crossbow +2
+        - Heavy Crossbow +2
+        - Light Crossbow +2
+        - Greatsword +2
+        - Longsword +2
+        - Scimitar +2
+        - Rapier +2
+        - Shortsword +2
+        - Dagger of Blindsight
+        - Dagger of Venom
+        - Mace of Disruption
+        - Mace of Smiting
+        - Mace of Terror
+        Wondrous: &Outcomes_Magic_Item_Rare_Wondrous
+        - Amulet of Health
+        - Bag of Beans
+        - Bead of Force
+        - Belt of Dwarvenkind
+        - Belt of Hill Giant Strength
+        - Boots of Levitation
+        - Boots of Speed
+        - Bowl of Commanding Water Elementals
+        - Bracer of Flying Daggers
+        - Bracers of Defense
+        - Brazier of Commanding Fire Elementals
+        - Cape of the Mountebank
+        - Censer of Controlling Air Elementals
+        - Chime of Opening
+        - Cloak of Displacement
+        - Cloak of the Bat
+        - Cube of Force
+        - Dimensional Shackles
+        - Figurine of Wondrous Power - Bronze Griffon
+        - Figurine of Wondrous Power - Ebony Fly
+        - Figurine of Wondrous Power - Golden Lions
+        - Figurine of Wondrous Power - Ivory Goats
+        - Figurine of Wondrous Power - Marble Elephant
+        - Figurine of Wondrous Power - Onyx Dog
+        - Figurine of Wondrous Power - Serpentine Owl
+        - Folding Boat
+        - Gem of Seeing
+        - Helm of Teleportation
+        - Heward's Handy Haversack
+        - Horn of Blasting
+        - Horn of Valhalla - Brass
+        - Horn of Valhalla - Silver
+        - Horseshoes of Speed
+        - Ioun Stone - Awareness
+        - Ioun Stone - Protection
+        - Ioun Stone - Reserve
+        - Ioun Stone - Sustenance
+        - Iron Bands of Bilarro
+        - Mantle of Spell Resistance
+        - Necklace of Fireballs
+        - Necklace of Prayer Beads
+        - Periapt of Proof against Poison
+        - Portable Hole
+        - Quaal's Feather Token - Anchor
+        - Quaal's Feather Token - Bird
+        - Quaal's Feather Token - Fan
+        - Quaal's Feather Token - Swan
+        - Quaal's Feather Token - Tree
+        - Quaal's Feather Token - Whip
+        - Robe of Eyes
+        - Rope of Entanglement
+        - Stone of Controlling Earth Elementals
+        - Wings of Flying
+        - Instrument of the Bards - Canaith Mandolin
+        - Instrument of the Bards - Cli Lyre
+        All: &Outcomes_Magic_Item_Rare_All
+        - *Outcomes_Magic_Item_Rare_Armor
+        - *Outcomes_Magic_Item_Rare_Ring
+        - *Outcomes_Magic_Item_Rare_Rod
+        - *Outcomes_Magic_Item_Rare_Staff
+        - *Outcomes_Magic_Item_Rare_Wand
+        - *Outcomes_Magic_Item_Rare_Weapon
+        - *Outcomes_Magic_Item_Rare_Wondrous
+      Uncommon:
+        Armor: &Outcomes_Magic_Item_Uncommon_Armor
+        - Adamantine Breastplate
+        - Adamantine Chain Shirt
+        - Adamantine Half Plate Armor
+        - Adamantine Scale Mail
+        - Adamantine Spiked Armor
+        - Adamantine Chain Mail
+        - Adamantine Plate Armor
+        - Adamantine Ring Mail
+        - Adamantine Splint Armor
+        - Mariner's Leather Armor
+        - Mariner's Padded Armor
+        - Mariner's Studded Leather Armor
+        - Mariner's Hide Armor
+        - Mariner's Breastplate
+        - Mariner's Chain Shirt
+        - Mariner's Half Plate Armor
+        - Mariner's Scale Mail
+        - Mariner's Spiked Armor
+        - Mariner's Chain Mail
+        - Mariner's Plate Armor
+        - Mariner's Ring Mail
+        - Mariner's Splint Armor
+        - Mithral Breastplate
+        - Mithral Chain Shirt
+        - Mithral Half Plate Armor
+        - Mithral Scale Mail
+        - Mithral Spiked Armor
+        - Mithral Chain Mail
+        - Mithral Plate Armor
+        - Mithral Ring Mail
+        - Mithral Splint Armor
+        - Shield +1
+        - Sentinel Shield
+        Ring: &Outcomes_Magic_Item_Uncommon_Ring
+        - Ring of Jumping
+        - Ring of Mind Shielding
+        - Ring of Swimming
+        - Ring of Truth Telling
+        - Ring of Warmth
+        - Ring of Water Walking
+        Rod: &Outcomes_Magic_Item_Uncommon_Rod
+        - Immovable Rod
+        - Rod of the Pact Keeper +1
+        Staff: &Outcomes_Magic_Item_Uncommon_Staff
+        - Staff of the Adder
+        - Staff of the Python
+        Wand: &Outcomes_Magic_Item_Uncommon_Wand
+        - Wand of Entangle
+        - Wand of Magic Detection
+        - Wand of magic Missiles
+        - Wand of Secrets
+        - Wand of the War Mage +1
+        - Wand of Web
+        Weapon: &Outcomes_Magic_Item_Uncommon_Weapon
+        - Trident of Fish Command
+        - Blowgun +1
+        - Club +1
+        - Dagger +1
+        - Dart +1
+        - Flail +1
+        - Glaive +1
+        - Greatclub +1
+        - Halberd +1
+        - Javelin +1
+        - Lance +1
+        - Light Hammer +1
+        - Longbow +1
+        - Mace +1
+        - Maul +1
+        - Morningstar +1
+        - Pike +1
+        - Quarterstaff +1
+        - Shortbow +1
+        - Sickle +1
+        - Sling +1
+        - Spear +1
+        - Trident +1
+        - War Pick +1
+        - Warhammer +1
+        - Whip +1
+        - Battleaxe +1
+        - Greataxe +1
+        - Handaxe +1
+        - Hand Crossbow +1
+        - Heavy Crossbow +1
+        - Light Crossbow +1
+        - Greatsword +1
+        - Longsword +1
+        - Scimitar +1
+        - Rapier +1
+        - Shortsword +1
+        - Blowgun of Warning
+        - Club of Warning
+        - Dagger of Warning
+        - Dart of Warning
+        - Flail of Warning
+        - Glaive of Warning
+        - Greatclub of Warning
+        - Halberd of Warning
+        - Javelin of Warning
+        - Lance of Warning
+        - Light Hammer of Warning
+        - Longbow of Warning
+        - Mace of Warning
+        - Maul of Warning
+        - Morningstar of Warning
+        - Pike of Warning
+        - Quarterstaff of Warning
+        - Shortbow of Warning
+        - Sickle of Warning
+        - Sling of Warning
+        - Spear of Warning
+        - Trident of Warning
+        - War Pick of Warning
+        - Warhammer of Warning
+        - Whip of Warning
+        - Battleaxe of Warning
+        - Greataxe of Warning
+        - Handaxe of Warning
+        - Hand Crossbow of Warning
+        - Heavy Crossbow of Warning
+        - Light Crossbow of Warning
+        - Greatsword of Warning
+        - Longsword of Warning
+        - Scimitar of Warning
+        - Rapier of Warning
+        - Shortsword of Warning
+        - Javelin of Lightning
+        Wondrous: &Outcomes_Magic_Item_Uncommon_Wondrous
+        - Alchemy Jug
+        - Amulet of Proof against Detection and Location
+        - Bag of Holding
+        - Bag of Tricks - Gray
+        - Bag of Tricks - Rust
+        - Bag of Tricks - Tan
+        - Boots of Elvenkind
+        - Boots of Striding and Springing
+        - Boots of the Winterlands
+        - Bracers of Archery
+        - Brooch of Shielding
+        - Broom of Flying
+        - Cap of Water BReathing
+        - Circlet of Blasting
+        - Cloak of Elvenkind
+        - Cloak of Protection
+        - Cloak of the Manta Ray
+        - Decanter of Endless Water
+        - Deck of Illusions
+        - Driftglobe
+        - Dust of Disappearance
+        - Dust of Dryness
+        - Dust of Sneezing and Choking (Cursed)
+        - Elemental Gem - Blue Sapphire
+        - Elemental Gem - Emerald
+        - Elemental Gem - Red Corundum
+        - Elemental Gem - Yellow Diamond
+        - Eversmoking Bottle
+        - Eyes of Charming
+        - Eyes of minute Seeing
+        - Eyes of the Eagle
+        - Figurine of Wondrous Power - Silver Raven
+        - Gauntlets of Ogre Power
+        - Gem of Brightness
+        - Gloves of Missile Snaring
+        - Gloves of Swimming and Climbing
+        - Gloves of Thievery
+        - Goggles of Night
+        - Hat of Disguise
+        - Headband of intellect
+        - Helm of Comprehending Languages
+        - Helm of Telepathy
+        - Helm of Underwater Action
+        - Keoghtom's Ointment
+        - Lantern of Revealing
+        - Medallion of Thoughts
+        - Necklace of Adaptation
+        - Paper Bird
+        - Pearl of Power
+        - Periapt of health
+        - Periapt of Wound Closure
+        - Quiver of Ehlonna
+        - Robe of Serpents
+        - Robe of Useful Items
+        - Rope of Climbing
+        - Saddle of the Cavalier
+        - Sending Stones
+        - Slippers of Spider Climbing
+        - Stone of Good Luck
+        - Wind Fan
+        - Winged Boots
+        - Instrument of the Bards - Doss Lute
+        - Instrument of the Bards - Fochlucan Bandore
+        - Instrument of the Bards - Fuirmidh Cittern
+        - Pipes of Haunting
+        - Pipes of the Sewers
+        All: &Outcomes_Magic_Item_Uncommon_All
+        - *Outcomes_Magic_Item_Uncommon_Armor
+        - *Outcomes_Magic_Item_Uncommon_Ring
+        - *Outcomes_Magic_Item_Uncommon_Rod
+        - *Outcomes_Magic_Item_Uncommon_Staff
+        - *Outcomes_Magic_Item_Uncommon_Wand
+        - *Outcomes_Magic_Item_Uncommon_Weapon
+        - *Outcomes_Magic_Item_Uncommon_Wondrous
+      Very Rare:
+        Armor: &Outcomes_Magic_Item_Very_Rare_Armor
+        - Leather Armor +2
+        - Padded Armor +2
+        - Studded Leather Armor +2
+        - Hide Armor +2
+        - Breastplate +2
+        - Chain Shirt +2
+        - Half Plate Armor +2
+        - Scale Mail +2
+        - Spiked Armor +2
+        - Chain Mail +2
+        - Plate Armor +2
+        - Ring Mail +2
+        - Splint Armor +2
+        - Demon Armor
+        - Dragon Scale Mail - Black
+        - Dragon Scale Mail - Blue
+        - Dragon Scale Mail - Brass
+        - Dragon Scale Mail - Bronze
+        - Dragon Scale Mail - Copper
+        - Dragon Scale Mail - Gold
+        - Dragon Scale Mail - Green
+        - Dragon Scale Mail - Red
+        - Dragon Scale Mail - Silver
+        - Dragon Scale Mail - White
+        - Dwarven Plate Armor
+        - Animated Shield
+        - Spell Guard Shield
+        - Shield +3
+        Ring: &Outcomes_Magic_Item_Very_Rare_Ring
+        - Ring of Regeneration
+        - Ring of Shooting Stars
+        - Ring of Telekinesis
+        Rod: &Outcomes_Magic_Item_Very_Rare_Rod
+        - Rod of Absorption
+        - Rod of Alertness
+        - Rod of Security
+        - Rod of the Pact Keeper +3
+        Staff: &Outcomes_Magic_Item_Very_Rare_Staff
+        - Staff of Fire
+        - Staff of Frost
+        - Staff of Power
+        - Staff of Striking
+        - Staff of Thunder and Lightning
+        Wand: &Outcomes_Magic_Item_Very_Rare_Wand
+        - Wand of Polymorph
+        - Wand of the War Mage +3
+        Weapon: &Outcomes_Magic_Item_Very_Rare_Weapon
+        - Dancing Greatsword
+        - Dancing Longsword
+        - Dancing Scimitar
+        - Dancing Rapier
+        - Dancing Shortsword
+        - Frost Brand Greatsword
+        - Frost Brand Longsword
+        - Frost Brand Scimitar
+        - Frost Brand Rapier
+        - Frost Brand Shortsword
+        - Nine Lives Stealer - Greatsword
+        - Nine Lives Stealer - Longsword
+        - Nine Lives Stealer - Scimitar
+        - Nine Lives Stealer - Rapier
+        - Nine Lives Stealer - Shortsword
+        - Greatsword of Sharpness
+        - Longsword of Sharpness
+        - Scimitar of Sharpness
+        - Dwarven Thrower
+        - Scimitar of Speed
+        - Oathbow
+        - Blowgun +3
+        - Club +3
+        - Dagger +3
+        - Dart +3
+        - Flail +3
+        - Glaive +3
+        - Greatclub +3
+        - Halberd +3
+        - Javelin +3
+        - Lance +3
+        - Light Hammer +3
+        - Longbow +3
+        - Mace +3
+        - Maul +3
+        - Morningstar +3
+        - Pike +3
+        - Quarterstaff +3
+        - Shortbow +3
+        - Sickle +3
+        - Sling +3
+        - Spear +3
+        - Trident +3
+        - War Pick +3
+        - Warhammer +3
+        - Whip +3
+        - Battleaxe +3
+        - Greataxe +3
+        - Handaxe +3
+        - Hand Crossbow +3
+        - Heavy Crossbow +3
+        - Light Crossbow +3
+        - Greatsword +3
+        - Longsword +3
+        - Scimitar +3
+        - Rapier +3
+        - Shortsword +3
+        Wondrous: &Outcomes_Magic_Item_Very_Rare_Wondrous
+        - Bag of Devouring
+        - Belt of Fire Giant Strength
+        - Belt of Frost Giant Strength
+        - Belt of Stone Giant Strength
+        - Candle of Invocation
+        - Carpet of Flying - 3x5
+        - Carpet of Flying - 4x6
+        - Carpet of Flying - 5x7
+        - Carpet of Flying - 6x9
+        - Cloak of Arachnida
+        - Crystal Ball
+        - Efreeti Bottle
+        - Figuring of Wondrous Power - Obsidian Steed
+        - Helm of Brilliance
+        - Horn of Valhalla - Bronze
+        - Horseshoes of a Zephyr
+        - Ioun Stone - Absorption
+        - Ioun Stone - Agility
+        - Ioun Stone - Fortitude
+        - Ioun Stone - Insight
+        - Ioun Stone - Intellect
+        - Ioun Stone - Leadership
+        - Ioun Stone - Strength
+        - Manual of Bodily Health
+        - Manual of Gainful Exercise
+        - Manual of Quickness of Action
+        - Manual of Golems - Clay Golems
+        - Manual of Golems - Flesh Golems
+        - Manual of Golems - Iron Golems
+        - Manual of Golems - Stone Golems
+        - Mirror of Life Trapping
+        - Nolzur's Marvelous Pigments
+        - Robe of Scintillating Colors
+        - Robe of Stars
+        - Tome of Clear Thought
+        - Tome of Leadership and Influence
+        - Tome of Understanding
+        - Instrument of the Bards - Anstruth Harp
+        All: &Outcomes_Magic_Item_Very_Rare_All
+        - *Outcomes_Magic_Item_Very_Rare_Armor
+        - *Outcomes_Magic_Item_Very_Rare_Ring
+        - *Outcomes_Magic_Item_Very_Rare_Rod
+        - *Outcomes_Magic_Item_Very_Rare_Staff
+        - *Outcomes_Magic_Item_Very_Rare_Wand
+        - *Outcomes_Magic_Item_Very_Rare_Weapon
+        - *Outcomes_Magic_Item_Very_Rare_Wondrous
+
+
+#####################################################################################################################
+# 'Special' rules
+# Definitions for random_outcome anchors for use within recipes.
+#####################################################################################################################
+Rules:
+  Red Thaumstyn:
+    Magic Item:
+      base_random_outcome:
+      #################################################################################################################
+      # Define base rules for random outcome
+      #################################################################################################################
+        random outcome: &Special_Magic_Item_Base_Random_Outcome
+          die: 100
+      base_ranges: &Ranges_Magic_Item_Base_Ranges
+        #####################################################################################################################
+        # 'Range' rules:
+        # Definitions for random_outcome ranges within recipes. Only the base choices should really need maintenance.
+        # The other options in here link anchors together. I.e. Links the rarity, slot, outcomes, and ranges anchors into one
+        #####################################################################################################################
+        fail range: &Ranges_Magic_Item_Base_Fail
+          label: "An extreme reaction in the thaumstyn occurs... The item frame changes and has been destroyed."
+          start: 1
+          stop: 25
+          outcomes: null
+        rarity range: &Ranges_Magic_Item_Base_Rarity
+          label: "A large reaction in the thaumstyn occurs... The item frame changes and a different item of the same rarity lies before you."
+          start: 26
+          stop: 50
+        slot range: &Ranges_Magic_Item_Base_Slot
+          label: "A medium reaction in the thaumstyn occurs... The item frame changes and a very similar item lies before you."
+          start: 51
+          stop: 75
+        succeed range: &Ranges_Magic_Item_Base_Succeed
+          label: "A small reaction in the thaumstyn occurs... The item frame changes and your desired item lies before you."
+          start: 76
+          stop: 100
+          original: True
+      Common:
+        base_rules: &Recipe_Magic_Item_Common_Base_Rules
+        ################################################################################################################
+        # Define base rules for each Common slot - prereq rules and cost rules
+        ################################################################################################################
+          prereq:
+            has_level: 3
+          cost:
+            Red Dust: 10
+        range_rules:
+          #################################################################################################################
+          # Define 'Common' rarity base ranges. Each slot will use this and set their own slot range.
+          #################################################################################################################
+          ranges: &Ranges_Magic_Item_Common_Ranges
+            <<: *Ranges_Magic_Item_Base_Ranges
+            # Rarity range definition: Common
+            rarity range:
+              <<: *Ranges_Magic_Item_Base_Rarity
+              outcomes:
+                - *Outcomes_Magic_Item_Common_All
+          #################################################################################################################
+          # Begin defining slots by merging common range anchor in and setting the slot range
+          #################################################################################################################
+          Armor:  &Ranges_Magic_Item_Common_Armor_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Common_Ranges
+              # Slot definition: Armor
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Common_Armor
+          Staff: &Ranges_Magic_Item_Common_Staff_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Common_Ranges
+              # Slot definition: Staff
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Common_Staff
+          Wand: &Ranges_Magic_Item_Common_Wand_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Common_Ranges
+              # Slot definition: Wand
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Common_Wand
+          Weapon: &Ranges_Magic_Item_Common_Weapon_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Common_Ranges
+              # Slot definition: Weapon
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Common_Weapon
+          Wondrous: &Ranges_Magic_Item_Common_Wondrous_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Common_Ranges
+              # Slot definition: Wondrous
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Common_Wondrous
+        outcome_rules:
+      #################################################################################################################
+      # Define random outcome rules for each Common slot
+      #################################################################################################################
+          Armor: &Special_Magic_Item_Common_Armor_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Common_Armor_Ranges
+          Staff: &Special_Magic_Item_Common_Staff_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Common_Staff_Ranges
+          Wand: &Special_Magic_Item_Common_Wand_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Common_Wand_Ranges
+          Weapon: &Special_Magic_Item_Common_Weapon_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Common_Weapon_Ranges
+          Wondrous: &Special_Magic_Item_Common_Wondrous_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Common_Wondrous_Ranges
+        prereq_rules:
+
+          base:
+
+        recipe_rules:
+        ################################################################################################################
+        # Define recipe rules for each Common slot
+        ################################################################################################################
+          Armor: &Recipe_Magic_Item_Common_Armor_Rules
+            <<: *Recipe_Magic_Item_Common_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Common_Armor_Random_Outcome
+          Staff: &Recipe_Magic_Item_Common_Staff_Rules
+            <<: *Recipe_Magic_Item_Common_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Common_Staff_Random_Outcome
+          Wand: &Recipe_Magic_Item_Common_Wand_Rules
+            <<: *Recipe_Magic_Item_Common_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Common_Wand_Random_Outcome
+          Weapon: &Recipe_Magic_Item_Common_Weapon_Rules
+            <<: *Recipe_Magic_Item_Common_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Common_Weapon_Random_Outcome
+          Wondrous: &Recipe_Magic_Item_Common_Wondrous_Rules
+            <<: *Recipe_Magic_Item_Common_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Common_Wondrous_Random_Outcome
+      Uncommon:
+        base_rules: &Recipe_Magic_Item_Uncommon_Base_Rules
+          ################################################################################################################
+          # Define base rules for each Uncommon slot - prereq rules and cost rules
+          ################################################################################################################
+          prereq:
+            has_level: 4
+          cost:
+            Red Dust: 100
+        range_rules:
+          #################################################################################################################
+          # Define 'Uncommon' rarity base ranges. Each slot will use this and set their own slot range.
+          #################################################################################################################
+          ranges: &Ranges_Magic_Item_Uncommon_Ranges
+            <<: *Ranges_Magic_Item_Base_Ranges
+            # Rarity range definition: Uncommon
+            rarity range:
+              <<: *Ranges_Magic_Item_Base_Rarity
+              outcomes:
+                - *Outcomes_Magic_Item_Uncommon_All
+          #################################################################################################################
+          # Begin defining slots by merging Uncommon range anchor in and setting the slot range
+          #################################################################################################################
+          Armor:  &Ranges_Magic_Item_Uncommon_Armor_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Uncommon_Ranges
+              # Slot definition: Armor
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Uncommon_Armor
+          Ring:  &Ranges_Magic_Item_Uncommon_Ring_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Uncommon_Ranges
+              # Slot definition: Ring
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Uncommon_Ring
+          Rod:  &Ranges_Magic_Item_Uncommon_Rod_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Uncommon_Ranges
+              # Slot definition: Rod
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Uncommon_Ring
+          Staff: &Ranges_Magic_Item_Uncommon_Staff_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Uncommon_Ranges
+              # Slot definition: Staff
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Uncommon_Staff
+          Wand: &Ranges_Magic_Item_Uncommon_Wand_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Uncommon_Ranges
+              # Slot definition: Wand
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Uncommon_Wand
+          Weapon: &Ranges_Magic_Item_Uncommon_Weapon_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Uncommon_Ranges
+              # Slot definition: Weapon
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Uncommon_Weapon
+          Wondrous: &Ranges_Magic_Item_Uncommon_Wondrous_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Uncommon_Ranges
+              # Slot definition: Wondrous
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Uncommon_Wondrous
+        outcome_rules:
+          #################################################################################################################
+          # Define random outcome rules for each Uncommon slot
+          #################################################################################################################
+          Armor: &Special_Magic_Item_Uncommon_Armor_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Uncommon_Armor_Ranges
+          Ring: &Special_Magic_Item_Uncommon_Ring_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Uncommon_Ring_Ranges
+          Rod: &Special_Magic_Item_Uncommon_Rod_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Uncommon_Rod_Ranges
+          Staff: &Special_Magic_Item_Uncommon_Staff_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Uncommon_Staff_Ranges
+          Wand: &Special_Magic_Item_Uncommon_Wand_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Uncommon_Wand_Ranges
+          Weapon: &Special_Magic_Item_Uncommon_Weapon_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Uncommon_Weapon_Ranges
+          Wondrous: &Special_Magic_Item_Uncommon_Wondrous_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Uncommon_Wondrous_Ranges
+        recipe_rules:
+          #################################################################################################################
+          # Define recipe rules for each Uncommon slot
+          #################################################################################################################
+          Armor: &Recipe_Magic_Item_Uncommon_Armor_Rules
+            <<: *Recipe_Magic_Item_Uncommon_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Uncommon_Armor_Random_Outcome
+          Ring: &Recipe_Magic_Item_Uncommon_Ring_Rules
+            <<: *Recipe_Magic_Item_Uncommon_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Uncommon_Ring_Random_Outcome
+          Rod: &Recipe_Magic_Item_Uncommon_Rod_Rules
+            <<: *Recipe_Magic_Item_Uncommon_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Uncommon_Rod_Random_Outcome
+          Staff: &Recipe_Magic_Item_Uncommon_Staff_Rules
+            <<: *Recipe_Magic_Item_Uncommon_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Uncommon_Staff_Random_Outcome
+          Wand: &Recipe_Magic_Item_Uncommon_Wand_Rules
+            <<: *Recipe_Magic_Item_Uncommon_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Uncommon_Wand_Random_Outcome
+          Weapon: &Recipe_Magic_Item_Uncommon_Weapon_Rules
+            <<: *Recipe_Magic_Item_Uncommon_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Uncommon_Weapon_Random_Outcome
+          Wondrous: &Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            <<: *Recipe_Magic_Item_Uncommon_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Uncommon_Wondrous_Random_Outcome
+      Rare:
+        base_rules: &Recipe_Magic_Item_Rare_Base_Rules
+          ################################################################################################################
+          # Define base rules for each Rare slot - prereq rules and cost rules
+          ################################################################################################################
+          prereq:
+            has_level: 8
+          cost:
+            Red Dust: 400
+        range_rules:
+          #################################################################################################################
+          # Define 'Rare' rarity base ranges. Each slot will use this and set their own slot range.
+          #################################################################################################################
+          ranges: &Ranges_Magic_Item_Rare_Ranges
+            <<: *Ranges_Magic_Item_Base_Ranges
+            # Rarity range definition: Rare
+            rarity range:
+              <<: *Ranges_Magic_Item_Base_Rarity
+              outcomes:
+                - *Outcomes_Magic_Item_Rare_All
+          #################################################################################################################
+          # Begin defining slots by merging Rare range anchor in and setting the slot range
+          #################################################################################################################
+          Armor:  &Ranges_Magic_Item_Rare_Armor_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Rare_Ranges
+              # Slot definition: Armor
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Rare_Armor
+          Ring:  &Ranges_Magic_Item_Rare_Ring_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Rare_Ranges
+              # Slot definition: Ring
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Rare_Ring
+          Rod:  &Ranges_Magic_Item_Rare_Rod_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Rare_Ranges
+              # Slot definition: Rod
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Rare_Ring
+          Staff: &Ranges_Magic_Item_Rare_Staff_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Rare_Ranges
+              # Slot definition: Staff
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Rare_Staff
+          Wand: &Ranges_Magic_Item_Rare_Wand_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Rare_Ranges
+              # Slot definition: Wand
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Rare_Wand
+          Weapon: &Ranges_Magic_Item_Rare_Weapon_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Rare_Ranges
+              # Slot definition: Weapon
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Rare_Weapon
+          Wondrous: &Ranges_Magic_Item_Rare_Wondrous_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Rare_Ranges
+              # Slot definition: Wondrous
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Rare_Wondrous
+        outcome_rules:
+      #################################################################################################################
+      # Define random outcome rules for each Rare slot
+      #################################################################################################################
+          Armor: &Special_Magic_Item_Rare_Armor_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Rare_Armor_Ranges
+          Ring: &Special_Magic_Item_Rare_Ring_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Rare_Ring_Ranges
+          Rod: &Special_Magic_Item_Rare_Rod_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Rare_Rod_Ranges
+          Staff: &Special_Magic_Item_Rare_Staff_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Rare_Staff_Ranges
+          Wand: &Special_Magic_Item_Rare_Wand_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Rare_Wand_Ranges
+          Weapon: &Special_Magic_Item_Rare_Weapon_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Rare_Weapon_Ranges
+          Wondrous: &Special_Magic_Item_Rare_Wondrous_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Rare_Wondrous_Ranges
+        recipe_rules:
+        #################################################################################################################
+        # Define recipe rules for each Rare slot
+        #################################################################################################################
+          Armor: &Recipe_Magic_Item_Rare_Armor_Rules
+            <<: *Recipe_Magic_Item_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Rare_Armor_Random_Outcome
+          Ring: &Recipe_Magic_Item_Rare_Ring_Rules
+            <<: *Recipe_Magic_Item_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Rare_Ring_Random_Outcome
+          Rod: &Recipe_Magic_Item_Rare_Rod_Rules
+            <<: *Recipe_Magic_Item_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Rare_Rod_Random_Outcome
+          Staff: &Recipe_Magic_Item_Rare_Staff_Rules
+            <<: *Recipe_Magic_Item_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Rare_Staff_Random_Outcome
+          Wand: &Recipe_Magic_Item_Rare_Wand_Rules
+            <<: *Recipe_Magic_Item_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Rare_Wand_Random_Outcome
+          Weapon: &Recipe_Magic_Item_Rare_Weapon_Rules
+            <<: *Recipe_Magic_Item_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Rare_Weapon_Random_Outcome
+          Wondrous: &Recipe_Magic_Item_Rare_Wondrous_Rules
+            <<: *Recipe_Magic_Item_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Rare_Wondrous_Random_Outcome
+      Very_Rare:
+        base_rules: &Recipe_Magic_Item_Very_Rare_Base_Rules
+          ################################################################################################################
+          # Define base rules for each Very_Rare slot - prereq rules and cost rules
+          ################################################################################################################
+          prereq:
+            has_level: 12
+          cost:
+            Red Dust: 1000
+        range_rules:
+          #################################################################################################################
+          # Define 'Very_Rare' rarity base ranges. Each slot will use this and set their own slot range.
+          #################################################################################################################
+          ranges: &Ranges_Magic_Item_Very_Rare_Ranges
+            <<: *Ranges_Magic_Item_Base_Ranges
+            # Rarity range definition: Very_Rare
+            rarity range:
+              <<: *Ranges_Magic_Item_Base_Rarity
+              outcomes:
+                - *Outcomes_Magic_Item_Very_Rare_All
+          #################################################################################################################
+          # Begin defining slots by merging Very_Rare range anchor in and setting the slot range
+          #################################################################################################################
+          Armor:  &Ranges_Magic_Item_Very_Rare_Armor_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Very_Rare_Ranges
+              # Slot definition: Armor
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Very_Rare_Armor
+          Ring:  &Ranges_Magic_Item_Very_Rare_Ring_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Very_Rare_Ranges
+              # Slot definition: Ring
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Very_Rare_Ring
+          Rod:  &Ranges_Magic_Item_Very_Rare_Rod_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Very_Rare_Ranges
+              # Slot definition: Rod
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Very_Rare_Ring
+          Staff: &Ranges_Magic_Item_Very_Rare_Staff_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Very_Rare_Ranges
+              # Slot definition: Staff
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Very_Rare_Staff
+          Wand: &Ranges_Magic_Item_Very_Rare_Wand_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Very_Rare_Ranges
+              # Slot definition: Wand
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Very_Rare_Wand
+          Weapon: &Ranges_Magic_Item_Very_Rare_Weapon_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Very_Rare_Ranges
+              # Slot definition: Weapon
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Very_Rare_Weapon
+          Wondrous: &Ranges_Magic_Item_Very_Rare_Wondrous_Ranges
+            ranges:
+              <<: *Ranges_Magic_Item_Very_Rare_Ranges
+              # Slot definition: Wondrous
+              slot range:
+                <<: *Ranges_Magic_Item_Base_Slot
+                outcomes:
+                  - *Outcomes_Magic_Item_Very_Rare_Wondrous
+        outcome_rules:
+      #################################################################################################################
+      # Define random outcome rules for each Very_Rare slot
+      #################################################################################################################
+          Armor: &Special_Magic_Item_Very_Rare_Armor_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Very_Rare_Armor_Ranges
+          Ring: &Special_Magic_Item_Very_Rare_Ring_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Very_Rare_Ring_Ranges
+          Rod: &Special_Magic_Item_Very_Rare_Rod_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Very_Rare_Rod_Ranges
+          Staff: &Special_Magic_Item_Very_Rare_Staff_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Very_Rare_Staff_Ranges
+          Wand: &Special_Magic_Item_Very_Rare_Wand_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Very_Rare_Wand_Ranges
+          Weapon: &Special_Magic_Item_Very_Rare_Weapon_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Very_Rare_Weapon_Ranges
+          Wondrous: &Special_Magic_Item_Very_Rare_Wondrous_Random_Outcome
+            random outcome:
+              <<: *Special_Magic_Item_Base_Random_Outcome
+              <<: *Ranges_Magic_Item_Very_Rare_Wondrous_Ranges
+        recipe_rules:
+        #################################################################################################################
+        # Define recipe rules for each Very_Rare slot
+        #################################################################################################################
+          Armor: &Recipe_Magic_Item_Very_Rare_Armor_Rules
+            <<: *Recipe_Magic_Item_Very_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Very_Rare_Armor_Random_Outcome
+          Ring: &Recipe_Magic_Item_Very_Rare_Ring_Rules
+            <<: *Recipe_Magic_Item_Very_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Very_Rare_Ring_Random_Outcome
+          Rod: &Recipe_Magic_Item_Very_Rare_Rod_Rules
+            <<: *Recipe_Magic_Item_Very_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Very_Rare_Rod_Random_Outcome
+          Staff: &Recipe_Magic_Item_Very_Rare_Staff_Rules
+            <<: *Recipe_Magic_Item_Very_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Very_Rare_Staff_Random_Outcome
+          Wand: &Recipe_Magic_Item_Very_Rare_Wand_Rules
+            <<: *Recipe_Magic_Item_Very_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Very_Rare_Wand_Random_Outcome
+          Weapon: &Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            <<: *Recipe_Magic_Item_Very_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Very_Rare_Weapon_Random_Outcome
+          Wondrous: &Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            <<: *Recipe_Magic_Item_Very_Rare_Base_Rules
+            special:
+              <<: *Special_Magic_Item_Very_Rare_Wondrous_Random_Outcome
+
+#####################################################################################################################
+# 'Recipe' definitions:
+# Definitions for how to craft items.
+#####################################################################################################################
+recipes:
+  Blue Thaumstyn:
+    #################################################################################################################
+    # SPELL GEMS
+    #################################################################################################################
+    Spell Gems:
+      - 
+        name: Level 1 Spell Gem
+        prefix: Flickering Gem of
+        cost: 
+          Gold: 10
+          Blue Dust: 50
+        outcomes:
+          - *Outcomes_Spell_Gems_Level_1
+      - 
+        name: Level 2 Spell Gem
+        prefix: Steady Gem of
+        cost: 
+          Gold: 20
+          Blue Dust: 100
+        outcomes:
+          - *Outcomes_Spell_Gems_Level_2
+      -
+        name: Level 3 Spell Gem
+        prefix: Bright Gem of
+        cost: 
+          Gold: 30
+          Blue Dust: 150
+        outcomes:
+          - *Outcomes_Spell_Gems_Level_3
+      - 
+        name: Level 4 Spell Gem
+        prefix: Radiant Gem of
+        cost: 
+          Gold: 40
+          Blue Dust: 200
+        outcomes:
+          - *Outcomes_Spell_Gems_Level_4
+      -
+        name: Level 5 Spell Gem
+        prefix: Flawless Gem of
+        cost: 
+          Gold: 50
+          Blue Dust: 250
+        outcomes:
+          - *Outcomes_Spell_Gems_Level_5
+  Red Thaumstyn:
+  #################################################################################################################
+  # WAND AMMO
+  #################################################################################################################
+    Wand Ammo:
+      - 
+        name: Wand of Fireball Ammo
+        prereq:
+          has_item: Wand of Fireball
+          has_item_quantity_by_keyword:
+            Red Dust: 10
+        cost:
+          Red Dust: 1
+        special:
+          random amount:
+            die: 6
+            mod: 1
+        outcomes:
+          - Wand of Fireball Ammo
+
+
+#    Magic Item:
+#      Common:
+#        Armor:
+#          -
+#            # TODO: Have user select from original outcomes and just name this 'Armor of Gleaming'?
+#            name: Breastplate of Gleaming
+#            <<: *Recipe_Magic_Item_Common_Armor_Rules
+#            outcomes:
+#              - Breastplate of Gleaming
+
+  #################################################################################################################
+  # MAGIC ITEM CRAFTING
+  #################################################################################################################
+    Magic Item:
+      Common:
+        Armor:
+          - name: Leather Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Leather Armor of Gleaming
+          - name: Padded Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Padded Armor of Gleaming
+          - name: Studded Leather Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Studded Leather Armor of Gleaming
+          - name: Hide Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Hide Armor of Gleaming
+          - name: Breastplate of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Breastplate of Gleaming
+          - name: Chain Shirt of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Chain Shirt of Gleaming
+          - name: Half Plate Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Half Plate Armor of Gleaming
+          - name: Scale Mail of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Scale Mail of Gleaming
+          - name: Spiked Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Spiked Armor of Gleaming
+          - name: Chain Mail of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Chain Mail of Gleaming
+          - name: Plate Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Plate Armor of Gleaming
+          - name: Ring Mail of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Ring Mail of Gleaming
+          - name: Splint Armor of Gleaming
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Splint Armor of Gleaming
+          - name: Cast-Off Leather Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Leather Armor
+          - name: Cast-Off Padded Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Padded Armor
+          - name: Cast-Off Studded Leather Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Studded Leather Armor
+          - name: Cast-Off Hide Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Hide Armor
+          - name: Cast-Off Breastplate
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Breastplate
+          - name: Cast-Off Chain Shirt
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Chain Shirt
+          - name: Cast-Off Half Plate Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Half Plate Armor
+          - name: Cast-Off Scale Mail
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Scale Mail
+          - name: Cast-Off Spiked Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Spiked Armor
+          - name: Cast-Off Chain Mail
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Chain Mail
+          - name: Cast-Off Plate Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Plate Armor
+          - name: Cast-Off Ring Mail
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Ring Mail
+          - name: Cast-Off Splint Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Cast-Off Splint Armor
+          - name: Smoldering Leather Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Leather Armor
+          - name: Smoldering Padded Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Padded Armor
+          - name: Smoldering Studded Leather Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Studded Leather Armor
+          - name: Smoldering Hide Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Hide Armor
+          - name: Smoldering Breastplate
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Breastplate
+          - name: Smoldering Chain Shirt
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Chain Shirt
+          - name: Smoldering Half Plate Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Half Plate Armor
+          - name: Smoldering Scale Mail
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Scale Mail
+          - name: Smoldering Spiked Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Spiked Armor
+          - name: Smoldering Chain Mail
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Chain Mail
+          - name: Smoldering Plate Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Plate Armor
+          - name: Smoldering Ring Mail
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Ring Mail
+          - name: Smoldering Splint Armor
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Smoldering Splint Armor
+          - name: Shield of Expression
+            <<: *Recipe_Magic_Item_Common_Armor_Rules
+            outcomes:
+              - Shield of Expression
+        Staff:
+          - name: Staff of Adornment
+            <<: *Recipe_Magic_Item_Common_Staff_Rules
+            outcomes:
+              - Staff of Adornment
+          - name: Staff of Birdcalls
+            <<: *Recipe_Magic_Item_Common_Staff_Rules
+            outcomes:
+              - Staff of Birdcalls
+          - name: Staff of Flowers
+            <<: *Recipe_Magic_Item_Common_Staff_Rules
+            outcomes:
+              - Staff of Flowers
+        Wand:
+          - name: Wand of Conducting
+            <<: *Recipe_Magic_Item_Common_Wand_Rules
+            outcomes:
+              - Wand of Conducting
+          - name: Wand of Pyrotechnics
+            <<: *Recipe_Magic_Item_Common_Wand_Rules
+            outcomes:
+              - Wand of Pyrotechnics
+          - name: Wand of Scowls
+            <<: *Recipe_Magic_Item_Common_Wand_Rules
+            outcomes:
+              - Wand of Scowls
+          - name: Wand of Smiles
+            <<: *Recipe_Magic_Item_Common_Wand_Rules
+            outcomes:
+              - Wand of Smiles
+        Weapon:
+          - name: Moon-Touched Greatsword
+            <<: *Recipe_Magic_Item_Common_Weapon_Rules
+            outcomes:
+              - Moon-Touched Greatsword
+          - name: Moon-Touched Longsword
+            <<: *Recipe_Magic_Item_Common_Weapon_Rules
+            outcomes:
+              - Moon-Touched Longsword
+          - name: Moon-Touched Scimitar
+            <<: *Recipe_Magic_Item_Common_Weapon_Rules
+            outcomes:
+              - Moon-Touched Scimitar
+          - name: Moon-Touched Rapier
+            <<: *Recipe_Magic_Item_Common_Weapon_Rules
+            outcomes:
+              - Moon-Touched Rapier
+          - name: Moon-Touched Shortsword
+            <<: *Recipe_Magic_Item_Common_Weapon_Rules
+            outcomes:
+              - Moon-Touched Shortsword
+        Wondrous:
+          - name: Bead of Nourishment
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Bead of Nourishment
+          - name: Bead of Refreshment
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Bead of Refreshment
+          - name: Boots of False Tricks
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Boots of False Tricks
+          - name: Candle of the Deep
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Candle of the Deep
+          - name: Charlatan's Die
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Charlatan's Die
+          - name: Chest of Preserving
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Chest of Preserving
+          - name: Cloak of Billowing
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Cloak of Billowing
+          - name: Cloak of Many Fashions
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Cloak of Many Fashions
+          - name: Clockwork Amulet
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Clockwork Amulet
+          - name: Clothes of Mending
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Clothes of Mending
+          - name: Dark Shard Amulet
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Dark Shard Amulet
+          - name: Dread Helm
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Dread Helm
+          - name: Ear Horn of Hearing
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Ear Horn of Hearing
+          - name: Enduring Spellbook
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Enduring Spellbook
+          - name: Ersatz Eye
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Ersatz Eye
+          - name: Hat of Vermin
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Hat of Vermin
+          - name: Hat of Wizardry
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Hat of Wizardry
+          - name: Heward's Handy Spice Pouch
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Heward's Handy Spice Pouch
+          - name: Horn of Silent Alarm
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Horn of Silent Alarm
+          - name: Lock of Trickery
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Lock of Trickery
+          - name: Mystery Key
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Mystery Key
+          - name: Orb of Direction
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Orb of Direction
+          - name: Orb on Gonging
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Orb on Gonging
+          - name: Orb of Time
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Orb of Time
+          - name: Perfume of Bewitching
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Perfume of Bewitching
+          - name: Pipe of Remembrance
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Pipe of Remembrance
+          - name: Pipe of Smoke Monsters
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Pipe of Smoke Monsters
+          - name: Pole of Angling
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Pole of Angling
+          - name: Pole of Collapsing
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Pole of Collapsing
+          - name: Pot of Awakening
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Pot of Awakening
+          - name: Pressure Capsule
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Pressure Capsule
+          - name: Rope of Mending
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Rope of Mending
+          - name: Ruby of the War Mage
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Ruby of the War Mage
+          - name: Talking Doll
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Talking Doll
+          - name: Tankard of Sobriety
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Tankard of Sobriety
+          - name: Veteran's Cane
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Veteran's Cane
+          - name: Instrument of Illusions
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Instrument of Illusions
+          - name: Instrument of Scribing
+            <<: *Recipe_Magic_Item_Common_Wondrous_Rules
+            outcomes:
+              - Instrument of Scribing
+      Uncommon:
+        Armor:
+          - name: Adamantine Breastplate
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Adamantine Breastplate
+          - name: Adamantine Chain Shirt
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Adamantine Chain Shirt
+          - name: Adamantine Half Plate Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Adamantine Half Plate Armor
+          - name: Adamantine Scale Mail
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Adamantine Scale Mail
+          - name: Adamantine Spiked Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Adamantine Spiked Armor
+          - name: Adamantine Chain Mail
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Adamantine Chain Mail
+          - name: Adamantine Plate Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Adamantine Plate Armor
+          - name: Adamantine Ring Mail
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Adamantine Ring Mail
+          - name: Adamantine Splint Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Adamantine Splint Armor
+          - name: Mariner's Leather Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Leather Armor
+          - name: Mariner's Padded Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Padded Armor
+          - name: Mariner's Studded Leather Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Studded Leather Armor
+          - name: Mariner's Hide Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Hide Armor
+          - name: Mariner's Breastplate
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Breastplate
+          - name: Mariner's Chain Shirt
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Chain Shirt
+          - name: Mariner's Half Plate Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Half Plate Armor
+          - name: Mariner's Scale Mail
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Scale Mail
+          - name: Mariner's Spiked Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Spiked Armor
+          - name: Mariner's Chain Mail
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Chain Mail
+          - name: Mariner's Plate Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Plate Armor
+          - name: Mariner's Ring Mail
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Ring Mail
+          - name: Mariner's Splint Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mariner's Splint Armor
+          - name: Mithral Breastplate
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mithral Breastplate
+          - name: Mithral Chain Shirt
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mithral Chain Shirt
+          - name: Mithral Half Plate Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mithral Half Plate Armor
+          - name: Mithral Scale Mail
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mithral Scale Mail
+          - name: Mithral Spiked Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mithral Spiked Armor
+          - name: Mithral Chain Mail
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mithral Chain Mail
+          - name: Mithral Plate Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mithral Plate Armor
+          - name: Mithral Ring Mail
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mithral Ring Mail
+          - name: Mithral Splint Armor
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Mithral Splint Armor
+          - name: Shield +1
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Shield +1
+          - name: Sentinel Shield
+            <<: *Recipe_Magic_Item_Uncommon_Armor_Rules
+            outcomes:
+              - Sentinel Shield
+        Ring:
+          - name: Ring of Jumping
+            <<: *Recipe_Magic_Item_Uncommon_Ring_Rules
+            outcomes:
+              - Ring of Jumping
+          - name: Ring of Mind Shielding
+            <<: *Recipe_Magic_Item_Uncommon_Ring_Rules
+            outcomes:
+              - Ring of Mind Shielding
+          - name: Ring of Swimming
+            <<: *Recipe_Magic_Item_Uncommon_Ring_Rules
+            outcomes:
+              - Ring of Swimming
+          - name: Ring of Truth Telling
+            <<: *Recipe_Magic_Item_Uncommon_Ring_Rules
+            outcomes:
+              - Ring of Truth Telling
+          - name: Ring of Warmth
+            <<: *Recipe_Magic_Item_Uncommon_Ring_Rules
+            outcomes:
+              - Ring of Warmth
+          - name: Ring of Water Walking
+            <<: *Recipe_Magic_Item_Uncommon_Ring_Rules
+            outcomes:
+              - Ring of Water Walking
+        Rod:
+          - name: Immovable Rod
+            <<: *Recipe_Magic_Item_Uncommon_Rod_Rules
+            outcomes:
+              - Immovable Rod
+          - name: Rod of the Pact Keeper +1
+            <<: *Recipe_Magic_Item_Uncommon_Rod_Rules
+            outcomes:
+              - Rod of the Pact Keeper +1
+        Stave:
+          - name: Staff of the Adder
+            <<: *Recipe_Magic_Item_Uncommon_Staff_Rules
+            outcomes:
+              - Staff of the Adder
+          - name: Staff of the Python
+            <<: *Recipe_Magic_Item_Uncommon_Staff_Rules
+            outcomes:
+              - Staff of the Python
+        Wand:
+          - name: Wand of Entangle
+            <<: *Recipe_Magic_Item_Uncommon_Wand_Rules
+            outcomes:
+              - Wand of Entangle
+          - name: Wand of Magic Detection
+            <<: *Recipe_Magic_Item_Uncommon_Wand_Rules
+            outcomes:
+              - Wand of Magic Detection
+          - name: Wand of magic Missiles
+            <<: *Recipe_Magic_Item_Uncommon_Wand_Rules
+            outcomes:
+              - Wand of magic Missiles
+          - name: Wand of Secrets
+            <<: *Recipe_Magic_Item_Uncommon_Wand_Rules
+            outcomes:
+              - Wand of Secrets
+          - name: Wand of the War Mage +1
+            <<: *Recipe_Magic_Item_Uncommon_Wand_Rules
+            outcomes:
+              - Wand of the War Mage +1
+          - name: Wand of Web
+            <<: *Recipe_Magic_Item_Uncommon_Wand_Rules
+            outcomes:
+              - Wand of Web
+        Weapon:
+          - name: Trident of Fish Command
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Trident of Fish Command
+          - name: Blowgun +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Blowgun +1
+          - name: Club +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Club +1
+          - name: Dagger +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Dagger +1
+          - name: Dart +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Dart +1
+          - name: Flail +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Flail +1
+          - name: Glaive +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Glaive +1
+          - name: Greatclub +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Greatclub +1
+          - name: Halberd +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Halberd +1
+          - name: Javelin +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Javelin +1
+          - name: Lance +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Lance +1
+          - name: Light Hammer +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Light Hammer +1
+          - name: Longbow +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Longbow +1
+          - name: Mace +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Mace +1
+          - name: Maul +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Maul +1
+          - name: Morningstar +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Morningstar +1
+          - name: Pike +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Pike +1
+          - name: Quarterstaff +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Quarterstaff +1
+          - name: Shortbow +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Shortbow +1
+          - name: Sickle +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Sickle +1
+          - name: Sling +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Sling +1
+          - name: Spear +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Spear +1
+          - name: Trident +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Trident +1
+          - name: War Pick +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - War Pick +1
+          - name: Warhammer +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Warhammer +1
+          - name: Whip +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Whip +1
+          - name: Battleaxe +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Battleaxe +1
+          - name: Greataxe +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Greataxe +1
+          - name: Handaxe +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Handaxe +1
+          - name: Hand Crossbow +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Hand Crossbow +1
+          - name: Heavy Crossbow +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Heavy Crossbow +1
+          - name: Light Crossbow +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Light Crossbow +1
+          - name: Greatsword +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Greatsword +1
+          - name: Longsword +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Longsword +1
+          - name: Scimitar +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Scimitar +1
+          - name: Rapier +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Rapier +1
+          - name: Shortsword +1
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Shortsword +1
+          - name: Blowgun of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Blowgun of Warning
+          - name: Club of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Club of Warning
+          - name: Dagger of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Dagger of Warning
+          - name: Dart of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Dart of Warning
+          - name: Flail of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Flail of Warning
+          - name: Glaive of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Glaive of Warning
+          - name: Greatclub of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Greatclub of Warning
+          - name: Halberd of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Halberd of Warning
+          - name: Javelin of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Javelin of Warning
+          - name: Lance of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Lance of Warning
+          - name: Light Hammer of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Light Hammer of Warning
+          - name: Longbow of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Longbow of Warning
+          - name: Mace of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Mace of Warning
+          - name: Maul of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Maul of Warning
+          - name: Morningstar of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Morningstar of Warning
+          - name: Pike of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Pike of Warning
+          - name: Quarterstaff of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Quarterstaff of Warning
+          - name: Shortbow of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Shortbow of Warning
+          - name: Sickle of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Sickle of Warning
+          - name: Sling of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Sling of Warning
+          - name: Spear of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Spear of Warning
+          - name: Trident of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Trident of Warning
+          - name: War Pick of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - War Pick of Warning
+          - name: Warhammer of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Warhammer of Warning
+          - name: Whip of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Whip of Warning
+          - name: Battleaxe of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Battleaxe of Warning
+          - name: Greataxe of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Greataxe of Warning
+          - name: Handaxe of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Handaxe of Warning
+          - name: Hand Crossbow of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Hand Crossbow of Warning
+          - name: Heavy Crossbow of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Heavy Crossbow of Warning
+          - name: Light Crossbow of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Light Crossbow of Warning
+          - name: Greatsword of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Greatsword of Warning
+          - name: Longsword of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Longsword of Warning
+          - name: Scimitar of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Scimitar of Warning
+          - name: Rapier of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Rapier of Warning
+          - name: Shortsword of Warning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Shortsword of Warning
+          - name: Javelin of Lightning
+            <<: *Recipe_Magic_Item_Uncommon_Weapon_Rules
+            outcomes:
+              - Javelin of Lightning
+        Wondrous:
+          - name: Alchemy Jug
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Alchemy Jug
+          - name: Amulet of Proof against Detection and Location
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Amulet of Proof against Detection and Location
+          - name: Bag of Holding
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Bag of Holding
+          - name: Bag of Tricks - Gray
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Bag of Tricks - Gray
+          - name: Bag of Tricks - Rust
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Bag of Tricks - Rust
+          - name: Bag of Tricks - Tan
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Bag of Tricks - Tan
+          - name: Boots of Elvenkind
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Boots of Elvenkind
+          - name: Boots of Striding and Springing
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Boots of Striding and Springing
+          - name: Boots of the Winterlands
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Boots of the Winterlands
+          - name: Bracers of Archery
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Bracers of Archery
+          - name: Brooch of Shielding
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Brooch of Shielding
+          - name: Broom of Flying
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Broom of Flying
+          - name: Cap of Water BReathing
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Cap of Water BReathing
+          - name: Circlet of Blasting
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Circlet of Blasting
+          - name: Cloak of Elvenkind
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Cloak of Elvenkind
+          - name: Cloak of Protection
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Cloak of Protection
+          - name: Cloak of the Manta Ray
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Cloak of the Manta Ray
+          - name: Decanter of Endless Water
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Decanter of Endless Water
+          - name: Deck of Illusions
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Deck of Illusions
+          - name: Driftglobe
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Driftglobe
+          - name: Dust of Disappearance
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Dust of Disappearance
+          - name: Dust of Dryness
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Dust of Dryness
+          - name: Dust of Sneezing and Choking (Cursed)
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Dust of Sneezing and Choking (Cursed)
+          - name: Elemental Gem - Blue Sapphire
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Elemental Gem - Blue Sapphire
+          - name: Elemental Gem - Emerald
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Elemental Gem - Emerald
+          - name: Elemental Gem - Red Corundum
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Elemental Gem - Red Corundum
+          - name: Elemental Gem - Yellow Diamond
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Elemental Gem - Yellow Diamond
+          - name: Eversmoking Bottle
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Eversmoking Bottle
+          - name: Eyes of Charming
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Eyes of Charming
+          - name: Eyes of minute Seeing
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Eyes of minute Seeing
+          - name: Eyes of the Eagle
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Eyes of the Eagle
+          - name: Figurine of Wondrous Power - Silver Raven
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Figurine of Wondrous Power - Silver Raven
+          - name: Gauntlets of Ogre Power
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Gauntlets of Ogre Power
+          - name: Gem of Brightness
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Gem of Brightness
+          - name: Gloves of Missile Snaring
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Gloves of Missile Snaring
+          - name: Gloves of Swimming and Climbing
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Gloves of Swimming and Climbing
+          - name: Gloves of Thievery
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Gloves of Thievery
+          - name: Goggles of Night
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Goggles of Night
+          - name: Hat of Disguise
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Hat of Disguise
+          - name: Headband of intellect
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Headband of intellect
+          - name: Helm of Comprehending Languages
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Helm of Comprehending Languages
+          - name: Helm of Telepathy
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Helm of Telepathy
+          - name: Helm of Underwater Action
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Helm of Underwater Action
+          - name: Keoghtom's Ointment
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Keoghtom's Ointment
+          - name: Lantern of Revealing
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Lantern of Revealing
+          - name: Medallion of Thoughts
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Medallion of Thoughts
+          - name: Necklace of Adaptation
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Necklace of Adaptation
+          - name: Paper Bird
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Paper Bird
+          - name: Pearl of Power
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Pearl of Power
+          - name: Periapt of health
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Periapt of health
+          - name: Periapt of Wound Closure
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Periapt of Wound Closure
+          - name: Quiver of Ehlonna
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Quiver of Ehlonna
+          - name: Robe of Serpents
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Robe of Serpents
+          - name: Robe of Useful Items
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Robe of Useful Items
+          - name: Rope of Climbing
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Rope of Climbing
+          - name: Saddle of the Cavalier
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Saddle of the Cavalier
+          - name: Sending Stones
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Sending Stones
+          - name: Slippers of Spider Climbing
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Slippers of Spider Climbing
+          - name: Stone of Good Luck
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Stone of Good Luck
+          - name: Wind Fan
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Wind Fan
+          - name: Winged Boots
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Winged Boots
+          - name: Instrument of the Bards - Doss Lute
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Instrument of the Bards - Doss Lute
+          - name: Instrument of the Bards - Fochlucan Bandore
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Instrument of the Bards - Fochlucan Bandore
+          - name: Instrument of the Bards - Fuirmidh Cittern
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Instrument of the Bards - Fuirmidh Cittern
+          - name: Pipes of Haunting
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Pipes of Haunting
+          - name: Pipes of the Sewers
+            <<: *Recipe_Magic_Item_Uncommon_Wondrous_Rules
+            outcomes:
+              - Pipes of the Sewers
+      Rare:
+        Armor:
+          - name: Leather Armor +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Leather Armor +1
+          - name: Padded Armor +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Padded Armor +1
+          - name: Studded Leather Armor +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Studded Leather Armor +1
+          - name: Hide Armor +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Hide Armor +1
+          - name: Breastplate +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Breastplate +1
+          - name: Chain Shirt +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Shirt +1
+          - name: Half Plate Armor +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Half Plate Armor +1
+          - name: Scale Mail +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Scale Mail +1
+          - name: Spiked Armor +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Spiked Armor +1
+          - name: Chain Mail +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Mail +1
+          - name: Plate Armor +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Plate Armor +1
+          - name: Ring Mail +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Ring Mail +1
+          - name: Splint Armor +1
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Splint Armor +1
+          - name: Leather Armor of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Leather Armor of Acid Resistance
+          - name: Leather Armor of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Leather Armor of Cold Resistance
+          - name: Leather Armor of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Leather Armor of Fire Resistance
+          - name: Leather Armor of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Leather Armor of Force Resistance
+          - name: Leather Armor of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Leather Armor of Lightning Resistance
+          - name: Leather Armor of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Leather Armor of Necrotic Resistance
+          - name: Leather Armor of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Leather Armor of Poison Resistance
+          - name: Leather Armor of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Leather Armor of Psychic Resistance
+          - name: Leather Armor of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Leather Armor of Radiant Resistance
+          - name: Leather Armor of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Leather Armor of Thunder Resistance
+          - name: Padded Armor of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Padded Armor of Acid Resistance
+          - name: Padded Armor of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Padded Armor of Cold Resistance
+          - name: Padded Armor of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Padded Armor of Fire Resistance
+          - name: Padded Armor of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Padded Armor of Force Resistance
+          - name: Padded Armor of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Padded Armor of Lightning Resistance
+          - name: Padded Armor of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Padded Armor of Necrotic Resistance
+          - name: Padded Armor of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Padded Armor of Poison Resistance
+          - name: Padded Armor of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Padded Armor of Psychic Resistance
+          - name: Padded Armor of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Padded Armor of Radiant Resistance
+          - name: Padded Armor of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Padded Armor of Thunder Resistance
+          - name: Studded Leather Armor of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Studded Leather Armor of Acid Resistance
+          - name: Studded Leather Armor of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Studded Leather Armor of Cold Resistance
+          - name: Studded Leather Armor of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Studded Leather Armor of Fire Resistance
+          - name: Studded Leather Armor of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Studded Leather Armor of Force Resistance
+          - name: Studded Leather Armor of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Studded Leather Armor of Lightning Resistance
+          - name: Studded Leather Armor of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Studded Leather Armor of Necrotic Resistance
+          - name: Studded Leather Armor of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Studded Leather Armor of Poison Resistance
+          - name: Studded Leather Armor of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Studded Leather Armor of Psychic Resistance
+          - name: Studded Leather Armor of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Studded Leather Armor of Radiant Resistance
+          - name: Studded Leather Armor of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Studded Leather Armor of Thunder Resistance
+          - name: Hide Armor of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Hide Armor of Acid Resistance
+          - name: Hide Armor of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Hide Armor of Cold Resistance
+          - name: Hide Armor of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Hide Armor of Fire Resistance
+          - name: Hide Armor of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Hide Armor of Force Resistance
+          - name: Hide Armor of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Hide Armor of Lightning Resistance
+          - name: Hide Armor of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Hide Armor of Necrotic Resistance
+          - name: Hide Armor of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Hide Armor of Poison Resistance
+          - name: Hide Armor of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Hide Armor of Psychic Resistance
+          - name: Hide Armor of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Hide Armor of Radiant Resistance
+          - name: Hide Armor of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Hide Armor of Thunder Resistance
+          - name: Breastplate of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Breastplate of Acid Resistance
+          - name: Breastplate of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Breastplate of Cold Resistance
+          - name: Breastplate of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Breastplate of Fire Resistance
+          - name: Breastplate of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Breastplate of Force Resistance
+          - name: Breastplate of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Breastplate of Lightning Resistance
+          - name: Breastplate of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Breastplate of Necrotic Resistance
+          - name: Breastplate of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Breastplate of Poison Resistance
+          - name: Breastplate of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Breastplate of Psychic Resistance
+          - name: Breastplate of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Breastplate of Radiant Resistance
+          - name: Breastplate of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Breastplate of Thunder Resistance
+          - name: Chain Shirt of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Shirt of Acid Resistance
+          - name: Chain Shirt of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Shirt of Cold Resistance
+          - name: Chain Shirt of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Shirt of Fire Resistance
+          - name: Chain Shirt of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Shirt of Force Resistance
+          - name: Chain Shirt of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Shirt of Lightning Resistance
+          - name: Chain Shirt of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Shirt of Necrotic Resistance
+          - name: Chain Shirt of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Shirt of Poison Resistance
+          - name: Chain Shirt of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Shirt of Psychic Resistance
+          - name: Chain Shirt of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Shirt of Radiant Resistance
+          - name: Chain Shirt of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Shirt of Thunder Resistance
+          - name: Half Plate Armor of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Half Plate Armor of Acid Resistance
+          - name: Half Plate Armor of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Half Plate Armor of Cold Resistance
+          - name: Half Plate Armor of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Half Plate Armor of Fire Resistance
+          - name: Half Plate Armor of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Half Plate Armor of Force Resistance
+          - name: Half Plate Armor of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Half Plate Armor of Lightning Resistance
+          - name: Half Plate Armor of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Half Plate Armor of Necrotic Resistance
+          - name: Half Plate Armor of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Half Plate Armor of Poison Resistance
+          - name: Half Plate Armor of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Half Plate Armor of Psychic Resistance
+          - name: Half Plate Armor of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Half Plate Armor of Radiant Resistance
+          - name: Half Plate Armor of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Half Plate Armor of Thunder Resistance
+          - name: Scale Mail of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Scale Mail of Acid Resistance
+          - name: Scale Mail of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Scale Mail of Cold Resistance
+          - name: Scale Mail of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Scale Mail of Fire Resistance
+          - name: Scale Mail of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Scale Mail of Force Resistance
+          - name: Scale Mail of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Scale Mail of Lightning Resistance
+          - name: Scale Mail of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Scale Mail of Necrotic Resistance
+          - name: Scale Mail of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Scale Mail of Poison Resistance
+          - name: Scale Mail of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Scale Mail of Psychic Resistance
+          - name: Scale Mail of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Scale Mail of Radiant Resistance
+          - name: Scale Mail of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Scale Mail of Thunder Resistance
+          - name: Spiked Armor of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Spiked Armor of Acid Resistance
+          - name: Spiked Armor of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Spiked Armor of Cold Resistance
+          - name: Spiked Armor of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Spiked Armor of Fire Resistance
+          - name: Spiked Armor of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Spiked Armor of Force Resistance
+          - name: Spiked Armor of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Spiked Armor of Lightning Resistance
+          - name: Spiked Armor of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Spiked Armor of Necrotic Resistance
+          - name: Spiked Armor of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Spiked Armor of Poison Resistance
+          - name: Spiked Armor of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Spiked Armor of Psychic Resistance
+          - name: Spiked Armor of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Spiked Armor of Radiant Resistance
+          - name: Spiked Armor of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Spiked Armor of Thunder Resistance
+          - name: Chain Mail of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Mail of Acid Resistance
+          - name: Chain Mail of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Mail of Cold Resistance
+          - name: Chain Mail of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Mail of Fire Resistance
+          - name: Chain Mail of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Mail of Force Resistance
+          - name: Chain Mail of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Mail of Lightning Resistance
+          - name: Chain Mail of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Mail of Necrotic Resistance
+          - name: Chain Mail of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Mail of Poison Resistance
+          - name: Chain Mail of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Mail of Psychic Resistance
+          - name: Chain Mail of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Mail of Radiant Resistance
+          - name: Chain Mail of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Chain Mail of Thunder Resistance
+          - name: Plate Armor of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Plate Armor of Acid Resistance
+          - name: Plate Armor of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Plate Armor of Cold Resistance
+          - name: Plate Armor of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Plate Armor of Fire Resistance
+          - name: Plate Armor of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Plate Armor of Force Resistance
+          - name: Plate Armor of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Plate Armor of Lightning Resistance
+          - name: Plate Armor of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Plate Armor of Necrotic Resistance
+          - name: Plate Armor of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Plate Armor of Poison Resistance
+          - name: Plate Armor of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Plate Armor of Psychic Resistance
+          - name: Plate Armor of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Plate Armor of Radiant Resistance
+          - name: Plate Armor of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Plate Armor of Thunder Resistance
+          - name: Ring Mail of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Ring Mail of Acid Resistance
+          - name: Ring Mail of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Ring Mail of Cold Resistance
+          - name: Ring Mail of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Ring Mail of Fire Resistance
+          - name: Ring Mail of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Ring Mail of Force Resistance
+          - name: Ring Mail of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Ring Mail of Lightning Resistance
+          - name: Ring Mail of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Ring Mail of Necrotic Resistance
+          - name: Ring Mail of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Ring Mail of Poison Resistance
+          - name: Ring Mail of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Ring Mail of Psychic Resistance
+          - name: Ring Mail of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Ring Mail of Radiant Resistance
+          - name: Ring Mail of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Ring Mail of Thunder Resistance
+          - name: Splint Armor of Acid Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Splint Armor of Acid Resistance
+          - name: Splint Armor of Cold Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Splint Armor of Cold Resistance
+          - name: Splint Armor of Fire Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Splint Armor of Fire Resistance
+          - name: Splint Armor of Force Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Splint Armor of Force Resistance
+          - name: Splint Armor of Lightning Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Splint Armor of Lightning Resistance
+          - name: Splint Armor of Necrotic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Splint Armor of Necrotic Resistance
+          - name: Splint Armor of Poison Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Splint Armor of Poison Resistance
+          - name: Splint Armor of Psychic Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Splint Armor of Psychic Resistance
+          - name: Splint Armor of Radiant Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Splint Armor of Radiant Resistance
+          - name: Splint Armor of Thunder Resistance
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Splint Armor of Thunder Resistance
+          - name: Elven Chain
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Elven Chain
+          - name: Glamoured Studded Leather
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Glamoured Studded Leather
+          - name: Arrow Catching Shield
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Arrow Catching Shield
+          - name: Shield +2
+            <<: *Recipe_Magic_Item_Rare_Armor_Rules
+            outcomes:
+              - Shield +2
+        Ring:
+          - name: Ring of <Resistance>
+            <<: *Recipe_Magic_Item_Rare_Ring_Rules
+            outcomes:
+              - Ring of <Resistance>
+          - name: Ring of Animal Influence
+            <<: *Recipe_Magic_Item_Rare_Ring_Rules
+            outcomes:
+              - Ring of Animal Influence
+          - name: Ring of Evasion
+            <<: *Recipe_Magic_Item_Rare_Ring_Rules
+            outcomes:
+              - Ring of Evasion
+          - name: Ring of Feather Falling
+            <<: *Recipe_Magic_Item_Rare_Ring_Rules
+            outcomes:
+              - Ring of Feather Falling
+          - name: Ring of Free Action
+            <<: *Recipe_Magic_Item_Rare_Ring_Rules
+            outcomes:
+              - Ring of Free Action
+          - name: Ring of Protection
+            <<: *Recipe_Magic_Item_Rare_Ring_Rules
+            outcomes:
+              - Ring of Protection
+          - name: Ring of Spell Storing
+            <<: *Recipe_Magic_Item_Rare_Ring_Rules
+            outcomes:
+              - Ring of Spell Storing
+          - name: Ring of the Ram
+            <<: *Recipe_Magic_Item_Rare_Ring_Rules
+            outcomes:
+              - Ring of the Ram
+          - name: Ring of X-Ray Vision
+            <<: *Recipe_Magic_Item_Rare_Ring_Rules
+            outcomes:
+              - Ring of X-Ray Vision
+        Rod:
+          - name: Rod of Rulership
+            <<: *Recipe_Magic_Item_Rare_Rod_Rules
+            outcomes:
+              - Rod of Rulership
+          - name: Rod of the Pact Keeper +2
+            <<: *Recipe_Magic_Item_Rare_Rod_Rules
+            outcomes:
+              - Rod of the Pact Keeper +2
+          - name: Tentacle Rod
+            <<: *Recipe_Magic_Item_Rare_Rod_Rules
+            outcomes:
+              - Tentacle Rod
+        Stave:
+          - name: Staff of Charming
+            <<: *Recipe_Magic_Item_Rare_Staff_Rules
+            outcomes:
+              - Staff of Charming
+          - name: Staff of Healing
+            <<: *Recipe_Magic_Item_Rare_Staff_Rules
+            outcomes:
+              - Staff of Healing
+          - name: Staff of Swarming Insects
+            <<: *Recipe_Magic_Item_Rare_Staff_Rules
+            outcomes:
+              - Staff of Swarming Insects
+          - name: Staff of the Woodlands
+            <<: *Recipe_Magic_Item_Rare_Staff_Rules
+            outcomes:
+              - Staff of the Woodlands
+          - name: Staff of Withering
+            <<: *Recipe_Magic_Item_Rare_Staff_Rules
+            outcomes:
+              - Staff of Withering
+        Wand:
+          - name: Wand of Binding
+            <<: *Recipe_Magic_Item_Rare_Wand_Rules
+            outcomes:
+              - Wand of Binding
+          - name: Wand of Enemy Detection
+            <<: *Recipe_Magic_Item_Rare_Wand_Rules
+            outcomes:
+              - Wand of Enemy Detection
+          - name: Wand of Fear
+            <<: *Recipe_Magic_Item_Rare_Wand_Rules
+            outcomes:
+              - Wand of Fear
+          - name: Wand of Fireballs
+            <<: *Recipe_Magic_Item_Rare_Wand_Rules
+            outcomes:
+              - Wand of Fireballs
+          - name: Wand of Lightning Bolts
+            <<: *Recipe_Magic_Item_Rare_Wand_Rules
+            outcomes:
+              - Wand of Lightning Bolts
+          - name: Wand of Paralysis
+            <<: *Recipe_Magic_Item_Rare_Wand_Rules
+            outcomes:
+              - Wand of Paralysis
+          - name: Wand of the War Mage +2
+            <<: *Recipe_Magic_Item_Rare_Wand_Rules
+            outcomes:
+              - Wand of the War Mage +2
+          - name: Wand of Wonder
+            <<: *Recipe_Magic_Item_Rare_Wand_Rules
+            outcomes:
+              - Wand of Wonder
+        Weapon:
+          - name: Berserker Battleaxe
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Berserker Battleaxe
+          - name: Berserker Greataxe
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Berserker Greataxe
+          - name: Berserker Handaxe
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Berserker Handaxe
+          - name: Dragon Slayer Greatsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Dragon Slayer Greatsword
+          - name: Dragon Slayer Longsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Dragon Slayer Longsword
+          - name: Dragon Slayer Scimitar
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Dragon Slayer Scimitar
+          - name: Dragon Slayer Rapier
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Dragon Slayer Rapier
+          - name: Dragon Slayer Shortsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Dragon Slayer Shortsword
+          - name: Flame Tongue Greatsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Flame Tongue Greatsword
+          - name: Flame Tongue Longsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Flame Tongue Longsword
+          - name: Flame Tongue Scimitar
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Flame Tongue Scimitar
+          - name: Flame Tongue Rapier
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Flame Tongue Rapier
+          - name: Flame Tongue Shortsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Flame Tongue Shortsword
+          - name: Giant Slayer Greatsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Giant Slayer Greatsword
+          - name: Giant Slayer Longsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Giant Slayer Longsword
+          - name: Giant Slayer Scimitar
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Giant Slayer Scimitar
+          - name: Giant Slayer Rapier
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Giant Slayer Rapier
+          - name: Giant Slayer Shortsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Giant Slayer Shortsword
+          - name: Giant Slayer Battleaxe
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Giant Slayer Battleaxe
+          - name: Giant Slayer Greataxe
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Giant Slayer Greataxe
+          - name: Giant Slayer Handaxe
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Giant Slayer Handaxe
+          - name: Mind Mind Blade Greatsword Greatsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Greatsword Greatsword
+          - name: Mind Mind Blade Longsword Greatsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Longsword Greatsword
+          - name: Mind Mind Blade Scimitar Greatsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Scimitar Greatsword
+          - name: Mind Mind Blade Rapier Greatsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Rapier Greatsword
+          - name: Mind Mind Blade Shortsword Greatsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Shortsword Greatsword
+          - name: Mind Mind Blade Greatsword Longsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Greatsword Longsword
+          - name: Mind Mind Blade Longsword Longsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Longsword Longsword
+          - name: Mind Mind Blade Scimitar Longsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Scimitar Longsword
+          - name: Mind Mind Blade Rapier Longsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Rapier Longsword
+          - name: Mind Mind Blade Shortsword Longsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Shortsword Longsword
+          - name: Mind Mind Blade Greatsword Scimitar
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Greatsword Scimitar
+          - name: Mind Mind Blade Longsword Scimitar
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Longsword Scimitar
+          - name: Mind Mind Blade Scimitar Scimitar
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Scimitar Scimitar
+          - name: Mind Mind Blade Rapier Scimitar
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Rapier Scimitar
+          - name: Mind Mind Blade Shortsword Scimitar
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Shortsword Scimitar
+          - name: Mind Mind Blade Greatsword Rapier
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Greatsword Rapier
+          - name: Mind Mind Blade Longsword Rapier
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Longsword Rapier
+          - name: Mind Mind Blade Scimitar Rapier
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Scimitar Rapier
+          - name: Mind Mind Blade Rapier Rapier
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Rapier Rapier
+          - name: Mind Mind Blade Shortsword Rapier
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Shortsword Rapier
+          - name: Mind Mind Blade Greatsword Shortsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Greatsword Shortsword
+          - name: Mind Mind Blade Longsword Shortsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Longsword Shortsword
+          - name: Mind Mind Blade Scimitar Shortsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Scimitar Shortsword
+          - name: Mind Mind Blade Rapier Shortsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Rapier Shortsword
+          - name: Mind Mind Blade Shortsword Shortsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mind Mind Blade Shortsword Shortsword
+          - name: Sun Blade
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Sun Blade
+          - name: Greatsword of Life Stealing
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Greatsword of Life Stealing
+          - name: Longsword of Life Stealing
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Longsword of Life Stealing
+          - name: Scimitar of Life Stealing
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Scimitar of Life Stealing
+          - name: Rapier of Life Stealing
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Rapier of Life Stealing
+          - name: Shortsword of Life Stealing
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Shortsword of Life Stealing
+          - name: Greatsword of Wounding
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Greatsword of Wounding
+          - name: Longsword of Wounding
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Longsword of Wounding
+          - name: Scimitar of Wounding
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Scimitar of Wounding
+          - name: Rapier of Wounding
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Rapier of Wounding
+          - name: Shortsword of Wounding
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Shortsword of Wounding
+          - name: Vicious Blowgun
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Blowgun
+          - name: Vicious Club
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Club
+          - name: Vicious Dagger
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Dagger
+          - name: Vicious Dart
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Dart
+          - name: Vicious Flail
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Flail
+          - name: Vicious Glaive
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Glaive
+          - name: Vicious Greatclub
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Greatclub
+          - name: Vicious Halberd
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Halberd
+          - name: Vicious Javelin
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Javelin
+          - name: Vicious Lance
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Lance
+          - name: Vicious Light Hammer
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Light Hammer
+          - name: Vicious Longbow
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Longbow
+          - name: Vicious Mace
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Mace
+          - name: Vicious Maul
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Maul
+          - name: Vicious Morningstar
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Morningstar
+          - name: Vicious Pike
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Pike
+          - name: Vicious Quarterstaff
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Quarterstaff
+          - name: Vicious Shortbow
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Shortbow
+          - name: Vicious Sickle
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Sickle
+          - name: Vicious Sling
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Sling
+          - name: Vicious Spear
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Spear
+          - name: Vicious Trident
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Trident
+          - name: Vicious War Pick
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious War Pick
+          - name: Vicious Warhammer
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Warhammer
+          - name: Vicious Whip
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Whip
+          - name: Vicious Battleaxe
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Battleaxe
+          - name: Vicious Greataxe
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Greataxe
+          - name: Vicious Handaxe
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Handaxe
+          - name: Vicious Hand Crossbow
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Hand Crossbow
+          - name: Vicious Heavy Crossbow
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Heavy Crossbow
+          - name: Vicious Light Crossbow
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Light Crossbow
+          - name: Vicious Greatsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Greatsword
+          - name: Vicious Longsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Longsword
+          - name: Vicious Scimitar
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Scimitar
+          - name: Vicious Rapier
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Rapier
+          - name: Vicious Shortsword
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Vicious Shortsword
+          - name: Blowgun +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Blowgun +2
+          - name: Club +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Club +2
+          - name: Dagger +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Dagger +2
+          - name: Dart +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Dart +2
+          - name: Flail +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Flail +2
+          - name: Glaive +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Glaive +2
+          - name: Greatclub +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Greatclub +2
+          - name: Halberd +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Halberd +2
+          - name: Javelin +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Javelin +2
+          - name: Lance +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Lance +2
+          - name: Light Hammer +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Light Hammer +2
+          - name: Longbow +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Longbow +2
+          - name: Mace +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mace +2
+          - name: Maul +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Maul +2
+          - name: Morningstar +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Morningstar +2
+          - name: Pike +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Pike +2
+          - name: Quarterstaff +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Quarterstaff +2
+          - name: Shortbow +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Shortbow +2
+          - name: Sickle +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Sickle +2
+          - name: Sling +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Sling +2
+          - name: Spear +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Spear +2
+          - name: Trident +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Trident +2
+          - name: War Pick +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - War Pick +2
+          - name: Warhammer +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Warhammer +2
+          - name: Whip +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Whip +2
+          - name: Battleaxe +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Battleaxe +2
+          - name: Greataxe +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Greataxe +2
+          - name: Handaxe +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Handaxe +2
+          - name: Hand Crossbow +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Hand Crossbow +2
+          - name: Heavy Crossbow +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Heavy Crossbow +2
+          - name: Light Crossbow +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Light Crossbow +2
+          - name: Greatsword +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Greatsword +2
+          - name: Longsword +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Longsword +2
+          - name: Scimitar +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Scimitar +2
+          - name: Rapier +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Rapier +2
+          - name: Shortsword +2
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Shortsword +2
+          - name: Dagger of Blindsight
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Dagger of Blindsight
+          - name: Dagger of Venom
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Dagger of Venom
+          - name: Mace of Disruption
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mace of Disruption
+          - name: Mace of Smiting
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mace of Smiting
+          - name: Mace of Terror
+            <<: *Recipe_Magic_Item_Rare_Weapon_Rules
+            outcomes:
+              - Mace of Terror
+        Wondrous:
+          - name: Amulet of Health
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Amulet of Health
+          - name: Bag of Beans
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Bag of Beans
+          - name: Bead of Force
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Bead of Force
+          - name: Belt of Dwarvenkind
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Belt of Dwarvenkind
+          - name: Belt of Hill Giant Strength
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Belt of Hill Giant Strength
+          - name: Boots of Levitation
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Boots of Levitation
+          - name: Boots of Speed
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Boots of Speed
+          - name: Bowl of Commanding Water Elementals
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Bowl of Commanding Water Elementals
+          - name: Bracer of Flying Daggers
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Bracer of Flying Daggers
+          - name: Bracers of Defense
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Bracers of Defense
+          - name: Brazier of Commanding Fire Elementals
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Brazier of Commanding Fire Elementals
+          - name: Cape of the Mountebank
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Cape of the Mountebank
+          - name: Censer of Controlling Air Elementals
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Censer of Controlling Air Elementals
+          - name: Chime of Opening
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Chime of Opening
+          - name: Cloak of Displacement
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Cloak of Displacement
+          - name: Cloak of the Bat
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Cloak of the Bat
+          - name: Cube of Force
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Cube of Force
+          - name: Dimensional Shackles
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Dimensional Shackles
+          - name: Figurine of Wondrous Power - Bronze Griffon
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Figurine of Wondrous Power - Bronze Griffon
+          - name: Figurine of Wondrous Power - Ebony Fly
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Figurine of Wondrous Power - Ebony Fly
+          - name: Figurine of Wondrous Power - Golden Lions
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Figurine of Wondrous Power - Golden Lions
+          - name: Figurine of Wondrous Power - Ivory Goats
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Figurine of Wondrous Power - Ivory Goats
+          - name: Figurine of Wondrous Power - Marble Elephant
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Figurine of Wondrous Power - Marble Elephant
+          - name: Figurine of Wondrous Power - Onyx Dog
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Figurine of Wondrous Power - Onyx Dog
+          - name: Figurine of Wondrous Power - Serpentine Owl
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Figurine of Wondrous Power - Serpentine Owl
+          - name: Folding Boat
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Folding Boat
+          - name: Gem of Seeing
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Gem of Seeing
+          - name: Helm of Teleportation
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Helm of Teleportation
+          - name: Heward's Handy Haversack
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Heward's Handy Haversack
+          - name: Horn of Blasting
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Horn of Blasting
+          - name: Horn of Valhalla - Brass
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Horn of Valhalla - Brass
+          - name: Horn of Valhalla - Silver
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Horn of Valhalla - Silver
+          - name: Horseshoes of Speed
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Horseshoes of Speed
+          - name: Ioun Stone - Awareness
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Ioun Stone - Awareness
+          - name: Ioun Stone - Protection
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Ioun Stone - Protection
+          - name: Ioun Stone - Reserve
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Ioun Stone - Reserve
+          - name: Ioun Stone - Sustenance
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Ioun Stone - Sustenance
+          - name: Iron Bands of Bilarro
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Iron Bands of Bilarro
+          - name: Mantle of Spell Resistance
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Mantle of Spell Resistance
+          - name: Necklace of Fireballs
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Necklace of Fireballs
+          - name: Necklace of Prayer Beads
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Necklace of Prayer Beads
+          - name: Periapt of Proof against Poison
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Periapt of Proof against Poison
+          - name: Portable Hole
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Portable Hole
+          - name: Quaal's Feather Token - Anchor
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Quaal's Feather Token - Anchor
+          - name: Quaal's Feather Token - Bird
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Quaal's Feather Token - Bird
+          - name: Quaal's Feather Token - Fan
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Quaal's Feather Token - Fan
+          - name: Quaal's Feather Token - Swan
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Quaal's Feather Token - Swan
+          - name: Quaal's Feather Token - Tree
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Quaal's Feather Token - Tree
+          - name: Quaal's Feather Token - Whip
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Quaal's Feather Token - Whip
+          - name: Robe of Eyes
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Robe of Eyes
+          - name: Rope of Entanglement
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Rope of Entanglement
+          - name: Stone of Controlling Earth Elementals
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Stone of Controlling Earth Elementals
+          - name: Wings of Flying
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Wings of Flying
+          - name: Instrument of the Bards - Canaith Mandolin
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Instrument of the Bards - Canaith Mandolin
+          - name: Instrument of the Bards - Cli Lyre
+            <<: *Recipe_Magic_Item_Rare_Wondrous_Rules
+            outcomes:
+              - Instrument of the Bards - Cli Lyre
+      Very Rare:
+        Armor:
+          - name: Leather Armor +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Leather Armor +2
+          - name: Padded Armor +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Padded Armor +2
+          - name: Studded Leather Armor +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Studded Leather Armor +2
+          - name: Hide Armor +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Hide Armor +2
+          - name: Breastplate +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Breastplate +2
+          - name: Chain Shirt +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Chain Shirt +2
+          - name: Half Plate Armor +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Half Plate Armor +2
+          - name: Scale Mail +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Scale Mail +2
+          - name: Spiked Armor +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Spiked Armor +2
+          - name: Chain Mail +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Chain Mail +2
+          - name: Plate Armor +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Plate Armor +2
+          - name: Ring Mail +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Ring Mail +2
+          - name: Splint Armor +2
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Splint Armor +2
+          - name: Demon Armor
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Demon Armor
+          - name: Dragon Scale Mail - Black
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Dragon Scale Mail - Black
+          - name: Dragon Scale Mail - Blue
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Dragon Scale Mail - Blue
+          - name: Dragon Scale Mail - Brass
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Dragon Scale Mail - Brass
+          - name: Dragon Scale Mail - Bronze
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Dragon Scale Mail - Bronze
+          - name: Dragon Scale Mail - Copper
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Dragon Scale Mail - Copper
+          - name: Dragon Scale Mail - Gold
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Dragon Scale Mail - Gold
+          - name: Dragon Scale Mail - Green
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Dragon Scale Mail - Green
+          - name: Dragon Scale Mail - Red
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Dragon Scale Mail - Red
+          - name: Dragon Scale Mail - Silver
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Dragon Scale Mail - Silver
+          - name: Dragon Scale Mail - White
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Dragon Scale Mail - White
+          - name: Dwarven Plate Armor
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Dwarven Plate Armor
+          - name: Animated Shield
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Animated Shield
+          - name: Spell Guard Shield
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Spell Guard Shield
+          - name: Shield +3
+            <<: *Recipe_Magic_Item_Very_Rare_Armor_Rules
+            outcomes:
+              - Shield +3
+        Ring:
+          - name: Ring of Regeneration
+            <<: *Recipe_Magic_Item_Very_Rare_Ring_Rules
+            outcomes:
+              - Ring of Regeneration
+          - name: Ring of Shooting Stars
+            <<: *Recipe_Magic_Item_Very_Rare_Ring_Rules
+            outcomes:
+              - Ring of Shooting Stars
+          - name: Ring of Telekinesis
+            <<: *Recipe_Magic_Item_Very_Rare_Ring_Rules
+            outcomes:
+              - Ring of Telekinesis
+        Rod:
+          - name: Rod of Absorption
+            <<: *Recipe_Magic_Item_Very_Rare_Rod_Rules
+            outcomes:
+              - Rod of Absorption
+          - name: Rod of Alertness
+            <<: *Recipe_Magic_Item_Very_Rare_Rod_Rules
+            outcomes:
+              - Rod of Alertness
+          - name: Rod of Security
+            <<: *Recipe_Magic_Item_Very_Rare_Rod_Rules
+            outcomes:
+              - Rod of Security
+          - name: Rod of the Pact Keeper +3
+            <<: *Recipe_Magic_Item_Very_Rare_Rod_Rules
+            outcomes:
+              - Rod of the Pact Keeper +3
+        Stave:
+          - name: Staff of Fire
+            <<: *Recipe_Magic_Item_Very_Rare_Staff_Rules
+            outcomes:
+              - Staff of Fire
+          - name: Staff of Frost
+            <<: *Recipe_Magic_Item_Very_Rare_Staff_Rules
+            outcomes:
+              - Staff of Frost
+          - name: Staff of Power
+            <<: *Recipe_Magic_Item_Very_Rare_Staff_Rules
+            outcomes:
+              - Staff of Power
+          - name: Staff of Striking
+            <<: *Recipe_Magic_Item_Very_Rare_Staff_Rules
+            outcomes:
+              - Staff of Striking
+          - name: Staff of Thunder and Lightning
+            <<: *Recipe_Magic_Item_Very_Rare_Staff_Rules
+            outcomes:
+              - Staff of Thunder and Lightning
+        Wand:
+          - name: Wand of Polymorph
+            <<: *Recipe_Magic_Item_Very_Rare_Wand_Rules
+            outcomes:
+              - Wand of Polymorph
+          - name: Wand of the War Mage +3
+            <<: *Recipe_Magic_Item_Very_Rare_Wand_Rules
+            outcomes:
+              - Wand of the War Mage +3
+        Weapon:
+          - name: Dancing Greatsword
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Dancing Greatsword
+          - name: Dancing Longsword
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Dancing Longsword
+          - name: Dancing Scimitar
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Dancing Scimitar
+          - name: Dancing Rapier
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Dancing Rapier
+          - name: Dancing Shortsword
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Dancing Shortsword
+          - name: Frost Brand Greatsword
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Frost Brand Greatsword
+          - name: Frost Brand Longsword
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Frost Brand Longsword
+          - name: Frost Brand Scimitar
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Frost Brand Scimitar
+          - name: Frost Brand Rapier
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Frost Brand Rapier
+          - name: Frost Brand Shortsword
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Frost Brand Shortsword
+          - name: Nine Lives Stealer - Greatsword
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Nine Lives Stealer - Greatsword
+          - name: Nine Lives Stealer - Longsword
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Nine Lives Stealer - Longsword
+          - name: Nine Lives Stealer - Scimitar
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Nine Lives Stealer - Scimitar
+          - name: Nine Lives Stealer - Rapier
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Nine Lives Stealer - Rapier
+          - name: Nine Lives Stealer - Shortsword
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Nine Lives Stealer - Shortsword
+          - name: Greatsword of Sharpness
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Greatsword of Sharpness
+          - name: Longsword of Sharpness
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Longsword of Sharpness
+          - name: Scimitar of Sharpness
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Scimitar of Sharpness
+          - name: Dwarven Thrower
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Dwarven Thrower
+          - name: Scimitar of Speed
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Scimitar of Speed
+          - name: Oathbow
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Oathbow
+          - name: Blowgun +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Blowgun +3
+          - name: Club +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Club +3
+          - name: Dagger +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Dagger +3
+          - name: Dart +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Dart +3
+          - name: Flail +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Flail +3
+          - name: Glaive +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Glaive +3
+          - name: Greatclub +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Greatclub +3
+          - name: Halberd +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Halberd +3
+          - name: Javelin +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Javelin +3
+          - name: Lance +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Lance +3
+          - name: Light Hammer +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Light Hammer +3
+          - name: Longbow +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Longbow +3
+          - name: Mace +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Mace +3
+          - name: Maul +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Maul +3
+          - name: Morningstar +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Morningstar +3
+          - name: Pike +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Pike +3
+          - name: Quarterstaff +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Quarterstaff +3
+          - name: Shortbow +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Shortbow +3
+          - name: Sickle +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Sickle +3
+          - name: Sling +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Sling +3
+          - name: Spear +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Spear +3
+          - name: Trident +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Trident +3
+          - name: War Pick +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - War Pick +3
+          - name: Warhammer +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Warhammer +3
+          - name: Whip +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Whip +3
+          - name: Battleaxe +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Battleaxe +3
+          - name: Greataxe +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Greataxe +3
+          - name: Handaxe +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Handaxe +3
+          - name: Hand Crossbow +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Hand Crossbow +3
+          - name: Heavy Crossbow +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Heavy Crossbow +3
+          - name: Light Crossbow +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Light Crossbow +3
+          - name: Greatsword +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Greatsword +3
+          - name: Longsword +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Longsword +3
+          - name: Scimitar +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Scimitar +3
+          - name: Rapier +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Rapier +3
+          - name: Shortsword +3
+            <<: *Recipe_Magic_Item_Very_Rare_Weapon_Rules
+            outcomes:
+              - Shortsword +3
+        Wondrous:
+          - name: Bag of Devouring
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Bag of Devouring
+          - name: Belt of Fire Giant Strength
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Belt of Fire Giant Strength
+          - name: Belt of Frost Giant Strength
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Belt of Frost Giant Strength
+          - name: Belt of Stone Giant Strength
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Belt of Stone Giant Strength
+          - name: Candle of Invocation
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Candle of Invocation
+          - name: Carpet of Flying - 3x5
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Carpet of Flying - 3x5
+          - name: Carpet of Flying - 4x6
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Carpet of Flying - 4x6
+          - name: Carpet of Flying - 5x7
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Carpet of Flying - 5x7
+          - name: Carpet of Flying - 6x9
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Carpet of Flying - 6x9
+          - name: Cloak of Arachnida
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Cloak of Arachnida
+          - name: Crystal Ball
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Crystal Ball
+          - name: Efreeti Bottle
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Efreeti Bottle
+          - name: Figuring of Wondrous Power - Obsidian Steed
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Figuring of Wondrous Power - Obsidian Steed
+          - name: Helm of Brilliance
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Helm of Brilliance
+          - name: Horn of Valhalla - Bronze
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Horn of Valhalla - Bronze
+          - name: Horseshoes of a Zephyr
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Horseshoes of a Zephyr
+          - name: Ioun Stone - Absorption
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Ioun Stone - Absorption
+          - name: Ioun Stone - Agility
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Ioun Stone - Agility
+          - name: Ioun Stone - Fortitude
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Ioun Stone - Fortitude
+          - name: Ioun Stone - Insight
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Ioun Stone - Insight
+          - name: Ioun Stone - Intellect
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Ioun Stone - Intellect
+          - name: Ioun Stone - Leadership
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Ioun Stone - Leadership
+          - name: Ioun Stone - Strength
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Ioun Stone - Strength
+          - name: Manual of Bodily Health
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Manual of Bodily Health
+          - name: Manual of Gainful Exercise
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Manual of Gainful Exercise
+          - name: Manual of Quickness of Action
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Manual of Quickness of Action
+          - name: Manual of Golems - Clay Golems
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Manual of Golems - Clay Golems
+          - name: Manual of Golems - Flesh Golems
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Manual of Golems - Flesh Golems
+          - name: Manual of Golems - Iron Golems
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Manual of Golems - Iron Golems
+          - name: Manual of Golems - Stone Golems
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Manual of Golems - Stone Golems
+          - name: Mirror of Life Trapping
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Mirror of Life Trapping
+          - name: Nolzur's Marvelous Pigments
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Nolzur's Marvelous Pigments
+          - name: Robe of Scintillating Colors
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Robe of Scintillating Colors
+          - name: Robe of Stars
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Robe of Stars
+          - name: Tome of Clear Thought
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Tome of Clear Thought
+          - name: Tome of Leadership and Influence
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Tome of Leadership and Influence
+          - name: Tome of Understanding
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Tome of Understanding
+          - name: Instrument of the Bards - Anstruth Harp
+            <<: *Recipe_Magic_Item_Very_Rare_Wondrous_Rules
+            outcomes:
+              - Instrument of the Bards - Anstruth Harp
+  Misc:
+    Holy Water:
+      -
+        name: Holy Water Flask
+        prereq:
+          has_either_class:
+          - Cleric
+          - Paladin
+        cost:
+          Gold: 25
+        outcomes:
+        - Holy Water Flask
+
