@@ -331,11 +331,3 @@ def create_recipe(data: dict) -> Recipe:
                 raise ValueError(f"'type' of '{item}' not in lookup_table")
     return recipe
 
-
-# import Character.Character
-# import Crafting.Parser
-# character = Character.Character.Character("E4CEFA15-B3C7-4B6E-8EA9-DC140B5D0338")
-# data = Crafting.Parser.parse_crafting_file()
-# recipe = Crafting.Parser.ask_user_to_select_recipe(None, None, data)
-# if recipe.can_afford(character):
-#     recipe.craft(character)
