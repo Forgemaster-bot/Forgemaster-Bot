@@ -45,7 +45,9 @@ class TableMapper:
         self._queries.insert(self._table_info, query_dict)
 
     def delete(self, storage_obj) -> None:
-        data = storage_obj.to_dict()
-        where_info = {k: data.pop(k) for k in self._table_info.update_keys}
+        data = transform_dict_keys(storage_obj.to_dict(), self._table_info.to_dict())
+        where_info = {}
+        for k in ast.literal_eval(self._table_info.update_keys):
+            where_info[k] = data.pop(k)
         self._queries.delete(self._table_info, where_info)
 

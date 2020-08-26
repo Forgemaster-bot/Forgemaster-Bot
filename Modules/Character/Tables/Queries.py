@@ -91,7 +91,7 @@ class Queries:
         # create where clause after splitting dictionary
         key_keys = list(key_info.keys())
         key_values = list(key_info.values())
-        where_clause = 'WHERE {}'.format(', '.join('[{}]=?'.format(k) for k in key_keys))
+        where_clause = 'WHERE {}'.format(' OR '.join('[{}]=?'.format(k) for k in key_keys))
         # create query
         query = "DELETE FROM [{table}] {where_clause}".format(**table_info.to_dict(), where_clause=where_clause)
         # run query
