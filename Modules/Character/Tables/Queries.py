@@ -7,6 +7,24 @@ class Queries:
     """
     Container of static methods for handling player queries
     """
+    @staticmethod
+    def select_column(table_info, select_column: str) -> list:
+        """
+        Select database column by key
+        :param table_info: table constants containing table definitions. Where table is table name, and key is table key
+        :param select_column: column to get values from
+        :return: dict containing database info
+        """
+        query = """\
+                SELECT [{select_column}] 
+                FROM [{table}]
+                """.format(**table_info.to_dict(), select_column=select_column)
+        cursor = Quick_Python.run_query(query, None)
+        rows = cursor.fetchall()
+        results = []
+        for row in rows:
+            results.append(row[0])
+        return [] if not results else results
 
     @staticmethod
     def select(table_info, where_column: str, where_value: str) -> List[dict]:

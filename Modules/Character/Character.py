@@ -30,7 +30,7 @@ class Character:
 
     def has_either_class(self, *args):
         names = [name.lower() for name in args]
-        return any(c for c in self.classes if c.name in names)
+        return any(c for c in self.classes if c.name.lower() in names)
 
     def has_subclass(self, sub_class: str):
         return any(c for c in self.classes if c.sub_class.lower() == sub_class.lower())
@@ -166,8 +166,8 @@ class Character:
     def formatted_items(self) -> str:
         return Quick_Python.labelled_list("Items", list(self.items.values()))
 
-    def formatted_character_info(self):
-        info_list = [
+    def get_formatted_character_info_list(self):
+        return [
             self.formatted_name(),
             self.formatted_stats(),
             self.formatted_xp(),
@@ -177,6 +177,9 @@ class Character:
             self.formatted_gold(),
             self.formatted_items()
         ]
+
+    def formatted_character_info(self):
+        info_list = self.get_formatted_character_info_list()
         return "\n".join(info_list)
 
     def item_list_as_str(self):
@@ -219,3 +222,9 @@ class Character:
 
     def get_proficiency_bonus(self):
         return math.ciel(self.get_character_level() * (1 / 4)) + 1
+
+    def get_skills_dict(self):
+        return {s.name: s for s in self.skills}
+
+    def get_class_dict(self):
+        return {c.name: c for c in self.classes}

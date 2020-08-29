@@ -4,9 +4,7 @@ from Player_Menu.Character_Sheet_Menu import Scripts
 async def main_menu(self, command, discord_id: int, character_id: str):
     while True:
         choice = await menu_options(self, command, character_id)
-        if choice == "View inventory":
-            await command.message.author.send(Scripts.inventory_list(character_id))
-        elif choice == "Level up your character":
+        if choice == "Level up your character":
             while True:
                 menu = await level_menu(self, command, discord_id, character_id)
                 if menu == "exit":

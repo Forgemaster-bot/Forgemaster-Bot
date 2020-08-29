@@ -112,7 +112,7 @@ def get_character_name(character_id: str):
 def inventory_list(character_id):
     item_list = SQL_Lookup.character_inventory(character_id)
     result = Quick_Python.list_to_string(item_list)
-    return result
+    return result if result else "You don't have any items."
 
 
 '''''''''''''''''''''''''''''''''''''''''

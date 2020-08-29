@@ -505,7 +505,10 @@ def craft_scroll_level_options(character_id: str, class_name: str, gold_limit):
             spell_level_list.append(row_list)
     return_list = []
     for row in spell_level_list:
-        if row[0] <= spell_limit:
+        # if row is null due to the ability being a racial then just skip it
+        if not row:
+            continue
+        elif row[0] <= spell_limit:
             return_list.append("Level {} spell".format(row[0]))
     return return_list
 

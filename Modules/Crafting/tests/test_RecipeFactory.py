@@ -9,8 +9,7 @@ import Crafting.RecipeFactory
 import Character.Character
 import Connections
 
-from Crafting.Utils import ExitException
-
+from Exceptions import ExitException
 
 sent_messages = []
 replies = []

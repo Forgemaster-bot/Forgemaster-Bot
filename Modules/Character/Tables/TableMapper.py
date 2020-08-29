@@ -2,6 +2,7 @@ from typing import List
 from Quick_Python import transform_dict_keys
 import ast
 
+
 class TableMapper:
     """
     CharacterInfo info storage
@@ -32,6 +33,13 @@ class TableMapper:
             storage_obj_list.append(self._storage_type(**transformed_dict))
         return storage_obj_list
 
+    def fetch_keys(self) -> list:
+        """
+        Fetch keys objects from table using _table_info.key
+        :return: List of values
+        """
+        return self._queries.select_column(self._table_info, self._table_info.key)
+
     def update(self, storage_obj) -> None:
         data = transform_dict_keys(storage_obj.to_dict(), self._table_info.to_dict())
         # where_info = {k: data.pop(k) for k in self._table_info.update_keys}
@@ -51,3 +59,18 @@ class TableMapper:
             where_info[k] = data.pop(k)
         self._queries.delete(self._table_info, where_info)
 
+    @property
+    def table_info(self):
+        return self._table_info
+
+    @table_info.setter
+    def table_info(self, value):
+        self._table_info = value
+
+    @property
+    def storage_type(self):
+        return self._storage_type
+
+    @storage_type.setter
+    def storage_type(self, value):
+        self._storage_type = value

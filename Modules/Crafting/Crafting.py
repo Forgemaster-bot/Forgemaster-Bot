@@ -6,7 +6,7 @@ import Update_Google_Roster as Roster
 data = Crafting.Parser.parse_file('thaumstyn')
 
 
-async def craft_item_menu(cog, context, character, file_label):
+async def craft_item_menu(context, character, file_label):
     """
     Queries
     :param cog: discord cog object
@@ -16,25 +16,29 @@ async def craft_item_menu(cog, context, character, file_label):
     :return: None
     """
     available_recipes = data['recipes']
-    recipe = await Crafting.Utils.ask_user_to_select_recipe(cog, context, available_recipes, file_label)
+    recipe = await Crafting.Utils.ask_user_to_select_recipe(context, available_recipes, file_label)
     if recipe is not None:
         if await Crafting.Utils.verify_prerequisites(context, character, recipe):
-            if await Crafting.Utils.recipe_confirm(cog, context, recipe):
-                await craft_recipe(cog, context, character, recipe)
+            if recipe.can_afford(character):
+                if await Crafting.Utils.recipe_confirm(context, recipe):
+                    character.refresh()
+                    await craft_recipe(context, character, recipe)
+            else:
+                msg = f"**Error** You cannot afford to craft this recipe: {str(recipe)}"
+                await Crafting.Utils.send_message(context, msg)
 
     await Crafting.Utils.send_message(context, "Returning to menu.")
     return
 
 
 async def craft_recipe(cog, context, character, recipe):
-    if recipe.can_afford(character):
-        craft_result = recipe.craft(character)
-        message = f"{craft_result.message}" if craft_result.result else f"**Crafting failed.** {craft_result.message}"
+    craft_result = recipe.craft(character)
+    message = f"{craft_result.message}" if craft_result.result else f"**Crafting failed.** {craft_result.message}"
+    await Crafting.Utils.send_message(context, craft_result.prereq_message)
+    await Crafting.Utils.send_message(context, message)
+    log = f"{character.info.name} is crafting [{str(recipe)}] - {message.replace('You', character.info.name)}"
+    await Connections.log_to_discord(context.cog, log)
+    Roster.update_character_in_roster(character)
 
-        await Crafting.Utils.send_message(context, craft_result.prereq_message)
-        await Crafting.Utils.send_message(context, message)
-        log = f"{character.info.name} is crafting [{str(recipe)}] - {message.replace('You', character.info.name)}"
-        await Connections.log_to_discord(cog, log)
-        Roster.update_character_in_roster(character)
-    else:
-        await Crafting.Utils.send_message(context, "**Error** You cannot afford to craft this item.")
+
+

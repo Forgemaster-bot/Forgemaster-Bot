@@ -1,23 +1,9 @@
-from Crafting.RecipeFactory import create_recipe
 import asyncio
+from Crafting.RecipeFactory import create_recipe
+from Exceptions import StopException, ExitException
 
 available_prereq = ['has_class', 'has_item', 'has_feat', 'has_skill', 'has_skill_proficiency', 'has_level',
                     'has_item_quantity_by_keyword', 'has_subclass', 'has_either_class']
-
-class StopException(Exception):
-    """
-    Exception used to stop a menu.
-    TODO: Move into menu cogs.
-    """
-    pass
-
-
-class ExitException(Exception):
-    """
-    Exception used to exit the '$menu' command.
-    TODO: Move into menu cogs.
-    """
-    pass
 
 
 async def send_message(context, message) -> None:
@@ -30,8 +16,7 @@ async def send_message(context, message) -> None:
     if message is None:
         print("Send_message was called with None value.")
     else:
-        await context.message.author.send(message)
-    # print(message)
+        return await context.message.author.send(message)
 
 
 def is_stop_response(response) -> None:
@@ -65,9 +50,6 @@ def is_stop_or_exit(response) -> False:
     return False
 
 
-# responses = ["1", "1", "2"]
-# async def wait_for_reply(cog, context):
-#     return responses.pop()
 async def wait_for_reply(cog, context) -> str:
     """
     Waits, gets, and returns user response. Raises ExitException on timeout.
@@ -136,7 +118,7 @@ async def query_user(cog, context, data: dict):
     return question_dict[response]
 
 
-async def query_until_recipe(cog, context, data, label):
+async def query_until_data(cog, context, data, label):
     """
     Recursive function which will query user to select key in a dict until a non-dictionary value is found.
     When a key is selected, this function will be called until a non-dictionary value is returned by basecase.
@@ -150,7 +132,7 @@ async def query_until_recipe(cog, context, data, label):
         """
         No entries available 
         """
-        await send_message(context, f"No valid recipes exist for **{label}**")
+        await send_message(context, f"No valid data exists for **{label}**")
         return None
     elif isinstance(data, dict):
         """
@@ -158,17 +140,31 @@ async def query_until_recipe(cog, context, data, label):
         """
         await send_message(context, f"Please select a category you would like to craft from **{label}**: ")
         next_key = await query_user(cog, context, data)
-        return await query_until_recipe(cog, context, data[next_key], next_key)
-    elif isinstance(data, list):
+        return await query_until_data(cog, context, data[next_key], next_key)
+    else:
+        return data
+
+
+async def query_until_recipe(cog, context, data, label):
+    """
+    Queries
+    :param cog: discord cog object
+    :param context: discord context object for client
+    :param data: yaml file data containing recipes
+    :param label: name of current category
+    :return: recipe dictionary
+    """
+    recipe_list = await query_until_data(cog, context, data, label)
+    if isinstance(recipe_list, list):
         """
         Parse recipe list and query user to select which concrete recipe to return.
         """
         await send_message(context, "Please select a recipe you would like to craft:")
-        recipe_dict = {item['name']: item for item in data}
+        recipe_dict = {item['name']: item for item in recipe_list}
         next_key = await query_user(cog, context, recipe_dict)
         return recipe_dict[next_key]
     else:
-        raise RuntimeError(f'query_until_recipe encountered bad type. label={label}; type={type};')
+        raise RuntimeError(f'query_until_recipe encountered bad type. label={label}; type={type(recipe_list)};')
 
 
 async def recipe_confirm(cog, context, recipe):

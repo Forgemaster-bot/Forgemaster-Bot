@@ -1,88 +1,98 @@
+import collections
+import Crafting.Utils
+import Strings
 from Player_Menu.Workshop_Menu import Scripts
 from Crafting.Crafting import craft_item_menu
-from Crafting.Utils import StopException
-from Crafting.Utils import ExitException
+from Exceptions import StopException, ExitException
 from Character.Character import Character
 
 
-async def main_menu(self, command, discord_id: int, character_id: str):
+def gen_old_submenu_callable(fn, *args):
+    return lambda cog, ctx, c, *largs: fn(cog, ctx, c.info.discord_id, c.info.character_id, *args)
+
+
+def gen_submenu_callable(fn, *args):
+    return lambda cog, ctx, c: fn(cog, ctx, c, *args)
+
+
+menu_lookup = {
+    "Create a mundane item": lambda cog, ctx, character: gen_old_submenu_callable(mundane_menu),
+    "Create a consumable item": lambda cog, ctx, character: gen_old_submenu_callable(consumable_menu),
+    "Experiment with thaumstyn": lambda cog, ctx, character: gen_submenu_callable(craft_item_menu, 'thaumstyn'),
+    "Create a scroll": lambda cog, ctx, character: gen_submenu_callable(new_craft_scroll_menu),
+    "Work for someone this week": lambda cog, ctx, character: work_menu(cog,
+                                                                        ctx,
+                                                                        character.info.discord_id,
+                                                                        character.info.character_id)
+}
+
+
+async def call_submenu_coro(self, ctx, coro, character) -> str:
+    """
+    Call submenu coroutine. Catching and handling StopException as this is intended to be a submenu.
+    :param self: here to keep up with how other functions are handled... really is a cog
+    :param ctx: discord context which was invoked to call this
+    :param coro: coroutine to call
+    :param character: character to pass
+    :return: str
+    """
+    try:
+        menu_response = await coro(self, ctx, character)
+        if menu_response and menu_response.lower() == 'exit':
+            raise ExitException
+    except StopException as e:
+        return
+    return menu_response
+
+
+async def query_and_invoke_subroutine(cog, ctx, header, details, choices, character):
+    """
+    Sends welcome message,
+    :param cog: Cog which invoked this function
+    :param ctx: Context which invoked this function
+    :param header: welcome header to present to caller
+    :param details: welcome details to present to caller
+    :param choices:
+    :param character:
+    :return:
+    """
+    await send_welcome_message(ctx, header, details)
+    submenu_coro = await Crafting.Utils.query_until_data(cog, ctx, choices, 'the available menus')
+    if isinstance(submenu_coro, collections.Callable):
+        return await call_submenu_coro(cog, ctx, submenu_coro, character)
+    else:
+        raise ExitException(f"Returned submenu option is not callable: {str(submenu_coro)}")
+
+
+async def main_menu(self, ctx, discord_id: int, character_id: str):
+    choices = menu_lookup
+    header = "Workshop Menu: Type **STOP** at any time to go back to the player menu "
+    details = f"{Scripts.character_info(character_id)}"
+    # Add additional options if needed
     character = Character(character_id)
-    while True:
-        choice = await menu_options(self, command, character_id)
-        if choice == "Create a mundane item":
-            while True:
-                menu = await mundane_menu(self, command, discord_id, character_id)
-                if menu == "exit":
-                    return menu
-                elif menu == "stop":
-                    return
-        elif choice == "Create a consumable item":
-            while True:
-                menu = await consumable_menu(self, command, discord_id, character_id)
-                if menu == "exit":
-                    return menu
-                elif menu == "stop":
-                    return
-        # elif choice == "Create a recipe guide":
-        #     await command.message.author.send("coming soon")
-        # elif choice == "Experiment with essences":
-        #     while True:
-        #         menu = await experiment_menu(self, command, discord_id, character_id)
-        #         if menu == "exit":
-        #             return menu
-        #         elif menu == "stop":
-        #             return
-        # elif choice == "View your recipes":
-        #     while True:
-        #         menu = await recipe_menu(self, command, character_id)
-        #         if menu == "exit":
-        #             return menu
-        #         elif menu == "stop":
-        #             return
-        elif choice == "Experiment with thaumstyn":
-            try:
-                # while True:
-                await craft_item_menu(self, command, character, 'thaumstyn')
-            except StopException as e:
-                return
-            except ExitException as e:
-                return "exit"
-        elif "Create a scroll from your " in choice:
-            while True:
-                class_choice = choice.replace("Create a scroll from your ", "").replace(" spells", "")
-                menu = await craft_scroll_menu(self, command, discord_id, character_id, class_choice)
-                if menu == "exit":
-                    return menu
-                elif menu == "stop":
-                    return
-        elif choice == "Scribe a spell into your spell book":
-            while True:
-                menu = await scribe_spell_menu(self, command, discord_id, character_id)
-                if menu == "exit":
-                    return menu
-                elif menu == "stop":
-                    return
-        elif choice == "Work for someone this week":
-            while True:
-                menu = await work_menu(self, command, discord_id, character_id)
-                if menu == "exit":
-                    return menu
-                elif menu == "stop":
-                    return
-        elif choice == "exit" or choice == "stop":
-            return choice
+    if character.has_class("Wizard"):
+        choices["Scribe a spell into your spell book"] = \
+            lambda cog, ctx, char: scribe_spell_menu(cog, ctx, char.info.discord_id, char.info.character_id)
+
+    return await query_and_invoke_subroutine(self, ctx, header, details, choices, character)
+
+
+async def send_welcome_message(ctx, header, details):
+    strings = [Strings.line_break, header, Strings.line_break, details]
+    welcome_message = "\n".join(s for s in strings if s)
+    await ctx.message.author.send(welcome_message)
 
 
 async def menu_options(self, command, character_id):
-    option_list = Scripts.menu(character_id)
+    # option_list = Scripts.menu(character_id)
     details = Scripts.character_info(character_id)
     option_question = "~~- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -~~\n" \
                       "Workshop Menu: Type **STOP** at any time to go back to the player menu \n" \
                       "~~- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -~~\n" \
-                      "{} \n" \
-                      "What would you like to do?".format(details)
-    choice = await self.answer_from_list(command, option_question, option_list)
-    return choice
+                      "{}".format(details)
+    await command.message.author.send(option_question)
+    # choice = await self.answer_from_list(command, option_question, option_list)
+    # return choice
 
 
 async def profession_choice(self, command, character_id):
@@ -431,6 +441,12 @@ async def work_confirm(self, command, discord_id, character_id, target_name):
 '''''''''''''''''''''''''''''''''''''''''
 ##############Craft Scroll###############
 '''''''''''''''''''''''''''''''''''''''''
+
+
+async def new_craft_scroll_menu(cog, ctx, character):
+    await ctx.message.author.send("Craft Scroll Menu: Type **STOP** at any time to go back or **EXIT** to quit.")
+    class_choice = await Crafting.Utils.query_until_data(cog, ctx, character.get_class_dict(), 'your available classes')
+    return await craft_scroll_menu(cog, ctx, character.info.discord_id, character.info.character_id, class_choice.name)
 
 
 async def craft_scroll_menu(self, command, discord_id, character_id: str, class_name: str):
