@@ -9,7 +9,6 @@ data = Crafting.Parser.parse_file('thaumstyn')
 async def craft_item_menu(context, character, file_label):
     """
     Queries
-    :param cog: discord cog object
     :param context: discord context object for client
     :param character: character object
     :param file_label: name portion of filename
@@ -31,7 +30,7 @@ async def craft_item_menu(context, character, file_label):
     return
 
 
-async def craft_recipe(cog, context, character, recipe):
+async def craft_recipe(context, character, recipe):
     craft_result = recipe.craft(character)
     message = f"{craft_result.message}" if craft_result.result else f"**Crafting failed.** {craft_result.message}"
     await Crafting.Utils.send_message(context, craft_result.prereq_message)

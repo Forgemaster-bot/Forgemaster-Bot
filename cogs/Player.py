@@ -68,11 +68,9 @@ class PlayerCog(commands.Cog):
                             #     break
                     elif menu_option == "Go to the workshop":
                         while True:
-                            menu = await WS_Menu.main_menu(self, command, discord_id, character_id)
-                            if menu == "exit":
-                                menu_option = "exit"
-                                break
-                            if menu == "stop":
+                            try:
+                                menu = await WS_Menu.main_menu(self, command, discord_id, character_id)
+                            except StopException as err:
                                 break
                     elif menu_option == "Go to the market":
                         while True:
@@ -85,6 +83,7 @@ class PlayerCog(commands.Cog):
                     if menu_option == "exit":
                         break
                 except ExitException as err:
+                    menu_option = "exit"
                     if err.message is not None:
                         await command.message.author.send(err.message)
 

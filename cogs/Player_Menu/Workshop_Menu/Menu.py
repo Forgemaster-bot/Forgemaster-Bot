@@ -8,26 +8,28 @@ from Character.Character import Character
 
 
 def gen_old_submenu_callable(fn, *args):
-    return lambda cog, ctx, c, *largs: fn(cog, ctx, c.info.discord_id, c.info.character_id, *args)
+    return lambda ctx, c, *largs: fn(ctx.cog, ctx, c.info.discord_id, c.info.character_id, *args)
 
 
 def gen_submenu_callable(fn, *args):
-    return lambda cog, ctx, c: fn(cog, ctx, c, *args)
+    return lambda ctx, c: fn(ctx, c, *args)
 
 
 menu_lookup = {
-    "Create a mundane item": lambda cog, ctx, character: gen_old_submenu_callable(mundane_menu),
-    "Create a consumable item": lambda cog, ctx, character: gen_old_submenu_callable(consumable_menu),
-    "Experiment with thaumstyn": lambda cog, ctx, character: gen_submenu_callable(craft_item_menu, 'thaumstyn'),
-    "Create a scroll": lambda cog, ctx, character: gen_submenu_callable(new_craft_scroll_menu),
-    "Work for someone this week": lambda cog, ctx, character: work_menu(cog,
-                                                                        ctx,
-                                                                        character.info.discord_id,
-                                                                        character.info.character_id)
+    "Create a mundane item": lambda: gen_old_submenu_callable(mundane_menu),
+    "Create a consumable item": lambda: gen_old_submenu_callable(consumable_menu),
+    "Experiment with thaumstyn": lambda: gen_submenu_callable(craft_item_menu, 'thaumstyn'),
+    "Create a scroll": lambda: gen_submenu_callable(new_craft_scroll_menu),
+    "Work for someone this week": lambda: gen_old_submenu_callable(work_menu)
+    # "Create a mundane item": gen_old_submenu_callable(mundane_menu),
+    # "Create a consumable item": gen_old_submenu_callable(consumable_menu),
+    # "Experiment with thaumstyn": gen_submenu_callable(craft_item_menu, 'thaumstyn'),
+    # "Create a scroll": gen_submenu_callable(new_craft_scroll_menu),
+    # "Work for someone this week": gen_old_submenu_callable(work_menu)
 }
 
 
-async def call_submenu_coro(self, ctx, coro, character) -> str:
+async def call_submenu_coro(ctx, coro, character) -> str:
     """
     Call submenu coroutine. Catching and handling StopException as this is intended to be a submenu.
     :param self: here to keep up with how other functions are handled... really is a cog
@@ -37,15 +39,17 @@ async def call_submenu_coro(self, ctx, coro, character) -> str:
     :return: str
     """
     try:
-        menu_response = await coro(self, ctx, character)
+        menu_response = await coro(ctx, character)
         if menu_response and menu_response.lower() == 'exit':
             raise ExitException
+        if menu_response and menu_response.lower() == 'stop':
+            raise StopException
     except StopException as e:
         return
     return menu_response
 
 
-async def query_and_invoke_subroutine(cog, ctx, header, details, choices, character):
+async def query_and_invoke_subroutine( ctx, header, details, choices, character):
     """
     Sends welcome message,
     :param cog: Cog which invoked this function
@@ -57,10 +61,16 @@ async def query_and_invoke_subroutine(cog, ctx, header, details, choices, charac
     :return:
     """
     await send_welcome_message(ctx, header, details)
-    submenu_coro = await Crafting.Utils.query_until_data(cog, ctx, choices, 'the available menus')
+    submenu_coro = await Crafting.Utils.query_until_data(ctx, choices, 'the available menus')
+    submenu_called = False
     if isinstance(submenu_coro, collections.Callable):
-        return await call_submenu_coro(cog, ctx, submenu_coro, character)
-    else:
+        # Convert generator into effectively a decorated menu
+        submenu_coro = submenu_coro()
+        if isinstance(submenu_coro, collections.Callable):
+            submenu_called = True
+            return await call_submenu_coro(ctx, submenu_coro, character)
+
+    if not submenu_called:
         raise ExitException(f"Returned submenu option is not callable: {str(submenu_coro)}")
 
 
@@ -71,10 +81,9 @@ async def main_menu(self, ctx, discord_id: int, character_id: str):
     # Add additional options if needed
     character = Character(character_id)
     if character.has_class("Wizard"):
-        choices["Scribe a spell into your spell book"] = \
-            lambda cog, ctx, char: scribe_spell_menu(cog, ctx, char.info.discord_id, char.info.character_id)
+        choices["Scribe a spell into your spell book"] = lambda: gen_old_submenu_callable(scribe_spell_menu)
 
-    return await query_and_invoke_subroutine(self, ctx, header, details, choices, character)
+    return await query_and_invoke_subroutine(ctx, header, details, choices, character)
 
 
 async def send_welcome_message(ctx, header, details):
@@ -443,10 +452,10 @@ async def work_confirm(self, command, discord_id, character_id, target_name):
 '''''''''''''''''''''''''''''''''''''''''
 
 
-async def new_craft_scroll_menu(cog, ctx, character):
+async def new_craft_scroll_menu(ctx, character):
     await ctx.message.author.send("Craft Scroll Menu: Type **STOP** at any time to go back or **EXIT** to quit.")
-    class_choice = await Crafting.Utils.query_until_data(cog, ctx, character.get_class_dict(), 'your available classes')
-    return await craft_scroll_menu(cog, ctx, character.info.discord_id, character.info.character_id, class_choice.name)
+    choice = await Crafting.Utils.query_until_data(ctx, character.get_class_dict(), 'your available classes')
+    return await craft_scroll_menu(ctx.cog, ctx, character.info.discord_id, character.info.character_id, choice.name)
 
 
 async def craft_scroll_menu(self, command, discord_id, character_id: str, class_name: str):
