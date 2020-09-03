@@ -62,6 +62,11 @@ class Recipe:
             prereq_messages.append(step.message)
 
         item_crafted = self.__create_item()
+
+        if ':' in item_crafted:
+            # If an amount is specified, we'll override the current amount
+            item_crafted, self.amount = item_crafted.rsplit(':', 1)
+
         character.modify_item_amount(item_crafted, self.amount)
 
         result_message = f"You successfully crafted **{self.amount}x[{item_crafted}]**"

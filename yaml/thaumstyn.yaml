@@ -373,31 +373,11 @@ outcome lists:
         - Giant Slayer Battleaxe
         - Giant Slayer Greataxe
         - Giant Slayer Handaxe
-        - Mind Blade Greatsword Greatsword
-        - Mind Mind Blade Longsword Greatsword
-        - Mind Mind Blade Scimitar Greatsword
-        - Mind Mind Blade Rapier Greatsword
-        - Mind Mind Blade Shortsword Greatsword
-        - Mind Mind Blade Greatsword Longsword
-        - Mind Mind Blade Longsword Longsword
-        - Mind Mind Blade Scimitar Longsword
-        - Mind Mind Blade Rapier Longsword
-        - Mind Mind Blade Shortsword Longsword
-        - Mind Mind Blade Greatsword Scimitar
-        - Mind Mind Blade Longsword Scimitar
-        - Mind Mind Blade Scimitar Scimitar
-        - Mind Mind Blade Rapier Scimitar
-        - Mind Mind Blade Shortsword Scimitar
-        - Mind Mind Blade Greatsword Rapier
-        - Mind Mind Blade Longsword Rapier
-        - Mind Mind Blade Scimitar Rapier
-        - Mind Mind Blade Rapier Rapier
-        - Mind Mind Blade Shortsword Rapier
-        - Mind Mind Blade Greatsword Shortsword
-        - Mind Mind Blade Longsword Shortsword
-        - Mind Mind Blade Scimitar Shortsword
-        - Mind Mind Blade Rapier Shortsword
-        - Mind Mind Blade Shortsword Shortsword
+        - Mind Blade Greatsword
+        - Mind Blade Longsword
+        - Mind Blade Scimitar
+        - Mind Blade Rapier
+        - Mind Blade Shortsword
         - Sun Blade
         - Greatsword of Life Stealing
         - Longsword of Life Stealing
@@ -930,7 +910,7 @@ Rules:
         # The other options in here link anchors together. I.e. Links the rarity, slot, outcomes, and ranges anchors into one
         #####################################################################################################################
         fail range: &Ranges_Magic_Item_Base_Fail
-          label: "An extreme reaction in the thaumstyn occurs... The item frame changes and has been destroyed."
+          label: "An extreme reaction in the thaumstyn occurs... The item frame changes and all of the thaumstyn used has turned into gold pieces."
           start: 1
           stop: 25
           outcomes: null
@@ -962,7 +942,12 @@ Rules:
           #################################################################################################################
           ranges: &Ranges_Magic_Item_Common_Ranges
             <<: *Ranges_Magic_Item_Base_Ranges
-            # Rarity range definition: Common
+            # Fail range definition: Common - Defines amount of gold
+            fail range:
+              <<: *Ranges_Magic_Item_Base_Fail
+              outcomes:
+                - Gold: 10
+            # Rarity range definition: Common - Defines possible items
             rarity range:
               <<: *Ranges_Magic_Item_Base_Rarity
               outcomes:
@@ -1077,6 +1062,11 @@ Rules:
           #################################################################################################################
           ranges: &Ranges_Magic_Item_Uncommon_Ranges
             <<: *Ranges_Magic_Item_Base_Ranges
+            # Fail range definition: Uncommon - Defines amount of gold
+            fail range:
+              <<: *Ranges_Magic_Item_Base_Fail
+              outcomes:
+                - Gold: 100
             # Rarity range definition: Uncommon
             rarity range:
               <<: *Ranges_Magic_Item_Base_Rarity
@@ -1220,6 +1210,11 @@ Rules:
           #################################################################################################################
           ranges: &Ranges_Magic_Item_Rare_Ranges
             <<: *Ranges_Magic_Item_Base_Ranges
+            # Fail range definition: Rare - Defines amount of gold
+            fail range:
+              <<: *Ranges_Magic_Item_Base_Fail
+              outcomes:
+                - Gold: 400
             # Rarity range definition: Rare
             rarity range:
               <<: *Ranges_Magic_Item_Base_Rarity
@@ -1363,6 +1358,11 @@ Rules:
           #################################################################################################################
           ranges: &Ranges_Magic_Item_Very_Rare_Ranges
             <<: *Ranges_Magic_Item_Base_Ranges
+            # Fail range definition: Very_Rare - Defines amount of gold
+            fail range:
+              <<: *Ranges_Magic_Item_Base_Fail
+              outcomes:
+                - Gold: 1000
             # Rarity range definition: Very_Rare
             rarity range:
               <<: *Ranges_Magic_Item_Base_Rarity
