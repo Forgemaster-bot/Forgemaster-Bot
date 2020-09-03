@@ -61,11 +61,11 @@ class PlayerCog(commands.Cog):
                                 menu = await CS_Menu.main_menu(self, command, discord_id, character_id)
                             except StopException as err:
                                 break
-                            # if menu == "exit":
-                            #     menu_option = "exit"
-                            #     break
-                            # if menu == "stop":
-                            #     break
+                            if menu == "exit":
+                                menu_option = "exit"
+                                break
+                            if menu == "stop":
+                                break
                     elif menu_option == "Go to the workshop":
                         while True:
                             try:

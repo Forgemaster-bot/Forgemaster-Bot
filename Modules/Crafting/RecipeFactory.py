@@ -62,11 +62,6 @@ class Recipe:
             prereq_messages.append(step.message)
 
         item_crafted = self.__create_item()
-
-        if ':' in item_crafted:
-            # If an amount is specified, we'll override the current amount
-            item_crafted, self.amount = item_crafted.rsplit(':', 1)
-
         character.modify_item_amount(item_crafted, self.amount)
 
         result_message = f"You successfully crafted **{self.amount}x[{item_crafted}]**"
@@ -88,6 +83,10 @@ class Recipe:
         """
         flattened_outcomes = Quick_Python.flatten(self.outcomes)
         outcome = random.sample(flattened_outcomes, 1)[0]
+        if isinstance(outcome, dict):
+            outcome, amount = list(outcome.items())[0]
+            print(f"Crafting {outcome}: Replacing amount {self.amount} with {amount}")
+            self.amount = amount
         return " ".join(item for item in [self.prefix, outcome] if item)
 
     def formatted_name(self):
