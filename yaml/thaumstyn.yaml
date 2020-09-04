@@ -935,7 +935,7 @@ Rules:
           prereq:
             has_level: 3
           cost:
-            Red Dust: 10
+            Red Dust: 25
         range_rules:
           #################################################################################################################
           # Define 'Common' rarity base ranges. Each slot will use this and set their own slot range.

@@ -5,7 +5,8 @@ from Player_Menu.Workshop_Menu import Scripts
 from Crafting.Crafting import craft_item_menu
 from Exceptions import StopException, ExitException
 from Character.Character import Character
-
+import Player_Menu.Workshop_Menu.SQL_Check as SQL_Check
+import Player_Menu.Workshop_Menu.SQL_Insert as SQL_Insert
 
 def gen_old_submenu_callable(fn, *args):
     return lambda ctx, c, *largs: fn(ctx.cog, ctx, c.info.discord_id, c.info.character_id, *args)
@@ -75,6 +76,8 @@ async def query_and_invoke_subroutine( ctx, header, details, choices, character)
 
 
 async def main_menu(self, ctx, discord_id: int, character_id: str):
+    if not SQL_Check.character_on_crafting_table(character_id):
+        SQL_Insert.crafting(character_id)
     choices = menu_lookup
     header = "Workshop Menu: Type **STOP** at any time to go back to the player menu "
     details = f"{Scripts.character_info(character_id)}"
