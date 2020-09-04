@@ -9,71 +9,91 @@ from Player_Menu import Scripts
 from Player_Menu.Character_Sheet_Menu import Menu as CS_Menu
 from Player_Menu.Workshop_Menu import Menu as WS_Menu
 from Player_Menu.Market_Menu import Menu as MP_Menu
-
+from Exceptions import StopException, ExitException
 
 def get_character_limit(command: commands.Context):
     character_limit = SQL_Lookup.total_characters_allowed(command.message.author.id)
     return character_limit + PatreonStatus.get(command)
 
 
-class Player_Menu_Commands(commands.Cog):
+class PlayerCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.players_in_menu = {}
 
     # Menu
-    @commands.command(name='Menu', help="in development ")
-    async def player_menu(self, command):
-        discord_id = command.message.author.id
-        # welcome message
-        welcome = "Welcome to the Lost World player menu, to navigate around the menu " \
-                  "type the option number into chat. Type **EXIT** at any time to close the menu"
-        await command.message.author.send(welcome)
-        # character choice
-        character_name = await self.character_choice(command, discord_id)
-        if character_name.lower() == "exit" or character_name.lower() == "back":
-            await command.message.author.send("Menu closed")
-            return
-        while True:
-            try:
-                character_id = SQL_Lookup.character_id_by_character_name(character_name)
-            except AttributeError as e:
-                error_message = "You do not have a character which can access the menu."\
-                                "You will need to roll your stats and talk with a Mod to create your character."\
-                                "The 'randchar' command will randomly roll your characters stats. Once this is done," \
-                                "a Mod can use the 'Create' command to create your character."
-                await command.message.author.send(error_message)
-                break
-            menu_option = await self.main_menu_choice(command, character_id)
-            if menu_option == "View your character sheet":
-                while True:
-                    menu = await CS_Menu.main_menu(self, command, discord_id, character_id)
-                    if menu == "exit":
-                        menu_option = "exit"
+    @commands.command(name='Menu', help="Main Player Menu", aliases=['menu'])
+    async def player_menu(self, command: commands.context.Context):
+        player_opened_menu = False
+        try:
+            if command.message.author.id in self.players_in_menu:
+                await command.message.author.send("You are already accessing the menu.")
+                return
+            else:
+                player_opened_menu = True
+                self.players_in_menu[command.message.author.id] = None
+
+            discord_id = command.message.author.id
+            # welcome message
+            welcome = "Welcome to the Lost World player menu, to navigate around the menu " \
+                      "type the option number into chat. Type **EXIT** at any time to close the menu"
+            await command.message.author.send(welcome)
+            # character choice
+            character_name = await self.character_choice(command, discord_id)
+            if character_name.lower() == "exit" or character_name.lower() == "back":
+                await command.message.author.send("Menu closed")
+                return
+            while True:
+                try:
+                    try:
+                        character_id = SQL_Lookup.character_id_by_character_name(character_name)
+                    except AttributeError as e:
+                        error_message = "You do not have a character which can access the menu."\
+                                        "You will need to roll your stats and talk with a Mod to create your character."\
+                                        "The 'randchar' command will randomly roll your characters stats. " \
+                                        "Once this is done, a Mod can use the 'Create' command to create your character."
+                        await command.message.author.send(error_message)
                         break
-                    if menu == "stop":
+                    menu_option = await self.main_menu_choice(command, character_id)
+                    if menu_option == "View your character sheet":
+                        while True:
+                            try:
+                                menu = await CS_Menu.main_menu(self, command, discord_id, character_id)
+                            except StopException as err:
+                                break
+                            if menu == "exit":
+                                menu_option = "exit"
+                                break
+                            if menu == "stop":
+                                break
+                    elif menu_option == "Go to the workshop":
+                        while True:
+                            try:
+                                menu = await WS_Menu.main_menu(self, command, discord_id, character_id)
+                            except StopException as err:
+                                break
+                    elif menu_option == "Go to the market":
+                        while True:
+                            menu = await MP_Menu.main_menu(self, command, discord_id, character_id)
+                            if menu == "exit":
+                                menu_option = "exit"
+                                break
+                            if menu == "stop":
+                                break
+                    if menu_option == "exit":
                         break
-            elif menu_option == "Go to the workshop":
-                while True:
-                    menu = await WS_Menu.main_menu(self, command, discord_id, character_id)
-                    if menu == "exit":
-                        menu_option = "exit"
-                        break
-                    if menu == "stop":
-                        break
-            elif menu_option == "Go to the market":
-                while True:
-                    menu = await MP_Menu.main_menu(self, command, discord_id, character_id)
-                    if menu == "exit":
-                        menu_option = "exit"
-                        break
-                    if menu == "stop":
-                        break
-            if menu_option == "exit":
-                break
-        await command.message.author.send("Menu closed")
+                except ExitException as err:
+                    menu_option = "exit"
+                    if err.message is not None:
+                        await command.message.author.send(err.message)
+
+        finally:
+            if player_opened_menu:
+                self.players_in_menu.pop(command.message.author.id)
+                await command.message.author.send("Menu closed")
 
     # Roll StatsPatreonStatus
-    @commands.command(name='randchar', help='Roll character stats')
+    @commands.command(name='randchar', help='Roll character stats', aliases=['rollstats'])
     async def dice_roll(self, command):
         discord_id = str(command.message.author.id)
         discord_name = str(command.message.author.display_name)
@@ -349,4 +369,4 @@ class Player_Menu_Commands(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Player_Menu_Commands(bot))
+    bot.add_cog(PlayerCog(bot))

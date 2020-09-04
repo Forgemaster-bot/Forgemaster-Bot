@@ -6,6 +6,25 @@ from Player_Menu.Character_Sheet_Menu import SQL_Delete
 import Update_Google_Roster
 import Connections
 import Quick_Python
+from Character.Character import Character
+
+
+# def menu(character: Character):
+#     # Check for conditional menu conditions
+#     can_level_up = character.can_level_up()
+#     has_profession = any(character.skills)
+#     available_subclasses = [c for c in character.classes if not c.subclass_is_picked()]
+#     is_warlock = character.has_class("Warlock")
+#     is_divine_soul = character.has_subclass("Divine Soul")
+#
+#     menu_list = []
+#     menu_list.append("View inventory")
+#     menu_list.append("Level up your character" if can_level_up else None)
+#     menu_list.append("Pick your free crafting profession" if has_profession else None)
+#     menu_list.append("Pick your subclass for {}".format(c) for c in available_subclasses)
+#     menu_list.append("Warlock Pack Boon choice" if is_warlock else None)
+#     menu_list.append("Divine Soul affinity spell choice" if is_divine_soul else None)
+#     return menu_list
 
 
 def menu(character_id: str):
@@ -40,24 +59,8 @@ def menu(character_id: str):
 
 
 def character_info(character_id: str):
-    character_name = get_character_name(character_id)
-    character_list = ["**Name:** {}".format(character_name)]
-    # classes
-    classes_and_levels = Quick_Python.list_to_string(SQL_Lookup.character_class_and_levels(character_id))
-    character_list.append("**Class:** {}".format(classes_and_levels))
-    # stats
-    stats = SQL_Lookup.character_stats(character_id)
-    character_list.append("**Stats:** STR: {}, DEX: {}, CON: {}, INT: {}, WIS: {}, CHA: {}"
-                          .format(stats.STR, stats.DEX, stats.CON, stats.INT, stats.WIS, stats.CHA))
-    # feats
-    feats = SQL_Lookup.character_feats(character_id)
-    if len(feats) > 0:
-        character_list.append("**Feats:** {}".format(Quick_Python.list_to_string(feats)))
-    # professions
-    professions = SQL_Lookup.character_skills(character_id)
-    if len(professions) > 0:
-        character_list.append("**Professions:** {}".format(Quick_Python.list_to_string(professions)))
-    return Quick_Python.list_to_table(character_list)
+    character = Character(character_id)
+    return character.formatted_character_info()
 
 
 def character_has_spells_to_view(character_id: str, class_name: str):
@@ -109,7 +112,7 @@ def get_character_name(character_id: str):
 def inventory_list(character_id):
     item_list = SQL_Lookup.character_inventory(character_id)
     result = Quick_Python.list_to_string(item_list)
-    return result
+    return result if result else "You don't have any items."
 
 
 '''''''''''''''''''''''''''''''''''''''''

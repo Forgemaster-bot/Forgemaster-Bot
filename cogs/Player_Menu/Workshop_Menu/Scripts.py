@@ -14,7 +14,7 @@ def menu(character_id: str):
         SQL_Insert.crafting(character_id)
     menu_list = ["Create a mundane item",
                  "Create a consumable item",
-                 "View your recipes"]
+                 "Experiment with thaumstyn"]
     # "Create a recipe guide",
     # if caster
     number_of_classes = SQL_Lookup.character_count_classes(character_id)
@@ -505,7 +505,10 @@ def craft_scroll_level_options(character_id: str, class_name: str, gold_limit):
             spell_level_list.append(row_list)
     return_list = []
     for row in spell_level_list:
-        if row[0] <= spell_limit:
+        # if row is null due to the ability being a racial then just skip it
+        if not row:
+            continue
+        elif row[0] <= spell_limit:
             return_list.append("Level {} spell".format(row[0]))
     return return_list
 

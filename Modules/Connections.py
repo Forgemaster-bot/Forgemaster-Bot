@@ -2,20 +2,25 @@ import pyodbc
 import time
 import gspread
 from google.oauth2.service_account import Credentials as gCredentials
-from oauth2client.service_account import ServiceAccountCredentials
 import os
 import Quick_Python
 import json
+from enum import IntEnum, auto
 
 
-'''''''''''''''''''''''''''''''''
-############# CONFIG ############
-'''''''''''''''''''''''''''''''''
+def get_discord_api_path():
+    """
+    Returns the path to patreon config file, prioritizing FORGEMASTER_GOOGLE_API_PATH env var.
+    :return: patreon config file path
+    """
+    default_config_path = os.path.join('Credentials', 'DiscordAPI.txt')
+    environment_path = os.getenv('FORGEMASTER_DISCORD_API_PATH')
+    return default_config_path if environment_path is None else environment_path
 
 
 def get_config_path():
     """
-    Returns the path to patreon config file, prioritizing PATREON_CONFIG_PATH env var.
+    Returns the path to patreon config file, prioritizing FORGEMASTER_CONFIG_PATH env var.
     :return: patreon config file path
     """
     default_config_path = os.path.join('Credentials', 'config.json')
@@ -23,14 +28,30 @@ def get_config_path():
     return default_config_path if environment_path is None else environment_path
 
 
+def get_bot_config_path():
+    """
+    Returns the path to patreon config file, prioritizing FORGEMASTER_BOT_CONFIG_PATH env var.
+    :return: patreon config file path
+    """
+    default_config_path = os.path.join('Credentials', 'BotConfig.json')
+    environment_path = os.getenv('FORGEMASTER_BOT_CONFIG_PATH')
+    return default_config_path if environment_path is None else environment_path
+
+
+'''''''''''''''''''''''''''''''''
+############# CONFIG ############
+'''''''''''''''''''''''''''''''''
+
+
 def load_config(path):
-    local_config = dict()
     with open(path, "r") as config_file:
         local_config = json.load(config_file)
     return local_config
 
 
 config = load_config(get_config_path())
+bot_config = load_config(get_bot_config_path())
+
 
 '''''''''''''''''''''''''''''''''
 ############## SQL ##############
@@ -80,6 +101,31 @@ def sql_log_error(user_id, user_command, error):
 '''''''''''''''''''''''''''''''''
 
 
+class RosterColumns(IntEnum):
+    BEGIN = 0
+    DISCORD_NAME = auto()
+    CHARACTER_NAME = auto()
+    RACE = auto()
+    BACKGROUND = auto()
+    CLASS_1 = auto()
+    CLASS_2 = auto()
+    CLASS_3 = auto()
+    EXPERIENCE = auto()
+    LEVEL = auto()
+    LEVELUP = auto()
+    STR = auto()
+    DEX = auto()
+    CON = auto()
+    INT = auto()
+    WIS = auto()
+    CHA = auto()
+    GOLD = auto()
+    FEATS = auto()
+    SKILLS = auto()
+    ITEMS = auto()
+    END = auto()
+
+
 def get_google_api_path():
     """
     Returns the path to patreon config file, prioritizing FORGEMASTER_GOOGLE_API_PATH env var.
@@ -96,8 +142,6 @@ def google_sheet(name: str):
              'https://www.googleapis.com/auth/drive']
     file_path = os.path.join('Credentials', 'GoogleAPI.json')
     credentials = gCredentials.from_service_account_file(file_path, scopes=scope)
-    # credentials = ServiceAccountCredentials.from_json_keyfile_name(file_path, scopes=scope)
-
     client = gspread.authorize(credentials)
     worksheet = client.open_by_key(config["spreadsheet-id"]).worksheet(name)
     return worksheet
@@ -118,6 +162,10 @@ def google_find_trade_seller(name: str, item: str):
 '''''''''''''''''''''''''''''''''
 #############Discord#############
 '''''''''''''''''''''''''''''''''
+
+
+def get_discord_token():
+    return open(get_discord_api_path()).read()
 
 
 async def log_to_bot(bot, log: str):

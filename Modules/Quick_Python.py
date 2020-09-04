@@ -4,6 +4,52 @@ import pyodbc
 from textwrap import dedent
 
 
+def labelled_str(label, data):
+    """
+    Return string with bold label followed by data
+    :param label: object containing string rep of label
+    :param data: object containing string rep of items
+    :return: string with bold key in format "key: value"
+    """
+    return "**{}:** {}".format(str(label), str(data))
+
+
+def labelled_list(label, data: list):
+    """
+    Returns label joined with string representation of objects in data separated by commas.
+    :param label: object containing string rep of bold label in front of data
+    :param data: list of object containing string rep of items to separate by comma
+    :return: string with bold key in format "key: value"
+    """
+    csv = ", ".join(str(item) for item in data) if data else "None"
+    return labelled_str(label, csv)
+
+
+def flatten(container):
+    """
+    Flattens iterarable container passed into a single list
+    :param container: iterable container (i.e. list)
+    :return: single level list
+    """
+    if not container:
+        return container
+    if isinstance(container, str):
+        container = [container]
+    if isinstance(container[0], list):
+        return flatten(container[0]) + flatten(container[1:])
+    return container[:1] + flatten(container[1:])
+
+
+def transform_dict_keys(values_dict: dict, keys_dict: dict) -> dict:
+    """
+    Transform values_dict to contain new keys of matching value in keys_dict
+    :param values_dict: dictionary containing key:value pairs where value contains final values
+    :param keys_dict: dictionary containing key:value where key matches key in values_dict and value is the new key
+    :return: dict containing new keys relating to Character attributes
+    """
+    return dict((keys_dict[k], v) for k, v in values_dict.items())
+
+
 def run_query(query: str, args: list = None) -> pyodbc.Cursor:
     # Strip common leading whitespace
     query = dedent(query)
@@ -30,13 +76,7 @@ def get_column_names_and_types(table: str):
 
 
 def list_to_string(given_list: list):
-    return_string = ""
-    for element in given_list:
-        if return_string == "":
-            return_string = element
-        else:
-            return_string = "{}, {}".format(return_string, element)
-    return return_string
+    return ", ".join(str(element) for element in given_list) if given_list else ""
 
 
 def list_to_table(given_list: list):

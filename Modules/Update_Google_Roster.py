@@ -1,6 +1,11 @@
+import gspread
+import gspread.utils
 import Quick_Python
 import Connections
+from Connections import RosterColumns
 from Quick_Python import run_query
+import Character.Character
+
 
 # Character commands
 def insert_new_character(character_id: str):
@@ -11,7 +16,7 @@ def insert_new_character(character_id: str):
     levelup = check_level_up(character_id)
 
     # split data
-    discord_name = lookup_player_name_by_id(character_sheet.Discord_ID)
+    discord_name = Quick_Python.lookup_player_name_by_id(character_sheet.Discord_ID)
     race = character_sheet.Race
     background = character_sheet.Background
     xp = character_sheet.XP
@@ -183,15 +188,6 @@ def lookup_character_sheet(character_id: str):
     return cursor.fetchone()
 
 
-def lookup_player_name_by_id(user_id: str):
-    query = "select * from Info_Discord where ID= ?"
-    cursor = run_query(query, [user_id])
-    result = cursor.fetchone()
-    if result is None:
-        return ""
-    return result.Name
-
-
 def lookup_character_sum_class_levels(character_id: str):
     query = "select SUM(Level) Total from Link_Character_Class where Character_ID = ?"
     cursor = run_query(query, [character_id])
@@ -286,3 +282,20 @@ def character_id_by_character_name(character_name: str):
     cursor = run_query(query, [character_name])
     result = cursor.fetchone()
     return result.ID
+
+
+def update_character_in_roster(character: Character.Character.Character):
+    roster = Connections.google_sheet("Roster")
+    character_row = Quick_Python.find_character_row(roster.col_values(RosterColumns.CHARACTER_NAME),
+                                                    character.info.name)
+
+    begin = gspread.utils.rowcol_to_a1(character_row, RosterColumns.BEGIN+1)
+    end = gspread.utils.rowcol_to_a1(character_row, RosterColumns.END-1)
+    cell_range = f"{begin}:{end}"
+
+    cell_list = roster.range(cell_range)
+    character_data = [str(value) for value in character.get_roster_data().values()]
+    for i, value in enumerate(character_data):
+        cell_list[i].value = value
+
+    roster.update_cells(cell_list)
