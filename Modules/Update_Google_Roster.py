@@ -298,4 +298,4 @@ def update_character_in_roster(character: Character.Character.Character):
     for i, value in enumerate(character_data):
         cell_list[i].value = value
 
-    roster.update_cells(cell_list)
+    roster.update_cells(cell_list, 'USER_ENTERED')
