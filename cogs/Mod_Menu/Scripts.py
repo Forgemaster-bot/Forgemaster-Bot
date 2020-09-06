@@ -212,7 +212,7 @@ def item_execute(command: str, author: str):
     for rows in range(len(item_list)):
         character_name = item_list[rows][0].lstrip()
         character_id = SQL_Lookup.character_id_by_character_name(character_name)
-        item_name = item_list[rows][1].lstrip().replace("'", "''")
+        item_name = item_list[rows][1].lstrip()
 
         if not SQL_Check.character_exists_by_id(character_id):
             continue
