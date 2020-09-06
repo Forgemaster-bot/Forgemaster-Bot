@@ -68,7 +68,7 @@ def sync_players_execute(command):
     new_players = 0
     update_player = 0
     for member in command.guild.members:
-        discord_name = member.display_name.replace("'", "")
+        discord_name = member.display_name
         discord_id = str(member.id)
         result = Quick_Python.sync_player(discord_id, discord_name)
         if result[0]:
@@ -209,15 +209,15 @@ def item_execute(command: str, author: str):
     item_list = item_split(command)
     character_name_list = []
     response_list = []
-    for rows in range(len(item_list)):
-        character_name = item_list[rows][0].lstrip()
+    for character_name, item_name, quantity in item_list:
+        character_name = character_name.lstrip()
+        item_name = item_name.lstrip()
         character_id = SQL_Lookup.character_id_by_character_name(character_name)
-        item_name = item_list[rows][1].lstrip()
 
         if not SQL_Check.character_exists_by_id(character_id):
             continue
         try:
-            quantity = int(item_list[rows][2])
+            quantity = int(quantity)
         except IndexError:
             quantity = 1
         except ValueError:
@@ -227,7 +227,7 @@ def item_execute(command: str, author: str):
                 SQL_Update.character_item_quantity(character_id, item_name, quantity)
             else:
                 SQL_Insert.character_item(character_id, item_name, quantity)
-            response_list.append("{} received {} {}".format(character_name, quantity, item_name.replace("''", "'")))
+            response_list.append("{} received {} {}".format(character_name, quantity, item_name))
             character_name_list.append(character_name)
         elif quantity < 0:
             if SQL_Check.character_has_item(character_id, item_name):
@@ -236,8 +236,7 @@ def item_execute(command: str, author: str):
                     SQL_Update.character_item_quantity(character_id, item_name, quantity)
                 else:
                     SQL_Delete.character_item(character_id, item_name)
-                response_list.append("{} had {} {} removed".format(character_name, quantity,
-                                                                   item_name.replace("''", "'")))
+                response_list.append("{} had {} {} removed".format(character_name, quantity, item_name))
                 character_name_list.append(character_name)
 
     for character_name in character_name_list:

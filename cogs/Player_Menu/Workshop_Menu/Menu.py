@@ -499,8 +499,8 @@ async def craft_scroll_spell_choice(self, command, character_id, class_name, spe
 async def create_scroll_confirm(self, command, discord_id, character_id, spell_level: int, spell_name):
     character_name = Scripts.get_character_name(character_id)
     gold_cost = Scripts.scroll_gold_cost(spell_level)
-    question = "Do you want to create a scroll of {} for {}g? [Yes/No]".format(spell_name.replace("''", "'"), gold_cost)
-    log = "{} created a scroll of {}.".format(character_name, spell_name.replace("''", "'"))
+    question = "Do you want to create a scroll of {} for {}g? [Yes/No]".format(spell_name, gold_cost)
+    log = "{} created a scroll of {}.".format(character_name, spell_name)
     await command.author.send(question)
     reply = await self.confirm(command)
     if reply == "Yes":
@@ -586,7 +586,7 @@ async def scribe_spell_confirm(self, command, discord_id, character_id, spell, a
 
     question = "Scribing **{}** from **{}** will cost **{}gp** and you must pass a **DC[{}]** Arcana roll.\n" \
                "Do you want to try and scribe this spell into your spellbook? [Yes/No]\n" \
-        .format(spell_name.replace("''", "'"), spell_origin, reagent_cost, skill_dc)
+        .format(spell_name, spell_origin, reagent_cost, skill_dc)
     await command.author.send(question)
     reply = await self.confirm(command)
     if reply == "Yes":

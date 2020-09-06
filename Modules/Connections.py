@@ -74,7 +74,7 @@ def sql_db_connection() -> pyodbc.Cursor:
 
 def sql_log_command(message):
     user = message.message.author.id
-    command = message.message.content.replace("'", "''")
+    command = message.message.content
     query = "insert into Command_Logs (User_ID,Command,DateTime) values (?,?,?)"\
         
     cursor = Quick_Python.run_query(query, [user, command, time.strftime('%Y-%m-%d %H:%M:%S')])
@@ -88,7 +88,7 @@ def sql_log_private_command(user_id: str, command: str):
 
 
 def sql_log_error(user_id, user_command, error):
-    command = error.replace("'", "''").replace("Command raised an exception: ", "")
+    command = error.replace("Command raised an exception: ", "")
     query = "insert into Error_Messages (Discord_ID,Discord_Command,Error,DateTime) " \
             "values (?,?,?,?)"
     cursor = Quick_Python.run_query(query,

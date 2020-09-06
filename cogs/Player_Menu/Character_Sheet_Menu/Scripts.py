@@ -327,7 +327,7 @@ async def learning_spell_confirm(self, discord_id, character_id: str, class_name
             spell_origin = SQL_Lookup.character_class_subclass(character_id, class_name)
         SQL_Insert.character_spell(character_id, spell_origin, spell_name)
     Connections.sql_log_private_command(discord_id, log)
-    await Connections.log_to_discord(self, log.replace("''", "'"))
+    await Connections.log_to_discord(self, log)
 
 
 def forget_spells_list(character_id: str, class_name: str, ):
@@ -357,7 +357,7 @@ async def divine_soul_confirm(self, discord_id, character_id: str, spell_name: s
     SQL_Insert.character_spell(character_id, "Divine Soul affinity", spell_name)
     SQL_Update.character_sub_class_option(character_id, "Sorcerer", False)
     Connections.sql_log_private_command(discord_id, log)
-    await Connections.log_to_discord(self, log.replace("''", "'"))
+    await Connections.log_to_discord(self, log)
 
 
 async def warlock_tome_confirm(self, discord_id, character_id: str, reply: str, log):
@@ -367,7 +367,7 @@ async def warlock_tome_confirm(self, discord_id, character_id: str, reply: str, 
         SQL_Update.character_free_spell(character_id, "Warlock", 2)
     SQL_Update.character_sub_class_option(character_id, "Warlock", False)
     Connections.sql_log_private_command(discord_id, log)
-    await Connections.log_to_discord(self, log.replace("''", "'"))
+    await Connections.log_to_discord(self, log)
 
 '''''''''''''''''''''''''''''''''''''''''
 ###############Utility##################

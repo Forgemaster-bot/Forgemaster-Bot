@@ -617,10 +617,10 @@ async def scribe_spell_confirm(self, command, discord_id, character_id, spell_na
     ability_roll = random.randint(1, 20)
     if skill_dc > ability_roll + ability_bonus:
         log = "**FAILURE**: {} rolled [{} + {}] against DC[{}]. **{}** was **not** copied into their spell book." \
-            .format(character_name, ability_roll, ability_bonus, skill_dc, spell_name.replace("''", "'"))
+            .format(character_name, ability_roll, ability_bonus, skill_dc, spell_name)
     else:
         log = "**SUCCESS**: {} rolled [{} + {}] against a DC[{}]. **{}** was copied into their spell book." \
-            .format(character_name, ability_roll, ability_bonus, skill_dc, spell_name.replace("''", "'"))
+            .format(character_name, ability_roll, ability_bonus, skill_dc, spell_name)
         book_id = SQL_Lookup.spell_book(character_id)
         SQL_Insert.spell_book_spell(book_id, spell_name)
 
@@ -641,7 +641,7 @@ async def scribe_spell_confirm(self, command, discord_id, character_id, spell_na
 
     # add to logs
     Update_Google_Roster.update_items(character_id)
-    Connections.sql_log_private_command(discord_id, "Scribing: " + log.replace("'", "''"))
+    Connections.sql_log_private_command(discord_id, "Scribing: " + log)
     await Connections.log_to_discord(self, "Scribing:" + log)
     await command.author.send(log)
     return

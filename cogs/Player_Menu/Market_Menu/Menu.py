@@ -483,12 +483,12 @@ async def share_spell_spell_choice(self, command, character_id, spell_level: int
 
 async def share_spell_confirm(self, command, discord_id, character_id, target_name, spell_name):
     character_name = Scripts.get_character_name(character_id)
-    question = "Do you want to create a scroll of {}?".format(spell_name.replace("''", "'"))
+    question = "Do you want to create a scroll of {}?".format(spell_name)
     await command.author.send(question)
     reply = await self.confirm(command)
     if reply == "Yes":
         await command.author.send("sharing spell...")
-        log = "{} shared the spell {} with {}.".format(character_name, spell_name.replace("''", "'"), target_name)
+        log = "{} shared the spell {} with {}.".format(character_name, spell_name, target_name)
         await Scripts.share_spell_confirm(self, discord_id, character_id, target_name, spell_name, log)
         await command.author.send(log)
     return "stop"

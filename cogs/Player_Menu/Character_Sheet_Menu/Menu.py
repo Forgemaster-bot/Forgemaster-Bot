@@ -277,7 +277,7 @@ async def learn_spell_choice(self, command, character_id, class_name, spell_leve
 
 async def learn_spell_confirm(self, command, discord_id, character_id, class_name, spell_choice):
     character_name = Scripts.get_character_name(character_id)
-    spell_name = spell_choice.replace("''", "'")
+    spell_name = spell_choice
     if class_name == 'Wizard':
         question = "Do you want to add {} to your spell book? [Yes/No]".format(spell_name)
         log = "{} added {} to their spell book from leveling up.".format(character_name, spell_name)
@@ -326,8 +326,8 @@ async def forget_spell_choice(self, command, character_id, class_name):
 
 async def forget_spell_confirm(self, command, discord_id, character_id, class_name, spell_choice):
     character_name = Scripts.get_character_name(character_id)
-    question = "Do you want to forget the {} spell {}? [Yes/No]".format(class_name, spell_choice.replace("''", "'"))
-    log = "{} forgot {} as a {}.".format(character_name, spell_choice.replace("''", "'"), class_name)
+    question = "Do you want to forget the {} spell {}? [Yes/No]".format(class_name, spell_choice)
+    log = "{} forgot {} as a {}.".format(character_name, spell_choice, class_name)
     await command.author.send(question)
     reply = await self.confirm(command)
     if reply == "Yes":
@@ -374,7 +374,7 @@ async def divine_soul_confirm(self, command, discord_id, character_id, spell_cho
     if reply == "Yes":
         await command.author.send("learning spell...")
         await Scripts.divine_soul_confirm(self, discord_id, character_id, spell_choice, log)
-        await command.author.send(log.replace("''", "'"))
+        await command.author.send(log)
     return "stop"
 
 
@@ -403,5 +403,5 @@ async def warlock_pack_confirm(self, command, discord_id, character_id):
             log = '{} is not a pack of the tome warlock, and wont have a book of secrets'.format(character_name)
             await command.author.send("working...")
         await Scripts.warlock_tome_confirm(self, discord_id, character_id, reply, log)
-        await command.author.send(log.replace("''", "'"))
+        await command.author.send(log)
     return "stop"

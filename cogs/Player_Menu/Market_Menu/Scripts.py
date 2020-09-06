@@ -97,7 +97,7 @@ async def pay_confirm(self, discord_id, character_id: str, target_name: str, amo
     SQL_Update.character_gold(target_id, amount)
     Update_Google_Roster.update_gold_group([character_id, target_id])
 
-    Connections.sql_log_private_command(discord_id, log.replace("'", "''"))
+    Connections.sql_log_private_command(discord_id, log)
     await Connections.log_to_discord(self, log)
     target_discord = self.bot.get_user(SQL_Lookup.character_owner(target_id))
     if target_discord is not None:
