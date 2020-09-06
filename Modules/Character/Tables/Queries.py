@@ -27,20 +27,34 @@ class Queries:
         return [] if not results else results
 
     @staticmethod
-    def select(table_info, where_column: str, where_value: str) -> List[dict]:
+    def select(table_info, where_column: str, where_value: str,
+               where_and_pairs: List[tuple] = None) -> List[dict]:
         """
         Select database row by key
         :param table_info: table constants containing table definitions. Where table is table name, and key is table key
         :param where_column: column to check for value
         :param where_value: where value
+        :param where_and_pairs: pairs of key:value for adding to where clause
         :return: dict containing database info
         """
+        if where_value == "*":
+            where_query = ""
+            args = None
+        else:
+            where_query = f"WHERE [{where_column}] = ?"
+            args = [where_value]
+            if where_and_pairs is not None:
+                keys, values = zip(*where_and_pairs)
+                # add and items
+                where_query = " AND ".join([where_query, " AND ".join(f"[{key}] = ?" for key in keys)])
+                args.extend(values)
+
+
         query = """\
                 SELECT * 
-                FROM [{table}] 
-                WHERE [{where_column}] = ?
-                """.format(**table_info.to_dict(), where_column=where_column)
-        args = [where_value]
+                FROM [{table}]
+                {where_query}
+                """.format(**table_info.to_dict(), where_query=where_query)
         cursor = Quick_Python.run_query(query, args)
 
         # Convert cursor into dict with column as the key
@@ -109,7 +123,7 @@ class Queries:
         # create where clause after splitting dictionary
         key_keys = list(key_info.keys())
         key_values = list(key_info.values())
-        where_clause = 'WHERE {}'.format(' AND '.join('[{}]=?'.format(k) for k in key_keys))
+        where_clause = 'WHERE {}'.format(' OR '.join('[{}]=?'.format(k) for k in key_keys))
         # create query
         query = "DELETE FROM [{table}] {where_clause}".format(**table_info.to_dict(), where_clause=where_clause)
         # run query

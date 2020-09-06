@@ -3,4 +3,4 @@ ci/.sql_secrets
 venv
 __pycache__/
 Credentials/
-
+secrets.py

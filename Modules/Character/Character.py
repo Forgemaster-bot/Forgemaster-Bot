@@ -6,7 +6,10 @@ import Character.CharacterClassFacade as CharacterClassFacade
 import Character.CharacterFeatFacade as CharacterFeatFacade
 import Character.CharacterSkillFacade as CharacterSkillFacade
 import Character.CharacterItemFacade as CharacterItemFacade
+import Character.SpellbookFacade as SpellbookFacade
 from Character.Data.CharacterItem import CharacterItem
+from Character.Data.CharacterClass import CharacterClass
+from Character.Data.Spellbook import Spellbook
 from Connections import RosterColumns
 
 
@@ -14,10 +17,11 @@ class Character:
 
     def __init__(self, character_id: str):
         self.info = CharacterInfoFacade.interface.fetch(character_id)
-        self.classes = CharacterClassFacade.interface.fetch(character_id)
+        self.classes = {c.name: c for c in CharacterClassFacade.interface.fetch(character_id)}
         self.feats = CharacterFeatFacade.interface.fetch(character_id)
         self.skills = CharacterSkillFacade.interface.fetch(character_id)
         self.items = {i.name: i for i in CharacterItemFacade.interface.fetch(character_id)}
+        self.core_spellbook_check()
 
     def refresh_info(self):
         self.info = CharacterInfoFacade.interface.fetch(self.info.character_id)
@@ -30,10 +34,13 @@ class Character:
 
     def has_either_class(self, *args):
         names = [name.lower() for name in args]
-        return any(c for c in self.classes if c.name.lower() in names)
+        return any(k for k in self.classes.keys() if k.lower() in names)
 
     def has_subclass(self, sub_class: str):
-        return any(c for c in self.classes if c.sub_class.lower() == sub_class.lower())
+        return any(c for c in self.classes.values() if c.sub_class.lower() == sub_class.lower())
+
+    def can_pick_subclass(self):
+        return any(c.subclass_not_picked() for c in self.classes.values())
 
     def has_feat(self, name: str):
         return any(f for f in self.feats if f.name.lower() == name.lower())
@@ -65,7 +72,7 @@ class Character:
         return len(kwargs) == len(matches)
 
     def get_character_level(self):
-        return sum(c.level for c in self.classes)
+        return sum(c.level for c in self.classes.values())
 
     def get_xp(self):
         return self.info.xp
@@ -74,7 +81,6 @@ class Character:
         return LevelExperience.can_level_up(self.get_character_level(), self.get_xp())
 
     def get_gold(self):
-        self.refresh_info()
         return self.info.gold
 
     def set_item_amount(self, name: str, amount: int):
@@ -169,12 +175,12 @@ class Character:
     def get_formatted_character_info_list(self):
         return [
             self.formatted_name(),
-            self.formatted_stats(),
             self.formatted_xp(),
+            self.formatted_gold(),
+            self.formatted_stats(),
             self.formatted_classes(),
             self.formatted_feats(),
             self.formatted_skills(),
-            self.formatted_gold(),
             self.formatted_items()
         ]
 
@@ -201,9 +207,9 @@ class Character:
             RosterColumns.CHARACTER_NAME: self.info.name,
             RosterColumns.RACE: self.info.race,
             RosterColumns.BACKGROUND: self.info.background,
-            RosterColumns.CLASS_1: self.classes[0] if 0 < len(self.classes) else None,
-            RosterColumns.CLASS_2: self.classes[1] if 1 < len(self.classes) else None,
-            RosterColumns.CLASS_3: self.classes[2] if 2 < len(self.classes) else None,
+            RosterColumns.CLASS_1: list(self.classes.values())[0] if 0 < len(self.classes) else None,
+            RosterColumns.CLASS_2: list(self.classes.values())[1] if 1 < len(self.classes) else None,
+            RosterColumns.CLASS_3: list(self.classes.values())[2] if 2 < len(self.classes) else None,
             RosterColumns.EXPERIENCE: self.info.xp,
             RosterColumns.LEVEL: self.get_character_level(),
             RosterColumns.LEVELUP: self.can_level_up(),
@@ -227,4 +233,92 @@ class Character:
         return {s.name: s for s in self.skills}
 
     def get_class_dict(self):
-        return {c.name: c for c in self.classes}
+        return self.classes
+
+    classes_which_learn_spells = ['Bard', 'Blood Hunter', 'Fighter', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock']
+
+    def level_up(self, class_name):
+        classes = self.get_class_dict()
+
+        if class_name in classes.keys():
+            is_first_level = False
+            class_obj = classes[class_name]
+            class_obj.level += 1
+            class_obj.can_replace_spells = class_obj.class_info.are_spells_memorized()
+        else:
+            # get_dnd_class
+            is_first_level = True
+            class_obj = CharacterClass()
+            class_obj.character_id = self.info.character_id
+            class_obj.name = class_name
+            class_obj.level = 1
+            class_obj.number = max([c.number for c in self.classes]) + 1
+            class_obj.can_replace_spells = CharacterClass.get_dnd_class(class_name).are_spells_memorized()
+            class_obj.free_book_spells = 0
+
+        if class_name == 'Wizard':
+            additional_slots = 6 if is_first_level else 2
+            class_obj.free_book_spells += additional_slots
+            # TODO: Spell book
+
+        if is_first_level:
+            self.classes.append(class_obj)
+            CharacterClassFacade.interface.insert(class_obj)
+        else:
+            CharacterClassFacade.interface.update(class_obj)
+
+        self.refresh()
+
+    def set_subclass(self, class_name, subclass_name):
+        self.classes[class_name].subclass = subclass_name
+        CharacterClassFacade.interface.update(self.classes[class_name])
+
+    def has_spellbook(self):
+        return False if not self.spellbook else True
+
+    def get_spellbooks(self):
+        return self.spellbooks
+
+    def get_core_spellbook_name(self):
+        return f"{self.info.name} {Spellbook.get_suffix()}"
+
+    def get_core_spellbook(self):
+        return self.classes['Wizard'].spell_holders[self.get_core_spellbook_name()]
+
+    def has_core_spellbook(self):
+        try:
+            return self.get_core_spellbook() is not None
+        except KeyError as err:
+            return False
+
+    def insert_core_spellbook(self):
+        book = Spellbook(character_id=self.info.character_id, name=self.get_core_spellbook_name(), type='Core')
+        SpellbookFacade.interface.insert(book)
+        self.refresh()
+
+    def core_spellbook_check(self):
+        if 'Wizard' in self.classes:
+            if not self.has_core_spellbook():
+                self.insert_core_spellbook()
+
+    @staticmethod
+    def filter_spell_list(spell_list, spells_holder):
+        """
+        Spellholder can be classes or spellbooks for example
+        :param spell_list:
+        :param spells_holder:
+        :return:
+        """
+        if isinstance(spells_holder, dict):
+            for holder in spells_holder.values():
+                for spell in holder.spells:
+                    spell_list.pop(spell.name, None)
+        elif isinstance(spells_holder, list):
+            for holder in spells_holder:
+                for spell in holder.spells:
+                    spell_list.pop(spell.name, None)
+        else:
+            for spell in spells_holder.spells:
+                spell_list.pop(spell.name, None)
+        return spell_list
+

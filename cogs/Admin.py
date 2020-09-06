@@ -1,5 +1,4 @@
 from discord.ext import commands
-import Crafting.Parser
 import sys
 import importlib
 
@@ -13,7 +12,7 @@ class Admin(commands.Cog):
     async def cog_check(self, ctx):
         return await self.bot.is_owner(ctx.author)
 
-    @commands.group(name='reload_cog', hidden=True, invoke_without_command=True)
+    @commands.group(name='reload_cog', invoke_without_command=True)
     async def _reload_cog(self, ctx, *, module):
         """Reloads a cog."""
         try:
@@ -23,7 +22,7 @@ class Admin(commands.Cog):
         else:
             await ctx.send('\N{OK HAND SIGN}')
 
-    @commands.group(name='reload_module', hidden=True, invoke_without_command=True)
+    @commands.group(name='reload_module', invoke_without_command=True)
     async def _reload_module(self, ctx, *, module):
         """Reloads a module."""
         try:
@@ -37,16 +36,6 @@ class Admin(commands.Cog):
                 await ctx.send(f'{e.__class__.__name__}: {e}')
             else:
                 await ctx.send('\N{OK HAND SIGN}')
-
-    @commands.group(name='refresh_recipe', hidden=True, invoke_without_command=True)
-    async def _refresh_recipe(self, ctx, *, label):
-        """Refreshes global recipes for label."""
-        try:
-            Crafting.Parser.refresh_file(label)
-        except commands.ExtensionError as e:
-            await ctx.send(f'{e.__class__.__name__}: {e}')
-        else:
-            await ctx.send('\N{OK HAND SIGN}')
 
 
 def setup(bot):

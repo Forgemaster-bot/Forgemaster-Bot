@@ -18,15 +18,16 @@ class TableMapper:
         self._table_info = table_info
         self._storage_type = storage_type
 
-    def fetch(self, value, column=None) -> List:
+    def fetch(self, value, column=None, where_and_pairs=None) -> List:
         """
         Fetch CharacterClass objects from tables using _table_info.key as key
         :param value: value to use for fetching data from key column in tables
         :param column: column to search
+        :param where_and_pairs: extra pairs to pass to select call
         :return: List of CharacterClass objects
         """
         where_column = self._table_info.key if column is None else column
-        table_dicts = self._queries.select(self._table_info, where_column, value)
+        table_dicts = self._queries.select(self._table_info, where_column, value, where_and_pairs)
         storage_obj_list = []
         for row_dict in table_dicts:
             transformed_dict = transform_dict_keys(row_dict, self._table_info.to_column_dict())

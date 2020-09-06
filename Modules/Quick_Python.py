@@ -47,7 +47,7 @@ def transform_dict_keys(values_dict: dict, keys_dict: dict) -> dict:
     :param keys_dict: dictionary containing key:value where key matches key in values_dict and value is the new key
     :return: dict containing new keys relating to Character attributes
     """
-    return dict((keys_dict[k], v) for k, v in values_dict.items())
+    return dict((keys_dict[k], v) for k, v in values_dict.items() if k in keys_dict)
 
 
 def run_query(query: str, args: list = None) -> pyodbc.Cursor:
