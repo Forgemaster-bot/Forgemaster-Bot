@@ -1,4 +1,5 @@
 from discord.ext import commands
+import discord
 import asyncio
 
 import Connections
@@ -92,7 +93,28 @@ class PlayerCog(commands.Cog):
                 self.players_in_menu.pop(command.message.author.id)
                 await command.message.author.send("Menu closed")
 
-    # Roll StatsPatreonStatus
+    @staticmethod
+    async def send_rolls(ctx):
+        rolls = SQL_Lookup.player_stat_roll(ctx.message.author.id)
+        if not rolls:
+            await ctx.send("Error: Player has no rolls stored.")
+            return
+
+        embed = discord.Embed(title=f"{ctx.message.author.display_name} Past Rolls:", colour=0xFFEF00)
+        embed.set_thumbnail(url="https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/" \
+                                "512/Helmet.jpg-512.png")
+        embed.description = "Your rolled stats are listed below."
+        stats = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']
+        for roll in rolls:
+            previous_rolls = [roll.Roll_1, roll.Roll_2, roll.Roll_3,
+                              roll.Roll_4, roll.Roll_5, roll.Roll_6]
+
+            name = "Unused" if roll.Character_Name is None else roll.Character_Name
+            value = ", ".join(f"**{stat}**: {value}" for stat, value in zip(stats, previous_rolls))
+            inline = False
+            embed.add_field(name=name, value=value, inline=inline)
+        await ctx.send(embed=embed)
+
     @commands.command(name='randchar', help='Roll character stats', aliases=['rollstats'])
     async def dice_roll(self, command):
         discord_id = str(command.message.author.id)
@@ -110,29 +132,10 @@ class PlayerCog(commands.Cog):
                 response = Scripts.rand_char(discord_id)
                 await command.send(embed=response)
             else:
-                response = "You have already hit your max number of rolls. " \
-                           "A mod can verify your rolls using the 'RollCheck' command."
-                await command.send(response)
+                await self.send_rolls(command)
 
         else:
-            rolls = SQL_Lookup.player_stat_roll(discord_id)
-            info = "Current maximum number of characters reached [{}/{}].".format(characters_total, character_limit)
-            await command.send(info)
-            if not rolls:
-                response = "Error: Player has no rolls stored. But, player has " \
-                           "{}/{} characters.".format(characters_total, character_limit)
-                await command.send(response)
-                return
-            for roll in rolls:
-                previous_rolls = [roll.Roll_1, roll.Roll_2, roll.Roll_3,
-                                  roll.Roll_4, roll.Roll_5, roll.Roll_6]
-                if roll.Character_Name is None:
-                    character_name = "Not used"
-                else:
-                    character_name = "Used for {}".format(roll.Character_Name)
-                response = Scripts.stitch_list_into_string(previous_rolls)
-                response = "Array: {}. {}".format(response, character_name)
-                await command.send(response)
+            await self.send_rolls(command)
 
     # Menu commands
     async def character_choice(self, command, discord_id):
