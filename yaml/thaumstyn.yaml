@@ -1542,6 +1542,13 @@ recipes:
           Blue Dust: 250
         outcomes:
           - *Outcomes_Spell_Gems_Level_5
+    Misc:
+      -
+        name: BTBB
+        cost:
+          Blue Dust: 250
+        outcomes:
+          - BTBB
   Red Thaumstyn:
   #################################################################################################################
   # WAND AMMO

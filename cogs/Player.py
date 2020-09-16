@@ -108,7 +108,7 @@ class PlayerCog(commands.Cog):
             if roll_total < character_limit:
                 Connections.sql_log_command(command)
                 response = Scripts.rand_char(discord_id)
-                await command.send(response)
+                await command.send(embed=response)
             else:
                 response = "You have already hit your max number of rolls. " \
                            "A mod can verify your rolls using the 'RollCheck' command."

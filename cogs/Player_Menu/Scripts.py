@@ -1,3 +1,6 @@
+from collections import deque
+import discord
+
 from Player_Menu import SQL_Check
 from Player_Menu import SQL_Lookup
 from Player_Menu import SQL_Update
@@ -18,43 +21,29 @@ def main_menu():
 
 
 def rand_char(discord_id: str):
+    stats = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']
     stat_array = []
     stat_display_list = []
-    for rolls in range(0, 6):  # Roll 6 times
-        dice_results = []
-        for roll_number in range(0, 4):  # Roll 4 dice
-            dice = int(random.randint(1, 6))
-            dice_results.append(dice)  # [6,3,2,6]
-        lowest = False
-        stat_display = []
-        for roll in dice_results:
-            if roll == min(dice_results) and lowest is False:  # find the first lowest roll
-                formatting = '~~'
-                lowest = True
-            else:
-                formatting = ''
-            stat = '{}{}{}'.format(formatting, roll, formatting)
-            if len(stat_display) == 0:
-                stat_display.append('(' + stat)
-            elif len(stat_display) == 3:
-                stat_display.append(stat + ')')
-            else:
-                stat_display.append(stat)
-        total_stat = sum(dice_results) - min(dice_results)
-        stat_display.append(' = **{}**'.format(total_stat))
-        result = stitch_list_into_string(stat_display).replace("),", ")")
+    discord_name = SQL_Lookup.player_name_by_id(discord_id)
 
-        # save stats
-        stat_array.append(total_stat)
-        stat_display_list.append(result)
+    embed = discord.Embed(title=f"{discord_name} Rolled Stats:", colour=0xFFEF00)
+    embed.set_thumbnail(url="https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/" \
+                            "512/Helmet.jpg-512.png")
+    embed.description = "Your rolled stats for character creation are listed below.\n" \
+                        "**Note**: You may still use point buy or stat array instead."
+
+    for stat in stats:  # Roll 6 times
+        dice = deque(sorted([random.randint(1, 6) for _ in range(0, 4)]))
+        min_dice = dice.popleft()
+        results_string = ', '.join(str(die) for die in dice)
+        stat_value = sum(dice)
+        embed.add_field(name=stat, value=f"(~~{min_dice}~~, {results_string}) = **{stat_value}**", inline=False)
+        stat_array.append(stat_value)
     # save to SQL after
     SQL_Insert.discord_roll(discord_id, stat_array)  # create new entry in discord roll
     # print to discord
-    roll_total = sum(stat_array)
-    stat_display_list.insert(0, "**{}:**".format(SQL_Lookup.player_name_by_id(discord_id)))
-    stat_display_list.append('Total = **{}**'.format(roll_total))
-    response = stitch_list_into_table(stat_display_list)
-    return response
+    embed.add_field(name='Total', value=f"{sum(stat_array)}", inline=False)
+    return embed
 
 
 '''''''''''''''''''''''''''''''''''''''''

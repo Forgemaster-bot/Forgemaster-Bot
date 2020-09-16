@@ -13,7 +13,7 @@ async def send_message(context, message) -> None:
     :param message: message to send to user.
     :return: None
     """
-    if message is None:
+    if message is None or message == "":
         print("Send_message was called with None value.")
     else:
         return await context.message.author.send(message)
