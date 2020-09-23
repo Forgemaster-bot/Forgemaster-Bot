@@ -1,7 +1,12 @@
 import random
+import logging
 import Connections
 import pyodbc
 from textwrap import dedent
+import struct
+
+
+log = logging.getLogger(__name__)
 
 
 def labelled_str(label, data):
@@ -50,13 +55,18 @@ def transform_dict_keys(values_dict: dict, keys_dict: dict) -> dict:
     return dict((keys_dict[k], v) for k, v in values_dict.items() if k in keys_dict)
 
 
+def to_single_line(query: str) -> str:
+    # Strip common leading whitespace and remove new lines to make a single line
+    return dedent(query).replace('\n', '')
+
+
+def log_transaction(query: str, args: list = None):
+    log.debug(f"run_query: query[{to_single_line(query)}]; args[{str(args)}];")
+
+
 def run_query(query: str, args: list = None) -> pyodbc.Cursor:
-    # Strip common leading whitespace
-    query = dedent(query)
-    # remove new lines to make a single line
-    query = query.replace('\n', '')
     # log the query
-    print("run_query: query[" + query.replace('\n', '') + "]; args[" + str(args) + "];")
+    log_transaction(query, args)
     # Connect to db, execute the query, and return cursor
     cursor = Connections.sql_db_connection()
     if args is None:
@@ -72,6 +82,10 @@ def run_query_commit(query: str, args: list = None):
 
 def get_column_names_and_types(table: str):
     cursor = Connections.sql_db_connection()
+    return get_column_names_and_types_with_cursor(table, cursor)
+
+
+def get_column_names_and_types_with_cursor(table: str, cursor):
     return {c.column_name: c.data_type for c in cursor.columns(table=table)}
 
 
@@ -159,7 +173,7 @@ def check_player_exists(user_id: str):
 
 def sync_player(discord_id: str, discord_name: str):
     try:
-        print("discord_id: " + discord_id + "; discord_name: " + discord_name)
+        log.debug("discord_id: " + discord_id + "; discord_name: " + discord_name)
         if not check_player_exists(discord_id):
             insert_players(discord_id, discord_name)
             return True, "New"
@@ -167,7 +181,7 @@ def sync_player(discord_id: str, discord_name: str):
             update_player_name(discord_name, discord_id)
             return True, "Update"
     except Exception as e:
-        print(e)
+        log.debug(e)
         return False, "Something went wrong adding {} to the list".format(discord_name)
     return False, "No change"
 
@@ -193,3 +207,16 @@ def update_player_name(discord_name: str, discord_id: str):
             "WHERE ID = ?"
     cursor = run_query(query, [discord_name, discord_id])
     cursor.commit()
+
+def guid_to_lowercase(value):
+    first_three_values = struct.unpack('<I2H', value[:8])
+    fourth_value = struct.unpack('>H', value[8:10])[0]
+    fifth_value = struct.unpack('>Q', b'\x00\x00' + value[10:16])[0]
+    guid_string_parts = (
+        '{:08x}'.format(first_three_values[0]),
+        '{:04x}'.format(first_three_values[1]),
+        '{:04x}'.format(first_three_values[2]),
+        '{:04x}'.format(fourth_value),
+        '{:012x}'.format(fifth_value),
+    )
+    return '-'.join(guid_string_parts)

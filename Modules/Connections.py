@@ -1,4 +1,5 @@
 import pyodbc
+import logging
 import time
 import gspread
 from google.oauth2.service_account import Credentials as gCredentials
@@ -7,15 +8,8 @@ import Quick_Python
 import json
 from enum import IntEnum, auto
 
-
-def get_discord_api_path():
-    """
-    Returns the path to patreon config file, prioritizing FORGEMASTER_GOOGLE_API_PATH env var.
-    :return: patreon config file path
-    """
-    default_config_path = os.path.join('Credentials', 'DiscordAPI.txt')
-    environment_path = os.getenv('FORGEMASTER_DISCORD_API_PATH')
-    return default_config_path if environment_path is None else environment_path
+log = logging.getLogger(__name__)
+pyodbc.native_uuid = True
 
 
 def get_config_path():
@@ -57,18 +51,22 @@ bot_config = load_config(get_bot_config_path())
 ############## SQL ##############
 '''''''''''''''''''''''''''''''''
 
+db_connect = None
 
 def sql_db_connection() -> pyodbc.Cursor:
+    global db_connect
     driver = config["sql-driver"]
     database = config["sql-database"]
     server = config["sql-server"]
     uid = config["sql-uid"]
     pwd = config["sql-pwd"]
     port = config["sql-port"]
-    try:
-        db_connect = pyodbc.connect(driver=driver, database=database, server=server, uid=uid, pwd=pwd, port=port)
-    except Exception as e:
-        print(e)
+    if db_connect is None:
+        try:
+            db_connect = pyodbc.connect(driver=driver, database=database, server=server, uid=uid, pwd=pwd, port=port,
+                                        tds_version='8.0', charset='utf-8')
+        except Exception as e:
+            log.debug(e)
     return db_connect.cursor()
 
 
@@ -164,17 +162,13 @@ def google_find_trade_seller(name: str, item: str):
 '''''''''''''''''''''''''''''''''
 
 
-def get_discord_token():
-    return open(get_discord_api_path()).read()
-
-
-async def log_to_bot(bot, log: str):
+async def log_to_bot(bot, msg: str):
     log_channel = bot.get_channel(config["log-channel-id"])
     if log_channel is None:
-        print(log)
+        log.debug(msg)
     else:
-        await log_channel.send(log)
+        await log_channel.send(msg)
 
 
-async def log_to_discord(self, log: str):
-    await log_to_bot(self.bot, log)
+async def log_to_discord(self, msg: str):
+    await log_to_bot(self.bot, msg)

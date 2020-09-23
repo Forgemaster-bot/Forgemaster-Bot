@@ -4,7 +4,6 @@ import Quick_Python
 import Connections
 from Connections import RosterColumns
 from Quick_Python import run_query
-import Character.Character
 
 
 # Character commands
@@ -45,7 +44,7 @@ def update_character(character_id: str):
     levelup = check_level_up(character_id)
 
     # split data
-    discord_name = lookup_player_name_by_id(character_sheet.Discord_ID)
+    discord_name = Quick_Python.lookup_player_name_by_id(character_sheet.Discord_ID)
     race = character_sheet.Race
     background = character_sheet.Background
     xp = character_sheet.XP
@@ -284,7 +283,7 @@ def character_id_by_character_name(character_name: str):
     return result.ID
 
 
-def update_character_in_roster(character: Character.Character.Character):
+def update_character_in_roster(character):
     roster = Connections.google_sheet("Roster")
     character_row = Quick_Python.find_character_row(roster.col_values(RosterColumns.CHARACTER_NAME),
                                                     character.info.name)
