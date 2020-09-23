@@ -36,7 +36,7 @@ def parse_files():
     return {file_label: parse_file(file_label) for file_label in get_files()}
 
 
-parsed_data = parse_files()
+parsed_data = None
 
 
 def refresh_file(file_label):
@@ -46,6 +46,8 @@ def refresh_file(file_label):
 
 def get_parsed_data(file_label):
     global parsed_data
+    if parsed_data is None:
+        parsed_data = parse_files()
     return parsed_data[file_label]
 
 

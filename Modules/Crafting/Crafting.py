@@ -3,8 +3,6 @@ import Crafting.Utils
 import Connections
 import Update_Google_Roster as Roster
 
-data = Crafting.Parser.parse_file('thaumstyn')
-
 
 async def craft_item_menu(context, character, file_label):
     """
@@ -14,7 +12,7 @@ async def craft_item_menu(context, character, file_label):
     :param file_label: name portion of filename
     :return: None
     """
-    available_recipes = data['recipes']
+    available_recipes = Crafting.Parser.get_parsed_data(file_label)['recipes']
     recipe = await Crafting.Utils.ask_user_to_select_recipe(context, available_recipes, file_label)
     if recipe is not None:
         if await Crafting.Utils.verify_prerequisites(context, character, recipe):

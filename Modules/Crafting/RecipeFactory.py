@@ -96,14 +96,17 @@ class Recipe:
         """
         return "**Name:** {}".format(self.name)
 
+    def list_costs(self):
+        return ", ".join(f"{k}:{v}" for k, v in self.cost.items())
+
     def formatted_costs(self):
         """
         Returns formatted and labelled recipe costs
         :return:
         """
-        return "**Costs:** {}".format(", ".join(f"{k}:{v}" for k, v in self.cost.items()))
+        return "**Costs:** {}".format(self.list_costs())
 
-    def formatted_special_steps(self):
+    def list_special_steps(self):
         return "-".join(f"{str(step)}" for step in self.special_steps)
 
     def __str__(self):
@@ -111,7 +114,7 @@ class Recipe:
         Formats recipe as a string of format '<name> - <cost name>:<cost quantity>...'
         :return: string of recipe name and costs
         """
-        return f"{self.formatted_name()} - {self.formatted_costs()} - {self.formatted_special_steps()}"
+        return f"{self.formatted_name()} - {self.formatted_costs()} - {self.list_special_steps()}"
 
 
 def validate_special_field_int(step, data: dict, key, recipe):

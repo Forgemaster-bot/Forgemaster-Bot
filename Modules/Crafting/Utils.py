@@ -16,7 +16,7 @@ async def send_message(context, message) -> None:
     if message is None:
         print("Send_message was called with None value.")
     else:
-        return await context.message.author.send(message)
+        return await context.send(message)
 
 
 def is_stop_response(response) -> None:
@@ -57,7 +57,7 @@ async def wait_for_reply(context) -> str:
     :return: String message response of user.
     """
     def check_reply(r):
-        return r.author == context.author and r.channel.type[1] == 1
+        return r.author == context.author and r.channel == context.channel
     try:
         msg = await context.cog.bot.wait_for('message', timeout=120.0, check=check_reply)
         return msg.content.lower()
