@@ -393,6 +393,7 @@ class Menu(metaclass=_MenuMeta):
         self._event = asyncio.Event()
         self._exception = None
         self.embed_info = embed_info
+        self.channel = None
         if self.enumerate_submenus:
             self._enumerated_submenus = {str(i): key for i, key in enumerate(self.submenus.keys(), start=1)}
 
@@ -433,7 +434,7 @@ class Menu(metaclass=_MenuMeta):
             raise CannotEmbedLinks()
 
     def message_check(self, message):
-        if message.channel != self.ctx.channel:
+        if message.channel != self.channel:
             return False
         if message.author.id != self._author_id:
             return False
@@ -443,6 +444,20 @@ class Menu(metaclass=_MenuMeta):
             return True
         return message.content in self.enumerated_submenus if self.enumerate_submenus else self.submenus
 
+    async def wait_for_reply(self):
+        tasks = [
+            asyncio.ensure_future(self.bot.wait_for('message', check=self.message_check)),
+        ]
+        done, pending = await asyncio.wait(tasks, timeout=self.timeout, return_when=asyncio.FIRST_COMPLETED)
+        for task in pending:
+            task.cancel()
+
+        if len(done) == 0:
+            raise asyncio.TimeoutError()
+
+        # Exception will propagate if e.g. cancelled or timed out
+        return done.pop().result()
+
     async def _internal_loop(self):
         try:
             self.__timed_out = False
@@ -451,19 +466,10 @@ class Menu(metaclass=_MenuMeta):
             tasks = []
             run_flag = True
             while self._running and run_flag:
-                await self.send_initial_message(self.ctx, self.ctx.channel)
-                tasks = [
-                    asyncio.ensure_future(self.bot.wait_for('message', check=self.message_check)),
-                ]
-                done, pending = await asyncio.wait(tasks, timeout=self.timeout, return_when=asyncio.FIRST_COMPLETED)
-                for task in pending:
-                    task.cancel()
+                # if self.send_to_author
+                await self.send_initial_message(self.ctx, self.channel)
 
-                if len(done) == 0:
-                    raise asyncio.TimeoutError()
-
-                # Exception will propagate if e.g. cancelled or timed out
-                payload = done.pop().result()
+                payload = await self.wait_for_reply()
 
                 should_stop_or_exit(payload)
 
@@ -561,7 +567,7 @@ class Menu(metaclass=_MenuMeta):
             log.debug(traceback.print_exc())
             log.exception(err)
 
-    async def start(self, ctx, *, channel=None, wait=False):
+    async def start(self, ctx, *, channel=None, wait=False, author=None):
         """|coro|
 
         Starts the interactive menu session.
@@ -594,9 +600,9 @@ class Menu(metaclass=_MenuMeta):
 
         self.bot = bot = ctx.bot
         self.ctx = ctx
-        self._author_id = ctx.author.id
+        self._author_id = author or ctx.author.id
 
-        channel = channel or ctx.channel
+        self.channel = channel or ctx.channel
         is_guild = isinstance(channel, discord.abc.GuildChannel)
         me = ctx.guild.me if is_guild else ctx.bot.user
         permissions = channel.permissions_for(me)

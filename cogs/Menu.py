@@ -1,115 +1,90 @@
 import logging
 import asyncio
 import itertools
+from typing import Union, Callable, Coroutine, Awaitable, List
+
+import discord
 from discord.ext import commands
+
+import Exceptions
 from cogs.utils import textmenus
+from cogs.utils import StandaloneQueries
+from cogs.utils.menu import start_menu, BaseMenu, BaseCharacterMenu, ConfirmMenu, ListMenu
+from cogs.utils import menu as menu_helper
+from cogs.utils import workshop
 import Character.ClassRequirements as ClassRequirements
-import cogs.utils.StandaloneQueries as Queries
 import Character.CharacterInfoFacade as CharacterInfoFacade
 import Character.LinkClassSpellFacade as LinkClassSpellFacade
-from Character.CharacterClassFacade import interface as class_interface
+import Character.SkillInfoFacade as SkillInfoFacade
+from Character.Data.CharacterInfo import CharacterInfo
 from Character.Character import Character
 import Connections
 import Update_Google_Roster as Roster
 
+from cogs.old_menus.Workshop_Menu import Menu as OldWorkshopMenu
+
 log = logging.getLogger(__name__)
 blank = '\u200b'
 
-
-async def start_menu(ctx, menu, **kwargs):
-    m = menu(**kwargs)
-    channel = kwargs.pop('channel', None)
-    await m.start(ctx, wait=True, channel=channel)
-
-    if m.exception and isinstance(m.exception, textmenus.StopException):
-        log.debug("Stop exception received")
-        pass
-    elif m.exception and isinstance(m.exception, textmenus.ExitException):
-        log.debug("Exit exception received")
-        raise m.exception
-    elif m.exception and isinstance(m.exception, asyncio.TimeoutError):
-        log.debug("Timeout exception received")
-        raise m.exception
-    elif not m.single_time:
-        await start_menu(ctx, menu, **kwargs)
-    return m
-
-
 class Menu(commands.Cog):
+
+    should_dm = True
 
     def __init__(self, bot):
         self.bot = bot
         self.players_in_menu = {}
 
-    class BaseMenu(textmenus.Menu):
+    class FreeProfessionConfirmMenu(ConfirmMenu, BaseCharacterMenu):
+        title = "Free Profession Menu - Confirm Choice"
+
+        def __init__(self, skill, **kwargs):
+            message = f"Are you sure you want to learn the job '{skill.name}'?"
+            super().__init__(message=message, **kwargs)
+            self.skill = skill
+
+        async def on_confirm(self, payload):
+            await super().on_confirm(payload)
+            await self.character.learn_skill(self.skill)
+            msg = f"{self.character.name} has used their free profession slot to become a '**{self.skill.name}**'"
+            await Connections.log_to_discord(self, msg)
+            await self.channel.send(msg)
+            Roster.update_character_in_roster(self.character)
+
+    class FreeProfessionMenu(BaseCharacterMenu):
         """
-        Helper base instance for textmenus.Menu. Reuses common code for finalize and getter for title
+        FreeProfessionMenu menu which allows players to select a job if they don't have one.
         """
-
-        def __init__(self, title=None, embed_info=None, stop_on_first=True, **kwargs):
-            # Handle creating embed info if one wasn't passed
-            embed_info = embed_info if embed_info else self.create_embed_info()
-            super().__init__(embed_info=embed_info, stop_on_first=True, **kwargs)
-            self.single_time = stop_on_first
-            self.timed_out = False
-            try:
-                self.title
-            except AttributeError:
-                self.title = title
-
-        def get_title(self):
-            return self.title
-
-        def finalize(self, timed_out):
-            self.timed_out = timed_out
+        title = "Free Profession Menu"
 
         def get_initial_message(self):
-            return NotImplementedError
+            return f"Each character in this world has some way to make a living. " \
+                   f"Since you do not have a job, you are allowed to select one of the following. " \
+                   f"This will allow you to craft goods which can be used by yourself or other characters."
 
-        def update_embed(self):
-            return
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            for job_name, skill_obj in SkillInfoFacade.interface.fetch_jobs().items():
+                self.submenu(label=job_name)(self.make_job_choice(skill_obj))
 
         @staticmethod
-        def create_embed_info():
-            colour = 0xd0021b
-            thumb_url = "https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/" \
-                        "512/Helmet.jpg-512.png"
-            footer_text = None
-            author = None
-            fields = []
-            return textmenus.EmbedInfo(thumb_url, author, colour, footer_text, fields)
+        def make_job_choice(skill_obj):
+            async def job_confirm(menu, payload):
+                await start_menu(menu.ctx, Menu.FreeProfessionConfirmMenu, character=menu.character,
+                                 skill=skill_obj)
+            return job_confirm
 
-    class BaseCharacterMenu(BaseMenu):
-        """
-        Subclass of BaseMenu which requires a character to be passed at initialization.
-        This allows us to pass this info to other submenus.
-        """
+    class ForgetSpellConfirmMenu(ConfirmMenu, BaseCharacterMenu):
+        title = "Forget Spell Menu - Confirm Choice"
 
-        def __init__(self, character=None, **kwargs):
-            super().__init__(**kwargs)
-            self.character = character
-            self.update_embed()
+        def __init__(self, spell, character_class, **kwargs):
+            message = f"Are you sure you want to forget the spell '{str(spell)}'?"
+            super().__init__(message=message, **kwargs)
+            self.spell = spell
+            self.character_class = character_class
 
-    class ConfirmMenu(BaseMenu):
-        title = "Confirm Choice"
-
-        def __init__(self, message=None, **kwargs):
-            super().__init__(**kwargs)
-            self.message = message
-            self.confirm = False
-
-        def get_initial_message(self):
-            return self.message
-
-        @textmenus.submenu('Yes')
-        async def confirm(self, payload):
-            await self.ctx.channel.send("Confirming...")
-            self.confirm = True
-
-        @textmenus.submenu('No')
-        async def reject(self, payload):
-            await self.ctx.channel.send("Rejecting...")
-            self.confirm = False
+        async def on_confirm(self, payload):
+            await ConfirmMenu.on_confirm(self, payload)
+            await self.character.forget_spell(self.character_class, self.spell, cog=self, channel=self.channel)
 
     class ForgetSpellSelectSpellMenu(BaseCharacterMenu):
         title = "Forget Spell Menu - Forget Spell"
@@ -126,22 +101,11 @@ class Menu(commands.Cog):
                 if spell.spell_info.level == self.spell_level:
                     self.submenu(label=spell.name)(self.make_spell_confirm(spell))
 
-        async def on_confirm(self, spell):
-            self.character_class.remove_spell(spell)
-            self.character_class.can_replace_spells = False
-            class_interface.update(self.character_class)
-            msg = f"Successfully forgot the spell **{str(spell)}**'!"
-            await Connections.log_to_discord(self, msg)
-            await self.ctx.channel.send(msg)
-
         @staticmethod
         def make_spell_confirm(spell):
             async def spell_confirm(menu, payload):
-                msg = f"Are you sure you want to learn the spell '{str(spell)}'?"
-                m = await start_menu(menu.ctx, Menu.ConfirmMenu, message=msg)
-                if m.confirm:
-                    await menu.on_confirm(spell)
-
+                await start_menu(menu.ctx, Menu.ForgetSpellConfirmMenu, character=menu.character,
+                                 character_class=menu.character_class, spell=spell)
             return spell_confirm
 
     class ForgetSpellSelectLevelMenu(BaseCharacterMenu):
@@ -153,9 +117,8 @@ class Menu(commands.Cog):
         def __init__(self, character_class, **kwargs):
             super().__init__(**kwargs)
             self.character_class = character_class
-            max_spell_level = Queries.class_max_spell_level(self.character_class)
-            for level in range(1, max_spell_level + 1):
-                self.submenu(label=f"Level {level} Spells")(self.make_select_spell_level(level, character_class))
+            for level in range(1, StandaloneQueries.class_max_spell_level(self.character_class) + 1):
+                self.submenu(label=f"Level {level} Spells")(self.make_select_spell_level(level, self.character_class))
 
         @staticmethod
         def make_select_spell_level(level, character_class):
@@ -186,8 +149,20 @@ class Menu(commands.Cog):
             async def select_spell_level(menu, payload):
                 await start_menu(menu.ctx, Menu.ForgetSpellSelectLevelMenu, character=menu.character,
                                  character_class=character_class)
-
             return select_spell_level
+
+    class LearnSpellConfirmMenu(ConfirmMenu, BaseCharacterMenu):
+        title = "Learn Spell Menu - Confirm Choice"
+
+        def __init__(self, spell, character_class, **kwargs):
+            message = f"Are you sure you want to learn the spell '{str(spell)}'?"
+            super().__init__(message=message, **kwargs)
+            self.spell = spell
+            self.character_class = character_class
+
+        async def on_confirm(self, payload):
+            await ConfirmMenu.on_confirm(self, payload)
+            await self.character.learn_spell(self.character_class, self.spell, cog=self, channel=self.channel)
 
     class LearnSpellSelectSpellMenu(BaseCharacterMenu):
         title = "Learn Spell Menu - Select Spell"
@@ -201,30 +176,21 @@ class Menu(commands.Cog):
             self.character_class = character_class
             self.spell_level = spell_level
             available_spells = self.character_class.available_class_spells()[self.spell_level]
+
             if self.character_class.subclass is not None:
                 subclass_spells = self.character_class.available_subclass_spells()
-                available_spells = {**available_spells, **subclass_spells[spell_level]} \
-                    if subclass_spells is not None else available_spells
+                if subclass_spells is not None:
+                    available_spells = {**available_spells, **subclass_spells[spell_level]}
+
             available_spells = self.character_class.filter_available_spells(available_spells)
             for name, spell in available_spells.items():
                 self.submenu(label=name)(self.make_spell_confirm(spell))
 
-        async def on_confirm(self, spell):
-            self.character_class.insert_spell(spell.spell_name, spell.class_name)
-            msg = f"{self.character.info.name} has successfully learned the spell **{spell.spell_name}**, " \
-                  f"originating from '**{spell.class_name}**'!"
-            await Connections.log_to_discord(self, msg)
-            await self.ctx.channel.send(msg)
-            Roster.update_character_in_roster(self.character)
-
         @staticmethod
         def make_spell_confirm(spell):
             async def spell_confirm(menu, payload):
-                msg = f"Are you sure you want to learn the spell '{spell.spell_name}'?"
-                m = await start_menu(menu.ctx, Menu.ConfirmMenu, message=msg)
-                if m.confirm:
-                    await menu.on_confirm(spell)
-
+                await start_menu(menu.ctx, Menu.LearnSpellConfirmMenu, character=menu.character,
+                                 character_class=menu.character_class, spell=spell)
             return spell_confirm
 
     class LearnSpellSelectLevelMenu(BaseCharacterMenu):
@@ -236,7 +202,7 @@ class Menu(commands.Cog):
         def __init__(self, character_class, **kwargs):
             super().__init__(**kwargs)
             self.character_class = character_class
-            max_spell_level = Queries.class_max_spell_level(self.character_class)
+            max_spell_level = StandaloneQueries.class_max_spell_level(self.character_class)
             for level in range(1, max_spell_level + 1):
                 self.submenu(label=f"Level {level} Spells")(self.make_select_spell_level(level, character_class))
 
@@ -283,7 +249,7 @@ class Menu(commands.Cog):
             super().__init__(**kwargs)
 
         def update_embed(self):
-            max_spell_level = Queries.class_max_spell_level(self.character.classes[self.class_name])
+            max_spell_level = StandaloneQueries.class_max_spell_level(self.character.classes[self.class_name])
             class_spells = LinkClassSpellFacade.interface.fetch(self.class_name)
             embed_fields = []
             for level in range(1, max_spell_level + 1):
@@ -330,7 +296,7 @@ class Menu(commands.Cog):
 
             for character_class in self.spellcaster_classes:
                 name = character_class.class_info.name
-
+                add_to_submenu = None
                 if character_class.class_info.are_spells_memorized():
                     add_to_submenu = self.submenu(name)
                     func = self.make_display_character_class_spells(character_class)
@@ -372,7 +338,7 @@ class Menu(commands.Cog):
             super().__init__(**kwargs)
             self.class_name = class_name
             self.subclass_choice = None
-            options = Queries.select_possible_subclasses(self.class_name)
+            options = StandaloneQueries.select_possible_subclasses(self.class_name)
             for subclass in options:
                 add_to_submenu = self.submenu(subclass)
                 func = self.make_subclass_confirm(subclass)
@@ -380,16 +346,16 @@ class Menu(commands.Cog):
 
         async def on_confirm(self, subclass_name):
             self.character.set_subclass(self.class_name, subclass_name)
-            msg = f"**{self.character.info.name}** has selected **{subclass_name}** as their {self.class_name} subclass."
+            msg = f"**{self.character.info.name}** has selected **{subclass_name}** as their {self.class_name} subclass"
             await Connections.log_to_discord(self, msg)
-            await self.ctx.channel.send(msg)
+            await self.channel.send(msg)
             Roster.update_character_in_roster(self.character)
 
         @staticmethod
         def make_subclass_confirm(subclass_name):
             async def subclass_confirm(menu, payload):
                 msg = f"Are you sure you want to select the subclass '{subclass_name}'?"
-                m = await start_menu(menu.ctx, Menu.ConfirmMenu, message=msg)
+                m = await start_menu(menu.ctx, ConfirmMenu, message=msg)
                 if m.confirm:
                     await menu.on_confirm(subclass_name)
 
@@ -413,7 +379,6 @@ class Menu(commands.Cog):
         def make_class_choice(class_name):
             async def class_choice(menu, payload):
                 await start_menu(menu.ctx, Menu.SubclassChoiceMenu, character=menu.character, class_name=class_name)
-
             return class_choice
 
     class LevelUpMenu(BaseCharacterMenu):
@@ -430,25 +395,22 @@ class Menu(commands.Cog):
             super().__init__(character, **kwargs)
             available_classes = ClassRequirements.classes_available_for_levelup(self.character)
             for name in available_classes:
-                add_to_submenu = self.submenu(name)
-                func = self.make_level_up_choice(name)
-                add_to_submenu(func)
+                self.submenu(label=name)(self.make_level_up_choice(name))
 
         async def on_confirm(self, class_name):
             self.character.level_up(class_name)
             msg = f"**{self.character.info.name}** has gained a level in **{class_name}**."
             await Connections.log_to_discord(self, msg)
-            await self.ctx.channel.send(msg)
+            await self.channel.send(msg)
             Roster.update_character_in_roster(self.character)
 
         @staticmethod
         def make_level_up_choice(class_name):
             async def level_up_confirm(menu, payload):
                 msg = f"Are you sure you want to gain a level in '{class_name}'?"
-                m = await start_menu(menu.ctx, Menu.ConfirmMenu, message=msg)
+                m = await start_menu(menu.ctx, ConfirmMenu, message=msg)
                 if m.confirm:
                     await menu.on_confirm(class_name)
-
             return level_up_confirm
 
     class CharacterSheetMenu(BaseCharacterMenu):
@@ -568,6 +530,18 @@ class Menu(commands.Cog):
             await start_menu(self.ctx, Menu.ForgetSpellMenu, character=self.character,
                              spellcaster_classes=self.spellcaster_classes)
 
+        def _skip_free_profession(self):
+            try:
+                skills = self.character.skills
+                jobs = [skill for skill in skills if skill.name in SkillInfoFacade.interface.fetch_jobs()]
+                return len(jobs) > 0
+            except AttributeError:
+                return True
+
+        @textmenus.submenu("Pick a free profession", skip_if=_skip_free_profession)
+        async def pick_free_profession(self, payload):
+            await start_menu(self.ctx, Menu.FreeProfessionMenu, character=self.character)
+
     class WorkshopMenu(BaseCharacterMenu):
         """
         Workshop menu which allows players to craft items or give labor to other players.
@@ -577,13 +551,57 @@ class Menu(commands.Cog):
         def get_initial_message(self):
             return "Welcome to the workshop."
 
-        @textmenus.submenu('Create a mundane item')
-        async def craft_mundane(self, payload):
-            await self.ctx.channel.send("Your mundane recipes would be listed here.")
+        def __init__(self, character: Character, **kwargs):
+            super().__init__(character, **kwargs)
+            self.character.refresh()
 
-        @textmenus.submenu('Create a consumable item')
-        async def craft_consumable(self, payload):
-            await self.ctx.channel.send("Your consumable recipes would be listed here.")
+        def _skip_crafting(self):
+            """
+            Used to determine if the crafting menus should be displayed or not
+            :return: bool - True to skip
+            """
+            try:
+                limit = StandaloneQueries.crafting_limit(self.character.info.character_id, self.character.get_gold())
+                skills = self.character.skills
+                jobs = [skill for skill in skills if skill.name in SkillInfoFacade.interface.fetch_jobs()]
+                available = (limit and any(jobs))
+                log.info(f"_skip_crafting: Should skip crafting menu = '{not available}'")
+                return not available
+            except AttributeError:
+                return True
+
+        @textmenus.submenu("Create a mundane item", skip_if=_skip_crafting)
+        async def craft_mundane(self, payload):
+            await workshop.mundane_crafting_menu(self.ctx, self.character)
+
+        @textmenus.submenu("Experiment with Thaumstyn")
+        async def craft_thaumstyn(self, payload):
+            await workshop.open_file_based_recipe_menu(self.ctx, 'thaumstyn', self.character)
+
+        @textmenus.submenu("Create a scroll")
+        async def craft_scroll(self, payload):
+            await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
+            payload_context = await self.bot.get_context(payload)
+            await OldWorkshopMenu.new_craft_scroll_menu(payload_context, self.character)
+
+        @textmenus.submenu("Work for someone this week")
+        async def assign_labor(self, payload):
+            await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
+            payload_context = await self.bot.get_context(payload)
+            await OldWorkshopMenu.work_menu(self.ctx.cog, payload_context, self.ctx.author.id,
+                                            self.character.info.character_id)
+
+        def _skip_scribe(self):
+            try:
+                return not self.character.has_core_spellbook()
+            except AttributeError:
+                return True
+
+        @textmenus.submenu("Scribe a spell into your spell book", skip_if=_skip_scribe)
+        async def scribe_spell(self, payload):
+            await self.channel.send("TODO: Add scribe menu.")
+            await OldWorkshopMenu.scribe_spell_menu(self.ctx.cog, self.ctx, self.ctx.author.id,
+                                                    self.character.info.character_id)
 
     class MarketMenu(BaseCharacterMenu):
         """
@@ -596,11 +614,11 @@ class Menu(commands.Cog):
 
         @textmenus.submenu('Buy items from the market')
         async def buy_item_menu(self, payload):
-            await self.ctx.channel.send("This would list the menu for buying items from the market")
+            await self.channel.send("This would list the menu for buying items from the market")
 
         @textmenus.submenu('Sell items on the market')
         async def sell_item_menu(self, payload):
-            await self.ctx.channel.send("This would list the menu for selling items on the market")
+            await self.channel.send("This would list the menu for selling items on the market")
 
     class MainMenu(BaseCharacterMenu):
         """
@@ -640,39 +658,46 @@ class Menu(commands.Cog):
 
     class CharacterChoiceMenu(BaseMenu):
         title = "Character Choice"
-        character_info = None
+        character_info: CharacterInfo = None
 
         def get_initial_message(self):
             return "Welcome to the character select menu. Please select one of the characters below."
 
-        def __init__(self, info_list=[], **kwargs):
+        def __init__(self, available_characters: List[CharacterInfo] = None, **kwargs):
             """
             Add a 'dynamic' submenu for each possible character and present menu to user.
             Accomplished by decorating a menu function to set that menu's character_info when selected.
             """
             super().__init__(**kwargs)
-            for info in info_list:
-                add_to_submenu = self.submenu(info.name)
-                func = self.gen_set_character_info(info)
-                add_to_submenu(func)
+            if available_characters is None:
+                available_characters = []
+            for character_info in available_characters:
+                self.submenu(label=character_info.name)(self.gen_set_character_info(character_info))
 
         @staticmethod
-        def gen_set_character_info(character_info):
-            async def set_character_info(menu, payload):
+        def gen_set_character_info(character_info: CharacterInfo) -> \
+                Callable[['Menu.CharacterChoiceMenu', discord.Message], Awaitable[None]]:
+            """
+            Creates a decorated closure function which sets the menu's selected character to the one passed
+            :param character_info: character information to set when selected
+            :return:
+            """
+            async def set_character_info(menu: Menu.CharacterChoiceMenu, payload: discord.Message) -> None:
                 log.debug("CharacterChoiceMenu::set_character_info")
                 menu.character_info = character_info
                 await menu.ctx.channel.send(f"You selected {menu.character_info.name}")
-
             return set_character_info
 
     @staticmethod
-    async def select_character(ctx):
+    async def select_character(ctx, author: discord.User = None, channel: discord.abc.Messageable = None):
         """
         Fetches info for discord user. Returns id if available or will prompt user to select one from multiple.
-        :param ctx: context
+        :param ctx: context of the command which called this
+        :param author: discord.abc.User to fetch name of
+        :param channel: channel to send response message
         :return: character_id
         """
-        info_list = CharacterInfoFacade.interface.fetch_by_discord_id(ctx.message.author.id)
+        info_list = CharacterInfoFacade.interface.fetch_by_discord_id(author.id if author else ctx.message.author.id)
         if len(info_list) == 0:
             """No characters exist for the caller"""
             return None
@@ -680,7 +705,7 @@ class Menu(commands.Cog):
             """Shortcut to return the only available character."""
             return info_list[0].character_id
         else:
-            m = await start_menu(ctx, Menu.CharacterChoiceMenu, info_list=info_list)
+            m = await start_menu(ctx, Menu.CharacterChoiceMenu, available_characters=info_list, channel=channel)
             return m.character_info.character_id if m.character_info else None
 
     @commands.group(name='menu', invoke_without_command=True, brief='Opens the main menu')
@@ -692,7 +717,8 @@ class Menu(commands.Cog):
             Handle a player trying to access the menu twice
             """
             if ctx.message.author.id in self.players_in_menu:
-                await ctx.message.author.send("You are already accessing the menu.")
+                channel = await menu_helper.get_channel(ctx)
+                await channel.send("You are already accessing the menu.")
                 return
             else:
                 player_opened_menu = True
@@ -703,16 +729,17 @@ class Menu(commands.Cog):
             """
             character_id = await self.select_character(ctx)
             if character_id is None:
-                error_message = "You do not have a character which can access the menu." \
-                                "You will need to roll your stats and talk with a Mod to create your character." \
+                error_message = "You do not have a character which can access the menu. " \
+                                "You will need to roll your stats and talk with a Mod to create your character. " \
                                 "The 'randchar' command will randomly roll your characters stats. " \
                                 "Once this is done, a Mod can use the 'Create' command to create your character."
-                await ctx.channel.send(error_message)
+                channel = await menu_helper.get_channel(ctx)
+                await channel.send(error_message)
                 return
             """
             Create menu and start querying the user
             """
-            m = await start_menu(ctx, Menu.MainMenu, character=Character(character_id), stop_on_first=False)
+            await start_menu(ctx, Menu.MainMenu, character=Character(character_id), stop_on_first=False)
         except textmenus.StopException:
             reason = "'stop' received"
         except textmenus.ExitException:
@@ -720,13 +747,56 @@ class Menu(commands.Cog):
         except asyncio.TimeoutError:
             reason = "Timeout occurred"
         finally:
-            await ctx.channel.send(f"{reason}. Closing menu.")
+            channel = await menu_helper.get_channel(ctx)
+            await channel.send(f"{reason}. Closing menu.")
             """
             Remove player from list when they leave
             """
             if player_opened_menu:
                 self.players_in_menu.pop(ctx.message.author.id)
 
+    """
+    Define methods needed for 'old' menus.
+    """
+    @staticmethod
+    async def confirm(ctx):
+        m = await start_menu(ctx, ConfirmMenu, message="Would you like to confirm your choice?")
+        return "Yes" if m.confirm else "No"
+
+    @staticmethod
+    async def answer_from_list(ctx, question, option_list):
+        if len(option_list) == 0:
+            channel = await menu_helper.get_channel(ctx)
+            await channel.send("No options available. Stopping. "
+                               "[This could be due to not knowing a spell, meeting the minimum crafting limit, etc.]")
+            raise Exceptions.StopException
+        m = await start_menu(ctx, ListMenu, message=question, choices=option_list, title='Skill Menu')
+        return m.choice
+
+    async def character_name_lookup(self, command, question, character_id):
+        await command.message.author.send(question)
+
+        def check_reply(user_response):
+            return user_response.author == command.author and user_response.channel.type[1] == 1
+
+        character_info = CharacterInfoFacade.interface.fetch(character_id)
+        while True:
+            try:
+                msg = await self.bot.wait_for('message', timeout=120.0, check=check_reply)
+            except asyncio.TimeoutError:
+                return "exit"
+
+            if msg.content.lower() == "exit":
+                return "exit"
+            elif msg.content.lower() == "stop":
+                return "stop"
+            elif msg.content.lower() == character_info.name.lower():
+                await command.message.author.send("You cannot give yourself an item")
+            elif CharacterInfoFacade.interface.fetch_by_character_name(msg.content.lower()) is not None:
+                return msg.content.lower()
+            else:
+                await command.message.author.send("{} is not a character, please "
+                                                  "confirm the spelling and try again".format(msg.content.lower()))
 
 def setup(bot):
     bot.add_cog(Menu(bot))
