@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+        sql1:
+                container_name: test-server
+                build: .
+                ports:
+                        - "1433"
+                env_file:
+                        - ./scripts/.sql_secrets
+# Load all sql scripts from /sql-sripts on startup. Sorurce: https://github.com/microsoft/mssql-docker/issues/11
+                command:
+                      - /bin/bash
+                      - -c
+                      - |
+                        # Launch MSSQL and send to background
+                        /opt/mssql/bin/sqlservr &
+                        pid=$$!
+                        # Wait for it to be available
+                        echo "Waiting for MS SQL to be available ⏳"
+                        /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U sa -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT \"YAY WE ARE UP\" , @@servername"
+                        is_up=$$?
+                        while [ $$is_up -ne 0 ] ; do
+                          echo -e $$(date)
+                          /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U sa -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT \"YAY WE ARE UP\" , @@servername"
+                          is_up=$$?
+                          sleep 5
+                        done
+                        # Run every script in /sql-scripts
+                        # TODO set a flag so that this is only done once on creation,
+                        #      and not every time the container runs
+                        for foo in /sql-scripts/*.sql
+                        do /opt/mssql-tools/bin/sqlcmd -U sa -P $$SA_PASSWORD -l 30 -e -i $$foo
+                        done
+                        echo "All scripts have been executed. Waiting for MS SQL(pid $$pid) to terminate."
+                        # Wait on the sqlserver process
+                        wait $$pid
+
+volumes:
+        sqlvolume:
+

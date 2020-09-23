@@ -1,0 +1,10 @@
+{
+	"sql-driver": "FreeTDS",
+	"sql-database": "LostWorld",
+	"sql-server": "<SQL_IP_ADDRESS>",
+	"sql-uid": "SA",
+	"sql-pwd": "{<SQL_PASSWORD>}",
+	"sql-port": "1433",
+	"spreadsheet-id": "1bo2250hZ4dqvMK1JwBtiQStTao2ykLqz4SBDiw7oliY",
+	"log-channel-id": 738746027447812117
+}
