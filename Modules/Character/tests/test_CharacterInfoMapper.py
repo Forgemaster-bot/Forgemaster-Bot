@@ -65,9 +65,10 @@ class TestCharacter(unittest.TestCase):
             character = Character.Data.CharacterInfo.CharacterInfo(**{'not_real_attr': None})
 
     def test_fetch_info(self):
-        character_list = Character.CharacterInfoFacade.interface.fetch(character_id)
-        self.assertEqual(len(character_list), 1)
-        character = character_list[0]
+        # character_list = Character.CharacterInfoFacade.interface.fetch(character_id)
+        # self.assertEqual(len(character_list), 1)
+        # character = character_list[0]
+        character = Character.CharacterInfoFacade.interface.fetch(character_id)
         # Assert each field
         self.assertEqual(character.discord_id, discord_id)
         self.assertEqual(character.name, name)

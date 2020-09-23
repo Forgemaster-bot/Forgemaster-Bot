@@ -47,6 +47,8 @@ class TableMapper:
         where_info = {}
         for k in ast.literal_eval(self._table_info.update_keys):
             where_info[k] = data.pop(k)
+        if not data:
+            raise RuntimeError('Cannot update data passed. No allowable columns to set.')
         self._queries.update(self._table_info, data, where_info)
 
     def insert(self, storage_obj) -> None:

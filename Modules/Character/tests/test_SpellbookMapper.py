@@ -38,7 +38,7 @@ class InitializerTestCase(unittest.TestCase):
             self.assertEqual(getattr(character_class, k), v)
 
     def test_initializer_invalid(self):
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(TypeError):
             DataClass(**{'not_real_attr': None})
 
 

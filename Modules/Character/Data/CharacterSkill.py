@@ -1,12 +1,12 @@
+import uuid
+
 class CharacterSkill:
     __slots__ = ["character_id", "name", "proficiency"]
 
-    def __init__(self, **kwargs):
-        self.character_id = None
-        self.name = None
-        self.proficiency = None
-        for key, value in kwargs.items():
-            setattr(self, key, value)
+    def __init__(self, character_id: uuid.UUID = None, name: str =None, proficiency: bool = False):
+        self.character_id: uuid.UUID = character_id
+        self.name: str = name
+        self.proficiency: bool = proficiency
 
     def to_dict(self) -> dict:
         """

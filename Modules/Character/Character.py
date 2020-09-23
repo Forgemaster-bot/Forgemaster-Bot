@@ -1,4 +1,5 @@
 import math
+import logging
 import Quick_Python
 import Character.Data.LevelExperience as LevelExperience
 import Character.CharacterInfoFacade as CharacterInfoFacade
@@ -7,11 +8,16 @@ import Character.CharacterFeatFacade as CharacterFeatFacade
 import Character.CharacterSkillFacade as CharacterSkillFacade
 import Character.CharacterItemFacade as CharacterItemFacade
 import Character.SpellbookFacade as SpellbookFacade
+import Character.SkillInfoFacade as SkillInfoFacade
 from Character.Data.CharacterItem import CharacterItem
 from Character.Data.CharacterClass import CharacterClass
+from Character.Data.CharacterSkill import CharacterSkill
 from Character.Data.Spellbook import Spellbook
-from Connections import RosterColumns
+from Character.Data.SkillInfo import SkillInfo
+from Connections import RosterColumns, log_to_discord
+# import Update_Google_Roster as Roster
 
+log = logging.getLogger(__name__)
 
 class Character:
 
@@ -52,7 +58,11 @@ class Character:
         return any(s for s in self.skills if s.name.lower() == name.lower() and s.proficiency >= 0)
 
     def has_item(self, name: str):
-        return True if (name in self.items) and (self.items[name].quantity > 0) else False
+        # if lower:
+        if any([key for key, value in self.items.items() if key.lower() == name.lower() and value.quantity > 0]):
+            return True
+        return False
+        # return True if (name in self.items) and (self.items[name].quantity > 0) else False
 
     def has_item_quantity(self, name: str, quantity: int):
         return True if (name in self.items) and (self.items[name].quantity >= quantity) else False
@@ -78,7 +88,11 @@ class Character:
         return self.info.xp
 
     def can_level_up(self):
-        return LevelExperience.can_level_up(self.get_character_level(), self.get_xp())
+        character_level = self.get_character_level()
+        xp = self.get_xp()
+        can_level = LevelExperience.can_level_up(self.get_character_level(), self.get_xp())
+        log.debug(f"level: {character_level}; xp: {xp}; can_level: {can_level}")
+        return can_level
 
     def get_gold(self):
         return self.info.gold
@@ -252,7 +266,7 @@ class Character:
             class_obj.character_id = self.info.character_id
             class_obj.name = class_name
             class_obj.level = 1
-            class_obj.number = max([c.number for c in self.classes]) + 1
+            class_obj.number = max([c.number for c in self.classes.values()]) + 1
             class_obj.can_replace_spells = CharacterClass.get_dnd_class(class_name).are_spells_memorized()
             class_obj.free_book_spells = 0
 
@@ -262,7 +276,7 @@ class Character:
             # TODO: Spell book
 
         if is_first_level:
-            self.classes.append(class_obj)
+            self.classes[class_obj.name] = class_obj
             CharacterClassFacade.interface.insert(class_obj)
         else:
             CharacterClassFacade.interface.update(class_obj)
@@ -322,3 +336,37 @@ class Character:
                 spell_list.pop(spell.name, None)
         return spell_list
 
+    async def forget_spell(self, character_class, spell, cog=None, channel=None):
+        if isinstance(character_class, str):
+            character_class = self.classes[character_class]
+        character_class.remove_spell(spell)
+        character_class.can_replace_spells = False
+        CharacterClassFacade.interface.update(character_class)
+        if cog and channel:
+            msg = f"{self.info.name} has successfully forgot the spell **{str(spell)}**'!"
+            await log_to_discord(cog, msg)
+            await channel.send(msg)
+
+    async def learn_spell(self, character_class: CharacterClass, spell, cog=None, channel=None):
+        if isinstance(character_class, str):
+            character_class = self.classes[character_class]
+        character_class.insert_spell(spell)
+        if cog and channel:
+            msg = f"{self.info.name} has successfully learned the spell **{spell.spell_name}**, " \
+                  f"originating from '**{spell.class_name}**'!"
+            await log_to_discord(cog, msg)
+            await channel.send(msg)
+
+    async def learn_skill(self, skill: SkillInfo, has_proficiency: bool = False):
+        if skill.name not in self.get_skills_dict():
+            character_skill = CharacterSkill(character_id=self.id, name=skill.name, proficiency=has_proficiency)
+            CharacterSkillFacade.interface.insert(character_skill)
+            self.refresh()
+
+    @property
+    def id(self):
+        return self.info.character_id
+
+    @property
+    def name(self):
+        return self.info.name

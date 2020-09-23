@@ -40,8 +40,8 @@ class MapperTestCase(unittest.TestCase):
         for k, v in data.items():
             self.assertEqual(getattr(test_item, k), v)
 
-        with self.assertRaises(KeyError):
-            test_item = Facade.interface.fetch("does not exist")
+        test_item = Facade.interface.fetch("does not exist")
+        self.assertIsNone(test_item)
 
 
 if __name__ == '__main__':

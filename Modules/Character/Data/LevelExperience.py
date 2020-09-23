@@ -1,4 +1,5 @@
 total_xp_needed_for_next_level = {
+    0: 0,
     1: 300,
     2: 900,
     3: 2700,
@@ -22,6 +23,7 @@ total_xp_needed_for_next_level = {
 }
 
 xp_gap_to_next_level = {
+    0: 0,
     1: 300,
     2: 600,
     3: 1800,
@@ -47,9 +49,9 @@ xp_gap_to_next_level = {
 
 def can_level_up(current_level: int, total_xp: int):
     xp_needed = total_xp_needed_for_next_level[current_level]
-    return (total_xp >= xp_needed) if xp_needed else None
+    return (total_xp >= xp_needed) if xp_needed is not None else None
 
 
 def get_log_xp(current_level: int):
     xp_gap = xp_gap_to_next_level[current_level]
-    return (xp_gap / 20) if xp_gap else 0
+    return (xp_gap / 20) if xp_gap is not None else 0

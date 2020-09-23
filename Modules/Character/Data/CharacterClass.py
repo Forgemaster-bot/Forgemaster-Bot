@@ -24,7 +24,6 @@ class CharacterClass:
         self.class_info = ClassRequirements.get_dnd_class_definition(self.name)
         self.spell_holders = None
         self.refresh()
-        print(repr(self.to_dict()))
 
     def to_dict(self) -> dict:
         """
@@ -42,7 +41,7 @@ class CharacterClass:
             return "{} {}: {}".format(self.subclass, self.name, self.level)
 
     def _get_spell_holder(self):
-        if self.character_id:
+        if self.character_id and self.class_info:
             if self.class_info.has_spellbook():
                 return {sb.name: sb for sb in spellbook_interface.fetch_by_character_id(self.character_id)}
             else:
@@ -63,13 +62,13 @@ class CharacterClass:
     def subclass_not_picked(self):
         return not self.subclass_is_picked()
 
-    def insert_spell(self, spell_name: str, holder: str):
+    def insert_spell(self, spell: str):
         if self.class_info.has_spellbook():
             core_spellbooks = [holder for holder in self.spell_holders.values() if holder.type == 'Core']
             holder = core_spellbooks[0]
         else:
-            holder = self.spell_holders[holder]
-        holder.insert_spell(character_id=self.character_id, name=spell_name, origin=holder.name)
+            holder = self.spell_holders[spell.class_name]
+        holder.insert_spell(character_id=self.character_id, name=spell.spell_name, origin=holder.name)
 
     def remove_spell(self, spell):
         spell_interface.delete(spell)

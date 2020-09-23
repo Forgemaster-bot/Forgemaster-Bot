@@ -1,6 +1,8 @@
 import pyodbc
 import Quick_Python
-from typing import List
+import Connections
+from typing import List, Optional
+from uuid import UUID
 
 
 class Queries:
@@ -28,9 +30,11 @@ class Queries:
 
     @staticmethod
     def select(table_info, where_column: str, where_value: str,
-               where_and_pairs: List[tuple] = None) -> List[dict]:
+               where_and_pairs: List[tuple] = None, order_by_column=None, ascending=True) -> List[dict]:
         """
         Select database row by key
+        :param ascending:
+        :param order_by_column:
         :param table_info: table constants containing table definitions. Where table is table name, and key is table key
         :param where_column: column to check for value
         :param where_value: where value
@@ -41,20 +45,35 @@ class Queries:
             where_query = ""
             args = None
         else:
-            where_query = f"WHERE [{where_column}] = ?"
-            args = [where_value]
+            args = []
+            if where_value is not None:
+                where_query = f"WHERE [{where_column}] = ?"
+                args.append(where_value)
+            else:
+                where_query = f"WHERE [{where_column}] IS NULL"
+
             if where_and_pairs is not None:
                 keys, values = zip(*where_and_pairs)
                 # add and items
-                where_query = " AND ".join([where_query, " AND ".join(f"[{key}] = ?" for key in keys)])
-                args.extend(values)
-
+                null_keys = []
+                equals_keys = []
+                for key, value in where_and_pairs:
+                    if value is None:
+                        null_keys.append(key)
+                    else:
+                        equals_keys.append(key)
+                        args.append(value)
+                where_and_items = [f"[{key}] = ?" for key in equals_keys]
+                where_and_items.extend(f"[{key}] IS NULL" for key in null_keys)
+                where_query = " AND ".join([where_query, *where_and_items])
 
         query = """\
                 SELECT * 
                 FROM [{table}]
                 {where_query}
                 """.format(**table_info.to_dict(), where_query=where_query)
+        if order_by_column:
+            query = f"{query} ORDER BY {order_by_column} {'ASC' if ascending else ''}"
         cursor = Quick_Python.run_query(query, args)
 
         # Convert cursor into dict with column as the key
@@ -103,7 +122,7 @@ class Queries:
             if column_data[k] == pyodbc.SQL_GUID:
                 if arg is not None:
                     args.append(arg)
-                    values.append("CONVERT(uniqueidentifier,?)")
+                    values.append("?" if isinstance(arg, UUID) else "CONVERT(uniqueidentifier,?)")
                 else:
                     values.append("NEWID()")
             else:
@@ -113,10 +132,18 @@ class Queries:
         # Create column and value strings
         columns_string = ','.join("[{}]".format(k) for k in keys)
         values_string = ','.join(values)
-        query = "INSERT INTO [{table}] ({columns}) VALUES ({values})".format(table=table_info.table,
-                                                                             columns=columns_string,
-                                                                             values=values_string)
-        Quick_Python.run_query_commit(query, args)
+        # output_string = "" if output is None else f"OUTPUT {', '.join(f'Inserted.{o}' for o in output)}"
+        output_string = 'OUTPUT Inserted.*'
+        query = f"INSERT INTO [{table_info.table}] ({columns_string}) {output_string} VALUES ({values_string})"
+
+        # Quick_Python.run_query_commit(query, args)
+        with Connections.sql_db_connection() as cursor:
+            Quick_Python.log_transaction(query, args)
+            cursor.execute(query, args)
+            row = cursor.fetchone()
+            columns = [column[0] for column in cursor.description]
+            return dict(zip(columns, row))
+
 
     @staticmethod
     def delete(table_info, key_info: dict):

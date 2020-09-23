@@ -61,13 +61,8 @@ class MapperTestCase(unittest.TestCase):
         # Update the item
         new_value = getattr(test_item, test_update_field)*2
         setattr(test_item, test_update_field, new_value)
-        Facade.interface.update(test_item)
-
-        # Test the update was successful
-        objects = Facade.interface.fetch(character_id)
-        self.assertEqual(len(objects), 1)
-        test_item = objects[0]
-        self.assertEqual(getattr(test_item, test_update_field), new_value)
+        with self.assertRaises(RuntimeError):
+            Facade.interface.update(test_item)
 
         # Remove the item
         Facade.interface.delete(test_item)

@@ -77,7 +77,7 @@ class_definitions = {
 class_lookup = {c.name: c for c in class_definitions if c.name in config.available_classes}
 
 def get_dnd_class_definition(class_name: str) -> DndClass:
-    return class_lookup[class_name]
+    return class_lookup[class_name] if class_name is not None else None
 
 def classes_available_for_levelup(character):
     """

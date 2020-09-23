@@ -4,7 +4,7 @@ from Character import CharacterClassFacade as Facade
 from Character.Data.CharacterClass import CharacterClass as DataClass
 
 test_data = {'character_id': '0E984725-C51C-4BF4-9960-E1C80E27ABA0',
-             'name': 'Test',
+             'name': 'Bard',
              'level': 1,
              'number': 1,
              'subclass': None,
@@ -35,7 +35,7 @@ class InitializerTestCase(unittest.TestCase):
             self.assertEqual(getattr(character_class, k), v)
 
     def test_initializer_invalid(self):
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(TypeError):
             DataClass(**{'not_real_attr': None})
 
 
