@@ -12,13 +12,14 @@ from collections import deque
 
 log = logging.getLogger(__name__)
 
-initial_extensions = [
-    'cogs.Admin',
-    'cogs.Menu',
-]
-
-
 class TestBot(commands.Bot):
+
+    initial_extensions = [
+        'cogs.Admin',
+        'cogs.Menu',
+        'cogs.auction'
+    ]
+
     def __init__(self):
         super().__init__(command_prefix=config.command_prefix,
                          description=config.description)
@@ -32,7 +33,7 @@ class TestBot(commands.Bot):
         """
         Load initial extensions
         """
-        for extension in initial_extensions:
+        for extension in self.initial_extensions:
             # noinspection PyBroadException
             try:
                 self.load_extension(extension)
