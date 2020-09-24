@@ -200,7 +200,7 @@ async def level_up_confirm(self, character_id: str, class_name: str, discord_id:
         wizard_update_spellslots(character_id, class_name, is_first_level)
         wizard_update_core_spellbook(character_id)
 
-    if SQL_Lookup.character_sum_class_levels(character_id) > 6:
+    if SQL_Lookup.character_sum_class_levels(character_id) >= 8:
         SQL_Update.update_player_character_total(discord_id)
 
     Update_Google_Roster.update_classes(character_id)
