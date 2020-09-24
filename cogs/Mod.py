@@ -20,8 +20,8 @@ class Mod_Commands(commands.Cog):
                       aliases=['create']
                       )
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
-    async def create_character(self, command):
-        trim_message = command.message.content.replace('$Create ', '')
+    async def create_character(self, command, *, args):
+        trim_message = args
         command_check = Scripts.create_character_check(trim_message)
         await command.send(command_check[1])
         if command_check[0]:
@@ -40,8 +40,8 @@ class Mod_Commands(commands.Cog):
 
     @commands.command(name='Refresh', help='[Character]', aliases=['refresh'])
     @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
-    async def character_refresh(self, command):
-        trim_message = command.message.content.replace('$Refresh ', '')
+    async def character_refresh(self, command, *, args):
+        trim_message = args
         command_check = Scripts.character_refresh_check(trim_message)
         if command_check[0]:
             await command.send("working...")
