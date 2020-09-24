@@ -1,4 +1,5 @@
 import Character.Tables.CharacterClassMapper
+from Character.Data.CharacterClass import CharacterClass
 from typing import List
 
 
@@ -9,7 +10,7 @@ class CharacterClassFacade:
     def __init__(self, mapper):
         self._mapper = mapper
 
-    def fetch(self, character_id: str) -> List:
+    def fetch(self, character_id: str) -> List[CharacterClass]:
         return self._mapper.fetch(character_id)
 
     def update(self, character_class):

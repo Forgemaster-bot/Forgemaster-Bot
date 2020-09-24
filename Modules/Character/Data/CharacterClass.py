@@ -62,7 +62,7 @@ class CharacterClass:
     def subclass_not_picked(self):
         return not self.subclass_is_picked()
 
-    def insert_spell(self, spell: str):
+    def insert_spell(self, spell):
         if self.class_info.has_spellbook():
             core_spellbooks = [holder for holder in self.spell_holders.values() if holder.type == 'Core']
             holder = core_spellbooks[0]
@@ -114,6 +114,10 @@ class CharacterClass:
             for spell in holder.spells:
                 spells.append(spell)
         return spells
+
+    def set_subclass(self, subclass_name):
+        self.subclass = subclass_name
+        self.has_class_choice = ClassRequirements.has_class_choice(self.name, self.subclass)
 
     @staticmethod
     def get_dnd_class(class_name):

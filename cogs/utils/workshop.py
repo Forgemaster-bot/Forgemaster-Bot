@@ -1,8 +1,8 @@
 from cogs.utils import menu as Menu
 from cogs.utils import textmenus
 from cogs.utils import StandaloneQueries
-import Crafting.Parser
-import Crafting.RecipeFactory
+import Crafting.Parser as Parser
+import Crafting.RecipeFactory as RecipeFactory
 import Crafting.Crafting as Crafting
 import itertools
 import logging
@@ -36,7 +36,7 @@ class RecipeSelectionMenu(Menu.BaseCharacterMenu):
     @staticmethod
     def make_recipe_confirm(data: dict):
         async def recipe_confirm(menu, payload):
-            recipe = Crafting.RecipeFactory.create_recipe(data)
+            recipe = RecipeFactory.create_recipe(data)
             msg = f"Would you like to craft this recipe?"
             embed_info = Menu.BaseMenu.create_embed_info()
             embed_fields = [
@@ -83,7 +83,7 @@ class RecipeCategoryMenu(Menu.BaseCharacterMenu):
 
 
 async def open_file_based_recipe_menu(ctx, label: str, character):
-    available_selections = Crafting.Parser.get_parsed_data(label)['recipes']
+    available_selections = Parser.get_parsed_data(label)['recipes']
     await Menu.start_menu(ctx, RecipeCategoryMenu, character=character, data=available_selections, label=label)
 
 def make_skill_choice_func(skill):
@@ -91,7 +91,7 @@ def make_skill_choice_func(skill):
         tool = StandaloneQueries.select_tool(skill.name)
         if not menu.character.has_item(tool):
             log.info(f"skill_choice_func - {menu.character.info.name} - Does not have '{tool}'")
-            await menu.ctx.send(f"You do not have the required tool to craft: '{tool}'.")
+            await menu.channel.send(f"You do not have the required tool to craft: '{tool}'.")
         else:
             # await Menu.start_menu(menu.ctx, menu.next_menu, character=menu.character, skill=skill)
             await menu.next_menu(menu, skill)
@@ -103,9 +103,11 @@ def make_choice_func(skill):
     return choice_func
 
 async def ask_for_quantity(ctx: commands.Context, max_num: int) -> int:
+    channel = await Menu.get_channel(ctx)
+
     def wait_for_integer(message: discord.Message):
         try:
-            if ctx.author.id != message.author.id or ctx.channel.id != message.channel.id:
+            if ctx.author.id != message.author.id or channel.id != message.channel.id:
                 return False
             content = message.content.lower()
             if content == 'stop' or content == 'exit':
@@ -119,22 +121,22 @@ async def ask_for_quantity(ctx: commands.Context, max_num: int) -> int:
             # await message.author.send(f"Must be between 0 and {max_num}, 'stop', or 'exit. Please try again.")
             return False
 
-    await ctx.channel.send(f"How many would you like to craft? You may craft up to {max_num}. "
+    await channel.send(f"How many would you like to craft? You may craft up to {max_num}. "
                            f"[Please input an integer value between 0 and {max_num}, 'stop', or 'exit']")
     try:
         msg = await ctx.bot.wait_for('message', check=wait_for_integer, timeout=30)
         return int(msg.content)
     except asyncio.TimeoutError:
-        await ctx.channel.send(f"Timed out, aborting...")
+        await channel.send(f"Timed out, aborting...")
         raise Exceptions.StopException
     except ValueError:
-        await ctx.channel.send(f"Invalid number, aborting...")
+        await channel.send(f"Invalid number, aborting...")
         raise Exceptions.StopException
 
 async def craft_item_selection(menu, choice):
     log.info(f"craft_item_selection - {menu.character.info.name} - User selected {choice} ")
 
-    crafting_limit = StandaloneQueries.crafting_limit(menu.character.info.character_id, menu.character.get_gold())
+    crafting_limit = StandaloneQueries.crafting_limit(menu.character.id, menu.character.get_gold())
     max_num = math.floor(crafting_limit / choice.Value)
     quantity = await ask_for_quantity(menu.ctx, max_num)
     total_cost = choice.Value * quantity
@@ -143,7 +145,7 @@ async def craft_item_selection(menu, choice):
              f"Crafting cost will be {total_cost}")
 
     if not menu.character.has_item_quantity_by_keyword(Gold=choice.Value):
-        menu.ctx.send(f"Unfortunately, you do not have enough gold. This item costs '**{choice.Value}gp**' to craft.")
+        menu.channel.send(f"Unfortunately, you do not have enough gold. This item costs '**{choice.Value}gp**' to craft.")
         log.info(f"craft_item_selection - {menu.character.info.name} - User did not have enough gold.")
         return
 
@@ -156,7 +158,7 @@ async def craft_item_selection(menu, choice):
         menu.character.remove_item_amount('Gold', choice.Value)
         menu.character.modify_item_amount(choice.data, 1)
         StandaloneQueries.update_crafting_value(menu.character.info.character_id, new_limit)
-        await menu.ctx.send(f"Successfully crafted **{choice.Name}**! ")
+        await menu.channel.send(f"Successfully crafted **{choice.Name}**! ")
 
 async def item_selection_menu(menu, choice):
     log.info(f"item_selection_menu - {menu.character.info.name} - User selected {choice} ")
@@ -181,7 +183,8 @@ async def mundane_crafting_menu(ctx, character):
     message = f"Please choose one of the following skills for mundane crafting:"
     choices = character.get_skills_dict()
     if len(choices) == 0:
-        ctx.send("Unfortunately, I do not have any available choices for this menu.")
+        channel = await Menu.get_channel(ctx)
+        channel.send("Unfortunately, I do not have any available choices for this menu.")
         return
     await Menu.start_menu(ctx, Menu.ListCharacterMenu, character=character, closure_func=make_skill_choice_func,
                           message=message, next_menu=item_type_menu, choices=choices, title='Skill Menu')

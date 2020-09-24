@@ -1,11 +1,10 @@
 import logging
 import asyncio
 import itertools
-from typing import Union, Callable, Coroutine, Awaitable, List
-
+import textwrap
+from typing import Callable, Awaitable, List
 import discord
 from discord.ext import commands
-
 import Exceptions
 from cogs.utils import textmenus
 from cogs.utils import StandaloneQueries
@@ -15,13 +14,15 @@ from cogs.utils import workshop
 import Character.ClassRequirements as ClassRequirements
 import Character.CharacterInfoFacade as CharacterInfoFacade
 import Character.LinkClassSpellFacade as LinkClassSpellFacade
-import Character.SkillInfoFacade as SkillInfoFacade
+from Character.SkillInfoFacade import interface as skill_info_interface
 from Character.Data.CharacterInfo import CharacterInfo
+from Character.Data.LinkClassSpell import LinkClassSpell
 from Character.Character import Character
 import Connections
 import Update_Google_Roster as Roster
 
 from cogs.old_menus.Workshop_Menu import Menu as OldWorkshopMenu
+from cogs.old_menus.Market_Menu import Menu as OldMarketMenu
 
 log = logging.getLogger(__name__)
 blank = '\u200b'
@@ -63,7 +64,7 @@ class Menu(commands.Cog):
 
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
-            for job_name, skill_obj in SkillInfoFacade.interface.fetch_jobs().items():
+            for job_name, skill_obj in skill_info_interface.fetch_jobs().items():
                 self.submenu(label=job_name)(self.make_job_choice(skill_obj))
 
         @staticmethod
@@ -238,6 +239,45 @@ class Menu(commands.Cog):
 
             return select_spell_level
 
+    class DivineSoulMenu(BaseCharacterMenu):
+        title = "Divine Soul Affinity - Select Spell"
+
+        def get_initial_message(self):
+            label = f"**'Divine Soul'**"
+            return f"Please select a spell from one of the {label} listed."
+
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self.character_class = 'Sorcerer'
+            available_spells = ['Cure Wounds', 'Inflict Wounds', 'Bless', 'Bane', 'Protection from Good and Evil']
+            for name in available_spells:
+                spell = LinkClassSpell('Divine Soul', name)
+                self.submenu(label=name)(self.make_spell_confirm(spell))
+
+        @staticmethod
+        def make_spell_confirm(spell):
+            async def spell_confirm(menu, payload):
+                await start_menu(menu.ctx, Menu.DivineSoulMenu.DivineSoulConfirmMenu, character=menu.character,
+                                 character_class=menu.character_class, spell=spell)
+            return spell_confirm
+
+        class DivineSoulConfirmMenu(ConfirmMenu, BaseCharacterMenu):
+            title = "Divine Soul Affinity - Confirm Choice"
+
+            def __init__(self, spell, character_class, **kwargs):
+                message = f"Are you sure you want to select the spell '{str(spell)}' as your Divine Soul Affinity?"
+                super().__init__(message=message, **kwargs)
+                self.spell = spell
+                self.character_class = character_class
+
+            async def on_confirm(self, payload):
+                await ConfirmMenu.on_confirm(self, payload)
+                await self.character.learn_spell(self.character_class, self.spell)
+                self.character.update_class_choice(self.character_class, False)
+                msg = f"{self.character.name} used their divine soul affinity to learn **{str(self.spell)}**'!"
+                await Connections.log_to_discord(self, msg)
+                await self.channel.send(msg)
+
     class ViewSpellPreparedMenu(BaseCharacterMenu):
         title = "View Possible Prepared Spells"
 
@@ -296,17 +336,16 @@ class Menu(commands.Cog):
 
             for character_class in self.spellcaster_classes:
                 name = character_class.class_info.name
-                add_to_submenu = None
                 if character_class.class_info.are_spells_memorized():
-                    add_to_submenu = self.submenu(name)
-                    func = self.make_display_character_class_spells(character_class)
+                    # Add submenu which displays memorized spells
+                    self.submenu(label=name)(self.make_display_character_class_spells(character_class))
                 elif character_class.class_info.are_spells_prepared():
-                    add_to_submenu = self.submenu(name)
-                    func = self.make_display_prepared_spells(name)
+                    # Add submenu which displays all possible prepared spells
+                    self.submenu(label=name)(self.make_display_prepared_spells(name))
                 elif character_class.class_info.has_spellbook():
-                    add_to_submenu = self.submenu(name, skip_if=self._skip_display_spellbook_spells)
+                    # Add submenu which displays class spells if they have the right spellbook
                     func = self.make_display_character_class_spells(character_class)
-                add_to_submenu(func)
+                    self.submenu(name, skip_if=self._skip_display_spellbook_spells)(func)
 
         @staticmethod
         def make_display_character_class_spells(character_class):
@@ -398,7 +437,7 @@ class Menu(commands.Cog):
                 self.submenu(label=name)(self.make_level_up_choice(name))
 
         async def on_confirm(self, class_name):
-            self.character.level_up(class_name)
+            await self.character.level_up(class_name, cog=self, channel=self.channel)
             msg = f"**{self.character.info.name}** has gained a level in **{class_name}**."
             await Connections.log_to_discord(self, msg)
             await self.channel.send(msg)
@@ -436,7 +475,6 @@ class Menu(commands.Cog):
             info_fields = [
                 textmenus.EmbedInfo.Field("Name", self.character.info.name, inline=True),
                 textmenus.EmbedInfo.Field("XP", self.character.get_xp(), inline=True),
-                # textmenus.EmbedInfo.Field("Can Level", self.character.can_level_up(), inline=True),
                 textmenus.EmbedInfo.Field("Gold", self.character.get_gold(), inline=True)
             ]
             class_fields = [textmenus.EmbedInfo.Field("Class", c, inline=True) for c in self.character.classes.values()]
@@ -473,7 +511,7 @@ class Menu(commands.Cog):
             :param payload: message received which caused this option to be selected
             :return: None
             """
-            m = await start_menu(self.ctx, Menu.LevelUpMenu, character=self.character)
+            await start_menu(self.ctx, Menu.LevelUpMenu, character=self.character)
 
         def _skip_pick_subclass_menu(self):
             """
@@ -533,7 +571,7 @@ class Menu(commands.Cog):
         def _skip_free_profession(self):
             try:
                 skills = self.character.skills
-                jobs = [skill for skill in skills if skill.name in SkillInfoFacade.interface.fetch_jobs()]
+                jobs = [skill for skill in skills if skill.name in skill_info_interface.fetch_jobs()]
                 return len(jobs) > 0
             except AttributeError:
                 return True
@@ -542,6 +580,19 @@ class Menu(commands.Cog):
         async def pick_free_profession(self, payload):
             await start_menu(self.ctx, Menu.FreeProfessionMenu, character=self.character)
 
+        def _skip_divine_soul_choice(self):
+            try:
+                available = self.character.has_subclass_choice('Divine Soul')
+                log.debug(f"_skip_divine_soul_choice available = {available}")
+                return not available
+            except AttributeError:
+                log.debug(f"_skip_divine_soul_choice available = attribute error")
+                return True
+
+        @textmenus.submenu("Pick your Divine Soul Affinity", skip_if=_skip_divine_soul_choice)
+        async def divine_soul_choice(self, payload):
+            await start_menu(self.ctx, Menu.DivineSoulMenu, character=self.character)
+
     class WorkshopMenu(BaseCharacterMenu):
         """
         Workshop menu which allows players to craft items or give labor to other players.
@@ -549,7 +600,33 @@ class Menu(commands.Cog):
         title = "Workshop"
 
         def get_initial_message(self):
-            return "Welcome to the workshop."
+            return textwrap.dedent("""\
+            Welcome to the workshop. In this menu, you can perform various tasks related to crafting or making things  
+            for your character. When crafting mundane items, you may spend up to a weekly crafting limit in gold to 
+            produce items. This weekly limit acts as the amount of 'labor' you can expend in a week.\n
+            **Note**: This limit resets Sunday night at midnight EST/EDT.
+            """)
+
+        def update_embed(self):
+            jobs = [skill for skill in self.character.skills if skill.name in skill_info_interface.fetch_jobs()]
+            jobs_str = "None" if not jobs else ", ".join(job.name for job in jobs)
+            crafting_limit_row = StandaloneQueries.fetch_crafting_limit_row(self.character.id)
+            limit = StandaloneQueries.calculate_crafting_limit(crafting_limit_row, self.character.get_gold())
+            """
+            Build fields list for the embed sent for this menu
+            """
+            embed_fields = [
+                textmenus.EmbedInfo.Field("Name", self.character.info.name, inline=True),
+                textmenus.EmbedInfo.Field("Gold", self.character.get_gold(), inline=True),
+                textmenus.EmbedInfo.Field("Workers", crafting_limit_row.Labour_Points, inline=True),
+                textmenus.EmbedInfo.Field("Professions", jobs_str, inline=True),
+                textmenus.EmbedInfo.Field("Current Limit Remaining", limit, inline=True)
+            ]
+            """
+            Extend with any built in fields and set embed's fields to the newly built list
+            """
+            embed_fields.extend(self.embed_info.fields)
+            self.embed_info.fields = embed_fields
 
         def __init__(self, character: Character, **kwargs):
             super().__init__(character, **kwargs)
@@ -562,8 +639,7 @@ class Menu(commands.Cog):
             """
             try:
                 limit = StandaloneQueries.crafting_limit(self.character.info.character_id, self.character.get_gold())
-                skills = self.character.skills
-                jobs = [skill for skill in skills if skill.name in SkillInfoFacade.interface.fetch_jobs()]
+                jobs = [skill for skill in self.character.skills if skill.name in skill_info_interface.fetch_jobs()]
                 available = (limit and any(jobs))
                 log.info(f"_skip_crafting: Should skip crafting menu = '{not available}'")
                 return not available
@@ -578,17 +654,24 @@ class Menu(commands.Cog):
         async def craft_thaumstyn(self, payload):
             await workshop.open_file_based_recipe_menu(self.ctx, 'thaumstyn', self.character)
 
+        def _skip_craft_scroll(self):
+            try:
+                limit = StandaloneQueries.crafting_limit(self.character.info.character_id, self.character.get_gold())
+                has_spellcaster_class = any(ClassRequirements.all_spellcaster_classes(self.character))
+                available = (limit and has_spellcaster_class)
+                return not available
+            except AttributeError:
+                return True
+
         @textmenus.submenu("Create a scroll")
         async def craft_scroll(self, payload):
             await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
-            payload_context = await self.bot.get_context(payload)
-            await OldWorkshopMenu.new_craft_scroll_menu(payload_context, self.character)
+            await OldWorkshopMenu.new_craft_scroll_menu(self.ctx, self.character)
 
         @textmenus.submenu("Work for someone this week")
         async def assign_labor(self, payload):
             await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
-            payload_context = await self.bot.get_context(payload)
-            await OldWorkshopMenu.work_menu(self.ctx.cog, payload_context, self.ctx.author.id,
+            await OldWorkshopMenu.work_menu(self.ctx.cog, self.ctx, self.ctx.author.id,
                                             self.character.info.character_id)
 
         def _skip_scribe(self):
@@ -599,8 +682,9 @@ class Menu(commands.Cog):
 
         @textmenus.submenu("Scribe a spell into your spell book", skip_if=_skip_scribe)
         async def scribe_spell(self, payload):
-            await self.channel.send("TODO: Add scribe menu.")
-            await OldWorkshopMenu.scribe_spell_menu(self.ctx.cog, self.ctx, self.ctx.author.id,
+            await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
+            payload_context = await self.bot.get_context(payload)
+            await OldWorkshopMenu.scribe_spell_menu(self.ctx.cog, payload_context, self.ctx.author.id,
                                                     self.character.info.character_id)
 
     class MarketMenu(BaseCharacterMenu):
@@ -612,13 +696,70 @@ class Menu(commands.Cog):
         def get_initial_message(self):
             return "Welcome to the market."
 
+        def update_embed(self):
+            item_rows = StandaloneQueries.get_items_without_listed_auctions(self.character.id)
+            items_str = ", ".join(f"{item.Quantity}x[**{item.Item}**]" for item in item_rows) if item_rows else "None"
+            """
+            Build fields list for the embed sent for this menu
+            """
+            embed_fields = [
+                textmenus.EmbedInfo.Field("Name", self.character.name, inline=True),
+                textmenus.EmbedInfo.Field("Gold", self.character.get_gold(), inline=True),
+                textmenus.EmbedInfo.Field("Inventory", items_str, inline=False)
+            ]
+            """
+            Extend with any built in fields and set embed's fields to the newly built list
+            """
+            embed_fields.extend(self.embed_info.fields)
+            self.embed_info.fields = embed_fields
+
         @textmenus.submenu('Buy items from the market')
         async def buy_item_menu(self, payload):
-            await self.channel.send("This would list the menu for buying items from the market")
+            await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
+            payload_context = await self.bot.get_context(payload)
+            await OldMarketMenu.buy_menu(self.ctx.cog, payload_context, self.ctx.author.id, self.character.id)
 
         @textmenus.submenu('Sell items on the market')
         async def sell_item_menu(self, payload):
-            await self.channel.send("This would list the menu for selling items on the market")
+            await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
+            payload_context = await self.bot.get_context(payload)
+            await OldMarketMenu.sell_menu(self.ctx.cog, payload_context, self.ctx.author.id, self.character.id)
+
+        @textmenus.submenu('Stop selling an item')
+        async def stop_sell_item_menu(self, payload):
+            await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
+            payload_context = await self.bot.get_context(payload)
+            await OldMarketMenu.stop_sell_menu(self.ctx.cog, payload_context, self.ctx.author.id, self.character.id)
+
+        @textmenus.submenu('Give an item to another player')
+        async def give_item_menu(self, payload):
+            await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
+            payload_context = await self.bot.get_context(payload)
+            await OldMarketMenu.give_menu(self.ctx.cog, payload_context, self.ctx.author.id, self.character.id)
+
+        @textmenus.submenu('Give gold to another player')
+        async def give_gold_menu(self, payload):
+            await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
+            payload_context = await self.bot.get_context(payload)
+            await OldMarketMenu.pay_menu(self.ctx.cog, payload_context, self.ctx.author.id, self.character.id)
+
+        @textmenus.submenu('Recycle an item')
+        async def recycle_menu(self, payload):
+            await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
+            payload_context = await self.bot.get_context(payload)
+            await OldMarketMenu.recycle_menu(self.ctx.cog, payload_context, self.ctx.author.id, self.character.id)
+
+        def _skip_share_spellbook_spell(self):
+            try:
+                return not self.character.has_core_spellbook()
+            except AttributeError:
+                return True
+
+        @textmenus.submenu('Share a spellbook spell with another player', skip_if=_skip_share_spellbook_spell)
+        async def share_spell_menu(self, payload):
+            await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
+            payload_context = await self.bot.get_context(payload)
+            await OldMarketMenu.share_spell_menu(self.ctx.cog, payload_context, self.ctx.author.id, self.character.id)
 
     class MainMenu(BaseCharacterMenu):
         """
@@ -685,7 +826,7 @@ class Menu(commands.Cog):
             async def set_character_info(menu: Menu.CharacterChoiceMenu, payload: discord.Message) -> None:
                 log.debug("CharacterChoiceMenu::set_character_info")
                 menu.character_info = character_info
-                await menu.ctx.channel.send(f"You selected {menu.character_info.name}")
+                await menu.channel.send(f"You selected {menu.character_info.name}")
             return set_character_info
 
     @staticmethod
@@ -772,6 +913,92 @@ class Menu(commands.Cog):
             raise Exceptions.StopException
         m = await start_menu(ctx, ListMenu, message=question, choices=option_list, title='Skill Menu')
         return m.choice
+
+    async def answer_with_int_number(self, ctx, question, maximum):
+        member = ctx.message.author
+        channel = await menu_helper.get_channel(ctx)
+        await member.send(f"{question}")
+
+        # setup sub function to do checks the returned message is from the user in private messages
+        def wait_for_reply(message: discord.Message):
+            if member.id != message.author.id or channel.id != message.channel.id:
+                return False
+            return True
+
+        while True:
+            # run the check until 60 seconds has elapsed or player types EXIT
+            try:
+                msg = await self.bot.wait_for('message', timeout=60.0, check=wait_for_reply)
+            except asyncio.TimeoutError:
+                await channel.send(f"Timed out, aborting...")
+                raise Exceptions.ExitException
+            if msg.content.lower() == "exit":
+                await channel.send(f"Exit received. Exiting...")
+                raise Exceptions.ExitException
+            if msg.content.lower() == "stop":
+                await channel.send(f"Stop received. Stopping...")
+                raise Exceptions.StopException
+            # check they picked an answer
+            try:
+                answer = int(msg.content)
+                if answer < 1: await member.send(f"Please enter a number between 1 and {maximum}")
+                elif answer <= maximum: return answer
+                else: await member.send(f"Please enter a number between 1 and {maximum}")
+            except ValueError:
+                await member.send(f"{msg.content} is not a number, Please enter a number between 1 and {maximum}")
+
+    async def answer_with_float_number(self, ctx, question, maximum):
+        member = ctx.message.author
+        channel = await menu_helper.get_channel(ctx)
+        await member.send(f"{question}")
+
+        # setup sub function to do checks the returned message is from the user in private messages
+        def wait_for_reply(message: discord.Message):
+            return False if member.id != message.author.id and channel.id != message.channel.id else True
+
+        while True:
+            # run the check until 60 seconds has elapsed or player types EXIT
+            try:
+                msg = await self.bot.wait_for('message', timeout=60.0, check=wait_for_reply)
+            except asyncio.TimeoutError:
+                await channel.send(f"Timed out, aborting...")
+                raise Exceptions.ExitException
+            if msg.content.lower() == "exit":
+                await channel.send(f"Exit received. Exiting...")
+                raise Exceptions.ExitException
+            if msg.content.lower() == "stop":
+                await channel.send(f"Stop received. Stopping...")
+                raise Exceptions.StopException
+            # check they picked an answer
+            try:
+                answer = float(msg.content)
+                if answer < 1: await member.send(f"Please enter a number between 1 and {maximum}")
+                elif answer <= maximum: return answer
+                else: await member.send(f"Please enter a number between 1 and {maximum}")
+            except ValueError:
+                await member.send(f"{msg.content} is not a number, Please enter a number between 1 and {maximum}")
+
+    async def answer_with_statement(self, ctx):
+        member = ctx.message.author
+        channel = await menu_helper.get_channel(ctx)
+
+        # check author
+        def wait_for_reply(message: discord.Message):
+            return False if member.id != message.author.id and channel.id != message.channel.id else True
+
+        # send the user the message
+        try:
+            msg = await self.bot.wait_for('message', timeout=60.0, check=wait_for_reply)
+        except asyncio.TimeoutError:
+            return "exit"
+        # check the response
+        if msg.content.lower() == "exit":
+            reply = "exit"
+        elif msg.content.lower() == "stop":
+            reply = "stop"
+        else:
+            reply = msg.content.lower()
+        return reply
 
     async def character_name_lookup(self, command, question, character_id):
         await command.message.author.send(question)

@@ -73,6 +73,10 @@ class_definitions = {
     DndClass("Wizard", stat_req=['int'], subclass_lvl=2, has_spellbook=True)
 }
 
+class_choice_lookup = {
+    "Divine Soul" : True,
+    "Warlock": True
+}
 
 class_lookup = {c.name: c for c in class_definitions if c.name in config.available_classes}
 
@@ -95,3 +99,11 @@ def classes_available_for_subclass(character):
 
 def all_spellcaster_classes(character):
     return [v for k, v in character.classes.items() if v.class_info.is_spellcaster()]
+
+def has_class_choice(class_name: str, subclass_name: str):
+    has_choice = False
+    if class_name and class_name in class_choice_lookup:
+        has_choice = class_choice_lookup[class_name]
+    elif subclass_name and subclass_name in class_choice_lookup:
+        has_choice = class_choice_lookup[subclass_name]
+    return has_choice

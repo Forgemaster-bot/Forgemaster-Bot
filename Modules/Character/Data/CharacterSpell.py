@@ -2,7 +2,7 @@ from Character.SpellInfoFacade import interface as spell_info_interface
 class CharacterSpell:
     __slots__ = ["character_id", "name", "origin", "spell_info"]
 
-    def __init__(self, character_id=None, name=None, origin=False):
+    def __init__(self, character_id=None, name=None, origin=None):
         self.character_id = character_id
         self.name = name
         self.origin = origin

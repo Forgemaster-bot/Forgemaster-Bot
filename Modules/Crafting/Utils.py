@@ -1,6 +1,7 @@
 import asyncio
 from Crafting.RecipeFactory import create_recipe
 from Exceptions import StopException, ExitException
+from cogs.utils import menu
 
 available_prereq = ['has_class', 'has_item', 'has_feat', 'has_skill', 'has_skill_proficiency', 'has_level',
                     'has_item_quantity_by_keyword', 'has_subclass', 'has_either_class']
@@ -16,7 +17,8 @@ async def send_message(context, message) -> None:
     if message is None:
         print("Send_message was called with None value.")
     else:
-        return await context.send(message)
+        channel = await menu.get_channel(context)
+        return await channel.send(message)
 
 
 def is_stop_response(response) -> None:
@@ -56,10 +58,12 @@ async def wait_for_reply(context) -> str:
     :param context: discord context object for client
     :return: String message response of user.
     """
+    channel = await menu.get_channel(context)
+
     def check_reply(r):
-        return r.author == context.author and r.channel == context.channel
+        return r.author == context.author and r.channel == channel
     try:
-        msg = await context.cog.bot.wait_for('message', timeout=120.0, check=check_reply)
+        msg = await context.bot.wait_for('message', timeout=60.0, check=check_reply)
         return msg.content.lower()
     except asyncio.TimeoutError:
         raise ExitException()
