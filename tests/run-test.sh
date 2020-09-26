@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 script_path="$(dirname $(readlink -e -- "${BASH_SOURCE}"))"
 
+${script_path}/../setup-env.sh
+
 ## Bring up sql container
-cd "$script_path/sqlserver"
+cd "$script_path/automation/sqlserver"
 docker-compose up -d
 cd "$script_path"
 
 ## WORKAROUND UNTIL HAVE SCRIPT WHICH WAITS FOR CONTAINER TO START
 #sleep 10
+./automation/sqlserver/scripts/drop-old-data.sh
 
 #############################################################################################
 # Copy from templates, replacing '<SQL_PASSWORD>' and '<SQL_IP_ADDRESS>' with sql server info
 #############################################################################################
-templates_path="${script_path}/templates"
+templates_path="${script_path}/automation/templates"
 
 credentials_path="${script_path}/Credentials"
 mkdir -p "$credentials_path"
@@ -24,9 +27,9 @@ export FORGEMASTER_CONFIG_PATH="${credentials_path}/config.json"
 export FORGEMASTER_BOT_CONFIG_PATH="${credentials_path}/BotConfig.json"
 
 ## Replace config password/ip_addr
-source "${script_path}/sqlserver/scripts/docker-sql-env.sh"
+source "${script_path}/automation/sqlserver/scripts/docker-sql-env.sh"
 password="$(cat "$sql_secrets" | grep "^SA_PASSWORD" | cut -d '=' -f 2)"
-ip_addr="$(${script_path}/sqlserver/scripts/get-ip-address.sh)"
+ip_addr="$(${script_path}/automation/sqlserver/scripts/get-ip-address.sh)"
 
 sed -i -e "s/<SQL_PASSWORD>/${password}/" "$FORGEMASTER_CONFIG_PATH"
 sed -i -e "s/<SQL_IP_ADDRESS>/${ip_addr}/" "$FORGEMASTER_CONFIG_PATH"
@@ -35,6 +38,6 @@ sed -i -e "s/<SQL_IP_ADDRESS>/${ip_addr}/" "$FORGEMASTER_CONFIG_PATH"
 pytest --log-cli-level=10
 
 ## Stop containter
-#cd "$script_path/sqlserver"
+#cd "$script_path/automation/sqlserver"
 #docker-compose down
 
