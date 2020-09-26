@@ -1,5 +1,5 @@
 {
-	"sql-driver": "FreeTDS",
+	"sql-driver": "ODBC Driver 17 for SQL Server",
 	"sql-database": "LostWorld",
 	"sql-server": "<SQL_IP_ADDRESS>",
 	"sql-uid": "SA",
