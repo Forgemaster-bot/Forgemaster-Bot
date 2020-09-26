@@ -69,7 +69,7 @@ class Menu(commands.Cog):
 
         @staticmethod
         def make_job_choice(skill_obj):
-            async def job_confirm(menu, payload):
+            async def job_confirm(menu, _):
                 await start_menu(menu.ctx, Menu.FreeProfessionConfirmMenu, character=menu.character,
                                  skill=skill_obj)
             return job_confirm
@@ -104,7 +104,7 @@ class Menu(commands.Cog):
 
         @staticmethod
         def make_spell_confirm(spell):
-            async def spell_confirm(menu, payload):
+            async def spell_confirm(menu, _):
                 await start_menu(menu.ctx, Menu.ForgetSpellConfirmMenu, character=menu.character,
                                  character_class=menu.character_class, spell=spell)
             return spell_confirm
@@ -123,7 +123,7 @@ class Menu(commands.Cog):
 
         @staticmethod
         def make_select_spell_level(level, character_class):
-            async def select_spell_level(menu, payload):
+            async def select_spell_level(menu, _):
                 await start_menu(menu.ctx, Menu.ForgetSpellSelectSpellMenu, character=menu.character,
                                  character_class=character_class, spell_level=level)
 
@@ -147,7 +147,7 @@ class Menu(commands.Cog):
 
         @staticmethod
         def make_select_spell_level(character_class):
-            async def select_spell_level(menu, payload):
+            async def select_spell_level(menu, _):
                 await start_menu(menu.ctx, Menu.ForgetSpellSelectLevelMenu, character=menu.character,
                                  character_class=character_class)
             return select_spell_level
@@ -189,7 +189,7 @@ class Menu(commands.Cog):
 
         @staticmethod
         def make_spell_confirm(spell):
-            async def spell_confirm(menu, payload):
+            async def spell_confirm(menu, _):
                 await start_menu(menu.ctx, Menu.LearnSpellConfirmMenu, character=menu.character,
                                  character_class=menu.character_class, spell=spell)
             return spell_confirm
@@ -209,7 +209,7 @@ class Menu(commands.Cog):
 
         @staticmethod
         def make_select_spell_level(level, character_class):
-            async def select_spell_level(menu, payload):
+            async def select_spell_level(menu, _):
                 await start_menu(menu.ctx, Menu.LearnSpellSelectSpellMenu, character=menu.character,
                                  character_class=character_class, spell_level=level)
 
@@ -233,7 +233,7 @@ class Menu(commands.Cog):
 
         @staticmethod
         def make_select_spell_level(character_class):
-            async def select_spell_level(menu, payload):
+            async def select_spell_level(menu, _):
                 await start_menu(menu.ctx, Menu.LearnSpellSelectLevelMenu, character=menu.character,
                                  character_class=character_class)
 
@@ -256,7 +256,7 @@ class Menu(commands.Cog):
 
         @staticmethod
         def make_spell_confirm(spell):
-            async def spell_confirm(menu, payload):
+            async def spell_confirm(menu, _):
                 await start_menu(menu.ctx, Menu.DivineSoulMenu.DivineSoulConfirmMenu, character=menu.character,
                                  character_class=menu.character_class, spell=spell)
             return spell_confirm
@@ -349,14 +349,14 @@ class Menu(commands.Cog):
 
         @staticmethod
         def make_display_character_class_spells(character_class):
-            async def display_character_class_spells(menu, payload):
+            async def display_character_class_spells(menu, _):
                 await start_menu(menu.ctx, Menu.ViewSpellKnownMenu, character=menu.character,
                                  character_class=character_class)
             return display_character_class_spells
 
         @staticmethod
         def make_display_prepared_spells(class_name):
-            async def display_class_spells(menu, payload):
+            async def display_class_spells(menu, _):
                 await start_menu(menu.ctx, Menu.ViewSpellPreparedMenu, character=menu.character, class_name=class_name)
 
             return display_class_spells
@@ -392,7 +392,7 @@ class Menu(commands.Cog):
 
         @staticmethod
         def make_subclass_confirm(subclass_name):
-            async def subclass_confirm(menu, payload):
+            async def subclass_confirm(menu, _):
                 msg = f"Are you sure you want to select the subclass '{subclass_name}'?"
                 m = await start_menu(menu.ctx, ConfirmMenu, message=msg)
                 if m.confirm:
@@ -416,7 +416,7 @@ class Menu(commands.Cog):
 
         @staticmethod
         def make_class_choice(class_name):
-            async def class_choice(menu, payload):
+            async def class_choice(menu, _):
                 await start_menu(menu.ctx, Menu.SubclassChoiceMenu, character=menu.character, class_name=class_name)
             return class_choice
 
@@ -445,7 +445,7 @@ class Menu(commands.Cog):
 
         @staticmethod
         def make_level_up_choice(class_name):
-            async def level_up_confirm(menu, payload):
+            async def level_up_confirm(menu, _):
                 msg = f"Are you sure you want to gain a level in '{class_name}'?"
                 m = await start_menu(menu.ctx, ConfirmMenu, message=msg)
                 if m.confirm:
@@ -505,10 +505,10 @@ class Menu(commands.Cog):
                 return True
 
         @textmenus.submenu('Level up your character', skip_if=_skip_level_up_menu)
-        async def level_up_menu(self, payload):
+        async def level_up_menu(self, _):
             """
             Displays a LevelUpMenu to the user if they are able to level up
-            :param payload: message received which caused this option to be selected
+            :param _: message received which caused this option to be selected
             :return: None
             """
             await start_menu(self.ctx, Menu.LevelUpMenu, character=self.character)
@@ -526,10 +526,10 @@ class Menu(commands.Cog):
                 return True
 
         @textmenus.submenu('Pick available subclass', skip_if=_skip_pick_subclass_menu)
-        async def pick_subclass_menu(self, payload):
+        async def pick_subclass_menu(self, _):
             """
             Displays a SubclassMenu to the user if they are able to select a subclass
-            :param payload: message received which caused this option to be selected
+            :param _: message received which caused this option to be selected
             :return: None
             """
             await start_menu(self.ctx, Menu.SubclassMenu, character=self.character)
@@ -541,7 +541,7 @@ class Menu(commands.Cog):
                 return True
 
         @textmenus.submenu('View your spells', skip_if=_skip_view_spells_menu)
-        async def view_spells_menu(self, payload):
+        async def view_spells_menu(self, _):
             await start_menu(self.ctx, Menu.ViewSpellMenu, character=self.character,
                              spellcaster_classes=self.spellcaster_classes)
 
@@ -553,7 +553,7 @@ class Menu(commands.Cog):
                 return True
 
         @textmenus.submenu('Learn a spell', skip_if=_skip_learn_spell_menu)
-        async def learn_spell_menu(self, payload):
+        async def learn_spell_menu(self, _):
             await start_menu(self.ctx, Menu.LearnSpellMenu, character=self.character,
                              classes_with_spells=self.classes_with_spells)
 
@@ -564,7 +564,7 @@ class Menu(commands.Cog):
                 return True
 
         @textmenus.submenu('Forget a spell', skip_if=_skip_forget_spell_menu)
-        async def forget_spell_menu(self, payload):
+        async def forget_spell_menu(self, _):
             await start_menu(self.ctx, Menu.ForgetSpellMenu, character=self.character,
                              spellcaster_classes=self.spellcaster_classes)
 
@@ -577,7 +577,7 @@ class Menu(commands.Cog):
                 return True
 
         @textmenus.submenu("Pick a free profession", skip_if=_skip_free_profession)
-        async def pick_free_profession(self, payload):
+        async def pick_free_profession(self, _):
             await start_menu(self.ctx, Menu.FreeProfessionMenu, character=self.character)
 
         def _skip_divine_soul_choice(self):
@@ -590,7 +590,7 @@ class Menu(commands.Cog):
                 return True
 
         @textmenus.submenu("Pick your Divine Soul Affinity", skip_if=_skip_divine_soul_choice)
-        async def divine_soul_choice(self, payload):
+        async def divine_soul_choice(self, _):
             await start_menu(self.ctx, Menu.DivineSoulMenu, character=self.character)
 
     class WorkshopMenu(BaseCharacterMenu):
@@ -647,11 +647,11 @@ class Menu(commands.Cog):
                 return True
 
         @textmenus.submenu("Create a mundane item", skip_if=_skip_crafting)
-        async def craft_mundane(self, payload):
+        async def craft_mundane(self, _):
             await workshop.mundane_crafting_menu(self.ctx, self.character)
 
         @textmenus.submenu("Experiment with Thaumstyn")
-        async def craft_thaumstyn(self, payload):
+        async def craft_thaumstyn(self, _):
             await workshop.open_file_based_recipe_menu(self.ctx, 'thaumstyn', self.character)
 
         def _skip_craft_scroll(self):
@@ -664,12 +664,12 @@ class Menu(commands.Cog):
                 return True
 
         @textmenus.submenu("Create a scroll")
-        async def craft_scroll(self, payload):
+        async def craft_scroll(self, _):
             await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
             await OldWorkshopMenu.new_craft_scroll_menu(self.ctx, self.character)
 
         @textmenus.submenu("Work for someone this week")
-        async def assign_labor(self, payload):
+        async def assign_labor(self, _):
             await self.channel.send("New menu system not implemented for this menu yet. Displaying old one...")
             await OldWorkshopMenu.work_menu(self.ctx.cog, self.ctx, self.ctx.author.id,
                                             self.character.info.character_id)
@@ -786,15 +786,15 @@ class Menu(commands.Cog):
             self.embed_info.fields = embed_fields
 
         @textmenus.submenu('Character Sheet')
-        async def character_sheet(self, payload):
+        async def character_sheet(self, _):
             await start_menu(self.ctx, Menu.CharacterSheetMenu, character=self.character, stop_on_first=False)
 
         @textmenus.submenu('Workshop')
-        async def workshop(self, payload):
+        async def workshop(self, _):
             await start_menu(self.ctx, Menu.WorkshopMenu, character=self.character, stop_on_first=False)
 
         @textmenus.submenu('Market')
-        async def market(self, payload):
+        async def market(self, _):
             await start_menu(self.ctx, Menu.MarketMenu, character=self.character, stop_on_first=False)
 
     class CharacterChoiceMenu(BaseMenu):
@@ -823,14 +823,14 @@ class Menu(commands.Cog):
             :param character_info: character information to set when selected
             :return:
             """
-            async def set_character_info(menu: Menu.CharacterChoiceMenu, payload: discord.Message) -> None:
+            async def set_character_info(menu: Menu.CharacterChoiceMenu, _: discord.Message) -> None:
                 log.debug("CharacterChoiceMenu::set_character_info")
                 menu.character_info = character_info
                 await menu.channel.send(f"You selected {menu.character_info.name}")
             return set_character_info
 
     @staticmethod
-    async def select_character(ctx, author: discord.User = None, channel: discord.abc.Messageable = None):
+    async def select_character(ctx, author: discord.Member = None, channel: discord.abc.Messageable = None):
         """
         Fetches info for discord user. Returns id if available or will prompt user to select one from multiple.
         :param ctx: context of the command which called this
@@ -911,7 +911,8 @@ class Menu(commands.Cog):
             await channel.send("No options available. Stopping. "
                                "[This could be due to not knowing a spell, meeting the minimum crafting limit, etc.]")
             raise Exceptions.StopException
-        m = await start_menu(ctx, ListMenu, message=question, choices=option_list, title='Skill Menu')
+        choices = dict(message=question, choices=option_list, title='Select From List', should_raise_stop=True)
+        m = await start_menu(ctx, ListMenu, **choices)
         return m.choice
 
     async def answer_with_int_number(self, ctx, question, maximum):
