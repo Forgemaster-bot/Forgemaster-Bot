@@ -79,7 +79,8 @@ def get_main_menu_embed(player):
     return discord.Embed.from_dict(get_base_embed_dict(title, description, fields))
 
 
-def get_character_sheet_embed(name, level=False, pick_subclass=False, view=False, learn=False, forget=False):
+def get_character_sheet_embed(name, level=False, pick_subclass=False, view=False, learn=False, forget=False,
+                              free_profession=False):
     title = 'Character Sheet'
     description = f'**{name}**, welcome to your character sheet. ' \
                   f'This menu displays a summary of info for your character and allows you to manage your character.'
@@ -89,7 +90,8 @@ def get_character_sheet_embed(name, level=False, pick_subclass=False, view=False
         (pick_subclass, 'Pick available subclass'),
         (view, 'View your spells'),
         (learn, 'Learn a spell'),
-        (forget, 'Forget a spell')
+        (forget, 'Forget a spell'),
+        (free_profession, 'Pick a free profession')
     ]
     valid_options = [label for valid, label in possible_options if valid]
 
@@ -111,3 +113,14 @@ def get_character_sheet_embed(name, level=False, pick_subclass=False, view=False
             ]
     return discord.Embed.from_dict(get_base_embed_dict(title, description, fields))
 
+
+help_text = textwrap.dedent('''\
+            ```
+            This is a test bot for text menus.
+            
+            \u200bNo Category:
+              help Shows this message
+            
+            Type .help command for more info on a command.
+            You can also type .help category for more info on a category.
+            ```''')

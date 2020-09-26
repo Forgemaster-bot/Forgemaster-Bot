@@ -27,5 +27,7 @@ docker exec -it test-server /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "$
  DELETE FROM Discord_Roll;
  DELETE FROM Main_Characters;
  DELETE FROM Command_Logs;
+ DELETE FROM Auction;
+ DELETE FROM AuctionBids;
  "
  
