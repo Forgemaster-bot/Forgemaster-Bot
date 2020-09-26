@@ -8,10 +8,8 @@ import logging
 import discord
 import itertools
 import calendar
-import pprint
-import shlex
 import pytz
-from typing import List, Optional, Union
+from typing import List, Optional
 
 # Own modules
 import Quick_Python
@@ -23,9 +21,11 @@ from cogs.utils import member_utils
 from cogs.utils import StandaloneQueries
 from cogs.utils import time
 from cogs.Menu import Menu
-from Exceptions import *
 
 log = logging.getLogger(__name__)
+
+def get_current_time(tz=pytz.timezone('GMT')):
+    return datetime.datetime.now(tz=tz)
 
 async def get_cog(bot, channel, cog_name):
     menu_cog = bot.get_cog(cog_name)
@@ -177,7 +177,7 @@ class BaseTable:
     def delete_all(cls) -> bool:
         try:
             with Connections.sql_db_connection() as cursor:
-                query = f"DROP FROM {cls.table}"
+                query = f"DELETE FROM [{cls.table}]"
                 Quick_Python.log_transaction(query)
                 cursor.execute(query)
                 return True
@@ -230,7 +230,7 @@ class AuctionTable(BaseTable):
     table: str = 'Auction'
     key: str = 'auction_id'
     columns: List[Column] = [UniqueIdColumn('auction_id', primary=True),
-                             DatetimeColumn('start'), DatetimeColumn('end', null=True),
+                             DatetimeColumn('start'), DatetimeColumn('end'),
                              BoolColumn('auto_award'), BoolColumn('open'),
                              StringColumn('item', size='max'), StringColumn('winner', size='max', null=True),
                              IntColumn('message_id', null=True), IntColumn('channel_id', null=True)]
@@ -268,6 +268,15 @@ class AuctionTable(BaseTable):
             except discord.NotFound:
                 return None
 
+        async def query_to_update_time(self, ctx, end):
+            log.info(f"auction_start - {ctx.author.display_name} - end date != row end date: {end} != {self.end}")
+            await ctx.channel.send(f"Would you like to update the auction end time to: {str(end)}?")
+            choices = {'Yes': True, 'No': False}
+            choice = await query_user(ctx, choices)
+            if choices[choice]:
+                self.end = end
+                AuctionTable.update_end(auction_id=self.auction_id, end=end)
+
     @classmethod
     def select_open(cls, item: str = None) -> List[Optional[Row]]:
         with Connections.sql_db_connection() as cursor:
@@ -284,8 +293,8 @@ class AuctionTable(BaseTable):
             return [cls.Row(**dict(zip(columns, row))) for row in rows]
 
     @classmethod
-    def insert(cls, item: str, message_id: int, channel_id: int, auto_award: bool = False, tz=datetime.timezone.utc):
-        new_row = cls.Row(item=item, auto_award=auto_award, start=datetime.datetime.now(tz=tz),
+    def insert(cls, item: str, message_id: int, channel_id: int, auto_award: bool = False):
+        new_row = cls.Row(item=item, auto_award=auto_award, start=get_current_time(),
                           message_id=message_id, channel_id=channel_id)
         return cls.insert_row(new_row)
 
@@ -299,10 +308,18 @@ class AuctionTable(BaseTable):
     def update_end(cls, auction_id: uuid.UUID, end: datetime.datetime = None, open=False,
                    tz=datetime.timezone.utc) -> bool:
         if end is None:
-            end = datetime.datetime.now(tz=tz)
+            end = get_current_time(tz=tz)
         query = f"UPDATE Auction SET [end] = ?, [open] = ? WHERE [auction_id] = ?"
         args = [end, open, auction_id]
         return execute_single_nondata_query(query, args)
+
+    @classmethod
+    def make_auction(cls, item: str, end: datetime.datetime) -> Row:
+        if end is None:
+            raise AttributeError("Cannot start a brand new auction without an end time specified. Aborting...")
+        row = cls.Row(item, auto_award=False, start=get_current_time(), end=end)
+        row = cls.insert_row(row)
+        return row
 
 
 class BidTable(BaseTable):
@@ -340,7 +357,7 @@ class BidTable(BaseTable):
     @classmethod
     def update_bid(cls, auction_id: uuid.UUID, character_id: uuid.UUID, bid: float, tz=datetime.timezone.utc) -> bool:
         query = f"UPDATE [{cls.table}] SET [bid] = ?, [time] = ? WHERE [auction_id] = ? AND [character_id] = ?"
-        args = [bid, datetime.datetime.now(tz=tz), auction_id, character_id]
+        args = [bid, get_current_time(tz=tz), auction_id, character_id]
         return execute_single_nondata_query(query, args)
 
     @classmethod
@@ -356,17 +373,20 @@ class BidTable(BaseTable):
 
 class Auction(commands.Cog):
 
+    should_run_tasks = True
+
     def __init__(self, bot):
         self.bot: commands.Bot = bot
         self.gmttz = pytz.timezone('GMT')
         self.tz = pytz.timezone('US/Eastern')
-        self.update_auctions.start()
+        if self.should_run_tasks:
+            self.update_auctions.start()
 
     def cog_unload(self):
         self.update_auctions.cancel()
 
     @staticmethod
-    async def query_for_auction(auctions, ctx, msg):
+    async def query_for_auction(auctions: List[AuctionTable.Row], ctx, msg) -> Optional[AuctionTable.Row]:
         await ctx.channel.send(msg)
         choices = {}
         for a in auctions:
@@ -389,150 +409,59 @@ class Auction(commands.Cog):
             embed.description = "\n".join(f"**{cmd.name}** - {cmd.description}" for cmd in cmds)
             await ctx.send(embed=embed)
 
-    @auction.command(name='time', description='Tests asking for time')
-    async def ask_for_time(self, ctx: commands.Context):
-        question = "Please input a time below:"
-        is_dm = False
+    @classmethod
+    async def select_matching_auction(cls, ctx, auctions: List[AuctionTable.Row]) -> Optional[AuctionTable.Row]:
         user = ctx.author
-        channel = ctx.channel if is_dm is False else menu.get_dm_channel(user)
+        await ctx.channel.send("Open auction found which matches the item you provided. "
+                               "Would you like to create a new auction? ('No' will give you list of open auctions.)")
+        choices = {'Yes': True, 'No': False}
+        choice = await query_user(ctx, choices)
+        create_new = choices[choice]
+        if not create_new:
+            log.info(f"auction_start - {user.display_name} - Chose to listen to old message.")
+            msg = f"Which of the following would you me to begin listening for reactions?"
+            row = await cls.query_for_auction(auctions, ctx, msg)
+            log.info(f"auction_start - {user.display_name} - Chose auction: {row.to_dict()}")
+            return row
+        return None
 
-        await ctx.channel.send(question)
-
-        def wait_for_msg(message: discord.Message):
-            try:
-                if user.id != message.author.id or channel.id != message.channel.id:
-                    return False
-                content = message.content.lower()
-                if content == 'stop' or content == 'exit':
-                    # return True
-                    raise StopException
-                return True
-            except ValueError:
-                return False
-
-        while True:
-            try:
-                # TODO: Catch stop/exit
-                message = await self.bot.wait_for('message', check=wait_for_msg, timeout=30)
-                message_context = await self.bot.get_context(message)
-                converter = time.UserFriendlyTime(commands.clean_content, default='\u2026')
-                when = await converter.convert(message_context, message.content)
-                def to_dict(obj):
-                    return {k: v for k, v in vars(obj).items() if not k.startswith('__') and not callable(v)}
-                pprint.pprint(to_dict(when))
-                await channel.send(f"time specified = '{when.dt}'\narg = '{when.arg}'")
-
-            except commands.BadArgument as err:
-                log.warning(f"ask_for_time - {user.display_name} - User provided bad time")
-                await channel.send(f'{str(err)}. Please try again.')
-            except StopException:
-                await channel.send(f"'stop' received")
-                break
-            except ExitException:
-                await channel.send(f"'exit' received")
-                break
-            except Exception as err:
-                await channel.send(f'Exception received: {str(err)}')
-                break
-
-    @auction.command(name='time2', description='Tests asking for time')
-    async def time2(self, ctx: commands.Context, *, when: time.UserFriendlyTime(commands.clean_content, default='\u2026')):
-        def to_dict(obj):
-            return {k: v for k, v in vars(obj).items() if not k.startswith('__') and not callable(v)}
-        pprint.pprint(to_dict(when))
-        dt = when.dt.replace(tzinfo=datetime.timezone.utc).astimezone(self.tz).strftime('%c %Z')
-        await ctx.channel.send(f"time specified = '{dt}'\narg = '{when.arg}'")
-
-    @auction.command(name='time3', desciprtion='Tests asking for time')
-    async def time3(self, ctx: commands.Context, *, args: str):
-        allowed_args = ['item', 'time', 'end']
-        tmp_args = args
-        for arg in allowed_args:
-            find = f" {arg}="
-            repl = f" --{arg}="
-            args = tmp_args.replace(find, repl)
-        log.debug(shlex.split(tmp_args))
-
-        tmp_args = args
-        data = []
-        while len(tmp_args) > 0:
-            tmp_args, _, value = tmp_args.rpartition('=')
-            tmp_args, _, key = tmp_args.rpartition(' ')
-
-            if '{' in value and '}' in value:
-                _, _, value = value.partition('{')
-                value, _, _ = value.rpartition('}')
-                value = [item.strip() for item in value.split(',')]
-
-            data.append((key, value))
-        log.debug(data)
-
-    async def convert_UserFriendlyTime(self, ctx, argument):
-        converter = time.UserFriendlyTime(commands.clean_content, default='\u2026')
-        when = await converter.convert(ctx, argument)
-        # when.dt = when.dt.replace(tzinfo=datetime.timezone.utc).astimezone(self.tz)
-        return True, when
-
-    async def convert_itemname_and_time(self, ctx, arguments):
-        try:
-            status, when = await self.convert_UserFriendlyTime(ctx, arguments)
-            return when.arg, when.dt
-        except commands.BadArgument as err:
-            log.info(f"auction_start - {ctx.author.display_name} - Bad time returning None for end")
-            await ctx.send(f"Note: Time passed was invalid. {str(err)}")
-            return arguments, None
+    @staticmethod
+    def calculate_timeout(row) -> float:
+        return datetime.timedelta.total_seconds(row.end - get_current_time().replace(tzinfo=None))
 
     @auction.command(name='start', description='Starts an auction.')
     async def auction_start(self, ctx: commands.Context, *, arguments: str):
-        item, end = await self.convert_itemname_and_time(ctx, arguments)
+        item, end = await self.convert_item_name_and_time(ctx, arguments)
         log.info(f"auction_start - {ctx.author.display_name} - args: {arguments}; item = '{item}'; end = '{str(end)}")
+        if end is None:
+            await ctx.send("Valid time must be passed... Please try again.")
+            return
 
-        row = None
-        user = ctx.author
-
+        # Find matching auction and query user if they would like to reopen it
         matching_auctions = AuctionTable.select_open(item=item)
-        if matching_auctions:
-            log.info(f"auction_start - {user.display_name} - Found matching auctions for {item}")
-            await ctx.channel.send("Open auction found which matches the item you provided. "
-                                   "Would you like to create a new auction? "
-                                   "('No', will prompt list of auctions to reopen.)")
-            choices = {'Yes': True, 'No': False}
-            choice = await query_user(ctx, choices)
-            create_new = choices[choice]
-            if not create_new:
-                log.info(f"auction_start - {user.display_name} - Chose to listen to old message.")
-                msg = f"Which of the following would you me to begin listening for reactions?"
-                row = await self.query_for_auction(matching_auctions, ctx, msg)
-                log.info(f"auction_start - {user.display_name} - Chose auction: {row.to_dict()}")
+        row = await self.select_matching_auction(ctx, matching_auctions) if matching_auctions else None
 
+        # Without a row, we need to create a new auction
         if row is None:
-            if end is None:
-                await ctx.send("Cannot start a brand new auction without an end time specified. Aborting...")
-                return
-            row = AuctionTable.Row(item, auto_award=False, start=datetime.datetime.now(tz=self.gmttz), end=end)
-            row = AuctionTable.insert_row(row)
-            log.info(f"auction_start - {user.display_name} - Created new auction for {item}: {row.to_dict()}")
+            try:
+                log.info(f"auction_start - {ctx.author.display_name} - Found matching auctions for {item}")
+                row = AuctionTable.make_auction(item=item, end=end)
+                log.info(f"auction_start - {ctx.author.display_name} - Made new auction - {row.to_dict()}")
+            except AttributeError as err:
+                await ctx.send(str(err))
+        elif end != row.end:
+            await row.query_to_update_time(ctx, end)
 
-        if end is not None and end != row.end:
-            log.info(f"auction_start - {user.display_name} - end date != row end date: {end} != {row.end}")
-            await ctx.channel.send(f"Would you like to update the auction end time to: {str(end)}?")
-            choices = {'Yes': True, 'No': False}
-            choice = await query_user(ctx, choices)
-            if choices[choice]:
-                row.end = end
-                AuctionTable.update_end(auction_id=row.auction_id, end=end)
-
+        # Fetch row's current Message from discord
         message = await row.fetch_message(ctx)
 
-        timeout = 604800
-        if row.end is not None:
-            now = datetime.datetime.now(tz=self.gmttz).replace(tzinfo=None)
-            timeout = datetime.timedelta.total_seconds(row.end - now)
-
-        m = self.AuctionMenu(row, message=message, delete_message_after=True, timeout=timeout)
+        # Start the auction menu for players to react to
+        m = self.AuctionMenu(row, message=message, delete_message_after=True, timeout=self.calculate_timeout(row))
         await m.start(ctx)
-        if message is None:
-            log.info(f"auction_start - {user.display_name} - Could not find row's message. Updating row's message id.")
+
+        # Update the message if the auction menu created a new menu
+        if message != m.message:
+            log.info(f"auction_start - {ctx.author.display_name} - Could not find row's message. Updating message id.")
             message = m.message
             AuctionTable.update_message(row.auction_id, ctx.channel.id, message.id)
         await ctx.channel.send(f"You may react for {m.timeout}s. Auction message link: {message.jump_url}")
@@ -554,24 +483,6 @@ class Auction(commands.Cog):
             embed.add_field(name="None", value="None")
         await ctx.channel.send(embed=embed)
 
-    async def send_bids(self, auction: uuid.UUID, num_bids: int, complete=False):
-        row: AuctionTable.Row = AuctionTable.select_key(auction)
-        bids = BidTable.get_auction_bids(auction)
-
-        embed = discord.Embed(title=f"Bids for '{row.item}'", colour=0xFFEF00)
-        embed.set_thumbnail(url=menu.thumb_url)
-        embed.description = f"List of bids for auction: {str(row)}"
-
-        bid_msg = "\n".join(f"{bids[i].bid}gp - {StandaloneQueries.get_character_name(bids[i].character_id)}"
-                            for i in range(0, min(num_bids, len(bids))))
-        embed.add_field(name=f'Top {num_bids} Bids', value=bid_msg if bid_msg else 'None')
-
-        channel = self.bot.get_channel(row.channel_id)
-        log.info(f"auction_bids - Sending bids to channel {str(channel)}")
-        if complete and channel:
-            await channel.send(f"Auction completed for item '**{row.item}**'. Sending winning bids!")
-        await channel.send(embed=embed)
-
     @auction.command(name='bids', description='Check bids for an auction')
     async def auction_bids(self, ctx: commands.Context, auction_id: Optional[uuid.UUID] = None,
                            num_bids: Optional[int] = 10):
@@ -592,7 +503,7 @@ class Auction(commands.Cog):
         msg = 'A blind auction has started for an item! ' \
               'If you wish to place a bid, simply react to this message with \N{WHITE HEAVY CHECK MARK}. ' \
               'I will then message you directly with a request for your bid. ' \
-              'After <duration> has expired, the winner will be announced. '
+              'After the duration has expired, the winner will be announced. '
         embed = discord.Embed(title=f'Auction for {auction.item}', colour=0xFFEF00)
         embed.set_thumbnail(url=menu.thumb_url)
         embed.description = msg
@@ -600,6 +511,39 @@ class Auction(commands.Cog):
         duration = str(auction.end - auction.start) if auction.end else 'Manually Controlled'
         embed.add_field(name="Auction Duration:", value=duration)
         return embed
+
+    @staticmethod
+    async def convert_user_friendly_time(ctx, argument):
+        converter = time.UserFriendlyTime(commands.clean_content, default='\u2026')
+        when = await converter.convert(ctx, argument)
+        return True, when
+
+    async def convert_item_name_and_time(self, ctx, arguments):
+        try:
+            status, when = await self.convert_user_friendly_time(ctx, arguments)
+            return when.arg, when.dt
+        except commands.BadArgument as err:
+            log.info(f"auction_start - {ctx.author.display_name} - Bad time given. {str(err)}")
+            await ctx.send(f"Time passed was invalid. {str(err)}")
+            return arguments, None
+
+    async def send_bids(self, auction: uuid.UUID, num_bids: int, complete=False):
+        row: AuctionTable.Row = AuctionTable.select_key(auction)
+        bids = BidTable.get_auction_bids(auction)
+
+        embed = discord.Embed(title=f"Bids for '{row.item}'", colour=0xFFEF00)
+        embed.set_thumbnail(url=menu.thumb_url)
+        embed.description = f"List of bids for auction: {str(row)}"
+
+        bid_msg = "\n".join(f"{bids[i].bid}gp - {StandaloneQueries.get_character_name(bids[i].character_id)}"
+                            for i in range(0, min(num_bids, len(bids))))
+        embed.add_field(name=f'Top {num_bids} Bids', value=bid_msg if bid_msg else 'None')
+
+        channel = self.bot.get_channel(row.channel_id)
+        log.info(f"auction_bids - Sending bids to channel {str(channel)}")
+        if complete and channel:
+            await channel.send(f"Auction completed for item '**{row.item}**'. Sending winning bids!")
+        await channel.send(embed=embed)
 
     class AuctionMenu(menus.Menu):
         stop_role = 'Admins'
@@ -613,7 +557,7 @@ class Auction(commands.Cog):
             return await channel.send(embed=Auction.get_auction_listing_embed(self.auction))
 
         def reaction_check(self, payload):
-            """Overriden reaction_check to allow any member to react"""
+            """ Override reaction_check to allow any member to react """
             if payload.message_id != self.message.id:
                 return False
             if payload.user_id == self.ctx.bot.user.id:
@@ -674,7 +618,7 @@ class Auction(commands.Cog):
             else:
                 log.info(f"request_bid - {member.display_name} - Creating bid for {amount}gp")
                 bid = BidTable.Row(auction_id=self.auction.auction_id, character_id=character_id,
-                                   time=datetime.datetime.now(tz=pytz.timezone('GMT')), bid=amount)
+                                   time=get_current_time(), bid=amount)
                 BidTable.insert_row(bid)
             await dm_channel.send(f"Successfully created bid for item '**{self.auction.item}**' for **{amount}** gp.")
 
@@ -707,7 +651,7 @@ class Auction(commands.Cog):
 
                 log.info("Stopped and deleted reaction menu. Calling auction_bids to display bids.")
                 auction_cog: Auction = await get_cog(self.bot, dm_channel, 'Auction')
-                await auction_cog.send_bids(auction=self.auction, num_bids=3, complete=True)
+                await auction_cog.send_bids(auction=self.auction.auction_id, num_bids=3, complete=True)
             else:
                 log.info(f"stop_auction - {name} - Did not stop the auction")
                 return
@@ -731,11 +675,11 @@ class Auction(commands.Cog):
 
     async def task_update_auction_status(self, auction: AuctionTable.Row, now, message):
         log.info(f"task - Checking status: now={now} end={auction.end}")
-        if auction.open is True and auction.end is not None and auction.end < now.replace(tzinfo=None):
+        if (auction.open is True) and (auction.end is not None) and (auction.end < now.replace(tzinfo=None)):
             log.info(f"task - Closing auction with expired end: {auction.item} - {auction.auction_id}")
             AuctionTable.update_end(auction_id=auction.auction_id, end=now, open=False)
             auction_cog: Auction = await get_cog(self.bot, None, 'Auction')
-            await auction_cog.send_bids(auction=auction, num_bids=3, complete=True)
+            await auction_cog.send_bids(auction=auction.auction_id, num_bids=3, complete=True)
             if message is not None:
                 await message.delete()
             return True
@@ -751,7 +695,7 @@ class Auction(commands.Cog):
     async def update_auctions(self):
         log.debug(f"task - update_auctions - Running")
         if AuctionTable.exists():
-            now = datetime.datetime.now(tz=self.gmttz)
+            now = get_current_time()
             open_auctions = AuctionTable.select_open()
             if open_auctions:
                 await asyncio.wait([self.task_update_auction(auction, now) for auction in open_auctions])
