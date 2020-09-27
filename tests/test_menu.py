@@ -40,7 +40,7 @@ async def test_menu_as_player(mock_wait_for_reply, player_message):
 
     await dpytest.empty_queue()
     await player_message('.menu')
-    dpytest.verify_embed(test_data.get_main_menu_embed('player'), allow_text=True)
+    dpytest.verify_embed(test_data.get_main_menu_embed('player'), allow_text=True, full=True)
 
 @mock.patch('cogs.utils.textmenus.Menu.wait_for_reply')
 @pytest.mark.asyncio
@@ -62,10 +62,9 @@ async def test_character_sheet(mock_wait_for_reply, player_message):
     # Remove messages for menus we don't care about
     for i in range(1, num_replies):
         dpytest.get_embed()
-        # log.debug(f"{i}: {repr(dpytest.get_embed().to_dict())}")
 
     # Assert expected outputs
-    dpytest.verify_embed(exp_embed, allow_text=True)
+    dpytest.verify_embed(exp_embed, allow_text=True, full=True)
 
 
 

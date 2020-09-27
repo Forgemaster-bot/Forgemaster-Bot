@@ -53,7 +53,7 @@ async def test_auction(admin_message):
         **history** - Lists all past auctions
         **start** - Starts an auction.""")
     exp_embed = make_auction_embed('Auction Help', exp_descrip, None)
-    dpytest.verify_embed(exp_embed, allow_text=True)
+    dpytest.verify_embed(exp_embed, allow_text=True, full=True)
 
 
 @pytest.mark.asyncio
@@ -86,7 +86,7 @@ async def test_auction_start(monkeypatch, admin_message):
     await dpytest.empty_queue()
     await admin_message(f".auction start {item} {time}")
     # Assert results
-    dpytest.verify_embed(exp_embed, allow_text=True)
+    dpytest.verify_embed(exp_embed, allow_text=True, full=True)
 
 @pytest.mark.asyncio
 async def test_help_nonplayer(nonplayer_message):
