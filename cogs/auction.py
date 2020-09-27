@@ -507,6 +507,7 @@ class Auction(commands.Cog):
         await ctx.channel.send(embed=embed)
 
     @auction.command(name='bids', description='Check bids for an auction')
+    @commands.is_owner()
     async def auction_bids(self, ctx: commands.Context, auction_id: Optional[uuid.UUID] = None,
                            num_bids: Optional[int] = 10):
         user = ctx.author
