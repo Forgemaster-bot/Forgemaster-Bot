@@ -17,7 +17,7 @@ from Character.Data.CharacterSkill import CharacterSkill
 from Character.Data.Spellbook import Spellbook
 from Character.Data.SkillInfo import SkillInfo
 from Connections import RosterColumns, log_to_discord
-import Connections
+import config
 
 from cogs.utils import StandaloneQueries
 # import Update_Google_Roster as Roster
@@ -186,7 +186,7 @@ class Character:
         return Quick_Python.labelled_str("XP", self.info.formatted_xp())
 
     def formatted_classes(self) -> str:
-        return Quick_Python.labelled_list("Classes", self.classes.keys())
+        return Quick_Python.labelled_list("Classes", list(self.classes.keys()))
 
     def formatted_feats(self) -> str:
         return Quick_Python.labelled_list("Feats", self.feats)
@@ -294,8 +294,8 @@ class Character:
         Check if player unlocks a new character
         """
         try:
-            additional_character_level = Connections.bot_config['additional_character_level']
-            additional_character_num = Connections.bot_config['additional_character_num']
+            additional_character_level = config.additional_character_level
+            additional_character_num = config.additional_character_num
             current_level = self.get_character_level()
             if current_level == additional_character_level:
                 log.info(f"{self.name} leveled up to {current_level} and unlocked an additional character.")
