@@ -13,28 +13,32 @@ from typing import List, Optional
 
 # Own modules
 import Quick_Python
-import Connections
 from Crafting.Utils import query_user
 from Character.Tables.Queries import Queries
+from Character.CharacterInfoFacade import interface as character_info_interface
 from cogs.utils import menu
 from cogs.utils import member_utils
 from cogs.utils import StandaloneQueries
 from cogs.utils import time
 from cogs.Menu import Menu
+from Modules import Connections
 
 log = logging.getLogger(__name__)
 
+
 def get_current_time(tz=pytz.timezone('GMT')):
     return datetime.datetime.now(tz=tz)
+
 
 async def get_cog(bot, channel, cog_name):
     menu_cog = bot.get_cog(cog_name)
     if menu_cog is None:
         if channel is not None:
-            msg = f"{cog_name} cog is missing. Cannot stop auction. Contact developer"
+            msg = f"{cog_name} cog is missing. Contact developer or admin"
             await channel.send(msg)
         raise RuntimeError(f"{cog_name} cog is missing")
     return menu_cog
+
 
 def execute_single_nondata_query(query: str, args: list) -> bool:
     try:
@@ -45,6 +49,7 @@ def execute_single_nondata_query(query: str, args: list) -> bool:
     except Exception as err:
         log.exception(err)
         return False
+
 
 def execute_single_data_query(query: str, args: list) -> Optional[dict]:
     try:
@@ -68,9 +73,11 @@ async def fetch_link(ctx, message_id):
     except discord.NotFound:
         return "None"
 
+
 class Column:
     python_type = None
     sql_type = None
+
     def __init__(self, name, primary=False, size=None, null=False):
         self.name = name
         self.primary = primary
@@ -106,27 +113,34 @@ class Column:
     def null(self, value: bool) -> None:
         self._null = 'NULL' if value else 'NOT NULL'
 
+
 class UniqueIdColumn(Column):
     python_type = uuid.UUID
     sql_type = 'uniqueidentifier'
+
 
 class DatetimeColumn(Column):
     python_type = datetime.datetime
     sql_type = 'datetime2'
 
+
 class BoolColumn(Column):
     python_type = bool
     sql_type = 'bit'
+
 
 class IntColumn(Column):
     python_type = int
     sql_type = 'BIGINT'
 
+
 class FloatColumn(Column):
     python_type = float
     sql_type = 'float'
+
     def __init__(self, name, size='53', **kwargs):
         super().__init__(name, size=size, **kwargs)
+
 
 class StringColumn(Column):
     python_type = str
@@ -134,6 +148,7 @@ class StringColumn(Column):
 
     def __init__(self, name, size='50', **kwargs):
         super().__init__(name, size=size, **kwargs)
+
 
 class BaseTable:
     table: str = ''
@@ -255,8 +270,7 @@ class AuctionTable(BaseTable):
             if closed: labels.append(f"Lasted '*{str(self.end - self.start)}*'")
             if self.winner is not None: labels.append(f"'*{self.winner}*' won the auction")
             labels.append(f"Started on '{self.start.strftime('%c %Z')}'")
-            if closed: labels.append(f"Ended on '{self.end.strftime('%c %Z')}'")
-            # labels.append(f"\nID='{str(self.auction_id)}'")
+            if closed or self.end: labels.append(f"{'Ended' if closed else 'Ends'} on '{self.end.strftime('%c %Z')}'")
             data = " - ".join(labels)
             return f'~~{data}~~' if closed else data
 
@@ -270,12 +284,13 @@ class AuctionTable(BaseTable):
 
         async def query_to_update_time(self, ctx, end):
             log.info(f"auction_start - {ctx.author.display_name} - end date != row end date: {end} != {self.end}")
-            await ctx.channel.send(f"Would you like to update the auction end time to: {str(end)}?")
+            channel = await menu.get_channel(ctx)
+            await channel.send(f"Would you like to update the auction end time to: {str(end)}?")
             choices = {'Yes': True, 'No': False}
             choice = await query_user(ctx, choices)
             if choices[choice]:
                 self.end = end
-                AuctionTable.update_end(auction_id=self.auction_id, end=end)
+                AuctionTable.update_end(auction_id=self.auction_id, end=end, open=True)
 
     @classmethod
     def select_open(cls, item: str = None) -> List[Optional[Row]]:
@@ -339,11 +354,11 @@ class BidTable(BaseTable):
 
         def __str__(self):
             return "\n".join([
-                                  f"**Bid** = {self.bid}",
-                                  f"**Character_ID** = {self.character_id}",
-                                  f"**Time** = {self.time.strftime('%c %Z')}",
-                                  f"**Auction_ID** = {self.auction_id}"
-                             ])
+                f"**Bid** = {self.bid}",
+                f"**Character_ID** = {self.character_id}",
+                f"**Time** = {self.time.strftime('%c %Z')}",
+                f"**Auction_ID** = {self.auction_id}"
+            ])
 
     @classmethod
     def get_bid(cls, auction_id: uuid.UUID, character_id: uuid.UUID) -> bool:
@@ -371,8 +386,8 @@ class BidTable(BaseTable):
             columns = [column[0] for column in cursor.description]
             return [cls.Row(**dict(zip(columns, row))) for row in rows]
 
-class Auction(commands.Cog):
 
+class Auction(commands.Cog):
     should_run_tasks = True
 
     def __init__(self, bot):
@@ -387,7 +402,8 @@ class Auction(commands.Cog):
 
     @staticmethod
     async def query_for_auction(auctions: List[AuctionTable.Row], ctx, msg) -> Optional[AuctionTable.Row]:
-        await ctx.channel.send(msg)
+        channel = await menu.get_channel(ctx)
+        await channel.send(msg)
         choices = {}
         for a in auctions:
             link = await fetch_link(ctx, a.message_id)
@@ -412,8 +428,9 @@ class Auction(commands.Cog):
     @classmethod
     async def select_matching_auction(cls, ctx, auctions: List[AuctionTable.Row]) -> Optional[AuctionTable.Row]:
         user = ctx.author
-        await ctx.channel.send("Open auction found which matches the item you provided. "
-                               "Would you like to create a new auction? ('No' will give you list of open auctions.)")
+        channel = await menu.get_channel(ctx)
+        await channel.send("Open auction found which matches the item you provided. "
+                           "Would you like to create a new auction? ('No' will give you list of open auctions.)")
         choices = {'Yes': True, 'No': False}
         choice = await query_user(ctx, choices)
         create_new = choices[choice]
@@ -431,6 +448,7 @@ class Auction(commands.Cog):
 
     @auction.command(name='start', description='Starts an auction.')
     async def auction_start(self, ctx: commands.Context, *, arguments: str):
+        channel = await menu.get_channel(ctx)
         item, end = await self.convert_item_name_and_time(ctx, arguments)
         log.info(f"auction_start - {ctx.author.display_name} - args: {arguments}; item = '{item}'; end = '{str(end)}")
         if end is None:
@@ -454,17 +472,22 @@ class Auction(commands.Cog):
 
         # Fetch row's current Message from discord
         message = await row.fetch_message(ctx)
+        auction_channel_id = Connections.config['auction-channel-id']
+        auction_channel = self.bot.get_channel(auction_channel_id)
 
         # Start the auction menu for players to react to
         m = self.AuctionMenu(row, message=message, delete_message_after=True, timeout=self.calculate_timeout(row))
-        await m.start(ctx)
+        await m.start(ctx, channel=auction_channel)
 
         # Update the message if the auction menu created a new menu
         if message != m.message:
-            log.info(f"auction_start - {ctx.author.display_name} - Could not find row's message. Updating message id.")
+            if message is not None:
+                log.info(f"auction_start - {ctx.author.display_name} - Deleting old message {message.id}")
+                await message.delete()
+            log.info(f"auction_start - {ctx.author.display_name} - Updating message id to {m.message.id}")
             message = m.message
-            AuctionTable.update_message(row.auction_id, ctx.channel.id, message.id)
-        await ctx.channel.send(f"You may react for {m.timeout}s. Auction message link: {message.jump_url}")
+            AuctionTable.update_message(row.auction_id, auction_channel_id, message.id)
+        await channel.send(f"You may react for {m.timeout}s. Auction message link: {message.jump_url}")
 
     @auction.command(name='history', description='Lists all past auctions')
     async def auction_history(self, ctx: commands.Context):
@@ -508,8 +531,9 @@ class Auction(commands.Cog):
         embed.set_thumbnail(url=menu.thumb_url)
         embed.description = msg
         embed.add_field(name="Item For Auction:", value=auction.item)
-        duration = str(auction.end - auction.start) if auction.end else 'Manually Controlled'
+        duration = str(auction.end - get_current_time().replace(tzinfo=None)) if auction.end else 'Manually Controlled'
         embed.add_field(name="Auction Duration:", value=duration)
+        log.info(f"Making auction embed for {auction.item} - {duration} - {auction.message_id}")
         return embed
 
     @staticmethod
@@ -527,17 +551,34 @@ class Auction(commands.Cog):
             await ctx.send(f"Time passed was invalid. {str(err)}")
             return arguments, None
 
-    async def send_bids(self, auction: uuid.UUID, num_bids: int, complete=False):
+    @staticmethod
+    def bid_to_info_dict(bid: BidTable.Row):
+        info = character_info_interface.fetch(bid.character_id)
+        can_afford = info.gold >= bid.bid
+        return [f"{bid.bid}gp", f"**{info.name}**", f"<@{info.discord_id}>", can_afford]
+
+    @classmethod
+    def bids_to_str(cls, bids: List[BidTable.Row], max_num, complete: bool = False):
+        bid_info = []
+        for bid in bids:
+            bid_info.append(cls.bid_to_info_dict(bid))
+            should_stop = len(bid_info) < max_num if not complete else max_num <= len([i for i in bid_info if i[3]])
+            if should_stop:
+                break
+        return "\n".join([f"{b[0]} - {b[1]} - {'Can Afford' if b[3] else 'Cannot Afford'} - {b[2]}" for b in bid_info])
+
+    async def send_bids(self, auction: uuid.UUID, max_num: int, complete=False):
         row: AuctionTable.Row = AuctionTable.select_key(auction)
         bids = BidTable.get_auction_bids(auction)
+        title = f"Current bids for '{row.item}'" if row.open else f"'{row.item}' auction complete!"
+        colour = 0xFFEF00
+        description = f"List of bids for auction: {str(row)}"
+        field_name = f"Top {max_num} Bids"if row.open else "Winning Bids"
+        field_msg = self.bids_to_str(bids, max_num, complete=complete)
 
-        embed = discord.Embed(title=f"Bids for '{row.item}'", colour=0xFFEF00)
+        embed = discord.Embed(title=title, colour=colour, description=description)
         embed.set_thumbnail(url=menu.thumb_url)
-        embed.description = f"List of bids for auction: {str(row)}"
-
-        bid_msg = "\n".join(f"{bids[i].bid}gp - {StandaloneQueries.get_character_name(bids[i].character_id)}"
-                            for i in range(0, min(num_bids, len(bids))))
-        embed.add_field(name=f'Top {num_bids} Bids', value=bid_msg if bid_msg else 'None')
+        embed.add_field(name=field_name, value=field_msg if field_msg else 'None')
 
         channel = self.bot.get_channel(row.channel_id)
         log.info(f"auction_bids - Sending bids to channel {str(channel)}")
@@ -651,20 +692,23 @@ class Auction(commands.Cog):
 
                 log.info("Stopped and deleted reaction menu. Calling auction_bids to display bids.")
                 auction_cog: Auction = await get_cog(self.bot, dm_channel, 'Auction')
-                await auction_cog.send_bids(auction=self.auction.auction_id, num_bids=3, complete=True)
+                await auction_cog.send_bids(auction=self.auction.auction_id, max_num=3, complete=True)
             else:
                 log.info(f"stop_auction - {name} - Did not stop the auction")
                 return
 
     async def task_fetch_message(self, channel_id: int, message_id: int):
+        log.debug(f"task - Searching in {channel_id} for {message_id}")
         channel = self.bot.get_channel(channel_id)
         if channel is None:
             return None
         try:
             return await channel.fetch_message(message_id)
-        except discord.Forbidden:
+        except discord.Forbidden as err:
+            log.debug(f"task - discord.Forbidden exception thrown - {err}")
             return None
-        except discord.NotFound:
+        except discord.NotFound as err:
+            log.debug(f"task - discord.NotFound exception thrown - {err}")
             return None
 
     async def task_update_auction_listing(self, auction: AuctionTable.Row, message):
@@ -679,7 +723,7 @@ class Auction(commands.Cog):
             log.info(f"task - Closing auction with expired end: {auction.item} - {auction.auction_id}")
             AuctionTable.update_end(auction_id=auction.auction_id, end=now, open=False)
             auction_cog: Auction = await get_cog(self.bot, None, 'Auction')
-            await auction_cog.send_bids(auction=auction.auction_id, num_bids=3, complete=True)
+            await auction_cog.send_bids(auction=auction.auction_id, max_num=3, complete=True)
             if message is not None:
                 await message.delete()
             return True
