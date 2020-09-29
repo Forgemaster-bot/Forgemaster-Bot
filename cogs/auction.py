@@ -462,7 +462,7 @@ class Auction(commands.Cog):
         # Without a row, we need to create a new auction
         if row is None:
             try:
-                log.info(f"auction_start - {ctx.author.display_name} - Found matching auctions for {item}")
+                log.info(f"auction_start - {ctx.author.display_name} - Did not find matching auctions for {item}")
                 row = AuctionTable.make_auction(item=item, end=end)
                 log.info(f"auction_start - {ctx.author.display_name} - Made new auction - {row.to_dict()}")
             except AttributeError as err:
@@ -612,6 +612,7 @@ class Auction(commands.Cog):
                 log.info(f"request_bid - {payload.user_id} - performed invalid event {payload.event_type}")
                 return
 
+            only_one_bid_allowed = False
             member: discord.Member = payload.member
             dm_channel = await menu.get_dm_channel(member)
 
@@ -626,7 +627,7 @@ class Auction(commands.Cog):
                                   f"the item '**{self.auction.item}**'...")
 
             existing_bid = BidTable.get_bid(self.auction.auction_id, character_id)
-            if existing_bid:
+            if only_one_bid_allowed and existing_bid:
                 await dm_channel.send(f"Unfortunately, you have already bid {existing_bid}gp in this auction.")
                 return
 
