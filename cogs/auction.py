@@ -414,7 +414,7 @@ class Auction(commands.Cog):
         return choices[choice]
 
     @commands.group(name='auction', description='Group command')
-    @commands.check_any(commands.has_role('Admins'), commands.is_owner())
+    @commands.check_any(commands.has_any_role('Admins', 'Mods', 'DMs'), commands.is_owner())
     async def auction(self, ctx: commands.Context):
         AuctionTable.setup()
         BidTable.setup()
