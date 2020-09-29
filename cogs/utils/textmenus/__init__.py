@@ -600,7 +600,7 @@ class Menu(metaclass=_MenuMeta):
 
         self.bot = bot = ctx.bot
         self.ctx = ctx
-        self._author_id = author or ctx.author.id
+        self._author_id = author.id or ctx.author.id
 
         self.channel = channel or ctx.channel
         is_guild = isinstance(channel, discord.abc.GuildChannel)
