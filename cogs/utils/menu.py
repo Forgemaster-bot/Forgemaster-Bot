@@ -17,11 +17,11 @@ async def get_dm_channel(user):
 async def get_channel(ctx, user=None, should_dm=True):
     return ctx.channel if not should_dm else await get_dm_channel(user or ctx.author)
 
-async def start_menu(ctx, menu, should_dm=True, channel=None, should_raise_stop=False, **kwargs):
+async def start_menu(ctx, menu, should_dm=True, channel=None, should_raise_stop=False, author=None, **kwargs):
     m = menu(**kwargs)
     # channel = channel if channel else ctx.author.dm_channel
     channel = channel if channel else await get_channel(ctx, ctx.author, should_dm=should_dm)
-    await m.start(ctx, wait=True, channel=channel)
+    await m.start(ctx, wait=True, channel=channel, author=author)
 
     if m.exception and isinstance(m.exception, textmenus.StopException):
         log.debug("Stop exception received")
@@ -34,7 +34,7 @@ async def start_menu(ctx, menu, should_dm=True, channel=None, should_raise_stop=
         log.debug("Timeout exception received")
         raise m.exception
     elif not m.single_time:
-        await start_menu(ctx, menu, **kwargs)
+        await start_menu(ctx, menu, should_dm=should_dm, channel=channel, should_raise_stop=should_raise_stop, **kwargs)
     return m
 
 

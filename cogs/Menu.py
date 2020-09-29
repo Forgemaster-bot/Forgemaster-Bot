@@ -846,7 +846,8 @@ class Menu(commands.Cog):
             """Shortcut to return the only available character."""
             return info_list[0].character_id
         else:
-            m = await start_menu(ctx, Menu.CharacterChoiceMenu, available_characters=info_list, channel=channel)
+            m = await start_menu(ctx, Menu.CharacterChoiceMenu, available_characters=info_list, channel=channel,
+                                 author=author)
             return m.character_info.character_id if m.character_info else None
 
     @commands.group(name='menu', invoke_without_command=True, brief='Opens the main menu')
