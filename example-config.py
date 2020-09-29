@@ -20,3 +20,7 @@ available_classes = [
     "Warlock",
     "Wizard"
 ]
+
+client_id = '12345'
+token = 'token here'
+

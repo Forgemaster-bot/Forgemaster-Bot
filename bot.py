@@ -6,7 +6,6 @@ import datetime
 import traceback
 import logging
 import json
-import secrets
 import config
 from collections import deque
 
@@ -27,7 +26,7 @@ class TestBot(commands.Bot):
         """
         Set self attributes 
         """
-        self.client_id = secrets.client_id
+        self.client_id = config.client_id
         self._prev_events = deque(maxlen=10)
         self.uptime = None
         """
@@ -92,7 +91,7 @@ class TestBot(commands.Bot):
 
     def run(self):
         try:
-            super().run(secrets.token, reconnect=True)
+            super().run(config.token, reconnect=True)
         finally:
             with open('prev_events.log', 'w', encoding='utf-8') as fp:
                 for data in self._prev_events:

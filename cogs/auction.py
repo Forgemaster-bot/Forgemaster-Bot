@@ -582,7 +582,7 @@ class Auction(commands.Cog):
         embed.add_field(name=field_name, value=field_msg if field_msg else 'None')
 
         channel = self.bot.get_channel(row.channel_id)
-        log.info(f"auction_bids - Sending bids to channel {str(channel)}")
+        log.info(f"auction_bids - Sending bids to channel {str(channel)} with id {row.channel_id}")
         if complete and channel:
             await channel.send(f"Auction completed for item '**{row.item}**'. Sending winning bids!")
         await channel.send(embed=embed)
