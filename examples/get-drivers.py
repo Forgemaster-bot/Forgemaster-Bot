@@ -1,0 +1,2 @@
+import pyodbc
+pyodbc.drivers()
