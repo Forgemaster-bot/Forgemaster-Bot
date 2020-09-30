@@ -3,23 +3,7 @@ import json
 import re
 import Connections
 
-# with Connections.sql_db_connection() as cursor:
-#     query = "SELECT * FROM [Main_Crafting] WHERE Character_ID = ?"
-#     args = [character_id]
-#     Quick_Python.log_transaction(query, args)
-#     cursor.execute(query, args)
-#     crafting = cursor.fetchone()
-#     if crafting is None:
-#         query = "INSERT INTO [Main_Crafting] (Character_ID, Crafting_Value, Labour_Points) " \
-#                 "OUTPUT Inserted.* " \
-#                 "VALUES (?, '50', '0')"
-#         Quick_Python.log_transaction(query, args)
-#         cursor.execute(query, args)
-#         crafting = cursor.fetchone()
-#     return crafting
-
-cleric_file = os.path.join(os.path.sep, 'media', 'sf_shared', 'TheGiddyLimit.github.io-master', 'data', 'class',
-                           'class-cleric.json')
+cleric_file = os.path.join('examples', 'data', 'class-cleric.json')
 
 with open(cleric_file, "r") as f:
     data = json.load(f)
