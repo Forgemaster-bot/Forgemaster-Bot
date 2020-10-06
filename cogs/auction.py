@@ -487,7 +487,9 @@ class Auction(commands.Cog):
             log.info(f"auction_start - {ctx.author.display_name} - Updating message id to {m.message.id}")
             message = m.message
             AuctionTable.update_message(row.auction_id, auction_channel_id, message.id)
-        await channel.send(f"You may react for {m.timeout}s. Auction message link: {message.jump_url}")
+        msg = f"'**{ctx.author.display_name}**' started an auction for {row.item} which ends in {m.timeout}s. Link: {message.jump_url}"
+        await Connections.log_to_discord(self, msg)
+        await channel.send(msg)
 
     @auction.command(name='history', description='Lists all past auctions')
     async def auction_history(self, ctx: commands.Context):
@@ -499,8 +501,8 @@ class Auction(commands.Cog):
         for k, g in itertools.groupby(auctions, lambda row: (row.start.month, row.start.year)):
             if i >= 10: break
             month, year = k
-            embed.add_field(name=f"{calendar.month_abbr[month]} {year}", value="\n\n".join(str(auction)
-                                                                                           for auction in g))
+            auction_strings = "\n\n".join(str(auction) for auction in g)
+            embed.add_field(name=f"{calendar.month_abbr[month]} {year}", value=auction_strings)
             i = i + 1
         if len(embed.fields) == 0:
             embed.add_field(name="None", value="None")
@@ -688,22 +690,25 @@ class Auction(commands.Cog):
                 return
 
             m = menu.ConfirmMenu('Are you sure you would like to stop this auction?')
-            await m.start(self.ctx, channel=dm_channel, wait=True, author=payload.user_id)
+            await m.start(self.ctx, channel=dm_channel, wait=True, author=payload.member)
 
             if m.confirm:
                 log.info(f"stop_auction - {name} - Chose to stop the auction")
                 AuctionTable.update_end(auction_id=self.auction.auction_id, open=False)
-
                 self.stop()
                 if self.delete_message_after:
                     await self.message.delete()
 
-                log.info("Stopped and deleted reaction menu. Calling send_bids to display bids.")
+                log.info(f"stop_auction - {name} - Stopped and deleted reaction menu. Displaying bids.")
                 auction_cog: Auction = await get_cog(self.bot, dm_channel, 'Auction')
                 await auction_cog.send_bids(auction=self.auction.auction_id, max_num=3, complete=True)
+
+                msg = f"'**{name}**' successfully stopped auction for '{self.auction.item}'."
+                await Connections.log_to_discord(self.ctx, msg)
+                await dm_channel.send(msg)
             else:
                 log.info(f"stop_auction - {name} - Did not stop the auction")
-                return
+            return
 
     async def task_fetch_message(self, channel_id: int, message_id: int):
         log.debug(f"task - Searching in {channel_id} for {message_id}")
@@ -732,6 +737,7 @@ class Auction(commands.Cog):
             AuctionTable.update_end(auction_id=auction.auction_id, end=now, open=False)
             auction_cog: Auction = await get_cog(self.bot, None, 'Auction')
             await auction_cog.send_bids(auction=auction.auction_id, max_num=3, complete=True)
+            await Connections.log_to_discord(self, f"Auction timer has completed for {auction.item}!")
             if message is not None:
                 await message.delete()
             return True

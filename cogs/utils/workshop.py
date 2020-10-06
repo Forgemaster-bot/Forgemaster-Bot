@@ -154,12 +154,15 @@ async def craft_item_selection(menu, choice):
     message = f"Would you like to craft **{quantity}x[{choice.Name}]** for a total of **{choice.Value} gp**?\n" \
               f"Your new crafting limit for the week will be: {new_limit}"
     m = Menu.ConfirmMenu(message)
-    await m.start(menu.ctx, channel=menu.ctx.channel, wait=True)
+    await m.start(menu.ctx, channel=menu.channel, wait=True)
     if m.confirm:
         menu.character.remove_item_amount('Gold', choice.Value)
-        menu.character.modify_item_amount(choice.data, 1)
+        menu.character.modify_item_amount(choice.Name, quantity)
         StandaloneQueries.update_crafting_value(menu.character.info.character_id, new_limit)
-        await menu.channel.send(f"Successfully crafted **{choice.Name}**! ")
+        msg = f"{menu.character.name} successfully crafted {quantity}x**{choice.Name}**!"
+        await menu.channel.send(msg)
+        await Connections.log_to_discord(menu.ctx, msg)
+        Roster.update_character_in_roster(menu.character)
 
 async def item_selection_menu(menu, choice):
     log.info(f"item_selection_menu - {menu.character.info.name} - User selected {choice} ")
