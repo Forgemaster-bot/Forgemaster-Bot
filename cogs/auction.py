@@ -554,16 +554,22 @@ class Auction(commands.Cog):
 
     @staticmethod
     def bid_to_info_dict(bid: BidTable.Row):
-        info = character_info_interface.fetch(bid.character_id)
-        can_afford = info.gold >= bid.bid
-        return [f"{bid.bid}gp", f"**{info.name}**", f"<@{info.discord_id}>", can_afford]
+        try:
+            info = character_info_interface.fetch(bid.character_id)
+            can_afford = info.gold >= bid.bid
+            return [f"{bid.bid}gp", f"**{info.name}**", f"<@{info.discord_id}>", can_afford]
+        except IndexError as e:
+            return None
 
     @classmethod
     def bids_to_str(cls, bids: List[BidTable.Row], max_num, complete: bool = False):
         bid_info = []
         for bid in bids:
-            bid_info.append(cls.bid_to_info_dict(bid))
-            should_stop = len(bid_info) < max_num if not complete else max_num <= len([i for i in bid_info if i[3]])
+            log.info(f"bids_to_str - bid = {repr(bid)}")
+            new_bid_info = cls.bid_to_info_dict(bid)
+            if new_bid_info is not None:
+                bid_info.append(new_bid_info)
+            should_stop = len(bid_info) >= max_num if not complete else max_num <= len([i for i in bid_info if i[3]])
             if should_stop:
                 break
         return "\n".join([f"{b[0]} - {b[1]} - {'Can Afford' if b[3] else 'Cannot Afford'} - {b[2]}" for b in bid_info])
@@ -692,7 +698,7 @@ class Auction(commands.Cog):
                 if self.delete_message_after:
                     await self.message.delete()
 
-                log.info("Stopped and deleted reaction menu. Calling auction_bids to display bids.")
+                log.info("Stopped and deleted reaction menu. Calling send_bids to display bids.")
                 auction_cog: Auction = await get_cog(self.bot, dm_channel, 'Auction')
                 await auction_cog.send_bids(auction=self.auction.auction_id, max_num=3, complete=True)
             else:

@@ -101,6 +101,7 @@ def select_tool(profession) -> str:
         return cursor.fetchval()
 
 def get_items_by_profession_and_cost(profession: str, gold: float):
+    gold = gold * 2  # Double the amount of gold since crafted items are double their crafting cost
     with Connections.sql_db_connection() as cursor:
         query = "SELECT CAST([Type] AS TEXT) data, Value, Name FROM Info_Item " \
                     "WHERE [Crafting] = ? and [Value] <= ? " \

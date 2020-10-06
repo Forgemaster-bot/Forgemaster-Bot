@@ -135,6 +135,7 @@ async def ask_for_quantity(ctx: commands.Context, max_num: int) -> int:
 
 async def craft_item_selection(menu, choice):
     log.info(f"craft_item_selection - {menu.character.info.name} - User selected {choice} ")
+    choice.Value = choice.Value / 2  # Modify value to be half its value for the crafting cost
 
     crafting_limit = StandaloneQueries.crafting_limit(menu.character.id, menu.character.get_gold())
     max_num = math.floor(crafting_limit / choice.Value)

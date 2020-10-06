@@ -1552,9 +1552,9 @@ recipes:
         prereq:
           has_item: Wand of Fireball
           has_item_quantity_by_keyword:
-            Red Dust: 10
+            Red Dust: 120
         cost:
-          Red Dust: 1
+          Red Dust: 120
         special:
           random amount:
             die: 6

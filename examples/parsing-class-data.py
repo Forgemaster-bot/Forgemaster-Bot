@@ -15,7 +15,7 @@ with Connections.sql_db_connection() as cursor:
     for dndclass in data['class']:
         parent = dndclass.get('name')
         for subclass in dndclass['subclasses']:
-            name_source_data = re.split("[(|)]", subclass.get('name'))
+            name_source_data = re.split("[(|)]", subclass.get('shortName'))
 
             name = name_source_data[0].strip()
             source = subclass.get('source')
