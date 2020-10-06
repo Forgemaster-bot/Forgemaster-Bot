@@ -29,6 +29,7 @@ for class_file in os.listdir(class_files):
     with Connections.sql_db_connection() as cursor:
         for dndclass in data['class']:
             parent = dndclass.get('name')
+            print(f"{bcolors.OKBLUE}{name}{bcolors.ENDC}")
             for subclass in dndclass['subclasses']:
                 name_source_data = re.split("[(|)]", subclass.get('shortName'))
                 name = name_source_data[0].strip()
