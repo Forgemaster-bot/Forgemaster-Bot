@@ -31,6 +31,9 @@ class RecipeSelectionMenu(Menu.BaseCharacterMenu):
         return f"Please select one of the **{self.label}** recipes you would like to craft."
 
     async def on_confirm(self, recipe):
+        if recipe.can_afford(self.character) is False:
+            channel = await Menu.get_dm_channel(self.ctx.author)
+            return await channel.send(f"You cannot afford this recipe: '{str(recipe)}'")
         await Crafting.craft_recipe(self.ctx, self.character, recipe)
 
     @staticmethod
