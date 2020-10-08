@@ -711,17 +711,17 @@ class Auction(commands.Cog):
             return
 
     async def task_fetch_message(self, channel_id: int, message_id: int):
-        log.debug(f"task - Searching in {channel_id} for {message_id}")
+        #log.debug(f"task - Searching in {channel_id} for {message_id}")
         channel = self.bot.get_channel(channel_id)
         if channel is None:
             return None
         try:
             return await channel.fetch_message(message_id)
         except discord.Forbidden as err:
-            log.debug(f"task - discord.Forbidden exception thrown - {err}")
+            #log.debug(f"task - discord.Forbidden exception thrown - {err}")
             return None
         except discord.NotFound as err:
-            log.debug(f"task - discord.NotFound exception thrown - {err}")
+            #log.debug(f"task - discord.NotFound exception thrown - {err}")
             return None
 
     async def task_update_auction_listing(self, auction: AuctionTable.Row, message):
@@ -731,7 +731,7 @@ class Auction(commands.Cog):
         return await message.edit(embed=self.get_auction_listing_embed(auction))
 
     async def task_update_auction_status(self, auction: AuctionTable.Row, now, message):
-        log.info(f"task - Checking status: now={now} end={auction.end}")
+        #log.info(f"task - Checking status: now={now} end={auction.end}")
         if (auction.open is True) and (auction.end is not None) and (auction.end < now.replace(tzinfo=None)):
             log.info(f"task - Closing auction with expired end: {auction.item} - {auction.auction_id}")
             AuctionTable.update_end(auction_id=auction.auction_id, end=now, open=False)
@@ -751,13 +751,13 @@ class Auction(commands.Cog):
 
     @tasks.loop(seconds=30.0)
     async def update_auctions(self):
-        log.debug(f"task - update_auctions - Running")
+        #log.debug(f"task - update_auctions - Running")
         if AuctionTable.exists():
             now = get_current_time()
             open_auctions = AuctionTable.select_open()
             if open_auctions:
                 await asyncio.wait([self.task_update_auction(auction, now) for auction in open_auctions])
-        log.debug(f"task - update_auctions - Done")
+        #log.debug(f"task - update_auctions - Done")
 
 
 def setup(bot):
