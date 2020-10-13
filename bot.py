@@ -16,7 +16,8 @@ class TestBot(commands.Bot):
     initial_extensions = [
         'cogs.Admin',
         'cogs.Menu',
-        'cogs.auction'
+        'cogs.auction',
+        'cogs.Mod'
     ]
 
     def __init__(self):
