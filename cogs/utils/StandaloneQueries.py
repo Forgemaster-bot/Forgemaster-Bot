@@ -150,3 +150,18 @@ def update_player_character_total(discord_id: str, number_to_set):
         cursor.execute(query, args)
         # else:
         #     raise RuntimeError("Current number of characters allowed is None... Contact admin to set this for you.")
+
+def modify_free_spellbook_spells(character_id: uuid.UUID, class_name: str, modifier: int):
+    with Connections.sql_db_connection() as cursor:
+        query = "SELECT [Free_Book_Spells] FROM [Link_Character_Class] WHERE [Character_ID] = ? AND [Class] = ?"
+        args = [character_id, class_name]
+        Quick_Python.log_transaction(query, args)
+        cursor.execute(query, args)
+        value = cursor.fetchval()
+        if value is None or (value + modifier) < 0:
+            raise RuntimeError(f"Invalid Free_Book_Spells value='{value}' id='{character_id}' and class='{class_name}'")
+
+        query = "UPDATE [Link_Character_Class] SET [Free_Book_Spells] = ? WHERE [Character_ID] = ? AND [Class] = ?"
+        args = [value + modifier, character_id, class_name]
+        Quick_Python.log_transaction(query, args)
+        cursor.execute(query, args)

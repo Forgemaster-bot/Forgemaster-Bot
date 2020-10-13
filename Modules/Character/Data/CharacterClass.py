@@ -68,7 +68,7 @@ class CharacterClass:
             holder = core_spellbooks[0]
         else:
             holder = self.spell_holders[spell.class_name]
-        holder.insert_spell(character_id=self.character_id, name=spell.spell_name, origin=holder.name)
+        holder.insert_spell(character_id=self.character_id, name=spell.spell_name, origin=holder.name, parent=self.name)
 
     def remove_spell(self, spell):
         spell_interface.delete(spell)

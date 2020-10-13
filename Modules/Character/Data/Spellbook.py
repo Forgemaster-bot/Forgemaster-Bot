@@ -2,7 +2,7 @@ from typing import List
 from Character.Data.SpellbookSpell import SpellbookSpell
 from Character.SpellbookSpellFacade import interface as spell_interface
 from Character.Data.SpellHolder import SpellHolder
-
+from cogs.utils import StandaloneQueries
 
 class Spellbook(SpellHolder):
     __slots__ = ["spellbook_id", "character_id", "name", "type"]
@@ -36,4 +36,4 @@ class Spellbook(SpellHolder):
     def insert_spell(self, name, **kwargs):
         spell_obj = SpellbookSpell(spellbook_id=self.spellbook_id, name=name, is_known=True)
         self.insert_spell_obj(spell_obj)
-
+        StandaloneQueries.modify_free_spellbook_spells(self.character_id, kwargs['parent'], -1)
