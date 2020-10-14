@@ -22,16 +22,6 @@ def get_config_path():
     return default_config_path if environment_path is None else environment_path
 
 
-def get_bot_config_path():
-    """
-    Returns the path to patreon config file, prioritizing FORGEMASTER_BOT_CONFIG_PATH env var.
-    :return: patreon config file path
-    """
-    default_config_path = os.path.join('Credentials', 'BotConfig.json')
-    environment_path = os.getenv('FORGEMASTER_BOT_CONFIG_PATH')
-    return default_config_path if environment_path is None else environment_path
-
-
 '''''''''''''''''''''''''''''''''
 ############# CONFIG ############
 '''''''''''''''''''''''''''''''''
@@ -44,7 +34,6 @@ def load_config(path):
 
 
 config = load_config(get_config_path())
-bot_config = load_config(get_bot_config_path())
 
 
 '''''''''''''''''''''''''''''''''
