@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 help_msg = textwrap.dedent('''\
             ```
-            This is a test bot for text menus.
+            Prospects of Thystra Bot
     
             Menu:
               menu Opens the main menu
