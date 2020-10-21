@@ -1,11 +1,15 @@
 from discord.ext import commands
 from bot import TestBot
 import asyncio
-import uvloop
 import contextlib
 import logging
 
-asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+# Use uvloop if it is installed
+try:
+    import uvloop
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+except ImportError:
+    print("Not using uvloop as it is not installed...")
 
 def setup_logging():
     # __enter__
