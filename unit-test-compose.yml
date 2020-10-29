@@ -1,12 +1,15 @@
 version: "3.8"
 services:
-        sql1:
+        test-server:
                 container_name: test-server
-                build: .
+                build: ./sql-server
+                image: sql-server:test
                 ports:
                         - "1433"
                 env_file:
-                        - ./scripts/.sql_secrets
+                        - sql-server/scripts/.sql_secrets
+                networks:
+                        - servicenet
 # Load all sql scripts from /sql-sripts on startup. Sorurce: https://github.com/microsoft/mssql-docker/issues/11
                 command:
                       - /bin/bash
@@ -35,6 +38,23 @@ services:
                         # Wait on the sqlserver process
                         wait $$pid
 
-volumes:
-        sqlvolume:
+        tests:
+                container_name: tests
+                build: 
+                        context: .
+                        dockerfile: tests/Dockerfile
+                image: discord-bot:tests
+                ports:
+                        - "1443"
+#                volumes:
+#                        - ../:/usr/src/app
+                networks:
+                        - servicenet
+                depends_on:
+                        - test-server
+                entrypoint: ["/wait-for-it.sh", "test-server:1433", "-t", "120", "--", "pytest"]
+
+networks:
+        servicenet:
+                driver: bridge
 
