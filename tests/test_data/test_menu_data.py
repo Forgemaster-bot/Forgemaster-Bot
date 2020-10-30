@@ -143,7 +143,7 @@ def get_character_sheet_embed(name, level=False, pick_subclass=False, view=False
     fields = [
                 {'inline': True, 'name': 'Name', 'value': f"{name}"},
                 {'inline': True, 'name': 'XP', 'value': f"{character_info_lookup[name]['xp']}"},
-                {'inline': True, 'name': 'Gold', 'value': f"{character_info_lookup[name]['gold']}"},
+                {'inline': True, 'name': 'Gold', 'value': f"{character_info_lookup[name]['gold']:.2f}"},
                 {'inline': True, 'name': 'Feats', 'value': 'None'},
                 {'inline': True, 'name': 'Skills', 'value': skill_string},
                 {'inline': False, 'name': 'Stats', 'value': 'STR: 20, DEX: 20, CON: 20, INT: 20, WIS: 20, CHA: 20'},

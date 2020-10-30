@@ -132,8 +132,8 @@ async def test_craft_item(mock_ask_for_quantity, mock_wait_for_reply, player_mes
 
     # Check that the market menu has updated with new gold and worker limit
     new_market_embed = dpytest.get_embed()
-    helper.embed_matches_field(name="Gold", value="9.4", embed=new_market_embed)
-    helper.embed_matches_field(name="Current Weekly Limit", value="49.4", embed=new_market_embed)
+    helper.embed_matches_field(name="Gold", value="9.40", embed=new_market_embed)
+    helper.embed_matches_field(name="Current Weekly Limit", value="49.40", embed=new_market_embed)
 
 
 
