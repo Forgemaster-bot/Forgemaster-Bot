@@ -3,6 +3,7 @@ from bot import TestBot
 import asyncio
 import contextlib
 import logging
+from datetime import datetime
 
 # Use uvloop if it is installed
 try:
@@ -10,6 +11,8 @@ try:
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     print("Not using uvloop as it is not installed...")
+
+use_log_timestamp = True
 
 def setup_logging():
     # __enter__
@@ -24,7 +27,11 @@ def setup_logging():
     fmt = logging.Formatter('[{asctime}] [{levelname:<7}] {name}: {message}', dt_fmt, style='{')
 
     # Add file logger
-    handler = logging.FileHandler(filename=f'TestBot.log', encoding='utf-8', mode='w')
+    file_prefix = "bot"
+    if use_log_timestamp:
+        file_prefix = f"{file_prefix}{datetime.now().strftime('_%H_%M_%d_%m_%Y')}"
+    filename = f"{file_prefix}.log"
+    handler = logging.FileHandler(filename=filename, encoding='utf-8', mode='w')
     handler.setFormatter(fmt)
     log.addHandler(handler)
 

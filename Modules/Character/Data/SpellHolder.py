@@ -19,6 +19,6 @@ class SpellHolder:
         self.interface.insert(spell_obj)
         self.refresh_spells()
 
-    def insert_spell(self, character_id, name, origin):
+    def insert_spell(self, character_id, name, origin, **kwargs):
         spell_obj = CharacterSpell(character_id=character_id, name=name, origin=origin)
         self.insert_spell_obj(spell_obj)
