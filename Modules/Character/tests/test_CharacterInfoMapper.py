@@ -3,6 +3,7 @@ import unittest
 from Quick_Python import run_query_commit
 import Character.CharacterInfoFacade
 import Character.Data.CharacterInfo
+import uuid
 import Connections
 
 
@@ -26,8 +27,7 @@ intelligence = 4
 wis = 5
 cha = 6
 gold = 7
-roll_id = '8616E10E-0D7C-457C-8C89-E661A45264FB'
-roll_id_binary = b'\x0e\xe1\x16\x86|\r|E\x8c\x89\xe6a\xa4Rd\xfb'
+roll_id = uuid.UUID('8616E10E-0D7C-457C-8C89-E661A45264FB')
 
 
 def insert_character():
@@ -81,7 +81,7 @@ class TestCharacter(unittest.TestCase):
         self.assertEqual(character.wis, wis)
         self.assertEqual(character.cha, cha)
         self.assertEqual(character.gold, gold)
-        self.assertEqual(character.roll_id, roll_id_binary)
+        self.assertEqual(character.roll_id, roll_id)
 
     def test_insert(self):
         discid = discord_id+'1'
@@ -118,7 +118,7 @@ class TestCharacter(unittest.TestCase):
         self.assertEqual(character.wis, inserted_character.wis)
         self.assertEqual(character.cha, inserted_character.cha)
         self.assertEqual(character.gold, inserted_character.gold)
-        self.assertEqual(roll_id_binary, inserted_character.roll_id)
+        self.assertEqual(character.roll_id, inserted_character.roll_id)
 
 
 if __name__ == '__main__':

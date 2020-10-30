@@ -36,9 +36,13 @@ def insert_new_character(character_id: str):
 def update_character(character_id: str):
     character_name = character_name_by_character_id(character_id)
     roster = Connections.google_sheet("Roster")
-    character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
+    # character_row = Quick_Python.find_character_row(roster.col_values(2), character_name)
+    # if character_row == 0:
+    #     character_row = len(roster.col_values(1)) + 1
+    name_column_values = roster.col_values(2)
+    character_row = Quick_Python.find_character_row(name_column_values, character_name)
     if character_row == 0:
-        character_row = len(roster.col_values(1)) + 1
+        character_row = len(name_column_values) + 1
         roster.update_cell(character_row, 2, character_name)
     character_sheet = lookup_character_sheet(character_id)
     levelup = check_level_up(character_id)
@@ -285,10 +289,12 @@ def character_id_by_character_name(character_name: str):
 
 def update_character_in_roster(character):
     roster = Connections.google_sheet("Roster")
-    character_row = Quick_Python.find_character_row(roster.col_values(RosterColumns.CHARACTER_NAME),
-                                                    character.info.name)
+    name_column_values = roster.col_values(RosterColumns.CHARACTER_NAME)
+    character_row = Quick_Python.find_character_row(name_column_values, character.info.name)
+    if character_row == 0:
+        character_row = len(name_column_values)+1
 
-    begin = gspread.utils.rowcol_to_a1(character_row, RosterColumns.BEGIN+1)
+    begin = gspread.utils.rowcol_to_a1(character_row, RosterColumns.DISCORD_NAME)
     end = gspread.utils.rowcol_to_a1(character_row, RosterColumns.END-1)
     cell_range = f"{begin}:{end}"
 

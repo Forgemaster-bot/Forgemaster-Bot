@@ -392,7 +392,7 @@ class Character:
             await log_to_discord(cog, msg)
             await channel.send(msg)
 
-    async def learn_skill(self, skill: SkillInfo, has_proficiency: bool = False):
+    def learn_skill(self, skill: SkillInfo, has_proficiency: bool = False):
         if skill.name not in self.get_skills_dict():
             character_skill = CharacterSkill(character_id=self.id, name=skill.name, proficiency=has_proficiency)
             CharacterSkillFacade.interface.insert(character_skill)

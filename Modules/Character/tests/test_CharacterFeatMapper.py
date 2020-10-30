@@ -59,10 +59,12 @@ class MapperTestCase(unittest.TestCase):
             self.assertEqual(getattr(test_item, k), v)
 
         # Update the item
+        old_value = getattr(test_item, test_update_field)
         new_value = getattr(test_item, test_update_field)*2
         setattr(test_item, test_update_field, new_value)
         with self.assertRaises(RuntimeError):
             Facade.interface.update(test_item)
+        setattr(test_item, test_update_field, old_value)
 
         # Remove the item
         Facade.interface.delete(test_item)

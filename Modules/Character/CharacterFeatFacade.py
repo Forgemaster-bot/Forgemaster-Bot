@@ -13,14 +13,14 @@ class CharacterFeatFacade:
     def fetch(self, character_id: str) -> List[CharacterFeat]:
         return self._mapper.fetch(character_id)
 
-    def update(self, character: CharacterFeat):
-        return self._mapper.update(character)
+    def update(self, feat: CharacterFeat):
+        return self._mapper.update(feat)
 
-    def insert(self, character: CharacterFeat):
-        return self._mapper.insert(character)
+    def insert(self, feat: CharacterFeat):
+        return self._mapper.insert(feat)
 
-    def delete(self, character: CharacterFeat):
-        return self._mapper.delete(character)
+    def delete(self, feat: CharacterFeat):
+        return self._mapper.delete(feat)
 
 
 interface = CharacterFeatFacade(CharacterFeatMapper.mapper)

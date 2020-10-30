@@ -6,7 +6,9 @@ import uuid
 import discord
 
 from Character.CharacterInfoFacade import interface as character_info_interface
+from Character.SkillInfoFacade import interface as skill_info_interface
 from Character.Data.CharacterInfo import CharacterInfo
+from Character.Character import Character
 
 log = logging.getLogger(__name__)
 
@@ -38,18 +40,39 @@ character_info_lookup = {
     'player': dict(character_id=uuid.UUID(int=1), roll_id=uuid.UUID(int=1),
                    discord_id=discord_info_lookup['player']['id_num'],
                    name='player', race='TestRace', background='TestBg',
-                   xp=900, gold=500, str=20, dex=20, con=20, int=20, wis=20, cha=20
+                   xp=900, gold=10.0, str=20, dex=20, con=20, int=20, wis=20, cha=20
                    )
+}
+
+character_skill_lookup = {
+    # 'player': [('Weaver', True)]
+}
+
+character_item_lookup = {
+    'player': [('Weavers Tools', 1)]
 }
 
 
 def create_characters():
-    for key, value in character_info_lookup.items():
-        if not character_info_interface.fetch_by_discord_id(value['discord_id']):
-            character_info_interface.insert(CharacterInfo(**value))
-            characters: List[CharacterInfo] = character_info_interface.fetch_by_discord_id(value['discord_id'])
-            for character in characters:
-                log.debug(repr(character))
+    for name, info in character_info_lookup.items():
+        if not character_info_interface.fetch_by_discord_id(info['discord_id']):
+
+            # Insert character info into database
+            character_info_interface.insert(CharacterInfo(**info))
+
+            # Create a Character object from database
+            character: Character = Character(info['character_id'])
+
+            # Add any applicable skills to the Character
+            if name in character_skill_lookup:
+                for skill_name, proficiency in character_skill_lookup[name]:
+                    character.learn_skill(skill_info_interface.fetch(skill_name), proficiency)
+
+            # Add any applicable items to the Character
+            if name in character_item_lookup:
+                for item_name, amount in character_item_lookup[name]:
+                    character.set_item_amount(item_name, amount)
+
 
 def get_base_embed_dict(title: str, description: str, fields: List[dict], color=13632027):
     return {
@@ -80,7 +103,7 @@ def get_main_menu_embed(player):
 
 
 def get_character_sheet_embed(name, level=False, pick_subclass=False, view=False, learn=False, forget=False,
-                              free_profession=False):
+                              free_profession=False, skills: List[str] = None, items: List[str] = None):
     title = 'Character Sheet'
     description = f'**{name}**, welcome to your character sheet. ' \
                   f'This menu displays a summary of info for your character and allows you to manage your character.'
@@ -99,15 +122,32 @@ def get_character_sheet_embed(name, level=False, pick_subclass=False, view=False
     options_string = "\n".join(f"**{i}** : {option}" for i, option in enumerate(valid_options, start=1))
     options_string = "\n".join([options_string, end_options])
 
+    item_string = None
+    if items:
+        skill_string = ", ".join(f"{item}" for item in items)
+    elif name in character_item_lookup:
+        items = character_item_lookup[name]
+        item_string = ", ".join(f"{amount}x[{item_name}]" for item_name, amount in items)
+    item_string = item_string if item_string else "None"
+
+    skill_string = None
+    if skills:
+        skill_string = ", ".join(f"{skill}" for skill in skills)
+    elif name in character_skill_lookup:
+        skills = character_skill_lookup[name]
+        skill_string = ", ".join(f"{skill}{'' if proficiency else ' (D)'}" for skill, proficiency in skills)
+    skill_string = skill_string if skill_string else "None"
+
+
     # Create fields and return the embed
     fields = [
-                {'inline': True, 'name': 'Name', 'value': 'player'},
-                {'inline': True, 'name': 'XP', 'value': '900'},
-                {'inline': True, 'name': 'Gold', 'value': '500.0'},
+                {'inline': True, 'name': 'Name', 'value': f"{name}"},
+                {'inline': True, 'name': 'XP', 'value': f"{character_info_lookup[name]['xp']}"},
+                {'inline': True, 'name': 'Gold', 'value': f"{character_info_lookup[name]['gold']}"},
                 {'inline': True, 'name': 'Feats', 'value': 'None'},
-                {'inline': True, 'name': 'Skills', 'value': 'None'},
+                {'inline': True, 'name': 'Skills', 'value': skill_string},
                 {'inline': False, 'name': 'Stats', 'value': 'STR: 20, DEX: 20, CON: 20, INT: 20, WIS: 20, CHA: 20'},
-                {'inline': True, 'name': 'Items', 'value': 'None'},
+                {'inline': True, 'name': 'Items', 'value': item_string},
                 {'inline': False, 'name': 'Please select one of the following options:',
                  'value': options_string}
             ]

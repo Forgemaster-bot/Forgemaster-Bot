@@ -108,12 +108,12 @@ class ConfirmMenu(BaseMenu):
         return self.message
 
     async def on_confirm(self, payload):
-        channel = await get_channel(self.ctx, payload.author)
+        channel = await get_channel(self.ctx, user=payload.author)
         await channel.send("Confirming...")
         self.confirm = True
 
     async def on_reject(self, payload):
-        channel = await get_channel(self.ctx, payload.author)
+        channel = await get_channel(self.ctx, user=payload.author)
         await channel.send("Rejecting...")
         self.confirm = False
 

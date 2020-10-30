@@ -5,26 +5,28 @@ ${script_path}/../setup-env.sh
 
 sql_path="$script_path/../sql-server"
 ## Bring up sql container
-cd "$sql_path"
-docker-compose up -d
-cd "$script_path"
+#cd "$sql_path"
+#docker-compose up -d
+#cd "$script_path"
 
 ## WORKAROUND UNTIL HAVE SCRIPT WHICH WAITS FOR CONTAINER TO START
 #sleep 10
-$sql_path/scripts/drop-old-data.sh
+#$sql_path/scripts/drop-old-data.sh
 
-#############################################################################################
-# Copy from templates, replacing '<SQL_PASSWORD>' and '<SQL_IP_ADDRESS>' with sql server info
-#############################################################################################
+##############################################################################################
+## Copy from templates, replacing '<SQL_PASSWORD>' and '<SQL_IP_ADDRESS>' with sql server info
+##############################################################################################
 templates_path="${script_path}/../Credentials"
 credentials_path="${script_path}/Credentials"
 
-mkdir -p "$credentials_path"
+mkdir $credentials_path
+cp ${templates_path}/* $credentials_path
 for file in $(ls "${templates_path}/template*")
 do
 	target_file="${credentials_path}/${file/template-/}"
 	cp "$file" "${target_file}"
 done
+
 
 ## Set config paths
 # TODO: Rename PATH to 'FILE'
@@ -40,7 +42,7 @@ sed -i -e "s/<SQL_PASSWORD>/${password}/" "$FORGEMASTER_CONFIG_PATH"
 sed -i -e "s/<SQL_IP_ADDRESS>/${ip_addr}/" "$FORGEMASTER_CONFIG_PATH"
 
 ## Run pytest
-pytest --log-cli-level=10
+#pytest --log-cli-level=10
 
 ## Stop containter
 #cd "$script_path/automation/sqlserver"

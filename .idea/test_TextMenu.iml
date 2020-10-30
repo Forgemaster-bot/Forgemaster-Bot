@@ -9,7 +9,11 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.6 (Lost-World-Bot)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.8 (Forgemaster-Bot)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="PackageRequirementsSettings">
+    <option name="requirementsPath" value="$MODULE_DIR$/requirements.txt" />
+    <option name="versionSpecifier" value="Strong equality (==x.y.z)" />
   </component>
 </module>

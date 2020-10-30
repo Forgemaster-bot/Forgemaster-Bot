@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.3"
 services:
         test-server:
                 container_name: test-server
@@ -20,11 +20,11 @@ services:
                         pid=$$!
                         # Wait for it to be available
                         echo "Waiting for MS SQL to be available ⏳"
-                        /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U sa -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT \"YAY WE ARE UP\" , @@servername"
+                        /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U SA -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT \"YAY WE ARE UP\" , @@servername"
                         is_up=$$?
                         while [ $$is_up -ne 0 ] ; do
                           echo -e $$(date)
-                          /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U sa -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT \"YAY WE ARE UP\" , @@servername"
+                          /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U SA -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT \"YAY WE ARE UP\" , @@servername"
                           is_up=$$?
                           sleep 5
                         done

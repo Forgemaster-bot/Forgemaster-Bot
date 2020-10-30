@@ -140,29 +140,32 @@ async def craft_item_selection(menu, choice):
     log.info(f"craft_item_selection - {menu.character.info.name} - User selected {choice} ")
     choice.Value = choice.Value / 2  # Modify value to be half its value for the crafting cost
 
-    crafting_limit = StandaloneQueries.crafting_limit(menu.character.id, menu.character.get_gold())
-    max_num = math.floor(crafting_limit / choice.Value)
+    # Determine quantity and total cost based on player input
+    crafting_limit = StandaloneQueries.fetch_crafting_limit_row(menu.character.id).Crafting_Value
+    max_num = math.floor(min(menu.character.get_gold(), crafting_limit) / choice.Value)
     quantity = await ask_for_quantity(menu.ctx, max_num)
     total_cost = choice.Value * quantity
 
     log.info(f"craft_item_selection - {menu.character.info.name} - Crafting limit is {max_num}. User chose {quantity}."
              f"Crafting cost will be {total_cost}")
 
-    if not menu.character.has_item_quantity_by_keyword(Gold=choice.Value):
+    # Check if player has enough gold to cover this total cost
+    if not menu.character.has_item_quantity_by_keyword(Gold=total_cost):
         menu.channel.send(f"Unfortunately, you do not have enough gold. This item costs '**{choice.Value}gp**' to craft.")
         log.info(f"craft_item_selection - {menu.character.info.name} - User did not have enough gold.")
         return
 
-    new_limit = 0 if crafting_limit <= total_cost else crafting_limit - total_cost
+    # Query user and update limit, gold, and items if sele
+    new_limit = 0 if total_cost >= crafting_limit else crafting_limit - total_cost
     message = f"Would you like to craft **{quantity}x[{choice.Name}]** for a total of **{choice.Value} gp**?\n" \
               f"Your new crafting limit for the week will be: {new_limit}"
     m = Menu.ConfirmMenu(message)
     await m.start(menu.ctx, channel=menu.channel, wait=True)
     if m.confirm:
-        menu.character.remove_item_amount('Gold', choice.Value)
+        menu.character.remove_item_amount('Gold', total_cost)
         menu.character.modify_item_amount(choice.Name, quantity)
         StandaloneQueries.update_crafting_value(menu.character.info.character_id, new_limit)
-        msg = f"{menu.character.name} successfully crafted {quantity}x**{choice.Name}**!"
+        msg = f"{menu.character.name} successfully crafted {quantity}x**{choice.Name}** for **{total_cost:.2f}gp**!"
         await menu.channel.send(msg)
         await Connections.log_to_discord(menu.ctx, msg)
         Roster.update_character_in_roster(menu.character)

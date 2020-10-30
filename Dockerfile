@@ -18,7 +18,7 @@ WORKDIR /usr/src/app
 
 ## Copy requirements.txt and install needed packages
 COPY ./requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --use-feature=2020-resolver -r requirements.txt
 
 ## Copy our application over
 COPY . ./

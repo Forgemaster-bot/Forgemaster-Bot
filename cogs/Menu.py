@@ -45,7 +45,7 @@ class Menu(commands.Cog):
 
         async def on_confirm(self, payload):
             await super().on_confirm(payload)
-            await self.character.learn_skill(self.skill)
+            self.character.learn_skill(self.skill)
             msg = f"{self.character.name} has used their free profession slot to become a '**{self.skill.name}**'"
             await Connections.log_to_discord(self, msg)
             await self.channel.send(msg)
@@ -611,16 +611,17 @@ class Menu(commands.Cog):
             jobs = [skill for skill in self.character.skills if skill.name in skill_info_interface.fetch_jobs()]
             jobs_str = "None" if not jobs else ", ".join(job.name for job in jobs)
             crafting_limit_row = StandaloneQueries.fetch_crafting_limit_row(self.character.id)
-            limit = StandaloneQueries.calculate_crafting_limit(crafting_limit_row, self.character.get_gold())
+            # limit = StandaloneQueries.calculate_crafting_limit(crafting_limit_row, self.character.get_gold())
+            limit = crafting_limit_row.Crafting_Value
             """
             Build fields list for the embed sent for this menu
             """
             embed_fields = [
                 textmenus.EmbedInfo.Field("Name", self.character.info.name, inline=True),
-                textmenus.EmbedInfo.Field("Gold", self.character.get_gold(), inline=True),
+                textmenus.EmbedInfo.Field("Gold", f"{self.character.get_gold():.2f}", inline=True),
                 textmenus.EmbedInfo.Field("Workers", crafting_limit_row.Labour_Points, inline=True),
                 textmenus.EmbedInfo.Field("Professions", jobs_str, inline=True),
-                textmenus.EmbedInfo.Field("Current Limit Remaining", limit, inline=True)
+                textmenus.EmbedInfo.Field("Current Weekly Limit", f"{limit:.2f}", inline=True)
             ]
             """
             Extend with any built in fields and set embed's fields to the newly built list
@@ -631,6 +632,7 @@ class Menu(commands.Cog):
         def __init__(self, character: Character, **kwargs):
             super().__init__(character, **kwargs)
             self.character.refresh()
+            StandaloneQueries.fetch_crafting_limit_row(self.character.id)
 
         def _skip_crafting(self):
             """
