@@ -1,16 +1,16 @@
 version: "3.3"
 services:
-#        sql-server:
-#                container_name: sql-server
-#                image: "mcr.microsoft.com/mssql/server:2019-CU5-ubuntu-18.04"
-#                expose:
-#                        - "1433"
-#                env_file:
-#                        - ./sql-server/scripts/.sql_secrets
-#                volumes:
-#                        - services_sqlvolume:/var/opt/mssql
-#                networks:
-#                        - servicenet
+        sql-server:
+                container_name: sql-server
+                image: "mcr.microsoft.com/mssql/server:2019-CU5-ubuntu-18.04"
+                ports:
+                        - "1433"
+                env_file:
+                        - ./sql-server/scripts/.sql_secrets
+                volumes:
+                        - services_sqlvolume:/var/opt/mssql
+                networks:
+                        - servicenet
 
         bot:
                 container_name: discord-bot
@@ -18,23 +18,24 @@ services:
                         context: .
                         dockerfile: Dockerfile
                 image: discord-bot:beta
-                expose:
+                ports:
                         - "1443"
+                volumes:
+                        - .:/usr/src/app
                 networks:
-                        - forgemaster-bot_servicenet
-#                volumes:
-#                        - .:/usr/src/app
-#                networks:
-#                        - servicenet
-#                depends_on:
-#                        - sql-server
-#volumes:
-#        services_sqlvolume:
-#                external: true
+                        - servicenet
+                        # Uncomment below if you want to connect to unit test sql server
+                        # - forgemaster-bot_servicenet
+                depends_on:
+                        - sql-server
+volumes:
+        services_sqlvolume:
+                external: true
 
 networks:
-#        servicenet:
-#                driver: bridge
-        forgemaster-bot_servicenet:
-                external: true
+        servicenet:
+                driver: bridge
+        # Uncomment below if you want to connect to unit test sql server
+        #forgemaster-bot_servicenet:
+        #        external: true
 
