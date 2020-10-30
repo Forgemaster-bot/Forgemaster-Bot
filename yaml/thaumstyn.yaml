@@ -1203,7 +1203,7 @@ Rules:
           prereq:
             has_level: 8
           cost:
-            Red Dust: 400
+            Red Dust: 300
         range_rules:
           #################################################################################################################
           # Define 'Rare' rarity base ranges. Each slot will use this and set their own slot range.
@@ -1214,7 +1214,7 @@ Rules:
             fail range:
               <<: *Ranges_Magic_Item_Base_Fail
               outcomes:
-                - Gold: 400
+                - Gold: 300
             # Rarity range definition: Rare
             rarity range:
               <<: *Ranges_Magic_Item_Base_Rarity
@@ -1542,26 +1542,18 @@ recipes:
           Blue Dust: 250
         outcomes:
           - *Outcomes_Spell_Gems_Level_5
-  Red Thaumstyn:
-  #################################################################################################################
-  # WAND AMMO
-  #################################################################################################################
-    Wand Ammo:
-      - 
-        name: Wand of Fireball Ammo
-        prereq:
-          has_item: Wand of Fireball
-          has_item_quantity_by_keyword:
-            Red Dust: 120
+    #################################################################################################################
+    # MISC
+    #################################################################################################################
+    Misc:
+      -
+        name: BTBB
         cost:
-          Red Dust: 120
-        special:
-          random amount:
-            die: 6
-            mod: 1
+          Blue Dust: 250
         outcomes:
-          - Wand of Fireball Ammo
+          - BTBB
 
+  Red Thaumstyn:
 
 #    Magic Item:
 #      Common:
