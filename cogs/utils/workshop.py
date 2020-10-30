@@ -166,6 +166,7 @@ async def craft_item_selection(menu, choice):
         menu.character.modify_item_amount(choice.Name, quantity)
         StandaloneQueries.update_crafting_value(menu.character.info.character_id, new_limit)
         msg = f"{menu.character.name} successfully crafted {quantity}x**{choice.Name}** for **{total_cost:.2f}gp**!"
+        log.info(f"{msg} Original limit={crafting_limit}; New limit={new_limit};")
         await menu.channel.send(msg)
         await Connections.log_to_discord(menu.ctx, msg)
         Roster.update_character_in_roster(menu.character)
