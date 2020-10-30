@@ -105,7 +105,7 @@ def make_choice_func(skill):
         await menu.next_menu(menu, skill)
     return choice_func
 
-async def ask_for_quantity(ctx: commands.Context, max_num: int) -> int:
+async def ask_for_quantity(ctx: commands.Context, max_num: int, msg: str) -> int:
     channel = await Menu.get_channel(ctx)
 
     def wait_for_integer(message: discord.Message):
@@ -124,8 +124,7 @@ async def ask_for_quantity(ctx: commands.Context, max_num: int) -> int:
             # await message.author.send(f"Must be between 0 and {max_num}, 'stop', or 'exit. Please try again.")
             return False
 
-    await channel.send(f"How many would you like to craft? You may craft up to {max_num}. "
-                           f"[Please input an integer value between 0 and {max_num}, 'stop', or 'exit']")
+    await channel.send(f"{msg} [Please input an integer value between 0 and {max_num}, 'stop', or 'exit']")
     try:
         msg = await ctx.bot.wait_for('message', check=wait_for_integer, timeout=30)
         return int(msg.content)
@@ -143,7 +142,9 @@ async def craft_item_selection(menu, choice):
     # Determine quantity and total cost based on player input
     crafting_limit = StandaloneQueries.fetch_crafting_limit_row(menu.character.id).Crafting_Value
     max_num = math.floor(min(menu.character.get_gold(), crafting_limit) / choice.Value)
-    quantity = await ask_for_quantity(menu.ctx, max_num)
+    msg = f"How many {choice.Name} would you like to craft? Each costs {choice.Value}gp to make. " \
+          f"With your current crafting limit of {crafting_limit}gp you may craft up to {max_num}."
+    quantity = await ask_for_quantity(menu.ctx, max_num, msg)
     total_cost = choice.Value * quantity
 
     log.info(f"craft_item_selection - {menu.character.info.name} - Crafting limit is {max_num}. User chose {quantity}."
