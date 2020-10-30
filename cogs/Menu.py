@@ -475,7 +475,7 @@ class Menu(commands.Cog):
             info_fields = [
                 textmenus.EmbedInfo.Field("Name", self.character.info.name, inline=True),
                 textmenus.EmbedInfo.Field("XP", self.character.get_xp(), inline=True),
-                textmenus.EmbedInfo.Field("Gold", self.character.get_gold(), inline=True)
+                textmenus.EmbedInfo.Field("Gold", f"{self.character.get_gold():.2f}", inline=True)
             ]
             class_fields = [textmenus.EmbedInfo.Field("Class", c, inline=True) for c in self.character.classes.values()]
             list_fields = [
@@ -706,7 +706,7 @@ class Menu(commands.Cog):
             """
             embed_fields = [
                 textmenus.EmbedInfo.Field("Name", self.character.name, inline=True),
-                textmenus.EmbedInfo.Field("Gold", self.character.get_gold(), inline=True),
+                textmenus.EmbedInfo.Field("Gold", f"{self.character.get_gold():.2f}", inline=True),
                 textmenus.EmbedInfo.Field("Inventory", items_str, inline=False)
             ]
             """
