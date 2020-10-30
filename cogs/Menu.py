@@ -976,7 +976,7 @@ class Menu(commands.Cog):
             # check they picked an answer
             try:
                 answer = float(msg.content)
-                if answer < 1: await member.send(f"Please enter a number between 1 and {maximum}")
+                if answer < 0: await member.send(f"Please enter a number between 0 and {maximum}")
                 elif answer <= maximum: return answer
                 else: await member.send(f"Please enter a number between 1 and {maximum}")
             except ValueError:
