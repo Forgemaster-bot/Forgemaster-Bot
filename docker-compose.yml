@@ -30,7 +30,7 @@ services:
                         - sql-server
 volumes:
         services_sqlvolume:
-                external: true
+#                external: true
 
 networks:
         servicenet:
