@@ -124,16 +124,21 @@ class Character:
             CharacterItemFacade.interface.insert(item)
 
     def modify_item_amount(self, name: str, amount):
-        if name == "Gold":
+        if name.lower() == "gold" or name.lower() == "gp":
             self.refresh_info()
-            new_quantity = self.info.gold + amount
-            if new_quantity >= 0:
-                self.info.gold += amount
-                CharacterInfoFacade.interface.update(self.info)
-                return
-            else:
-                raise RuntimeError("modify_item_amount cannot remove gold due to lack of quantity. {} > {}"
-                                   .format(amount, self.info.gold))
+            if self.gold + amount < 0:
+                raise RuntimeError(f"modify_item_amount cannot remove {amount}gp. {self.name} only has {self.gold}gp")
+            self.gold += amount
+            CharacterInfoFacade.interface.update(self.info)
+            return
+
+        if name.lower() == "xp":
+            self.refresh_info()
+            if self.xp + amount < 0:
+                raise RuntimeError(f"modify_item_amount cannot remove {amount} XP. {self.name} only has {self.xp} XP.")
+            self.xp += amount
+            CharacterInfoFacade.interface.update(self.info)
+            return
 
         self.refresh_items()
         if name in self.items:
@@ -411,3 +416,19 @@ class Character:
     @property
     def name(self):
         return self.info.name
+
+    @property
+    def gold(self):
+        return self.info.gold
+
+    @gold.setter
+    def gold(self, value):
+        self.info.gold = value
+
+    @property
+    def xp(self):
+        return self.info.xp
+
+    @xp.setter
+    def xp(self, value):
+        self.info.xp = value
