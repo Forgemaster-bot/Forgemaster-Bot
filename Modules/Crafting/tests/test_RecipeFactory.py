@@ -1,6 +1,7 @@
 import unittest
-from unittest.mock import patch
+import mock
 import asyncio
+import pytest
 
 import Crafting.Crafting
 import Crafting.Utils
@@ -21,19 +22,11 @@ async def mock_send_message(context, message):
 
 
 async def mock_wait_for_reply(context):
+    global replies
     if len(replies):
         return replies.pop()
     else:
         raise ExitException()
-
-def async_test(f):
-    def wrapper(*args, **kwargs):
-        coro = asyncio.coroutine(f)
-        future = coro(*args, **kwargs)
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(future)
-    return wrapper
-
 
 class MockBot:
     def get_channel(self, id):
@@ -82,17 +75,17 @@ def delete_table_rows(table: str):
     run_query_commit(query)
 
 
-class MyTestCase(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        delete_table_rows("Main_Characters")
-        insert_character()
-        character = Character.Character.Character(character_id)
-        character.set_item_amount(name='Red Dust', amount=1000)
+# class MyTestCase(unittest.TestCase):
+#     @classmethod
+def setup_function():
+    delete_table_rows("Main_Characters")
+    insert_character()
+    character = Character.Character.Character(character_id)
+    character.set_item_amount(name='Red Dust', amount=1000)
 
-    @classmethod
-    def tearDownClass(cls):
-        delete_table_rows("Main_Characters")
+    # @classmethod
+def teardown_function():
+    delete_table_rows("Main_Characters")
 
     # @patch('Crafting.Utils.send_message', side_effect=mock_send_message)
     # @patch('Crafting.Utils.wait_for_reply', side_effect=mock_wait_for_reply)
@@ -120,70 +113,58 @@ class MyTestCase(unittest.TestCase):
     #     event_loop.run_until_complete(coro())
     #     event_loop.close()
 
-    @patch('Crafting.Utils.send_message', side_effect=mock_send_message)
-    @patch('Crafting.Utils.wait_for_reply', side_effect=mock_wait_for_reply)
-    @patch('Update_Google_Roster.update_character_in_roster')
-    def test_magic_item_crafting(self, mock_msg, mock_reply, mock_update):
+@pytest.mark.asyncio
+@mock.patch('Crafting.Utils.send_message', side_effect=mock_send_message)
+@mock.patch('Crafting.Utils.wait_for_reply', side_effect=mock_wait_for_reply)
+@mock.patch('Update_Google_Roster.update_character_in_roster')
+async def test_magic_item_crafting(mock_reply, mock_msg, mock_update):
+    global replies
+    global sent_messages
 
-        event_loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(event_loop)
+    exp_recipe_name = "Leather Armor of Gleaming"
+    exp_message = "1 : Leather Armor of Gleaming"
+    replies = ['2', '2', '1', '1', '1', '1', 'Yes']
+    replies.reverse()
+    sent_messages.clear()
 
-        async def run_test():
-            global replies
-            global sent_messages
+    data = Crafting.Parser.parse_file(file_label)['recipes']
+    assert(data is not None)
+    recipe = await Crafting.Utils.ask_user_to_select_recipe(None, data, file_label)
+    assert(recipe.name == exp_recipe_name)
+    sent_messages.clear()
 
-            exp_recipe_name = "Leather Armor of Gleaming"
-            exp_message = "1 : Leather Armor of Gleaming"
-            replies = ['2', '2', '1', '1', '1', 'Yes']
-            replies.reverse()
-            sent_messages.clear()
+    character = Character.Character.Character(character_id)
+    # random_outcome success range
+    with mock.patch('random.randint', return_value=100) as mock_random:
+        exp_message1 = "You rolled '100'."
+        exp_message2 = f"You successfully crafted **1x[{exp_recipe_name}]**"
+        await Crafting.Crafting.craft_recipe(MockContext(), character, recipe)
+        assert(any([True for msg in sent_messages if exp_message1 in msg]))
+        assert (any([True for msg in sent_messages if exp_message2 in msg]))
 
-            data = Crafting.Parser.parse_file(file_label)['recipes']
-            assert(data is not None)
-            recipe = await Crafting.Utils.ask_user_to_select_recipe(None, data, file_label)
-            assert(recipe.name == exp_recipe_name)
-            sent_messages.clear()
+    # random_outcome slot range
+    with mock.patch('random.randint', return_value=70) as mock_random:
+        exp_message1 = "You rolled '70'."
+        exp_message2 = f"You successfully crafted **1x["
 
-            character = Character.Character.Character(character_id)
-            # random_outcome success range
-            with patch('random.randint', return_value=100) as mock_random:
-                exp_message1 = "You rolled '100'."
-                exp_message2 = f"You successfully crafted **1x[{exp_recipe_name}]**"
-                await Crafting.Crafting.craft_recipe(MockContext(), character, recipe)
-                assert(any([True for msg in sent_messages if exp_message1 in msg]))
-                assert (any([True for msg in sent_messages if exp_message2 in msg]))
+        await Crafting.Crafting.craft_recipe(MockContext(), character, recipe)
+        assert (any([True for msg in sent_messages if exp_message1 in msg]))
+        assert (any([True for msg in sent_messages if exp_message2 in msg]))
 
-            # random_outcome slot range
-            with patch('random.randint', return_value=70) as mock_random:
-                exp_message1 = "You rolled '70'."
-                exp_message2 = f"You successfully crafted **1x["
+    # random_outcome rarity range
+    with mock.patch('random.randint', return_value=30) as mock_random:
+        exp_message1 = "You rolled '30'."
+        exp_message2 = f"You successfully crafted **1x["
 
-                await Crafting.Crafting.craft_recipe(MockContext(), character, recipe)
-                assert (any([True for msg in sent_messages if exp_message1 in msg]))
-                assert (any([True for msg in sent_messages if exp_message2 in msg]))
+        await Crafting.Crafting.craft_recipe(MockContext(), character, recipe)
+        assert (any([True for msg in sent_messages if exp_message1 in msg]))
+        assert (any([True for msg in sent_messages if exp_message2 in msg]))
 
-            # random_outcome rarity range
-            with patch('random.randint', return_value=30) as mock_random:
-                exp_message1 = "You rolled '30'."
-                exp_message2 = f"You successfully crafted **1x["
+    # random_outcome failure range
+    with mock.patch('random.randint', return_value=5) as mock_random:
+        exp_message1 = "You rolled '5'."
+        exp_message2 = f"Crafting failed"
 
-                await Crafting.Crafting.craft_recipe(MockContext(), character, recipe)
-                assert (any([True for msg in sent_messages if exp_message1 in msg]))
-                assert (any([True for msg in sent_messages if exp_message2 in msg]))
+        await Crafting.Crafting.craft_recipe(MockContext(), character, recipe)
+        assert (any([True for msg in sent_messages if msg if exp_message1 in msg]))
 
-            # random_outcome failure range
-            with patch('random.randint', return_value=5) as mock_random:
-                exp_message1 = "You rolled '5'."
-                exp_message2 = f"Crafting failed"
-
-                await Crafting.Crafting.craft_recipe(MockContext(), character, recipe)
-                assert (any([True for msg in sent_messages if msg if exp_message1 in msg]))
-
-        # Run the async test
-        coro = asyncio.coroutine(run_test)
-        event_loop.run_until_complete(coro())
-        event_loop.close()
-
-
-if __name__ == '__main__':
-    unittest.main()
