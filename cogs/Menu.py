@@ -695,6 +695,10 @@ class Menu(commands.Cog):
         """
         title = "Market"
 
+        def __init__(self, character: Character, **kwargs):
+            super().__init__(character, **kwargs)
+            self.character.refresh()
+
         def get_initial_message(self):
             return "Welcome to the market."
 
