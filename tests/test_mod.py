@@ -57,7 +57,7 @@ async def test_ticket_error(admin_message):
     gold, xp = character.gold, character.xp
 
     # Run the test
-    await admin_message('.ticket player/Gold:-11,XP:10,Blue Dust:10,Red Dust,Weavers Tools:-1')
+    await admin_message('.ticket player/Gold:10,XP:10,Blue Dust:10,Red Dust,Weavers Tools:-99')
 
     # Lookup the player we were adding an exit ticket for
     character = Character(test_data.character_info_lookup['player']['character_id'])
@@ -84,7 +84,7 @@ async def test_ticket_success(mock_wait_for_reply, admin_message):
     gold, xp = character.gold+10, character.xp+10
 
     # Run the test
-    await admin_message('.ticket player/Gold:10,XP:10,Blue Dust:10,Red Dust,Weavers Tools:-1')
+    await admin_message('.ticket player/Gold:10, XP:10, Blue Dust:10, Red Dust, Weavers Tools:-1')
     # helper.print_current_queue()
 
     # Lookup the player we were adding an exit ticket for
