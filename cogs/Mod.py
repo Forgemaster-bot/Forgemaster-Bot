@@ -2,6 +2,7 @@ from datetime import datetime
 from operator import itemgetter
 from typing import List, Tuple
 import logging
+from textwrap import dedent
 
 from discord.ext import commands
 import Connections
@@ -58,7 +59,13 @@ class Mod(commands.Cog):
             items[name] = quantity
         return items
 
-    @commands.command(name='ticket', help='Exit ticket command.')
+    @commands.command(name='ticket', brief='Exit ticket command.',
+                      help=dedent("""\
+                      Command which will handle adding gold, xp, and items to a character after a session.
+                      Usage: .ticket *<character_name>*/*<item>*:*<amount>*,*<item>*:*<amount>*...
+                      Example: `.ticket Name/Gold:-100, XP:300, Blue Dust:10 
+                      """),
+                      )
     @commands.has_any_role('DMs', 'Mods', 'Admins')
     async def ticket(self, ctx, *, args):
         name, _, item_string = args.partition('/')
