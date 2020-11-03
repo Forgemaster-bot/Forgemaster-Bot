@@ -10,6 +10,7 @@ import Quick_Python
 from Character.CharacterInfoFacade import interface as character_info_interface
 from Character.Character import Character
 import cogs.utils.menu as menu_helper
+import Update_Google_Roster as Roster
 
 log = logging.getLogger(__name__)
 MAX_MESSAGE_SIZE = 2000
@@ -114,9 +115,10 @@ class Mod(commands.Cog):
         for name, quantity in items.items():
             character.modify_item_amount(name, quantity)
 
-        # Log changes
+        # Log changes to roster, info channel, and user
         msg = f"**'{ctx.author}'** did the following item changes to '{character.name}':\n{input_choices}"
         await Connections.log_to_discord(self, msg)
+        Roster.update_character_in_roster(character)
         await ctx.send(f"Exit ticket logged successfully for '{character.name}'")
 
 
