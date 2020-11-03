@@ -26,7 +26,7 @@ async def testbot(request):
     #     testbot.add_cog(cog)
     cog = testbot.get_cog('Auction')
     cog.update_auctions.cancel()
-    dpytest.configure(testbot)
+    dpytest.configure(testbot, num_members=3)
     config = dpytest.get_config()
 
     yield testbot

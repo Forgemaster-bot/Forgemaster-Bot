@@ -7,6 +7,7 @@ import discord.ext.test as dpytest
 # Our modules
 import tests.test_data.test_menu_data as test_data
 from tests import helper
+from Quick_Python import run_query_commit
 
 pytestmark = pytest.mark.usefixtures("testbot")
 
@@ -20,6 +21,10 @@ log_embeds = True
 Setup logger
 """
 log = logging.getLogger(__name__)
+
+def setup_function():
+    query = "DELETE FROM [Main_Crafting]"
+    run_query_commit(query)
 
 @pytest.mark.asyncio
 async def test_help(player_message):

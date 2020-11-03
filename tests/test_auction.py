@@ -34,7 +34,9 @@ auction_lookup = {
 
 def setup_function():
     log.debug(f"Setting up {__name__} ...")
+    auction.AuctionTable.setup()
     auction.AuctionTable.delete_all()
+    auction.BidTable.setup()
     auction.BidTable.delete_all()
 
 
