@@ -276,11 +276,12 @@ class Character:
         else:
             # get_dnd_class
             is_first_level = True
+            class_numbers = [c.number for c in self.classes.values()]
             class_obj = CharacterClass()
             class_obj.character_id = self.info.character_id
             class_obj.name = class_name
             class_obj.level = 1
-            class_obj.number = max([c.number for c in self.classes.values()]) + 1
+            class_obj.number = (max(class_numbers) if class_numbers else 0) + 1
             class_obj.can_replace_spells = CharacterClass.get_dnd_class(class_name).are_spells_memorized()
             class_obj.free_book_spells = 0
 
