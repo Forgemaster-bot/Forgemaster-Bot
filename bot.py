@@ -1,5 +1,8 @@
 from discord.ext import commands
 import discord
+intents = discord.Intents.default()
+intents.members = True
+
 # from cogs.utils import context
 import sys
 import datetime
@@ -22,7 +25,7 @@ class TestBot(commands.Bot):
 
     def __init__(self):
         super().__init__(command_prefix=config.command_prefix,
-                         description=config.description)
+                         description=config.description, intents=intents)
 
         """
         Set self attributes 
