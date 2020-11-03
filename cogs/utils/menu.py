@@ -18,7 +18,7 @@ async def get_channel(ctx, user=None, should_dm=True):
     return ctx.channel if not should_dm else await get_dm_channel(user or ctx.author)
 
 async def start_menu(ctx, menu, should_dm=True, channel=None, should_raise_stop=False, author=None, **kwargs):
-    m = menu(**kwargs)
+    m = menu(**kwargs, should_dm=should_dm)
     # channel = channel if channel else ctx.author.dm_channel
     channel = channel if channel else await get_channel(ctx, ctx.author, should_dm=should_dm)
     await m.start(ctx, wait=True, channel=channel, author=author)
@@ -46,6 +46,8 @@ class BaseMenu(textmenus.Menu):
     def __init__(self, title=None, embed_info=None, stop_on_first=True, **kwargs):
         # Handle creating embed info if one wasn't passed
         embed_info = embed_info if embed_info else self.create_embed_info()
+        if 'should_dm' in kwargs:
+            self.should_dm = kwargs.pop('should_dm')
         super().__init__(embed_info=embed_info, stop_on_first=True, **kwargs)
         self.single_time = stop_on_first
         self.timed_out = False
@@ -108,12 +110,12 @@ class ConfirmMenu(BaseMenu):
         return self.message
 
     async def on_confirm(self, payload):
-        channel = await get_channel(self.ctx, user=payload.author)
+        channel = await get_channel(self.ctx, user=payload.author, should_dm=self.should_dm)
         await channel.send("Confirming...")
         self.confirm = True
 
     async def on_reject(self, payload):
-        channel = await get_channel(self.ctx, user=payload.author)
+        channel = await get_channel(self.ctx, user=payload.author, should_dm=self.should_dm)
         await channel.send("Rejecting...")
         self.confirm = False
 
