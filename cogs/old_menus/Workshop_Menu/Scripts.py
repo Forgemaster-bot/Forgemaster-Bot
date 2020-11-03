@@ -7,6 +7,7 @@ import Quick_Python
 import Connections
 import Update_Google_Roster
 import random
+import config
 
 
 def menu(character_id: str):
@@ -214,13 +215,14 @@ async def create_scroll_confirm(self, command, discord_id, character_id, spell_l
     # update reagent
     reagent_cost = SQL_Lookup.spell_consumable_cost(spell_name)
     if reagent_cost > 0:
-        reagent_total = SQL_Lookup.character_item_quantity(character_id, 'Universal Reagent')
+        reagent_total = SQL_Lookup.character_item_quantity(character_id, config.universal_reagent)
         if reagent_cost > reagent_total:
-            msg = "You do not have enough Universal Reagent for the consumable cost of the scroll"
+            msg = f"You do not currently meet the consumable cost of this scroll. You currently have {reagent_total}" \
+                  f" of the needed {reagent_cost} {config.universal_reagent}."
             await command.message.author.send(msg)
             return "stop"
         else:
-            SQL_Update.character_item_quantity(character_id, 'Universal Reagent', int(reagent_cost)*-1)
+            SQL_Update.character_item_quantity(character_id, config.universal_reagent, int(reagent_cost)*-1)
     # update gold
     gold_cost = scroll_gold_cost(spell_level)
     SQL_Update.character_gold(character_id, gold_cost*-1)
@@ -255,7 +257,7 @@ def get_item_quantity(character_id: str, item_name: str):
 
 
 def reagent_quantity(character_id: str):
-    item = 'Universal Reagent'
+    item = config.universal_reagent
     return get_item_quantity(character_id, item)
 
 
