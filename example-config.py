@@ -6,6 +6,8 @@ on_ready_message = 'Working the anvil...'
 additional_character_level = 8
 additional_character_num = 2
 
+universal_reagent = 'Blue Dust'
+
 available_classes = [
     "Barbarian",
     "Bard",
