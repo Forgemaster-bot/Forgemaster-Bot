@@ -56,7 +56,7 @@ class Mod(commands.Cog):
             except ValueError:
                 log.info(f"Failed to parse quantity for item '{item}'")
                 raise ValueError(f"Failed to parse quantity for item '{item}'. Please verify and try again.")
-            items[name] = quantity
+            items[name.strip()] = quantity
         return items
 
     @commands.command(name='ticket', brief='Exit ticket command.',
@@ -91,19 +91,20 @@ class Mod(commands.Cog):
         # TODO: Remove if we figure out a way to handle cursors and can rollback changes.
         for name, quantity in items.items():
             if quantity < 0:
-                error_string = f"ERROR: Cannot remove **{quantity}x{name}** as '{character.name}' has"
+                quantity = quantity * -1
+                error_string = f"ERROR: Cannot remove **{quantity} x {name}** as '{character.name}'"
                 if not character.has_item(name):
-                    await ctx.send(f"{error_string} none.")
+                    await ctx.send(f"{error_string} has none.")
                     return
                 if not character.has_item_quantity(name, quantity):
-                    await ctx.send(f"{error_string} only {character.items[name].quantity}")
+                    await ctx.send(f"{error_string} only has ***{character.items[name].quantity}*** x **{name}**")
                     return
 
         # Ask user to confirm the choices
-        input_choices = "\n".join([f"{quantity}x{name}" for name, quantity in items.items()])
+        input_choices = "\n".join([f"\t**{quantity}** x **{name}**" for name, quantity in items.items()])
         msg = f"Would you like to confirm the following changes for '{character.name}'?\n{input_choices}"
 
-        m = await menu_helper.start_menu(ctx, menu_helper.ConfirmMenu, message=msg)
+        m = await menu_helper.start_menu(ctx, menu_helper.ConfirmMenu, message=msg, should_dm=False)
         if not m.confirm:
             log.info(f"'{ctx.author}' rejected the following changes: {items}")
             await ctx.send(f"Cancelled making exit ticket for '{character.name}'")
@@ -117,10 +118,6 @@ class Mod(commands.Cog):
         msg = f"**'{ctx.author}'** did the following item changes to '{character.name}':\n{input_choices}"
         await Connections.log_to_discord(self, msg)
         await ctx.send(f"Exit ticket logged successfully for '{character.name}'")
-
-
-
-
 
 
 def setup(bot):
