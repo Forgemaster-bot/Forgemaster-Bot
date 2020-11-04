@@ -87,6 +87,9 @@ class Mod(commands.Cog):
         except ValueError as err:
             await ctx.send(f"ERROR: {str(err)}")
             return
+        except Exception as err:
+            await ctx.send(f"ERROR: Unknown exception thrown - {str(err)}")
+            return
 
         # Check that user has enough for any negative values
         # TODO: Remove if we figure out a way to handle cursors and can rollback changes.
