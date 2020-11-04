@@ -46,8 +46,7 @@ class BaseMenu(textmenus.Menu):
     def __init__(self, title=None, embed_info=None, stop_on_first=True, **kwargs):
         # Handle creating embed info if one wasn't passed
         embed_info = embed_info if embed_info else self.create_embed_info()
-        if 'should_dm' in kwargs:
-            self.should_dm = kwargs.pop('should_dm')
+        self.should_dm = kwargs.pop('should_dm') if 'should_dm' in kwargs else False
         super().__init__(embed_info=embed_info, stop_on_first=True, **kwargs)
         self.single_time = stop_on_first
         self.timed_out = False

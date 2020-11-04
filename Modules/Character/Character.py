@@ -76,7 +76,8 @@ class Character:
         # return True if (name in self.items) and (self.items[name].quantity > 0) else False
 
     def has_item_quantity(self, name: str, quantity: int):
-        return True if (name in self.items) and (self.items[name].quantity >= quantity) else False
+        return any([key for key, value in self.items.items()
+                    if key.lower() == name.lower() and value.quantity >= quantity])
 
     def has_level(self, level: int):
         return True if (self.get_character_level() >= level) else False
@@ -141,7 +142,10 @@ class Character:
             return
 
         self.refresh_items()
-        if name in self.items:
+        matching_items = [key for key, value in self.items.items() if key.lower() == name.lower()]
+        if any(matching_items):
+            # update the name to match case of the first matching item
+            name = matching_items[0]
             # update existing quantity if item already exists
             item = self.items[name]
             new_quantity = item.quantity + amount
