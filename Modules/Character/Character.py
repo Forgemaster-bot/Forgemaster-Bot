@@ -69,11 +69,7 @@ class Character:
         return any(s for s in self.skills if s.name.lower() == name.lower() and s.proficiency >= 0)
 
     def has_item(self, name: str):
-        # if lower:
-        if any([key for key, value in self.items.items() if key.lower() == name.lower() and value.quantity > 0]):
-            return True
-        return False
-        # return True if (name in self.items) and (self.items[name].quantity > 0) else False
+        return any([key for key, value in self.items.items() if key.lower() == name.lower() and value.quantity > 0])
 
     def has_item_quantity(self, name: str, quantity: int):
         return any([key for key, value in self.items.items()
@@ -84,13 +80,26 @@ class Character:
 
     def has_item_quantity_by_keyword(self, **kwargs):
         # Check gold
-        if "Gold" in kwargs:
+        gold_keys = [k for k in kwargs if k.lower() == 'gold']
+        xp_keys = [k for k in kwargs if k.lower() == 'xp']
+        # Refresh info if we have any gold or xp keywords
+        if any(gold_keys) or any(xp_keys):
             self.refresh_info()
-            if self.get_gold() < kwargs.pop("Gold"):
+
+        # Check the gold quantity
+        if any(gold_keys):
+            if self.gold < kwargs.pop(gold_keys[0]):
                 return False
+
+        # Check the xp quantity
+        if any(xp_keys):
+            if self.xp < kwargs.pop(xp_keys[0]):
+                return False
+
         # Check remaining items
         self.refresh_items()
-        matches = {k: v for k, v in kwargs.items() if (k in self.items) and (self.items[k].quantity >= v)}
+        low_items = {k.lower(): v for k, v in self.items.items()}
+        matches = {k: v for k, v in kwargs.items() if (k.lower() in low_items) and (low_items[k.lower()].quantity >= v)}
         return len(kwargs) == len(matches)
 
     def get_character_level(self):
