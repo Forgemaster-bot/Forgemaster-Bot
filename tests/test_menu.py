@@ -93,7 +93,7 @@ async def test_free_profession(mock_wait_for_reply, player_message):
     # Run the test
     await player_message('.menu')
 
-    # Remove embeds and messages 1 through 4. 1=Main Menu; 2=Character Sheet; 3=Selection; 4=Confirm; 5=Confirm Message
+    # Remove embeds and messages 1 through 5. 1=Main Menu; 2=Character Sheet; 3=Selection; 4=Confirm; 5=Confirm Message
     for i in range(0, 5):
         dpytest.sent_queue.get_nowait()
 

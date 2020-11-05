@@ -536,6 +536,7 @@ class Auction(commands.Cog):
         embed.add_field(name="Item For Auction:", value=auction.item)
         duration = str(auction.end - get_current_time().replace(tzinfo=None)) if auction.end else 'Manually Controlled'
         embed.add_field(name="Auction Duration:", value=duration)
+        embed.add_field(name="Number of Bidders:", value=f"{len(BidTable.get_auction_bids(auction.auction_id))}")
         log.info(f"Making auction embed for {auction.item} - {duration} - {auction.message_id}")
         return embed
 

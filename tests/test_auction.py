@@ -1,14 +1,15 @@
 import discord
 import logging
 import pytest
-import difflib
-import pprint
+import mock
 from collections import deque
+
 import discord.ext.test as dpytest
 import datetime
 
 # Our modules
 import tests.test_data.test_menu_data as test_data
+import tests.helper as helper
 from cogs import auction
 from textwrap import dedent
 from tests import helper
@@ -64,8 +65,17 @@ async def test_auction_bad_permissions(player_message):
         await player_message('.auction')
 
 
+@mock.patch('Crafting.Utils.wait_for_reply')
 @pytest.mark.asyncio
-async def test_auction_start(monkeypatch, admin_message):
+async def test_auction_start(mock_wait_for_reply, monkeypatch, admin_message, testbot):
+    # Define side effects for wait_for_reply to not make a new auction
+    replies = deque(['2', '1', '2'])
+    mock_wait_for_reply.side_effect = helper.make_side_effect_from_deque(replies)
+    # Define side effects for datetime.datetime.now
+    class MockDateTime(datetime.datetime): pass
+    setattr(MockDateTime, 'now', classmethod(helper.make_side_effect_datetime_now(2020, 1, 1)))
+    monkeypatch.setattr(datetime, 'datetime', MockDateTime)
+
     # Define expected results
     item = "test123"
     time = "3 days"
@@ -76,19 +86,61 @@ async def test_auction_start(monkeypatch, admin_message):
                   'After the duration has expired, the winner will be announced. '
     fields = [
         {'inline': True, 'name': 'Item For Auction:', 'value': f"{item}"},
-        {'inline': True, 'name': 'Auction Duration:', 'value': f"{time}, 0:00:00"}
+        {'inline': True, 'name': 'Auction Duration:', 'value': f"{time}, 0:00:00"},
+        {'inline': True, 'name': 'Number of Bidders:', 'value': '0'}
     ]
     exp_embed = make_auction_embed(title, description, fields)
-    # Define side effects
-    class MockDateTime(datetime.datetime): pass
-    setattr(MockDateTime, 'now', classmethod(helper.make_side_effect_datetime_now(2020, 1, 1)))
-    monkeypatch.setattr(datetime, 'datetime', MockDateTime)
 
     # Run test
     await dpytest.empty_queue()
     await admin_message(f".auction start {item} {time}")
     # Assert results
     dpytest.verify_embed(exp_embed, allow_text=True, full=True)
+    await dpytest.empty_queue()
+
+    """ 
+    Check that number of bidders updates with new bids
+    """
+    # Get newly started auction
+    auctions = auction.AuctionTable.select_open(item)
+    assert auctions
+    new_auction = auctions[0]
+
+    # Delete old message
+    channel = testbot.guilds[0].channels[0]
+    message = await channel.fetch_message(new_auction.message_id)
+    await message.delete()
+
+
+    # Insert bid
+    row = auction.BidTable.Row(**dict(auction_id=new_auction.auction_id,
+                                      character_id=test_data.character_info_lookup['player']['character_id'],
+                                      time=MockDateTime.now(),
+                                      bid=10))
+    auction.BidTable.insert_row(row)
+
+
+    # Update the expected embed fields
+    fields = [
+        {'inline': True, 'name': 'Item For Auction:', 'value': f"{item}"},
+        {'inline': True, 'name': 'Auction Duration:', 'value': f"{time}, 0:00:00"},
+        {'inline': True, 'name': 'Number of Bidders:', 'value': '1'}
+    ]
+    exp_embed = make_auction_embed(title, description, fields)
+
+    # Run the tested function a second time to make a new embed message
+    await admin_message(f".auction start {item} {time}")
+
+    # Clear messages from the bot asking if we should start a new auction
+    # 1='open auction found' 2='options' 3='pick auction' 4='options'
+    for i in range(0, 4):
+        dpytest.sent_queue.get_nowait()
+
+    # Assert results
+    dpytest.verify_embed(exp_embed, allow_text=True, full=True)
+
+
+
 
 @pytest.mark.asyncio
 async def test_help_nonplayer(nonplayer_message):
