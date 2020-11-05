@@ -19,6 +19,7 @@ class Mod(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.dms_logging_tickets = {}
 
     @commands.command(name='history_like', help='Args = string to search for')
     @commands.has_any_role('DMs', 'Mods', 'Forge Smiths')
@@ -69,60 +70,98 @@ class Mod(commands.Cog):
                       )
     @commands.has_any_role('DMs', 'Mods', 'Admins')
     async def ticket(self, ctx, *, args):
-        name, _, item_string = args.partition('/')
-        characters = character_info_interface.fetch_by_character_name(name)
-
-        # Check for valid character names
-        if len(characters) != 1:
-            await ctx.send(f"ERROR: {'Multiple' if len(characters) else 'No'} character names found matching '{name}'")
-            return
-
-        # Select first *and only* character in the list
-        character = Character(characters[0].character_id)
-        log.info(f"'{ctx.author}' is logging exit ticket for '{character.name}'")
-
-        # Parse item_string into a dictionary of name:quantity pairs
+        dm_opened_menu = False
         try:
-            items = self.parse_ticket_items(item_string)
-        except ValueError as err:
-            await ctx.send(f"ERROR: {str(err)}")
-            return
-        except Exception as err:
-            await ctx.send(f"ERROR: Unknown exception thrown - {str(err)}")
-            return
+            """
+            Check if a DM is currently trying to submit a ticket
+            """
+            if ctx.message.author.id in self.dms_logging_tickets:
+                log.error(f"ticket - '{ctx.author}' is already logging a ticket. Cancelling.")
+                channel = await menu_helper.get_channel(ctx)
+                await channel.send("You are already logging a ticket. Cancelling.")
+                return
+            else:
+                dm_opened_menu = True
+                self.dms_logging_tickets[ctx.message.author.id] = None
+                log.info(f"ticket - '{ctx.author}' inserted into dms_logging_tickets")
 
-        # Check that user has enough for any negative values
-        # TODO: Remove if we figure out a way to handle cursors and can rollback changes.
-        for name, quantity in items.items():
-            if quantity < 0:
+            name, _, item_string = args.partition('/')
+            characters = character_info_interface.fetch_by_character_name(name)
+
+            """
+            Handle logging a ticket
+            """
+            # Check for valid character names
+            if len(characters) != 1:
+                log.error(f"ticket - Found multiple characters for name '{name}'")
+                await ctx.send(f"ERROR: {'Multiple' if len(characters) else 'No'} characters found matching '{name}'")
+                return
+
+            # Select first *and only* character in the list
+            character = Character(characters[0].character_id)
+            log.info(f"ticket - '{ctx.author}' is logging exit ticket for '{character.name}'")
+
+            # Parse item_string into a dictionary of name:quantity pairs
+            try:
+                items = self.parse_ticket_items(item_string)
+            except ValueError as err:
+                await ctx.send(f"ERROR: {str(err)}")
+                return
+            except Exception as err:
+                await ctx.send(f"ERROR: Unknown exception thrown - {str(err)}")
+                return
+
+            # Check that user has enough for any negative values
+            # TODO: Remove if we figure out a way to handle cursors and can rollback changes.
+            for name, quantity in items.items():
+                # Continue if value is positive
+                if quantity >= 0:
+                    continue
+
+                # Handle checking for a negative quantity
                 quantity = quantity * -1
                 error_string = f"ERROR: Cannot remove **{quantity} x {name}** as '{character.name}'"
-                if not character.has_item(name):
-                    await ctx.send(f"{error_string} has none.")
-                    return
-                if not character.has_item_quantity(name, quantity):
-                    await ctx.send(f"{error_string} only has ***{character.items[name].quantity}*** x **{name}**")
-                    return
+                # Handle gold and xp different since they aren't 'items'
+                if name.lower() == 'gold' or name.lower() == 'xp':
+                    if not character.has_item_quantity_by_keyword(**{name: quantity}):
+                        amount = character.gold if name.lower() == 'gold' else character.xp
+                        await ctx.send(f"{error_string} only has ***{amount}*** x **{name}**")
+                        return
+                else:
+                    if not character.has_item(name):
+                        await ctx.send(f"{error_string} has none.")
+                        return
+                    if not character.has_item_quantity(name, quantity):
+                        await ctx.send(f"{error_string} only has ***{character.items[name].quantity}*** x **{name}**")
+                        return
 
-        # Ask user to confirm the choices
-        input_choices = "\n".join([f"\t**{quantity}** x **{name}**" for name, quantity in items.items()])
-        msg = f"Would you like to confirm the following changes for '{character.name}'?\n{input_choices}"
+            # Ask user to confirm the choices
+            input_choices = "\n".join([f"\t**{quantity}** x **{name}**" for name, quantity in items.items()])
+            msg = f"Would you like to confirm the following changes for '{character.name}'?\n{input_choices}"
 
-        m = await menu_helper.start_menu(ctx, menu_helper.ConfirmMenu, message=msg, should_dm=False)
-        if not m.confirm:
-            log.info(f"'{ctx.author}' rejected the following changes: {items}")
-            await ctx.send(f"Cancelled making exit ticket for '{character.name}'")
-            return
+            m = await menu_helper.start_menu(ctx, menu_helper.ConfirmMenu, message=msg, should_dm=False)
+            if not m.confirm:
+                log.info(f"ticket - '{ctx.author}' rejected the following changes: {items}")
+                await ctx.send(f"Cancelled making exit ticket for '{character.name}'")
+                return
 
-        # Perform item changes
-        for name, quantity in items.items():
-            character.modify_item_amount(name, quantity)
+            # Perform item changes
+            for name, quantity in items.items():
+                character.modify_item_amount(name, quantity)
 
-        # Log changes to roster, info channel, and user
-        msg = f"**'{ctx.author}'** did the following item changes to '{character.name}':\n{input_choices}"
-        await Connections.log_to_discord(self, msg)
-        Roster.update_character_in_roster(character)
-        await ctx.send(f"Exit ticket logged successfully for '{character.name}'")
+            # Log changes to roster, info channel, and user
+            msg = f"**'{ctx.author}'** did the following item changes to '{character.name}':\n{input_choices}"
+            await Connections.log_to_discord(self, msg)
+            Roster.update_character_in_roster(character)
+            await ctx.send(f"Exit ticket logged successfully for '{character.name}'")
+
+
+        finally:
+            """
+            Handle removing dm from list if they opened it
+            """
+            if dm_opened_menu:
+                self.dms_logging_tickets.pop(ctx.message.author.id)
 
 
 def setup(bot):
