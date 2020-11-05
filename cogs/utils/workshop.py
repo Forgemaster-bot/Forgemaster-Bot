@@ -140,10 +140,12 @@ async def craft_item_selection(menu, choice):
     choice.Value = choice.Value / 2  # Modify value to be half its value for the crafting cost
 
     # Determine quantity and total cost based on player input
-    crafting_limit = StandaloneQueries.fetch_crafting_limit_row(menu.character.id).Crafting_Value
-    max_num = math.floor(min(menu.character.get_gold(), crafting_limit) / choice.Value)
+    crafting_limit_object = StandaloneQueries.fetch_crafting_limit_row(menu.character.id)
+    crafting_value = crafting_limit_object.Crafting_Value
+    labor = StandaloneQueries.calculate_crafting_limit(crafting_limit_object, menu.character.gold)
+    max_num = math.floor(labor / choice.Value)
     msg = f"How many {choice.Name} would you like to craft? Each costs {choice.Value}gp to make. " \
-          f"With your current crafting limit of {crafting_limit}gp you may craft up to {max_num}."
+          f"With your current crafting limit of {labor}gp you may craft up to {max_num}."
     quantity = await ask_for_quantity(menu.ctx, max_num, msg)
     total_cost = choice.Value * quantity
 
@@ -157,7 +159,7 @@ async def craft_item_selection(menu, choice):
         return
 
     # Query user and update limit, gold, and items if sele
-    new_limit = 0 if total_cost >= crafting_limit else crafting_limit - total_cost
+    new_limit = 0 if total_cost >= crafting_value else crafting_value - total_cost
     message = f"Would you like to craft **{quantity}x[{choice.Name}]** for a total of **{choice.Value} gp**?\n" \
               f"Your new crafting limit for the week will be: {new_limit}"
     m = Menu.ConfirmMenu(message)
@@ -167,7 +169,7 @@ async def craft_item_selection(menu, choice):
         menu.character.modify_item_amount(choice.Name, quantity)
         StandaloneQueries.update_crafting_value(menu.character.info.character_id, new_limit)
         msg = f"{menu.character.name} successfully crafted {quantity}x**{choice.Name}** for **{total_cost:.2f}gp**!"
-        log.info(f"{msg} Original limit={crafting_limit}; New limit={new_limit};")
+        log.info(f"{msg} Original limit={crafting_value}; New limit={new_limit};")
         await menu.channel.send(msg)
         await Connections.log_to_discord(menu.ctx, msg)
         Roster.update_character_in_roster(menu.character)

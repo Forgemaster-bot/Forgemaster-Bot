@@ -460,7 +460,6 @@ class Menu(commands.Cog):
 
         def __init__(self, character: Character, **kwargs):
             super().__init__(character, **kwargs)
-            self.character.refresh()
             self.spellcaster_classes = ClassRequirements.all_spellcaster_classes(self.character)
             self.classes_with_spells = [c for c in self.spellcaster_classes if c.can_learn_spell()]
 
@@ -469,6 +468,7 @@ class Menu(commands.Cog):
                    f"This menu displays a summary of info for your character and allows you to manage your character."
 
         def update_embed(self):
+            self.character.refresh()
             feats = self.character.feat_list_as_str()
             skills = self.character.skills_list_as_str()
             items = self.character.item_list_as_str().replace('*', '')
@@ -608,6 +608,7 @@ class Menu(commands.Cog):
             """)
 
         def update_embed(self):
+            self.character.refresh()
             jobs = [skill for skill in self.character.skills if skill.name in skill_info_interface.fetch_jobs()]
             jobs_str = "None" if not jobs else ", ".join(job.name for job in jobs)
             crafting_limit_row = StandaloneQueries.fetch_crafting_limit_row(self.character.id)
@@ -631,7 +632,6 @@ class Menu(commands.Cog):
 
         def __init__(self, character: Character, **kwargs):
             super().__init__(character, **kwargs)
-            self.character.refresh()
             StandaloneQueries.fetch_crafting_limit_row(self.character.id)
 
         def _skip_crafting(self):
@@ -697,12 +697,12 @@ class Menu(commands.Cog):
 
         def __init__(self, character: Character, **kwargs):
             super().__init__(character, **kwargs)
-            self.character.refresh()
 
         def get_initial_message(self):
             return "Welcome to the market."
 
         def update_embed(self):
+            self.character.refresh()
             item_rows = StandaloneQueries.get_items_without_listed_auctions(self.character.id)
             items_str = ", ".join(f"{item.Quantity}x[**{item.Item}**]" for item in item_rows) if item_rows else "None"
             """
