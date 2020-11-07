@@ -94,7 +94,7 @@ class PlayerCog(commands.Cog):
                 await command.message.author.send("Menu closed")
 
     @staticmethod
-    async def send_rolls(ctx):
+    async def send_rolls(ctx, content=None):
         rolls = SQL_Lookup.player_stat_roll(ctx.message.author.id)
         if not rolls:
             await ctx.send("Error: Player has no rolls stored.")
@@ -113,29 +113,38 @@ class PlayerCog(commands.Cog):
             value = ", ".join(f"**{stat}**: {value}" for stat, value in zip(stats, previous_rolls))
             inline = False
             embed.add_field(name=name, value=value, inline=inline)
-        await ctx.send(embed=embed)
+        await ctx.send(content=content, embed=embed)
 
     @commands.command(name='randchar', help='Roll character stats', aliases=['rollstats'])
-    async def dice_roll(self, command):
-        discord_id = str(command.message.author.id)
-        discord_name = str(command.message.author.display_name)
+    async def dice_roll(self, ctx):
+        discord_id = str(ctx.message.author.id)
+        discord_name = str(ctx.message.author.display_name)
+        
         if not SQL_Check.player_exists(discord_id):
             sync = Scripts.sync_player(discord_id, discord_name)
             if not sync[0]:
-                await command.send(sync)
-        character_limit = get_character_limit(command)
+                await ctx.send(sync)
+
+        character_limit = get_character_limit(ctx)
         characters_total = SQL_Lookup.character_total(discord_id)
         roll_total = SQL_Lookup.character_roll_total(discord_id)
-        if characters_total < character_limit:
-            if roll_total < character_limit:
-                Connections.sql_log_command(command)
-                response = Scripts.rand_char(discord_id)
-                await command.send(embed=response)
-            else:
-                await self.send_rolls(command)
+        if characters_total >= character_limit:
+            # At character limit, so send current list of characters
+            await self.send_rolls(ctx, f"You have reached your current {character_limit} character limit.")
+            return
 
-        else:
-            await self.send_rolls(command)
+        roll_limit = 1
+        current_rolls = roll_total - characters_total
+        if current_rolls >= roll_limit:
+            # At roll limit, send both characters and unused rolls
+            await self.send_rolls(ctx, "You already have an unused roll. Here are your current and past rolls.")
+            return
+
+        # Perform the roll, update database, and send results to the user.
+        Connections.sql_log_command(ctx)
+        response = Scripts.rand_char(discord_id)
+        await ctx.send("I have rolled up random stats for you to make a character with.", embed=response)
+
 
     # Menu commands
     async def character_choice(self, command, discord_id):
