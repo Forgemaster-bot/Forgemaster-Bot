@@ -182,9 +182,9 @@ class Mod_Commands(commands.Cog):
                     break
 
     @commands.command(name='SyncPlayers', help='updates database with all user Id and names')
-    @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
+    @commands.has_any_role('DMs', 'Mods', 'Forge Smiths')
     async def sync_players(self, command):
-        response = Scripts.sync_players_execute(command)
+        response = await Scripts.sync_players_execute(command)
         await command.send(response)
 
     @commands.command(name='RollCheck', help='[Discord Name]')
@@ -219,7 +219,7 @@ class Mod_Commands(commands.Cog):
         return reply
 
     @commands.command(name='character', help="Prints character info for character name passed. Args: [Character Name]")
-    @commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
+    #@commands.check_any(commands.has_role('DMs'), commands.has_role('Mods'))
     async def character_id(self, ctx, *, arg):
         info_list = CharacterInfoFacade.interface.fetch_by_character_name(arg)
         for info in info_list:

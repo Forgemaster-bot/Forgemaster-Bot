@@ -64,10 +64,10 @@ def create_character_execute(command: str):
     return "{} your character {} has been created".format(user_ping, character_name)
 
 
-def sync_players_execute(command):
+async def sync_players_execute(command):
     new_players = 0
     update_player = 0
-    for member in command.guild.members:
+    async for member in command.guild.fetch_members():
         discord_name = member.display_name
         discord_id = str(member.id)
         result = Quick_Python.sync_player(discord_id, discord_name)

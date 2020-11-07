@@ -6,7 +6,7 @@ import Update_Google_Roster as Roster
 from Character.Character import Character
 from DM_Menu import Scripts
 from DM_Menu import SQL_Lookup
-
+import time
 
 class DMCog(commands.Cog):
     def __init__(self, bot):
@@ -98,6 +98,7 @@ class DMCog(commands.Cog):
         for character_id in id_list:
             character = Character(character_id)
             Roster.update_character_in_roster(character)
+            time.sleep(5)
         await ctx.send("Done!")
 
     # Yes/No response checker

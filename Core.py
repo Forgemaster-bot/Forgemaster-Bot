@@ -5,6 +5,10 @@ import uvloop
 import contextlib
 import logging
 
+import discord
+intents = discord.Intents.default()
+intents.members = True
+
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
