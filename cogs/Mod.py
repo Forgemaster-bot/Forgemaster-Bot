@@ -8,6 +8,7 @@ from discord.ext import commands
 import Connections
 import Quick_Python
 from Character.CharacterInfoFacade import interface as character_info_interface
+from Character.LinkClassSpellFacade import interface as link_class_spell_interface
 from Character.Character import Character
 import cogs.utils.menu as menu_helper
 import Update_Google_Roster as Roster
@@ -47,6 +48,64 @@ class Mod(commands.Cog):
 
         if len(message): await ctx.send(message) #  Handle sending left over items
         await ctx.send(f"Completed.")
+
+
+    @commands.command(name='add_spell', help='.add_spell <character_name>, <origin>, <spell>')
+    @commands.has_any_role('DMs', 'Mods', 'Forge Smiths')
+    def add_spell(self, ctx, *, args):
+        # Parse arguments passed and handle error cases
+        try:
+            name, dndclass, spell = args.split(',')
+        except ValueError as err:
+            log.error(f"add_spell - '{ctx.author}' - Invalid argument format passed for args '{args}'")
+            await ctx.send(f"ERROR: Invalid argument format passed. Should be: <character_name>, <origin>, <spell>")
+            return
+        except Exception as err:
+            log.error(f"add_spell - '{ctx.author}' - Unknown exception thrown for args '{args}'")
+            await ctx.send(f"ERROR: Unknown exception thrown - {str(err)}")
+            return
+
+        log.info(f"add_spell - '{ctx.author}' is adding spell '{spell}' with origin '{dndclass}' to '{name}''")
+
+        # Fetch character info and make a character object from it
+        character_info = character_info_interface.fetch_by_character_name(name)
+        if character_info is None:
+            log.error(f"add_spell - '{ctx.author}' - No character with the name '{name}' found.")
+            await ctx.send(f"ERROR: No character with the name '{name}' found.")
+            return
+        if len(character_info) > 1:
+            log.error(f"add_spell - '{ctx.author}' - Multiple characters with the name '{name}' found.")
+            await ctx.send(f"ERROR: Multiple characters with the name '{name}' found.")
+            return
+        character = Character(character_info[0].character_id)
+
+        # Verify dndclass is valid
+        if not (character.has_class(dndclass) or character.has_subclass(dndclass)):
+            log.error(f"add_spell - '{ctx.author}' - Character does not have matching class or subclass '{dndclass}'")
+            await ctx.send(f"ERROR: Character does not have matching class or subclass with name '{dndclass}'")
+            return
+
+        # Verify a matching spell is found for dndclass
+        dndclass_spells = link_class_spell_interface.fetch(dndclass)
+        matching_spells = [s for s in dndclass_spells.values() if s.spell_name == spell]
+        if not any(matching_spells):
+            log.error(f"add_spell - '{ctx.author}' - No matching spells for '{spell}' and class/subclass '{dndclass}'")
+            await ctx.send(f"ERROR: No matching spells named '{spell}' for class/subclass '{dndclass}'")
+            return
+
+        # Confirm the choice.
+        msg = f"Would you like to confirm: '{name}' should learn the spell '{spell}' with an origin of '{dndclass}'?"
+        m = await menu_helper.start_menu(ctx, menu_helper.ConfirmMenu, message=msg, should_dm=False)
+        if not m.confirm:
+            log.info(f"add_spell - '{ctx.author}' - Cancelled adding '{spell}' to '{name}'")
+            await ctx.send(f"Cancelling the request.")
+            return
+
+        # Add the spell
+        character.learn_spell(dndclass, matching_spells[0], cog=self, channel=ctx)
+        log.info(f"add_spell - '{ctx.author}' - Done ading '{spell}' to '{name}'")
+
+
 
     @staticmethod
     def parse_ticket_items(item_string):
@@ -154,7 +213,6 @@ class Mod(commands.Cog):
             await Connections.log_to_discord(self, msg)
             Roster.update_character_in_roster(character)
             await ctx.send(f"Exit ticket logged successfully for '{character.name}'")
-
 
         finally:
             """
