@@ -67,7 +67,7 @@ class Mod(commands.Cog):
 
         log.info(f"add_spell - '{ctx.author}' is adding spell '{spell}' with origin '{dndclass}' to '{name}''")
 
-        # Fetch character info and make a character object from it
+        # Fetch character info. Check that the info is valid and only one character was returned.
         character_info = character_info_interface.fetch_by_character_name(name)
         if character_info is None:
             log.error(f"add_spell - '{ctx.author}' - No character with the name '{name}' found.")
@@ -77,6 +77,8 @@ class Mod(commands.Cog):
             log.error(f"add_spell - '{ctx.author}' - Multiple characters with the name '{name}' found.")
             await ctx.send(f"ERROR: Multiple characters with the name '{name}' found.")
             return
+
+        # Make Character object from the character info
         character = Character(character_info[0].character_id)
 
         # Verify dndclass is valid
